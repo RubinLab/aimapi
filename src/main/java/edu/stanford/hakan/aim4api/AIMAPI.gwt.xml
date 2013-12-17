@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='aimapi'>
+  <inherits name='com.google.gwt.user.User'/>  
+  <!-- not important -->
+
+  <inherits name='com.google.gwt.user.theme.clean.Clean'/> 
+  <!-- not important -->
+
+  <inherits name='org.w3c.dom.DOM' /> 
+  <!-- The lib we use to simulate the com.w3c classes in the client -->
+
+  <source path='aimquery'/> 
+  <source path='base'/> 
+  <source path='usage'/> 
+  <source path='utility'/> 
+  <!-- The directory where the client code is (it includes all subdirectories as well), it has to be a directory in the same folder as this XML file -->
+
+</module>
