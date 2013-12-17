@@ -29,97 +29,110 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class TwoDimensionSpatialCoordinateCollection implements IAimXMLOperations {
+public class TwoDimensionSpatialCoordinateCollection implements IAimXMLOperations
+{
 
-    private List<TwoDimensionSpatialCoordinate> listTwoDimensionSpatialCoordinate = new ArrayList<>();
+	private final List<TwoDimensionSpatialCoordinate> listTwoDimensionSpatialCoordinate = new ArrayList<TwoDimensionSpatialCoordinate>();
 
-    public void addTwoDimensionSpatialCoordinate(TwoDimensionSpatialCoordinate newTwoDimensionSpatialCoordinate) {
-        this.listTwoDimensionSpatialCoordinate.add(newTwoDimensionSpatialCoordinate);
-    }
+	public void addTwoDimensionSpatialCoordinate(TwoDimensionSpatialCoordinate newTwoDimensionSpatialCoordinate)
+	{
+		this.listTwoDimensionSpatialCoordinate.add(newTwoDimensionSpatialCoordinate);
+	}
 
-    public List<TwoDimensionSpatialCoordinate> getTwoDimensionSpatialCoordinateList() {
-        return this.listTwoDimensionSpatialCoordinate;
-    }
+	public List<TwoDimensionSpatialCoordinate> getTwoDimensionSpatialCoordinateList()
+	{
+		return this.listTwoDimensionSpatialCoordinate;
+	}
 
-    public int size() {
-        return this.listTwoDimensionSpatialCoordinate.size();
-    }
+	public int size()
+	{
+		return this.listTwoDimensionSpatialCoordinate.size();
+	}
 
-    public TwoDimensionSpatialCoordinate get(int index) {
-        if (index <= this.listTwoDimensionSpatialCoordinate.size() - 1) {
-            return this.listTwoDimensionSpatialCoordinate.get(index);
-        }
-        return null;
-    }
+	public TwoDimensionSpatialCoordinate get(int index)
+	{
+		if (index <= this.listTwoDimensionSpatialCoordinate.size() - 1) {
+			return this.listTwoDimensionSpatialCoordinate.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element twoDimensionSpatialCoordinateCollection = doc.createElement("twoDimensionSpatialCoordinateCollection");
-        for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
-            this.listTwoDimensionSpatialCoordinate.get(i).setTagName("TwoDimensionSpatialCoordinate");
-            twoDimensionSpatialCoordinateCollection.appendChild(this.listTwoDimensionSpatialCoordinate.get(i).getXMLNode(doc));
-        }
-        return twoDimensionSpatialCoordinateCollection;
-    }
+		Element twoDimensionSpatialCoordinateCollection = doc.createElement("twoDimensionSpatialCoordinateCollection");
+		for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
+			this.listTwoDimensionSpatialCoordinate.get(i).setTagName("TwoDimensionSpatialCoordinate");
+			twoDimensionSpatialCoordinateCollection
+					.appendChild(this.listTwoDimensionSpatialCoordinate.get(i).getXMLNode(doc));
+		}
+		return twoDimensionSpatialCoordinateCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listTwoDimensionSpatialCoordinate.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("TwoDimensionSpatialCoordinate".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listTwoDimensionSpatialCoordinate.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("TwoDimensionSpatialCoordinate".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    TwoDimensionSpatialCoordinate obj = new TwoDimensionSpatialCoordinate();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addTwoDimensionSpatialCoordinate(obj);
-                }
-            }
-        }
+				} else {
+					TwoDimensionSpatialCoordinate obj = new TwoDimensionSpatialCoordinate();
+					obj.setXMLNode(tempList.item(j));
+					this.addTwoDimensionSpatialCoordinate(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        TwoDimensionSpatialCoordinateCollection oth = (TwoDimensionSpatialCoordinateCollection) other;
-        if (this.listTwoDimensionSpatialCoordinate.size() != oth.listTwoDimensionSpatialCoordinate.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
-            if (!this.listTwoDimensionSpatialCoordinate.get(i).isEqualTo(oth.listTwoDimensionSpatialCoordinate.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		TwoDimensionSpatialCoordinateCollection oth = (TwoDimensionSpatialCoordinateCollection)other;
+		if (this.listTwoDimensionSpatialCoordinate.size() != oth.listTwoDimensionSpatialCoordinate.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
+			if (!this.listTwoDimensionSpatialCoordinate.get(i).isEqualTo(oth.listTwoDimensionSpatialCoordinate.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public TwoDimensionSpatialCoordinateCollection getClone() {
-        TwoDimensionSpatialCoordinateCollection res = new TwoDimensionSpatialCoordinateCollection();
-        for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
-            if (this.listTwoDimensionSpatialCoordinate.get(i) != null) {
-                res.addTwoDimensionSpatialCoordinate(this.listTwoDimensionSpatialCoordinate.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public TwoDimensionSpatialCoordinateCollection getClone()
+	{
+		TwoDimensionSpatialCoordinateCollection res = new TwoDimensionSpatialCoordinateCollection();
+		for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
+			if (this.listTwoDimensionSpatialCoordinate.get(i) != null) {
+				res.addTwoDimensionSpatialCoordinate(this.listTwoDimensionSpatialCoordinate.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

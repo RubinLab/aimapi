@@ -31,63 +31,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 
  * @author Hakan
  */
-class AimClass {
+class AimClass
+{
 
-    private String name;
-    private String type;
-    private boolean isAbstract;
-    private List<String> listXPaths;
-    private List<AimProperty> listAimProperties;
+	private String name;
+	private String type;
+	private final boolean isAbstract;
+	private List<String> listXPaths;
+	private List<AimProperty> listAimProperties;
 
-    public AimClass(String name, String type, boolean isAbstract) {
-        this.name = name;
-        this.type = type;
-        this.isAbstract = isAbstract;
-        this.listXPaths = new ArrayList<>();
-        this.listAimProperties = new ArrayList<>();
-    }
+	public AimClass(String name, String type, boolean isAbstract)
+	{
+		this.name = name;
+		this.type = type;
+		this.isAbstract = isAbstract;
+		this.listXPaths = new ArrayList<String>();
+		this.listAimProperties = new ArrayList<AimProperty>();
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName()
+	{
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType()
+	{
+		return type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 
-    public List<String> getListXPaths() {
-        return listXPaths;
-    }
+	public List<String> getListXPaths()
+	{
+		return listXPaths;
+	}
 
-    public void setListXPaths(List<String> listXPaths) {
-        this.listXPaths = listXPaths;
-    }
+	public void setListXPaths(List<String> listXPaths)
+	{
+		this.listXPaths = listXPaths;
+	}
 
-    public List<AimProperty> getListAimProperties() {
-        return listAimProperties;
-    }
+	public List<AimProperty> getListAimProperties()
+	{
+		return listAimProperties;
+	}
 
-    public void setListAimProperties(List<AimProperty> listAimProperties) {
-        this.listAimProperties = listAimProperties;
-    }
+	public void setListAimProperties(List<AimProperty> listAimProperties)
+	{
+		this.listAimProperties = listAimProperties;
+	}
 
-    public AimProperty getAimPropertyByName(String name) {
-        for (int i = 0; i < this.listAimProperties.size(); i++) {
-            if (this.listAimProperties.get(i).getName().toLowerCase().equals(name.toLowerCase())) {
-                return this.listAimProperties.get(i);
-            }
-        }
-        return null;
-    }
+	public AimProperty getAimPropertyByName(String name)
+	{
+		for (int i = 0; i < this.listAimProperties.size(); i++) {
+			if (this.listAimProperties.get(i).getName().toLowerCase().equals(name.toLowerCase())) {
+				return this.listAimProperties.get(i);
+			}
+		}
+		return null;
+	}
 }

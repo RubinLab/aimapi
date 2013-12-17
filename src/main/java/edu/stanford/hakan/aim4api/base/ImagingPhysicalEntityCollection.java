@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ImagingPhysicalEntityCollection implements IAimXMLOperations {
+public class ImagingPhysicalEntityCollection implements IAimXMLOperations
+{
 
-    private List<ImagingPhysicalEntity> listImagingPhysicalEntity = new ArrayList<>();
+	private final List<ImagingPhysicalEntity> listImagingPhysicalEntity = new ArrayList<ImagingPhysicalEntity>();
 
-    public void addImagingPhysicalEntity(ImagingPhysicalEntity newImagingPhysicalEntity) {
-        this.listImagingPhysicalEntity.add(newImagingPhysicalEntity);
-    }
+	public void addImagingPhysicalEntity(ImagingPhysicalEntity newImagingPhysicalEntity)
+	{
+		this.listImagingPhysicalEntity.add(newImagingPhysicalEntity);
+	}
 
-    public List<ImagingPhysicalEntity> getImagingPhysicalEntityList() {
-        return this.listImagingPhysicalEntity;
-    }
+	public List<ImagingPhysicalEntity> getImagingPhysicalEntityList()
+	{
+		return this.listImagingPhysicalEntity;
+	}
 
-    public int size() {
-        return this.listImagingPhysicalEntity.size();
-    }
+	public int size()
+	{
+		return this.listImagingPhysicalEntity.size();
+	}
 
-    public ImagingPhysicalEntity get(int index) {
-        if (index <= this.listImagingPhysicalEntity.size() - 1) {
-            return this.listImagingPhysicalEntity.get(index);
-        }
-        return null;
-    }
+	public ImagingPhysicalEntity get(int index)
+	{
+		if (index <= this.listImagingPhysicalEntity.size() - 1) {
+			return this.listImagingPhysicalEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element imagingPhysicalEntityCollection = doc.createElement("imagingPhysicalEntityCollection");
-        for (int i = 0; i < this.listImagingPhysicalEntity.size(); i++) {
-            this.listImagingPhysicalEntity.get(i).setTagName("ImagingPhysicalEntity");
-            imagingPhysicalEntityCollection.appendChild(this.listImagingPhysicalEntity.get(i).getXMLNode(doc));
-        }
-        return imagingPhysicalEntityCollection;
-    }
+		Element imagingPhysicalEntityCollection = doc.createElement("imagingPhysicalEntityCollection");
+		for (int i = 0; i < this.listImagingPhysicalEntity.size(); i++) {
+			this.listImagingPhysicalEntity.get(i).setTagName("ImagingPhysicalEntity");
+			imagingPhysicalEntityCollection.appendChild(this.listImagingPhysicalEntity.get(i).getXMLNode(doc));
+		}
+		return imagingPhysicalEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listImagingPhysicalEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("ImagingPhysicalEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listImagingPhysicalEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("ImagingPhysicalEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    ImagingPhysicalEntity obj = new ImagingPhysicalEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addImagingPhysicalEntity(obj);
-                }
-            }
-        }
+				} else {
+					ImagingPhysicalEntity obj = new ImagingPhysicalEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addImagingPhysicalEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ImagingPhysicalEntityCollection oth = (ImagingPhysicalEntityCollection) other;
-        if (this.listImagingPhysicalEntity.size() != oth.listImagingPhysicalEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listImagingPhysicalEntity.size(); i++) {
-            if (!this.listImagingPhysicalEntity.get(i).isEqualTo(oth.listImagingPhysicalEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ImagingPhysicalEntityCollection oth = (ImagingPhysicalEntityCollection)other;
+		if (this.listImagingPhysicalEntity.size() != oth.listImagingPhysicalEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listImagingPhysicalEntity.size(); i++) {
+			if (!this.listImagingPhysicalEntity.get(i).isEqualTo(oth.listImagingPhysicalEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ImagingPhysicalEntityCollection getClone() {
-        ImagingPhysicalEntityCollection res = new ImagingPhysicalEntityCollection();
-        for (int i = 0; i < this.listImagingPhysicalEntity.size(); i++) {
-            if (this.listImagingPhysicalEntity.get(i) != null) {
-                res.addImagingPhysicalEntity(this.listImagingPhysicalEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ImagingPhysicalEntityCollection getClone()
+	{
+		ImagingPhysicalEntityCollection res = new ImagingPhysicalEntityCollection();
+		for (int i = 0; i < this.listImagingPhysicalEntity.size(); i++) {
+			if (this.listImagingPhysicalEntity.get(i) != null) {
+				res.addImagingPhysicalEntity(this.listImagingPhysicalEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ImageCollection implements IAimXMLOperations {
+public class ImageCollection implements IAimXMLOperations
+{
 
-    private List<Image> listImage = new ArrayList<>();
+	private final List<Image> listImage = new ArrayList<Image>();
 
-    public void addImage(Image newImage) {
-        this.listImage.add(newImage);
-    }
+	public void addImage(Image newImage)
+	{
+		this.listImage.add(newImage);
+	}
 
-    public List<Image> getImageList() {
-        return this.listImage;
-    }
+	public List<Image> getImageList()
+	{
+		return this.listImage;
+	}
 
-    public int size() {
-        return this.listImage.size();
-    }
+	public int size()
+	{
+		return this.listImage.size();
+	}
 
-    public Image get(int index) {
-        if (index <= this.listImage.size() - 1) {
-            return this.listImage.get(index);
-        }
-        return null;
-    }
+	public Image get(int index)
+	{
+		if (index <= this.listImage.size() - 1) {
+			return this.listImage.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element imageCollection = doc.createElement("imageCollection");
-        for (int i = 0; i < this.listImage.size(); i++) {
-            this.listImage.get(i).setTagName("Image");
-            imageCollection.appendChild(this.listImage.get(i).getXMLNode(doc));
-        }
-        return imageCollection;
-    }
+		Element imageCollection = doc.createElement("imageCollection");
+		for (int i = 0; i < this.listImage.size(); i++) {
+			this.listImage.get(i).setTagName("Image");
+			imageCollection.appendChild(this.listImage.get(i).getXMLNode(doc));
+		}
+		return imageCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listImage.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("Image".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listImage.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("Image".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    Image obj = new Image();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addImage(obj);
-                }
-            }
-        }
+				} else {
+					Image obj = new Image();
+					obj.setXMLNode(tempList.item(j));
+					this.addImage(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ImageCollection oth = (ImageCollection) other;
-        if (this.listImage.size() != oth.listImage.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listImage.size(); i++) {
-            if (!this.listImage.get(i).isEqualTo(oth.listImage.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ImageCollection oth = (ImageCollection)other;
+		if (this.listImage.size() != oth.listImage.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listImage.size(); i++) {
+			if (!this.listImage.get(i).isEqualTo(oth.listImage.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ImageCollection getClone() {
-        ImageCollection res = new ImageCollection();
-        for (int i = 0; i < this.listImage.size(); i++) {
-            if (this.listImage.get(i) != null) {
-                res.addImage(this.listImage.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ImageCollection getClone()
+	{
+		ImageCollection res = new ImageCollection();
+		for (int i = 0; i < this.listImage.size(); i++) {
+			if (this.listImage.get(i) != null) {
+				res.addImage(this.listImage.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

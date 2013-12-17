@@ -29,102 +29,114 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class SegmentationEntityCollection implements IAimXMLOperations {
+public class SegmentationEntityCollection implements IAimXMLOperations
+{
 
-    private List<SegmentationEntity> listSegmentationEntity = new ArrayList<>();
+	private final List<SegmentationEntity> listSegmentationEntity = new ArrayList<SegmentationEntity>();
 
-    public void addSegmentationEntity(SegmentationEntity newSegmentationEntity) {
-        this.listSegmentationEntity.add(newSegmentationEntity);
-    }
+	public void addSegmentationEntity(SegmentationEntity newSegmentationEntity)
+	{
+		this.listSegmentationEntity.add(newSegmentationEntity);
+	}
 
-    public List<SegmentationEntity> getSegmentationEntityList() {
-        return this.listSegmentationEntity;
-    }
+	public List<SegmentationEntity> getSegmentationEntityList()
+	{
+		return this.listSegmentationEntity;
+	}
 
-    public int size() {
-        return this.listSegmentationEntity.size();
-    }
+	public int size()
+	{
+		return this.listSegmentationEntity.size();
+	}
 
-    public SegmentationEntity get(int index) {
-        if (index <= this.listSegmentationEntity.size() - 1) {
-            return this.listSegmentationEntity.get(index);
-        }
-        return null;
-    }
+	public SegmentationEntity get(int index)
+	{
+		if (index <= this.listSegmentationEntity.size() - 1) {
+			return this.listSegmentationEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element segmentationEntityCollection = doc.createElement("segmentationEntityCollection");
-        for (int i = 0; i < this.listSegmentationEntity.size(); i++) {
-            this.listSegmentationEntity.get(i).setTagName("SegmentationEntity");
-            segmentationEntityCollection.appendChild(this.listSegmentationEntity.get(i).getXMLNode(doc));
-        }
-        return segmentationEntityCollection;
-    }
+		Element segmentationEntityCollection = doc.createElement("segmentationEntityCollection");
+		for (int i = 0; i < this.listSegmentationEntity.size(); i++) {
+			this.listSegmentationEntity.get(i).setTagName("SegmentationEntity");
+			segmentationEntityCollection.appendChild(this.listSegmentationEntity.get(i).getXMLNode(doc));
+		}
+		return segmentationEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listSegmentationEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("SegmentationEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
-                    if ("DicomSegmentationEntity".equals(xsiType)) {
-                        DicomSegmentationEntity obj = new DicomSegmentationEntity();
-                        obj.setXMLNode(currentNode);
-                        this.addSegmentationEntity(obj);
-                    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listSegmentationEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("SegmentationEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+					if ("DicomSegmentationEntity".equals(xsiType)) {
+						DicomSegmentationEntity obj = new DicomSegmentationEntity();
+						obj.setXMLNode(currentNode);
+						this.addSegmentationEntity(obj);
+					}
 
-                } else {
-                    SegmentationEntity obj = new SegmentationEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addSegmentationEntity(obj);
-                }
-            }
-        }
+				} else {
+					SegmentationEntity obj = new SegmentationEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addSegmentationEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        SegmentationEntityCollection oth = (SegmentationEntityCollection) other;
-        if (this.listSegmentationEntity.size() != oth.listSegmentationEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listSegmentationEntity.size(); i++) {
-            if (!this.listSegmentationEntity.get(i).isEqualTo(oth.listSegmentationEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		SegmentationEntityCollection oth = (SegmentationEntityCollection)other;
+		if (this.listSegmentationEntity.size() != oth.listSegmentationEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listSegmentationEntity.size(); i++) {
+			if (!this.listSegmentationEntity.get(i).isEqualTo(oth.listSegmentationEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public SegmentationEntityCollection getClone() {
-        SegmentationEntityCollection res = new SegmentationEntityCollection();
-        for (int i = 0; i < this.listSegmentationEntity.size(); i++) {
-            if (this.listSegmentationEntity.get(i) != null) {
-                res.addSegmentationEntity(this.listSegmentationEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public SegmentationEntityCollection getClone()
+	{
+		SegmentationEntityCollection res = new SegmentationEntityCollection();
+		for (int i = 0; i < this.listSegmentationEntity.size(); i++) {
+			if (this.listSegmentationEntity.get(i) != null) {
+				res.addSegmentationEntity(this.listSegmentationEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

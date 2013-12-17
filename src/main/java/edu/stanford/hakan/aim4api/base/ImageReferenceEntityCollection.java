@@ -29,107 +29,119 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ImageReferenceEntityCollection implements IAimXMLOperations {
+public class ImageReferenceEntityCollection implements IAimXMLOperations
+{
 
-    private List<ImageReferenceEntity> listImageReferenceEntity = new ArrayList<>();
+	private final List<ImageReferenceEntity> listImageReferenceEntity = new ArrayList<ImageReferenceEntity>();
 
-    public void addImageReferenceEntity(ImageReferenceEntity newImageReferenceEntity) {
-        this.listImageReferenceEntity.add(newImageReferenceEntity);
-    }
+	public void addImageReferenceEntity(ImageReferenceEntity newImageReferenceEntity)
+	{
+		this.listImageReferenceEntity.add(newImageReferenceEntity);
+	}
 
-    public List<ImageReferenceEntity> getImageReferenceEntityList() {
-        return this.listImageReferenceEntity;
-    }
+	public List<ImageReferenceEntity> getImageReferenceEntityList()
+	{
+		return this.listImageReferenceEntity;
+	}
 
-    public int size() {
-        return this.listImageReferenceEntity.size();
-    }
+	public int size()
+	{
+		return this.listImageReferenceEntity.size();
+	}
 
-    public ImageReferenceEntity get(int index) {
-        if (index <= this.listImageReferenceEntity.size() - 1) {
-            return this.listImageReferenceEntity.get(index);
-        }
-        return null;
-    }
+	public ImageReferenceEntity get(int index)
+	{
+		if (index <= this.listImageReferenceEntity.size() - 1) {
+			return this.listImageReferenceEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element imageReferenceEntityCollection = doc.createElement("imageReferenceEntityCollection");
-        for (int i = 0; i < this.listImageReferenceEntity.size(); i++) {
-            this.listImageReferenceEntity.get(i).setTagName("ImageReferenceEntity");
-            imageReferenceEntityCollection.appendChild(this.listImageReferenceEntity.get(i).getXMLNode(doc));
-        }
-        return imageReferenceEntityCollection;
-    }
+		Element imageReferenceEntityCollection = doc.createElement("imageReferenceEntityCollection");
+		for (int i = 0; i < this.listImageReferenceEntity.size(); i++) {
+			this.listImageReferenceEntity.get(i).setTagName("ImageReferenceEntity");
+			imageReferenceEntityCollection.appendChild(this.listImageReferenceEntity.get(i).getXMLNode(doc));
+		}
+		return imageReferenceEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listImageReferenceEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("ImageReferenceEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
-                    if ("DicomImageReferenceEntity".equals(xsiType)) {
-                        DicomImageReferenceEntity obj = new DicomImageReferenceEntity();
-                        obj.setXMLNode(currentNode);
-                        this.addImageReferenceEntity(obj);
-                    }
-                    if ("UriImageReferenceEntity".equals(xsiType)) {
-                        UriImageReferenceEntity obj = new UriImageReferenceEntity();
-                        obj.setXMLNode(currentNode);
-                        this.addImageReferenceEntity(obj);
-                    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listImageReferenceEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("ImageReferenceEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+					if ("DicomImageReferenceEntity".equals(xsiType)) {
+						DicomImageReferenceEntity obj = new DicomImageReferenceEntity();
+						obj.setXMLNode(currentNode);
+						this.addImageReferenceEntity(obj);
+					}
+					if ("UriImageReferenceEntity".equals(xsiType)) {
+						UriImageReferenceEntity obj = new UriImageReferenceEntity();
+						obj.setXMLNode(currentNode);
+						this.addImageReferenceEntity(obj);
+					}
 
-                } else {
-                    ImageReferenceEntity obj = new ImageReferenceEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addImageReferenceEntity(obj);
-                }
-            }
-        }
+				} else {
+					ImageReferenceEntity obj = new ImageReferenceEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addImageReferenceEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ImageReferenceEntityCollection oth = (ImageReferenceEntityCollection) other;
-        if (this.listImageReferenceEntity.size() != oth.listImageReferenceEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listImageReferenceEntity.size(); i++) {
-            if (!this.listImageReferenceEntity.get(i).isEqualTo(oth.listImageReferenceEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ImageReferenceEntityCollection oth = (ImageReferenceEntityCollection)other;
+		if (this.listImageReferenceEntity.size() != oth.listImageReferenceEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listImageReferenceEntity.size(); i++) {
+			if (!this.listImageReferenceEntity.get(i).isEqualTo(oth.listImageReferenceEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ImageReferenceEntityCollection getClone() {
-        ImageReferenceEntityCollection res = new ImageReferenceEntityCollection();
-        for (int i = 0; i < this.listImageReferenceEntity.size(); i++) {
-            if (this.listImageReferenceEntity.get(i) != null) {
-                res.addImageReferenceEntity(this.listImageReferenceEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ImageReferenceEntityCollection getClone()
+	{
+		ImageReferenceEntityCollection res = new ImageReferenceEntityCollection();
+		for (int i = 0; i < this.listImageReferenceEntity.size(); i++) {
+			if (this.listImageReferenceEntity.get(i) != null) {
+				res.addImageReferenceEntity(this.listImageReferenceEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

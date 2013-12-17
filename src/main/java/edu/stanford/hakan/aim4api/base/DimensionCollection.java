@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class DimensionCollection implements IAimXMLOperations {
+public class DimensionCollection implements IAimXMLOperations
+{
 
-    private List<Dimension> listDimension = new ArrayList<>();
+	private final List<Dimension> listDimension = new ArrayList<Dimension>();
 
-    public void addDimension(Dimension newDimension) {
-        this.listDimension.add(newDimension);
-    }
+	public void addDimension(Dimension newDimension)
+	{
+		this.listDimension.add(newDimension);
+	}
 
-    public List<Dimension> getDimensionList() {
-        return this.listDimension;
-    }
+	public List<Dimension> getDimensionList()
+	{
+		return this.listDimension;
+	}
 
-    public int size() {
-        return this.listDimension.size();
-    }
+	public int size()
+	{
+		return this.listDimension.size();
+	}
 
-    public Dimension get(int index) {
-        if (index <= this.listDimension.size() - 1) {
-            return this.listDimension.get(index);
-        }
-        return null;
-    }
+	public Dimension get(int index)
+	{
+		if (index <= this.listDimension.size() - 1) {
+			return this.listDimension.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element dimensionCollection = doc.createElement("dimensionCollection");
-        for (int i = 0; i < this.listDimension.size(); i++) {
-            this.listDimension.get(i).setTagName("Dimension");
-            dimensionCollection.appendChild(this.listDimension.get(i).getXMLNode(doc));
-        }
-        return dimensionCollection;
-    }
+		Element dimensionCollection = doc.createElement("dimensionCollection");
+		for (int i = 0; i < this.listDimension.size(); i++) {
+			this.listDimension.get(i).setTagName("Dimension");
+			dimensionCollection.appendChild(this.listDimension.get(i).getXMLNode(doc));
+		}
+		return dimensionCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listDimension.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("Dimension".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listDimension.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("Dimension".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    Dimension obj = new Dimension();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addDimension(obj);
-                }
-            }
-        }
+				} else {
+					Dimension obj = new Dimension();
+					obj.setXMLNode(tempList.item(j));
+					this.addDimension(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        DimensionCollection oth = (DimensionCollection) other;
-        if (this.listDimension.size() != oth.listDimension.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listDimension.size(); i++) {
-            if (!this.listDimension.get(i).isEqualTo(oth.listDimension.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		DimensionCollection oth = (DimensionCollection)other;
+		if (this.listDimension.size() != oth.listDimension.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listDimension.size(); i++) {
+			if (!this.listDimension.get(i).isEqualTo(oth.listDimension.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public DimensionCollection getClone() {
-        DimensionCollection res = new DimensionCollection();
-        for (int i = 0; i < this.listDimension.size(); i++) {
-            if (this.listDimension.get(i) != null) {
-                res.addDimension(this.listDimension.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public DimensionCollection getClone()
+	{
+		DimensionCollection res = new DimensionCollection();
+		for (int i = 0; i < this.listDimension.size(); i++) {
+			if (this.listDimension.get(i) != null) {
+				res.addDimension(this.listDimension.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

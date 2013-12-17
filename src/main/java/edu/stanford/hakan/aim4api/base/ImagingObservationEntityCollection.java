@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ImagingObservationEntityCollection implements IAimXMLOperations {
+public class ImagingObservationEntityCollection implements IAimXMLOperations
+{
 
-    private List<ImagingObservationEntity> listImagingObservationEntity = new ArrayList<>();
+	private final List<ImagingObservationEntity> listImagingObservationEntity = new ArrayList<ImagingObservationEntity>();
 
-    public void addImagingObservationEntity(ImagingObservationEntity newImagingObservationEntity) {
-        this.listImagingObservationEntity.add(newImagingObservationEntity);
-    }
+	public void addImagingObservationEntity(ImagingObservationEntity newImagingObservationEntity)
+	{
+		this.listImagingObservationEntity.add(newImagingObservationEntity);
+	}
 
-    public List<ImagingObservationEntity> getImagingObservationEntityList() {
-        return this.listImagingObservationEntity;
-    }
+	public List<ImagingObservationEntity> getImagingObservationEntityList()
+	{
+		return this.listImagingObservationEntity;
+	}
 
-    public int size() {
-        return this.listImagingObservationEntity.size();
-    }
+	public int size()
+	{
+		return this.listImagingObservationEntity.size();
+	}
 
-    public ImagingObservationEntity get(int index) {
-        if (index <= this.listImagingObservationEntity.size() - 1) {
-            return this.listImagingObservationEntity.get(index);
-        }
-        return null;
-    }
+	public ImagingObservationEntity get(int index)
+	{
+		if (index <= this.listImagingObservationEntity.size() - 1) {
+			return this.listImagingObservationEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element imagingObservationEntityCollection = doc.createElement("imagingObservationEntityCollection");
-        for (int i = 0; i < this.listImagingObservationEntity.size(); i++) {
-            this.listImagingObservationEntity.get(i).setTagName("ImagingObservationEntity");
-            imagingObservationEntityCollection.appendChild(this.listImagingObservationEntity.get(i).getXMLNode(doc));
-        }
-        return imagingObservationEntityCollection;
-    }
+		Element imagingObservationEntityCollection = doc.createElement("imagingObservationEntityCollection");
+		for (int i = 0; i < this.listImagingObservationEntity.size(); i++) {
+			this.listImagingObservationEntity.get(i).setTagName("ImagingObservationEntity");
+			imagingObservationEntityCollection.appendChild(this.listImagingObservationEntity.get(i).getXMLNode(doc));
+		}
+		return imagingObservationEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listImagingObservationEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("ImagingObservationEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listImagingObservationEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("ImagingObservationEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    ImagingObservationEntity obj = new ImagingObservationEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addImagingObservationEntity(obj);
-                }
-            }
-        }
+				} else {
+					ImagingObservationEntity obj = new ImagingObservationEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addImagingObservationEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ImagingObservationEntityCollection oth = (ImagingObservationEntityCollection) other;
-        if (this.listImagingObservationEntity.size() != oth.listImagingObservationEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listImagingObservationEntity.size(); i++) {
-            if (!this.listImagingObservationEntity.get(i).isEqualTo(oth.listImagingObservationEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ImagingObservationEntityCollection oth = (ImagingObservationEntityCollection)other;
+		if (this.listImagingObservationEntity.size() != oth.listImagingObservationEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listImagingObservationEntity.size(); i++) {
+			if (!this.listImagingObservationEntity.get(i).isEqualTo(oth.listImagingObservationEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ImagingObservationEntityCollection getClone() {
-        ImagingObservationEntityCollection res = new ImagingObservationEntityCollection();
-        for (int i = 0; i < this.listImagingObservationEntity.size(); i++) {
-            if (this.listImagingObservationEntity.get(i) != null) {
-                res.addImagingObservationEntity(this.listImagingObservationEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ImagingObservationEntityCollection getClone()
+	{
+		ImagingObservationEntityCollection res = new ImagingObservationEntityCollection();
+		for (int i = 0; i < this.listImagingObservationEntity.size(); i++) {
+			if (this.listImagingObservationEntity.get(i) != null) {
+				res.addImagingObservationEntity(this.listImagingObservationEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

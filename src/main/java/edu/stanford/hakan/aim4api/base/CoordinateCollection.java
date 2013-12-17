@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class CoordinateCollection implements IAimXMLOperations {
+public class CoordinateCollection implements IAimXMLOperations
+{
 
-    private List<Coordinate> listCoordinate = new ArrayList<>();
+	private final List<Coordinate> listCoordinate = new ArrayList<Coordinate>();
 
-    public void addCoordinate(Coordinate newCoordinate) {
-        this.listCoordinate.add(newCoordinate);
-    }
+	public void addCoordinate(Coordinate newCoordinate)
+	{
+		this.listCoordinate.add(newCoordinate);
+	}
 
-    public List<Coordinate> getCoordinateList() {
-        return this.listCoordinate;
-    }
+	public List<Coordinate> getCoordinateList()
+	{
+		return this.listCoordinate;
+	}
 
-    public int size() {
-        return this.listCoordinate.size();
-    }
+	public int size()
+	{
+		return this.listCoordinate.size();
+	}
 
-    public Coordinate get(int index) {
-        if (index <= this.listCoordinate.size() - 1) {
-            return this.listCoordinate.get(index);
-        }
-        return null;
-    }
+	public Coordinate get(int index)
+	{
+		if (index <= this.listCoordinate.size() - 1) {
+			return this.listCoordinate.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element coordinateCollection = doc.createElement("coordinateCollection");
-        for (int i = 0; i < this.listCoordinate.size(); i++) {
-            this.listCoordinate.get(i).setTagName("Coordinate");
-            coordinateCollection.appendChild(this.listCoordinate.get(i).getXMLNode(doc));
-        }
-        return coordinateCollection;
-    }
+		Element coordinateCollection = doc.createElement("coordinateCollection");
+		for (int i = 0; i < this.listCoordinate.size(); i++) {
+			this.listCoordinate.get(i).setTagName("Coordinate");
+			coordinateCollection.appendChild(this.listCoordinate.get(i).getXMLNode(doc));
+		}
+		return coordinateCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listCoordinate.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("Coordinate".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listCoordinate.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("Coordinate".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    Coordinate obj = new Coordinate();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addCoordinate(obj);
-                }
-            }
-        }
+				} else {
+					Coordinate obj = new Coordinate();
+					obj.setXMLNode(tempList.item(j));
+					this.addCoordinate(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        CoordinateCollection oth = (CoordinateCollection) other;
-        if (this.listCoordinate.size() != oth.listCoordinate.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listCoordinate.size(); i++) {
-            if (!this.listCoordinate.get(i).isEqualTo(oth.listCoordinate.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		CoordinateCollection oth = (CoordinateCollection)other;
+		if (this.listCoordinate.size() != oth.listCoordinate.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listCoordinate.size(); i++) {
+			if (!this.listCoordinate.get(i).isEqualTo(oth.listCoordinate.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public CoordinateCollection getClone() {
-        CoordinateCollection res = new CoordinateCollection();
-        for (int i = 0; i < this.listCoordinate.size(); i++) {
-            if (this.listCoordinate.get(i) != null) {
-                res.addCoordinate(this.listCoordinate.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public CoordinateCollection getClone()
+	{
+		CoordinateCollection res = new CoordinateCollection();
+		for (int i = 0; i < this.listCoordinate.size(); i++) {
+			if (this.listCoordinate.get(i) != null) {
+				res.addCoordinate(this.listCoordinate.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

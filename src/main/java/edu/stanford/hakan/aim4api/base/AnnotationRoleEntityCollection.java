@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class AnnotationRoleEntityCollection implements IAimXMLOperations {
+public class AnnotationRoleEntityCollection implements IAimXMLOperations
+{
 
-    private List<AnnotationRoleEntity> listAnnotationRoleEntity = new ArrayList<>();
+	private final List<AnnotationRoleEntity> listAnnotationRoleEntity = new ArrayList<AnnotationRoleEntity>();
 
-    public void addAnnotationRoleEntity(AnnotationRoleEntity newAnnotationRoleEntity) {
-        this.listAnnotationRoleEntity.add(newAnnotationRoleEntity);
-    }
+	public void addAnnotationRoleEntity(AnnotationRoleEntity newAnnotationRoleEntity)
+	{
+		this.listAnnotationRoleEntity.add(newAnnotationRoleEntity);
+	}
 
-    public List<AnnotationRoleEntity> getAnnotationRoleEntityList() {
-        return this.listAnnotationRoleEntity;
-    }
+	public List<AnnotationRoleEntity> getAnnotationRoleEntityList()
+	{
+		return this.listAnnotationRoleEntity;
+	}
 
-    public int size() {
-        return this.listAnnotationRoleEntity.size();
-    }
+	public int size()
+	{
+		return this.listAnnotationRoleEntity.size();
+	}
 
-    public AnnotationRoleEntity get(int index) {
-        if (index <= this.listAnnotationRoleEntity.size() - 1) {
-            return this.listAnnotationRoleEntity.get(index);
-        }
-        return null;
-    }
+	public AnnotationRoleEntity get(int index)
+	{
+		if (index <= this.listAnnotationRoleEntity.size() - 1) {
+			return this.listAnnotationRoleEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element annotationRoleEntityCollection = doc.createElement("annotationRoleEntityCollection");
-        for (int i = 0; i < this.listAnnotationRoleEntity.size(); i++) {
-            this.listAnnotationRoleEntity.get(i).setTagName("AnnotationRoleEntity");
-            annotationRoleEntityCollection.appendChild(this.listAnnotationRoleEntity.get(i).getXMLNode(doc));
-        }
-        return annotationRoleEntityCollection;
-    }
+		Element annotationRoleEntityCollection = doc.createElement("annotationRoleEntityCollection");
+		for (int i = 0; i < this.listAnnotationRoleEntity.size(); i++) {
+			this.listAnnotationRoleEntity.get(i).setTagName("AnnotationRoleEntity");
+			annotationRoleEntityCollection.appendChild(this.listAnnotationRoleEntity.get(i).getXMLNode(doc));
+		}
+		return annotationRoleEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listAnnotationRoleEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("AnnotationRoleEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listAnnotationRoleEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("AnnotationRoleEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    AnnotationRoleEntity obj = new AnnotationRoleEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addAnnotationRoleEntity(obj);
-                }
-            }
-        }
+				} else {
+					AnnotationRoleEntity obj = new AnnotationRoleEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addAnnotationRoleEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        AnnotationRoleEntityCollection oth = (AnnotationRoleEntityCollection) other;
-        if (this.listAnnotationRoleEntity.size() != oth.listAnnotationRoleEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listAnnotationRoleEntity.size(); i++) {
-            if (!this.listAnnotationRoleEntity.get(i).isEqualTo(oth.listAnnotationRoleEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		AnnotationRoleEntityCollection oth = (AnnotationRoleEntityCollection)other;
+		if (this.listAnnotationRoleEntity.size() != oth.listAnnotationRoleEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listAnnotationRoleEntity.size(); i++) {
+			if (!this.listAnnotationRoleEntity.get(i).isEqualTo(oth.listAnnotationRoleEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public AnnotationRoleEntityCollection getClone() {
-        AnnotationRoleEntityCollection res = new AnnotationRoleEntityCollection();
-        for (int i = 0; i < this.listAnnotationRoleEntity.size(); i++) {
-            if (this.listAnnotationRoleEntity.get(i) != null) {
-                res.addAnnotationRoleEntity(this.listAnnotationRoleEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public AnnotationRoleEntityCollection getClone()
+	{
+		AnnotationRoleEntityCollection res = new AnnotationRoleEntityCollection();
+		for (int i = 0; i < this.listAnnotationRoleEntity.size(); i++) {
+			if (this.listAnnotationRoleEntity.get(i) != null) {
+				res.addAnnotationRoleEntity(this.listAnnotationRoleEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

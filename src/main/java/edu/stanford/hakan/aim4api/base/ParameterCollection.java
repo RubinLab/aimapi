@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ParameterCollection implements IAimXMLOperations {
+public class ParameterCollection implements IAimXMLOperations
+{
 
-    private List<Parameter> listParameter = new ArrayList<>();
+	private final List<Parameter> listParameter = new ArrayList<Parameter>();
 
-    public void addParameter(Parameter newParameter) {
-        this.listParameter.add(newParameter);
-    }
+	public void addParameter(Parameter newParameter)
+	{
+		this.listParameter.add(newParameter);
+	}
 
-    public List<Parameter> getParameterList() {
-        return this.listParameter;
-    }
+	public List<Parameter> getParameterList()
+	{
+		return this.listParameter;
+	}
 
-    public int size() {
-        return this.listParameter.size();
-    }
+	public int size()
+	{
+		return this.listParameter.size();
+	}
 
-    public Parameter get(int index) {
-        if (index <= this.listParameter.size() - 1) {
-            return this.listParameter.get(index);
-        }
-        return null;
-    }
+	public Parameter get(int index)
+	{
+		if (index <= this.listParameter.size() - 1) {
+			return this.listParameter.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element parameterCollection = doc.createElement("parameterCollection");
-        for (int i = 0; i < this.listParameter.size(); i++) {
-            this.listParameter.get(i).setTagName("Parameter");
-            parameterCollection.appendChild(this.listParameter.get(i).getXMLNode(doc));
-        }
-        return parameterCollection;
-    }
+		Element parameterCollection = doc.createElement("parameterCollection");
+		for (int i = 0; i < this.listParameter.size(); i++) {
+			this.listParameter.get(i).setTagName("Parameter");
+			parameterCollection.appendChild(this.listParameter.get(i).getXMLNode(doc));
+		}
+		return parameterCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listParameter.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("Parameter".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listParameter.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("Parameter".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    Parameter obj = new Parameter();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addParameter(obj);
-                }
-            }
-        }
+				} else {
+					Parameter obj = new Parameter();
+					obj.setXMLNode(tempList.item(j));
+					this.addParameter(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ParameterCollection oth = (ParameterCollection) other;
-        if (this.listParameter.size() != oth.listParameter.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listParameter.size(); i++) {
-            if (!this.listParameter.get(i).isEqualTo(oth.listParameter.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ParameterCollection oth = (ParameterCollection)other;
+		if (this.listParameter.size() != oth.listParameter.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listParameter.size(); i++) {
+			if (!this.listParameter.get(i).isEqualTo(oth.listParameter.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ParameterCollection getClone() {
-        ParameterCollection res = new ParameterCollection();
-        for (int i = 0; i < this.listParameter.size(); i++) {
-            if (this.listParameter.get(i) != null) {
-                res.addParameter(this.listParameter.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ParameterCollection getClone()
+	{
+		ParameterCollection res = new ParameterCollection();
+		for (int i = 0; i < this.listParameter.size(); i++) {
+			if (this.listParameter.get(i) != null) {
+				res.addParameter(this.listParameter.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

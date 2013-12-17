@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.aimquery;
 
-import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -36,117 +35,134 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.stanford.hakan.aim4api.base.AimException;
+
 /**
- *
+ * 
  * @author Hakan
  */
-public class QueryParser {
+public class QueryParser
+{
 
-    private String query = "";
-    private String aimCollection = "";
-    private String whereClause = "";
-    private List<QueryExpression> listExpressions;
+	private String query = "";
+	private String aimCollection = "";
+	private String whereClause = "";
+	private List<QueryExpression> listExpressions;
 
-    public QueryParser(String queryString) throws AimException {
-        this.listExpressions = new ArrayList<>();
-        this.query = queryString;
-        parseTheQuery();
-        this.fillListExpression();
-    }
+	public QueryParser(String queryString) throws AimException
+	{
+		this.listExpressions = new ArrayList<QueryExpression>();
+		this.query = queryString;
+		parseTheQuery();
+		this.fillListExpression();
+	}
 
-    private void parseTheQuery() throws AimException {
-        int indexOfWhere = this.query.toLowerCase(new Locale("\\u0131")).indexOf("where");
-        if (indexOfWhere < 0) {
-            throw new AimException("AimException: AimQL Syntax Error.");
-        }
-        String wherePart = this.query.substring(indexOfWhere + 5);
-        String selectPart = this.query.substring(0, indexOfWhere);
-        int indexOfFrom = selectPart.toLowerCase(new Locale("\\u0131")).indexOf("from");
-        if (indexOfFrom < 0) {
-            throw new AimException("AimException: AimQL Syntax Error.");
-        }
-        String collection = selectPart.substring(indexOfFrom + 4);
-        this.aimCollection = collection;
-        this.whereClause = wherePart;
-    }
+	private void parseTheQuery() throws AimException
+	{
+		int indexOfWhere = this.query.toLowerCase(new Locale("\\u0131")).indexOf("where");
+		if (indexOfWhere < 0) {
+			throw new AimException("AimException: AimQL Syntax Error.");
+		}
+		String wherePart = this.query.substring(indexOfWhere + 5);
+		String selectPart = this.query.substring(0, indexOfWhere);
+		int indexOfFrom = selectPart.toLowerCase(new Locale("\\u0131")).indexOf("from");
+		if (indexOfFrom < 0) {
+			throw new AimException("AimException: AimQL Syntax Error.");
+		}
+		String collection = selectPart.substring(indexOfFrom + 4);
+		this.aimCollection = collection;
+		this.whereClause = wherePart;
+	}
 
-    private void fillListExpression() throws AimException {
-        Hashtable<String, String> hasSingleQuoteValues = new Hashtable<>();
-        String regex = "'.*?'";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(this.whereClause);
-        int counter = 1;
-        String updatedWhereClause = this.whereClause;
-        while (matcher.find()) {
-            String val = matcher.group(0);
-            String key = "'~%value" + counter + "%~'";
-            hasSingleQuoteValues.put(key, val);
-            updatedWhereClause = updatedWhereClause.replace(val, key);
-            counter++;
-        }
-        String spliter = " ~%con%~ ";
-        updatedWhereClause = updatedWhereClause.replace("(", "").replace(")", "").trim().replaceAll(" (?i)and ", spliter).replaceAll(" (?i)or ", spliter);
-        List<String> listUpdatedExpressions = new ArrayList<>();
-        listUpdatedExpressions.addAll(Arrays.asList(updatedWhereClause.split(spliter)));
+	private void fillListExpression() throws AimException
+	{
+		Hashtable<String, String> hasSingleQuoteValues = new Hashtable<String, String>();
+		String regex = "'.*?'";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(this.whereClause);
+		int counter = 1;
+		String updatedWhereClause = this.whereClause;
+		while (matcher.find()) {
+			String val = matcher.group(0);
+			String key = "'~%value" + counter + "%~'";
+			hasSingleQuoteValues.put(key, val);
+			updatedWhereClause = updatedWhereClause.replace(val, key);
+			counter++;
+		}
+		String spliter = " ~%con%~ ";
+		updatedWhereClause = updatedWhereClause.replace("(", "").replace(")", "").trim().replaceAll(" (?i)and ", spliter)
+				.replaceAll(" (?i)or ", spliter);
+		List<String> listUpdatedExpressions = new ArrayList<String>();
+		listUpdatedExpressions.addAll(Arrays.asList(updatedWhereClause.split(spliter)));
 
-        for (int i = 0; i < listUpdatedExpressions.size(); i++) {
-            //regex = "([a-zA -Z][a-zA-Z0-9]*)\\.([a-zA-Z][a-zA-Z0-9]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
-            //regex = "(^[A-Za-z ].*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
-            regex = "([a-zA-Z][a-zA-Z0-9.]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
+		for (int i = 0; i < listUpdatedExpressions.size(); i++) {
+			// regex =
+			// "([a-zA -Z][a-zA-Z0-9]*)\\.([a-zA-Z][a-zA-Z0-9]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
+			// regex =
+			// "(^[A-Za-z ].*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
+			regex = "([a-zA-Z][a-zA-Z0-9.]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
 
-            pattern = Pattern.compile(regex);
-            matcher = pattern.matcher(listUpdatedExpressions.get(i));
-            boolean find = false;
-            while (matcher.find()) {
-                String expression = matcher.group(0);
-                String value = matcher.group(3);
-                if (value.indexOf("'~%value") >= 0) {
-                    String originalValue = hasSingleQuoteValues.get(value);
-                    String updatedValue = value;
-                    value = originalValue;
-                    expression = expression.replace(updatedValue, originalValue);
-                }
-                String leftSide = matcher.group(1);
-                String function = matcher.group(2);
-                QueryExpression exp = new QueryExpression(expression, leftSide, function, value);
-                this.listExpressions.add(exp);
-                find = true;
-            }
-            if (!find) {
-                throw new AimException("AimException: AimQL Syntax Error.");
-            }
-        }
-    }
+			pattern = Pattern.compile(regex);
+			matcher = pattern.matcher(listUpdatedExpressions.get(i));
+			boolean find = false;
+			while (matcher.find()) {
+				String expression = matcher.group(0);
+				String value = matcher.group(3);
+				if (value.indexOf("'~%value") >= 0) {
+					String originalValue = hasSingleQuoteValues.get(value);
+					String updatedValue = value;
+					value = originalValue;
+					expression = expression.replace(updatedValue, originalValue);
+				}
+				String leftSide = matcher.group(1);
+				String function = matcher.group(2);
+				QueryExpression exp = new QueryExpression(expression, leftSide, function, value);
+				this.listExpressions.add(exp);
+				find = true;
+			}
+			if (!find) {
+				throw new AimException("AimException: AimQL Syntax Error.");
+			}
+		}
+	}
 
-    public String getQuery() {
-        return query;
-    }
+	public String getQuery()
+	{
+		return query;
+	}
 
-    public void setQuery(String query) {
-        this.query = query;
-    }
+	public void setQuery(String query)
+	{
+		this.query = query;
+	}
 
-    public String getAimCollection() {
-        return aimCollection;
-    }
+	public String getAimCollection()
+	{
+		return aimCollection;
+	}
 
-    public void setAimCollection(String aimCollection) {
-        this.aimCollection = aimCollection;
-    }
+	public void setAimCollection(String aimCollection)
+	{
+		this.aimCollection = aimCollection;
+	}
 
-    public String getWhereClause() {
-        return whereClause;
-    }
+	public String getWhereClause()
+	{
+		return whereClause;
+	}
 
-    public void setWhereClause(String whereClause) {
-        this.whereClause = whereClause;
-    }
+	public void setWhereClause(String whereClause)
+	{
+		this.whereClause = whereClause;
+	}
 
-    public List<QueryExpression> getListExpressions() {
-        return listExpressions;
-    }
+	public List<QueryExpression> getListExpressions()
+	{
+		return listExpressions;
+	}
 
-    public void setListExpressions(List<QueryExpression> listExpressions) {
-        this.listExpressions = listExpressions;
-    }
+	public void setListExpressions(List<QueryExpression> listExpressions)
+	{
+		this.listExpressions = listExpressions;
+	}
 }

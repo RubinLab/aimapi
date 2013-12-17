@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class CalculationEntityCollection implements IAimXMLOperations {
+public class CalculationEntityCollection implements IAimXMLOperations
+{
 
-    private List<CalculationEntity> listCalculationEntity = new ArrayList<>();
+	private final List<CalculationEntity> listCalculationEntity = new ArrayList<CalculationEntity>();
 
-    public void addCalculationEntity(CalculationEntity newCalculationEntity) {
-        this.listCalculationEntity.add(newCalculationEntity);
-    }
+	public void addCalculationEntity(CalculationEntity newCalculationEntity)
+	{
+		this.listCalculationEntity.add(newCalculationEntity);
+	}
 
-    public List<CalculationEntity> getCalculationEntityList() {
-        return this.listCalculationEntity;
-    }
+	public List<CalculationEntity> getCalculationEntityList()
+	{
+		return this.listCalculationEntity;
+	}
 
-    public int size() {
-        return this.listCalculationEntity.size();
-    }
+	public int size()
+	{
+		return this.listCalculationEntity.size();
+	}
 
-    public CalculationEntity get(int index) {
-        if (index <= this.listCalculationEntity.size() - 1) {
-            return this.listCalculationEntity.get(index);
-        }
-        return null;
-    }
+	public CalculationEntity get(int index)
+	{
+		if (index <= this.listCalculationEntity.size() - 1) {
+			return this.listCalculationEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element calculationEntityCollection = doc.createElement("calculationEntityCollection");
-        for (int i = 0; i < this.listCalculationEntity.size(); i++) {
-            this.listCalculationEntity.get(i).setTagName("CalculationEntity");
-            calculationEntityCollection.appendChild(this.listCalculationEntity.get(i).getXMLNode(doc));
-        }
-        return calculationEntityCollection;
-    }
+		Element calculationEntityCollection = doc.createElement("calculationEntityCollection");
+		for (int i = 0; i < this.listCalculationEntity.size(); i++) {
+			this.listCalculationEntity.get(i).setTagName("CalculationEntity");
+			calculationEntityCollection.appendChild(this.listCalculationEntity.get(i).getXMLNode(doc));
+		}
+		return calculationEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listCalculationEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("CalculationEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listCalculationEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("CalculationEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    CalculationEntity obj = new CalculationEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addCalculationEntity(obj);
-                }
-            }
-        }
+				} else {
+					CalculationEntity obj = new CalculationEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addCalculationEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        CalculationEntityCollection oth = (CalculationEntityCollection) other;
-        if (this.listCalculationEntity.size() != oth.listCalculationEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listCalculationEntity.size(); i++) {
-            if (!this.listCalculationEntity.get(i).isEqualTo(oth.listCalculationEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		CalculationEntityCollection oth = (CalculationEntityCollection)other;
+		if (this.listCalculationEntity.size() != oth.listCalculationEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listCalculationEntity.size(); i++) {
+			if (!this.listCalculationEntity.get(i).isEqualTo(oth.listCalculationEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public CalculationEntityCollection getClone() {
-        CalculationEntityCollection res = new CalculationEntityCollection();
-        for (int i = 0; i < this.listCalculationEntity.size(); i++) {
-            if (this.listCalculationEntity.get(i) != null) {
-                res.addCalculationEntity(this.listCalculationEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public CalculationEntityCollection getClone()
+	{
+		CalculationEntityCollection res = new CalculationEntityCollection();
+		for (int i = 0; i < this.listCalculationEntity.size(); i++) {
+			if (this.listCalculationEntity.get(i) != null) {
+				res.addCalculationEntity(this.listCalculationEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

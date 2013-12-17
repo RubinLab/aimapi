@@ -29,107 +29,119 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class CalculationResultCollection implements IAimXMLOperations {
+public class CalculationResultCollection implements IAimXMLOperations
+{
 
-    private List<CalculationResult> listCalculationResult = new ArrayList<>();
+	private final List<CalculationResult> listCalculationResult = new ArrayList<CalculationResult>();
 
-    public void addCalculationResult(CalculationResult newCalculationResult) {
-        this.listCalculationResult.add(newCalculationResult);
-    }
+	public void addCalculationResult(CalculationResult newCalculationResult)
+	{
+		this.listCalculationResult.add(newCalculationResult);
+	}
 
-    public List<CalculationResult> getCalculationResultList() {
-        return this.listCalculationResult;
-    }
+	public List<CalculationResult> getCalculationResultList()
+	{
+		return this.listCalculationResult;
+	}
 
-    public int size() {
-        return this.listCalculationResult.size();
-    }
+	public int size()
+	{
+		return this.listCalculationResult.size();
+	}
 
-    public CalculationResult get(int index) {
-        if (index <= this.listCalculationResult.size() - 1) {
-            return this.listCalculationResult.get(index);
-        }
-        return null;
-    }
+	public CalculationResult get(int index)
+	{
+		if (index <= this.listCalculationResult.size() - 1) {
+			return this.listCalculationResult.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element calculationResultCollection = doc.createElement("calculationResultCollection");
-        for (int i = 0; i < this.listCalculationResult.size(); i++) {
-            this.listCalculationResult.get(i).setTagName("CalculationResult");
-            calculationResultCollection.appendChild(this.listCalculationResult.get(i).getXMLNode(doc));
-        }
-        return calculationResultCollection;
-    }
+		Element calculationResultCollection = doc.createElement("calculationResultCollection");
+		for (int i = 0; i < this.listCalculationResult.size(); i++) {
+			this.listCalculationResult.get(i).setTagName("CalculationResult");
+			calculationResultCollection.appendChild(this.listCalculationResult.get(i).getXMLNode(doc));
+		}
+		return calculationResultCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listCalculationResult.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("CalculationResult".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
-                    if ("CompactCalculationResult".equals(xsiType)) {
-                        CompactCalculationResult obj = new CompactCalculationResult();
-                        obj.setXMLNode(currentNode);
-                        this.addCalculationResult(obj);
-                    }
-                    if ("ExtendedCalculationResult".equals(xsiType)) {
-                        ExtendedCalculationResult obj = new ExtendedCalculationResult();
-                        obj.setXMLNode(currentNode);
-                        this.addCalculationResult(obj);
-                    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listCalculationResult.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("CalculationResult".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+					if ("CompactCalculationResult".equals(xsiType)) {
+						CompactCalculationResult obj = new CompactCalculationResult();
+						obj.setXMLNode(currentNode);
+						this.addCalculationResult(obj);
+					}
+					if ("ExtendedCalculationResult".equals(xsiType)) {
+						ExtendedCalculationResult obj = new ExtendedCalculationResult();
+						obj.setXMLNode(currentNode);
+						this.addCalculationResult(obj);
+					}
 
-                } else {
-                    CalculationResult obj = new CalculationResult();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addCalculationResult(obj);
-                }
-            }
-        }
+				} else {
+					CalculationResult obj = new CalculationResult();
+					obj.setXMLNode(tempList.item(j));
+					this.addCalculationResult(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        CalculationResultCollection oth = (CalculationResultCollection) other;
-        if (this.listCalculationResult.size() != oth.listCalculationResult.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listCalculationResult.size(); i++) {
-            if (!this.listCalculationResult.get(i).isEqualTo(oth.listCalculationResult.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		CalculationResultCollection oth = (CalculationResultCollection)other;
+		if (this.listCalculationResult.size() != oth.listCalculationResult.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listCalculationResult.size(); i++) {
+			if (!this.listCalculationResult.get(i).isEqualTo(oth.listCalculationResult.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public CalculationResultCollection getClone() {
-        CalculationResultCollection res = new CalculationResultCollection();
-        for (int i = 0; i < this.listCalculationResult.size(); i++) {
-            if (this.listCalculationResult.get(i) != null) {
-                res.addCalculationResult(this.listCalculationResult.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public CalculationResultCollection getClone()
+	{
+		CalculationResultCollection res = new CalculationResultCollection();
+		for (int i = 0; i < this.listCalculationResult.size(); i++) {
+			if (this.listCalculationResult.get(i) != null) {
+				res.addCalculationResult(this.listCalculationResult.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

@@ -29,86 +29,98 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class AnnotationOfAnnotationCollection extends AnnotationCollection {
+public class AnnotationOfAnnotationCollection extends AnnotationCollection
+{
 
-    private List<AnnotationOfAnnotation> listAnnotationOfAnnotation = new ArrayList<>();
+	private final List<AnnotationOfAnnotation> listAnnotationOfAnnotation = new ArrayList<AnnotationOfAnnotation>();
 
-    public void addAnnotationOfAnnotation(AnnotationOfAnnotation newAnnotationOfAnnotation) {
-        this.listAnnotationOfAnnotation.add(newAnnotationOfAnnotation);
-    }
+	public void addAnnotationOfAnnotation(AnnotationOfAnnotation newAnnotationOfAnnotation)
+	{
+		this.listAnnotationOfAnnotation.add(newAnnotationOfAnnotation);
+	}
 
-    public List<AnnotationOfAnnotation> getAnnotationOfAnnotationList() {
-        return this.listAnnotationOfAnnotation;
-    }
+	public List<AnnotationOfAnnotation> getAnnotationOfAnnotationList()
+	{
+		return this.listAnnotationOfAnnotation;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        AnnotationOfAnnotationCollection oth = (AnnotationOfAnnotationCollection) other;
-        if (this.listAnnotationOfAnnotation.size() != oth.listAnnotationOfAnnotation.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listAnnotationOfAnnotation.size(); i++) {
-            if (!this.listAnnotationOfAnnotation.get(i).isEqualTo(oth.listAnnotationOfAnnotation.get(i))) {
-                return false;
-            }
-        }
-        return super.isEqualTo(other);
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		AnnotationOfAnnotationCollection oth = (AnnotationOfAnnotationCollection)other;
+		if (this.listAnnotationOfAnnotation.size() != oth.listAnnotationOfAnnotation.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listAnnotationOfAnnotation.size(); i++) {
+			if (!this.listAnnotationOfAnnotation.get(i).isEqualTo(oth.listAnnotationOfAnnotation.get(i))) {
+				return false;
+			}
+		}
+		return super.isEqualTo(other);
+	}
 
-    @Override
-    public AnnotationOfAnnotationCollection getClone() {
-        AnnotationOfAnnotationCollection res = new AnnotationOfAnnotationCollection();
-        for (int i = 0; i < this.listAnnotationOfAnnotation.size(); i++) {
-            if (this.listAnnotationOfAnnotation.get(i) != null) {
-                res.addAnnotationOfAnnotation(this.listAnnotationOfAnnotation.get(i).getClone());
-            }
-        }
-        if (this.getUniqueIdentifier() != null) {
-            res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
-        }
-        if (this.getDescription() != null) {
-            res.setDescription(this.getDescription().getClone());
-        }
-        if (this.getDateTime() != null) {
-            res.setDateTime(this.getDateTime());
-        }
-        if (this.getUser() != null) {
-            res.setUser(this.getUser().getClone());
-        }
-        if (this.getEquipment() != null) {
-            res.setEquipment(this.getEquipment().getClone());
-        }
-        if (this.getAimVersion() != null) {
-            res.setAimVersion(this.getAimVersion());
-        }
-        if (this.getTagName() != null) {
-            res.setTagName(this.getTagName());
-        }
-        if (this.getXsiType() != null) {
-            res.setXsiType(this.getXsiType());
-        }
-        return res;
-    }
+	@Override
+	public AnnotationOfAnnotationCollection getClone()
+	{
+		AnnotationOfAnnotationCollection res = new AnnotationOfAnnotationCollection();
+		for (int i = 0; i < this.listAnnotationOfAnnotation.size(); i++) {
+			if (this.listAnnotationOfAnnotation.get(i) != null) {
+				res.addAnnotationOfAnnotation(this.listAnnotationOfAnnotation.get(i).getClone());
+			}
+		}
+		if (this.getUniqueIdentifier() != null) {
+			res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
+		}
+		if (this.getDescription() != null) {
+			res.setDescription(this.getDescription().getClone());
+		}
+		if (this.getDateTime() != null) {
+			res.setDateTime(this.getDateTime());
+		}
+		if (this.getUser() != null) {
+			res.setUser(this.getUser().getClone());
+		}
+		if (this.getEquipment() != null) {
+			res.setEquipment(this.getEquipment().getClone());
+		}
+		if (this.getAimVersion() != null) {
+			res.setAimVersion(this.getAimVersion());
+		}
+		if (this.getTagName() != null) {
+			res.setTagName(this.getTagName());
+		}
+		if (this.getXsiType() != null) {
+			res.setXsiType(this.getXsiType());
+		}
+		return res;
+	}
 }

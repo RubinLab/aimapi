@@ -29,97 +29,109 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ReferencedDicomObjectCollection implements IAimXMLOperations {
+public class ReferencedDicomObjectCollection implements IAimXMLOperations
+{
 
-    private List<ReferencedDicomObject> listReferencedDicomObject = new ArrayList<>();
+	private final List<ReferencedDicomObject> listReferencedDicomObject = new ArrayList<ReferencedDicomObject>();
 
-    public void addReferencedDicomObject(ReferencedDicomObject newReferencedDicomObject) {
-        this.listReferencedDicomObject.add(newReferencedDicomObject);
-    }
+	public void addReferencedDicomObject(ReferencedDicomObject newReferencedDicomObject)
+	{
+		this.listReferencedDicomObject.add(newReferencedDicomObject);
+	}
 
-    public List<ReferencedDicomObject> getReferencedDicomObjectList() {
-        return this.listReferencedDicomObject;
-    }
+	public List<ReferencedDicomObject> getReferencedDicomObjectList()
+	{
+		return this.listReferencedDicomObject;
+	}
 
-    public int size() {
-        return this.listReferencedDicomObject.size();
-    }
+	public int size()
+	{
+		return this.listReferencedDicomObject.size();
+	}
 
-    public ReferencedDicomObject get(int index) {
-        if (index <= this.listReferencedDicomObject.size() - 1) {
-            return this.listReferencedDicomObject.get(index);
-        }
-        return null;
-    }
+	public ReferencedDicomObject get(int index)
+	{
+		if (index <= this.listReferencedDicomObject.size() - 1) {
+			return this.listReferencedDicomObject.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element referencedDicomObjectCollection = doc.createElement("referencedDicomObjectCollection");
-        for (int i = 0; i < this.listReferencedDicomObject.size(); i++) {
-            this.listReferencedDicomObject.get(i).setTagName("ReferencedDicomObject");
-            referencedDicomObjectCollection.appendChild(this.listReferencedDicomObject.get(i).getXMLNode(doc));
-        }
-        return referencedDicomObjectCollection;
-    }
+		Element referencedDicomObjectCollection = doc.createElement("referencedDicomObjectCollection");
+		for (int i = 0; i < this.listReferencedDicomObject.size(); i++) {
+			this.listReferencedDicomObject.get(i).setTagName("ReferencedDicomObject");
+			referencedDicomObjectCollection.appendChild(this.listReferencedDicomObject.get(i).getXMLNode(doc));
+		}
+		return referencedDicomObjectCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listReferencedDicomObject.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("ReferencedDicomObject".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listReferencedDicomObject.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("ReferencedDicomObject".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    ReferencedDicomObject obj = new ReferencedDicomObject();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addReferencedDicomObject(obj);
-                }
-            }
-        }
+				} else {
+					ReferencedDicomObject obj = new ReferencedDicomObject();
+					obj.setXMLNode(tempList.item(j));
+					this.addReferencedDicomObject(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ReferencedDicomObjectCollection oth = (ReferencedDicomObjectCollection) other;
-        if (this.listReferencedDicomObject.size() != oth.listReferencedDicomObject.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listReferencedDicomObject.size(); i++) {
-            if (!this.listReferencedDicomObject.get(i).isEqualTo(oth.listReferencedDicomObject.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ReferencedDicomObjectCollection oth = (ReferencedDicomObjectCollection)other;
+		if (this.listReferencedDicomObject.size() != oth.listReferencedDicomObject.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listReferencedDicomObject.size(); i++) {
+			if (!this.listReferencedDicomObject.get(i).isEqualTo(oth.listReferencedDicomObject.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ReferencedDicomObjectCollection getClone() {
-        ReferencedDicomObjectCollection res = new ReferencedDicomObjectCollection();
-        for (int i = 0; i < this.listReferencedDicomObject.size(); i++) {
-            if (this.listReferencedDicomObject.get(i) != null) {
-                res.addReferencedDicomObject(this.listReferencedDicomObject.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ReferencedDicomObjectCollection getClone()
+	{
+		ReferencedDicomObjectCollection res = new ReferencedDicomObjectCollection();
+		for (int i = 0; i < this.listReferencedDicomObject.size(); i++) {
+			if (this.listReferencedDicomObject.get(i) != null) {
+				res.addReferencedDicomObject(this.listReferencedDicomObject.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

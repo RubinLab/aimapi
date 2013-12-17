@@ -29,107 +29,119 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class LesionObservationEntityCollection implements IAimXMLOperations {
+public class LesionObservationEntityCollection implements IAimXMLOperations
+{
 
-    private List<LesionObservationEntity> listLesionObservationEntity = new ArrayList<>();
+	private final List<LesionObservationEntity> listLesionObservationEntity = new ArrayList<LesionObservationEntity>();
 
-    public void addLesionObservationEntity(LesionObservationEntity newLesionObservationEntity) {
-        this.listLesionObservationEntity.add(newLesionObservationEntity);
-    }
+	public void addLesionObservationEntity(LesionObservationEntity newLesionObservationEntity)
+	{
+		this.listLesionObservationEntity.add(newLesionObservationEntity);
+	}
 
-    public List<LesionObservationEntity> getLesionObservationEntityList() {
-        return this.listLesionObservationEntity;
-    }
+	public List<LesionObservationEntity> getLesionObservationEntityList()
+	{
+		return this.listLesionObservationEntity;
+	}
 
-    public int size() {
-        return this.listLesionObservationEntity.size();
-    }
+	public int size()
+	{
+		return this.listLesionObservationEntity.size();
+	}
 
-    public LesionObservationEntity get(int index) {
-        if (index <= this.listLesionObservationEntity.size() - 1) {
-            return this.listLesionObservationEntity.get(index);
-        }
-        return null;
-    }
+	public LesionObservationEntity get(int index)
+	{
+		if (index <= this.listLesionObservationEntity.size() - 1) {
+			return this.listLesionObservationEntity.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element lesionObservationEntityCollection = doc.createElement("lesionObservationEntityCollection");
-        for (int i = 0; i < this.listLesionObservationEntity.size(); i++) {
-            this.listLesionObservationEntity.get(i).setTagName("LesionObservationEntity");
-            lesionObservationEntityCollection.appendChild(this.listLesionObservationEntity.get(i).getXMLNode(doc));
-        }
-        return lesionObservationEntityCollection;
-    }
+		Element lesionObservationEntityCollection = doc.createElement("lesionObservationEntityCollection");
+		for (int i = 0; i < this.listLesionObservationEntity.size(); i++) {
+			this.listLesionObservationEntity.get(i).setTagName("LesionObservationEntity");
+			lesionObservationEntityCollection.appendChild(this.listLesionObservationEntity.get(i).getXMLNode(doc));
+		}
+		return lesionObservationEntityCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listLesionObservationEntity.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("LesionObservationEntity".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
-                    if ("TimePointLesionObservationEntity".equals(xsiType)) {
-                        TimePointLesionObservationEntity obj = new TimePointLesionObservationEntity();
-                        obj.setXMLNode(currentNode);
-                        this.addLesionObservationEntity(obj);
-                    }
-                    if ("GeneralLesionObservationEntity".equals(xsiType)) {
-                        GeneralLesionObservationEntity obj = new GeneralLesionObservationEntity();
-                        obj.setXMLNode(currentNode);
-                        this.addLesionObservationEntity(obj);
-                    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listLesionObservationEntity.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("LesionObservationEntity".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+					if ("TimePointLesionObservationEntity".equals(xsiType)) {
+						TimePointLesionObservationEntity obj = new TimePointLesionObservationEntity();
+						obj.setXMLNode(currentNode);
+						this.addLesionObservationEntity(obj);
+					}
+					if ("GeneralLesionObservationEntity".equals(xsiType)) {
+						GeneralLesionObservationEntity obj = new GeneralLesionObservationEntity();
+						obj.setXMLNode(currentNode);
+						this.addLesionObservationEntity(obj);
+					}
 
-                } else {
-                    LesionObservationEntity obj = new LesionObservationEntity();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addLesionObservationEntity(obj);
-                }
-            }
-        }
+				} else {
+					LesionObservationEntity obj = new LesionObservationEntity();
+					obj.setXMLNode(tempList.item(j));
+					this.addLesionObservationEntity(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        LesionObservationEntityCollection oth = (LesionObservationEntityCollection) other;
-        if (this.listLesionObservationEntity.size() != oth.listLesionObservationEntity.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listLesionObservationEntity.size(); i++) {
-            if (!this.listLesionObservationEntity.get(i).isEqualTo(oth.listLesionObservationEntity.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		LesionObservationEntityCollection oth = (LesionObservationEntityCollection)other;
+		if (this.listLesionObservationEntity.size() != oth.listLesionObservationEntity.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listLesionObservationEntity.size(); i++) {
+			if (!this.listLesionObservationEntity.get(i).isEqualTo(oth.listLesionObservationEntity.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public LesionObservationEntityCollection getClone() {
-        LesionObservationEntityCollection res = new LesionObservationEntityCollection();
-        for (int i = 0; i < this.listLesionObservationEntity.size(); i++) {
-            if (this.listLesionObservationEntity.get(i) != null) {
-                res.addLesionObservationEntity(this.listLesionObservationEntity.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public LesionObservationEntityCollection getClone()
+	{
+		LesionObservationEntityCollection res = new LesionObservationEntityCollection();
+		for (int i = 0; i < this.listLesionObservationEntity.size(); i++) {
+			if (this.listLesionObservationEntity.get(i) != null) {
+				res.addLesionObservationEntity(this.listLesionObservationEntity.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

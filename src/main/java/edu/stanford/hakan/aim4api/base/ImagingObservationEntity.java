@@ -27,288 +27,320 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ImagingObservationEntity extends Entity {
+public class ImagingObservationEntity extends Entity
+{
 
-    public ImagingObservationEntity() {
-        setXsiType("ImagingObservationEntity");
-    }
-    private List<CD> listTypeCode = new ArrayList<>();
-    private List<CD> listQuestionTypeCode = new ArrayList<>();
-    private Double annotatorConfidence;
-    private ST label;
-    private ST comment;
-    private Boolean isPresent;
-    private Integer questionIndex;
-    private ImagingObservationCharacteristicCollection imagingObservationCharacteristicCollection = new ImagingObservationCharacteristicCollection();
+	public ImagingObservationEntity()
+	{
+		setXsiType("ImagingObservationEntity");
+	}
 
-    public List<CD> getListTypeCode() {
-        return this.listTypeCode;
-    }
+	private List<CD> listTypeCode = new ArrayList<CD>();
+	private List<CD> listQuestionTypeCode = new ArrayList<CD>();
+	private Double annotatorConfidence;
+	private ST label;
+	private ST comment;
+	private Boolean isPresent;
+	private Integer questionIndex;
+	private ImagingObservationCharacteristicCollection imagingObservationCharacteristicCollection = new ImagingObservationCharacteristicCollection();
 
-    public void setTypeCode(List<CD> listTypeCode) {
-        this.listTypeCode = listTypeCode;
-        for (int i = 0; i < this.listTypeCode.size(); i++) {
-            this.listTypeCode.get(i).setTagName("typeCode");
-        }
-    }
+	public List<CD> getListTypeCode()
+	{
+		return this.listTypeCode;
+	}
 
-    public void addTypeCode(CD newTypeCode) {
-        newTypeCode.setTagName("typeCode");
-        this.listTypeCode.add(newTypeCode);
-    }
+	public void setTypeCode(List<CD> listTypeCode)
+	{
+		this.listTypeCode = listTypeCode;
+		for (int i = 0; i < this.listTypeCode.size(); i++) {
+			this.listTypeCode.get(i).setTagName("typeCode");
+		}
+	}
 
-    public List<CD> getListQuestionTypeCode() {
-        return this.listQuestionTypeCode;
-    }
+	public void addTypeCode(CD newTypeCode)
+	{
+		newTypeCode.setTagName("typeCode");
+		this.listTypeCode.add(newTypeCode);
+	}
 
-    public void setQuestionTypeCode(List<CD> listQuestionTypeCode) {
-        this.listQuestionTypeCode = listQuestionTypeCode;
-        for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
-            this.listQuestionTypeCode.get(i).setTagName("questionTypeCode");
-        }
-    }
+	public List<CD> getListQuestionTypeCode()
+	{
+		return this.listQuestionTypeCode;
+	}
 
-    public void addQuestionTypeCode(CD newQuestionTypeCode) {
-        newQuestionTypeCode.setTagName("questionTypeCode");
-        this.listQuestionTypeCode.add(newQuestionTypeCode);
-    }
+	public void setQuestionTypeCode(List<CD> listQuestionTypeCode)
+	{
+		this.listQuestionTypeCode = listQuestionTypeCode;
+		for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
+			this.listQuestionTypeCode.get(i).setTagName("questionTypeCode");
+		}
+	}
 
-    public Double getAnnotatorConfidence() {
-        return annotatorConfidence;
-    }
+	public void addQuestionTypeCode(CD newQuestionTypeCode)
+	{
+		newQuestionTypeCode.setTagName("questionTypeCode");
+		this.listQuestionTypeCode.add(newQuestionTypeCode);
+	}
 
-    public void setAnnotatorConfidence(Double annotatorConfidence) {
-        this.annotatorConfidence = annotatorConfidence;
-    }
+	public Double getAnnotatorConfidence()
+	{
+		return annotatorConfidence;
+	}
 
-    public ST getLabel() {
-        return label;
-    }
+	public void setAnnotatorConfidence(Double annotatorConfidence)
+	{
+		this.annotatorConfidence = annotatorConfidence;
+	}
 
-    public void setLabel(ST label) {
-        label.setTagName("label");
-        this.label = label;
-    }
+	public ST getLabel()
+	{
+		return label;
+	}
 
-    public ST getComment() {
-        return comment;
-    }
+	public void setLabel(ST label)
+	{
+		label.setTagName("label");
+		this.label = label;
+	}
 
-    public void setComment(ST comment) {
-        comment.setTagName("comment");
-        this.comment = comment;
-    }
+	public ST getComment()
+	{
+		return comment;
+	}
 
-    public Boolean getIsPresent() {
-        return isPresent;
-    }
+	public void setComment(ST comment)
+	{
+		comment.setTagName("comment");
+		this.comment = comment;
+	}
 
-    public void setIsPresent(Boolean isPresent) {
-        this.isPresent = isPresent;
-    }
+	public Boolean getIsPresent()
+	{
+		return isPresent;
+	}
 
-    public Integer getQuestionIndex() {
-        return questionIndex;
-    }
+	public void setIsPresent(Boolean isPresent)
+	{
+		this.isPresent = isPresent;
+	}
 
-    public void setQuestionIndex(Integer questionIndex) {
-        this.questionIndex = questionIndex;
-    }
+	public Integer getQuestionIndex()
+	{
+		return questionIndex;
+	}
 
-    public ImagingObservationCharacteristicCollection getImagingObservationCharacteristicCollection() {
-        return imagingObservationCharacteristicCollection;
-    }
+	public void setQuestionIndex(Integer questionIndex)
+	{
+		this.questionIndex = questionIndex;
+	}
 
-    public void setImagingObservationCharacteristicCollection(ImagingObservationCharacteristicCollection imagingObservationCharacteristicCollection) {
-        this.imagingObservationCharacteristicCollection = imagingObservationCharacteristicCollection;
-    }
+	public ImagingObservationCharacteristicCollection getImagingObservationCharacteristicCollection()
+	{
+		return imagingObservationCharacteristicCollection;
+	}
 
-    public void addImagingObservationCharacteristic(ImagingObservationCharacteristic newImagingObservationCharacteristic) {
-        this.imagingObservationCharacteristicCollection.addImagingObservationCharacteristic(newImagingObservationCharacteristic);
-    }
+	public void setImagingObservationCharacteristicCollection(
+			ImagingObservationCharacteristicCollection imagingObservationCharacteristicCollection)
+	{
+		this.imagingObservationCharacteristicCollection = imagingObservationCharacteristicCollection;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        if (getTagName() == null || "".equals(getTagName())) {
-            setTagName("ImagingObservationEntity");
-        }
-        Element res = (Element) super.getXMLNode(doc);
-        if (this.listTypeCode.size() > 0) {
-            for (int i = 0; i < this.listTypeCode.size(); i++) {
-                res.appendChild(this.listTypeCode.get(i).getXMLNode(doc));
-            }
-        }
-        if (this.listQuestionTypeCode.size() > 0) {
-            for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
-                res.appendChild(this.listQuestionTypeCode.get(i).getXMLNode(doc));
-            }
-        }
-        if (this.annotatorConfidence != null) {
-            Element el_annotatorConfidence = doc.createElement("annotatorConfidence");
-            el_annotatorConfidence.setAttribute("value", this.annotatorConfidence.toString());
-            res.appendChild(el_annotatorConfidence);
-        }
-        if (this.label != null) {
-            res.appendChild(this.label.getXMLNode(doc));
-        }
-        if (this.comment != null) {
-            res.appendChild(this.comment.getXMLNode(doc));
-        }
-        if (this.isPresent != null) {
-            Element el_isPresent = doc.createElement("isPresent");
-            el_isPresent.setAttribute("value", this.isPresent.toString());
-            res.appendChild(el_isPresent);
-        }
-        if (this.questionIndex != null) {
-            Element el_questionIndex = doc.createElement("questionIndex");
-            el_questionIndex.setAttribute("value", this.questionIndex.toString());
-            res.appendChild(el_questionIndex);
-        }
-        if (this.imagingObservationCharacteristicCollection.size() > 0) {
-            res.appendChild(this.imagingObservationCharacteristicCollection.getXMLNode(doc));
-        }
-        return res;
-    }
+	public void addImagingObservationCharacteristic(ImagingObservationCharacteristic newImagingObservationCharacteristic)
+	{
+		this.imagingObservationCharacteristicCollection
+				.addImagingObservationCharacteristic(newImagingObservationCharacteristic);
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        super.setXMLNode(node);
-        this.listTypeCode.clear();
-        this.listQuestionTypeCode.clear();
-        NodeList listChilds = node.getChildNodes();
-        for (int i = 0; i < listChilds.getLength(); i++) {
-            Node currentNode = listChilds.item(i);
-            if ("typeCode".equals(currentNode.getNodeName())) {
-                CD obj = new CD();
-                obj.setXMLNode(currentNode);
-                this.addTypeCode(obj);
-            }
-            if ("questionTypeCode".equals(currentNode.getNodeName())) {
-                CD obj = new CD();
-                obj.setXMLNode(currentNode);
-                this.addQuestionTypeCode(obj);
-            }
-            if ("annotatorConfidence".equals(currentNode.getNodeName())) {
-                this.annotatorConfidence = Double.parseDouble(currentNode.getAttributes().getNamedItem("value").getNodeValue());
-            }
-            if ("label".equals(currentNode.getNodeName())) {
-                ST obj = new ST();
-                obj.setXMLNode(currentNode);
-                this.setLabel(obj);
-            }
-            if ("comment".equals(currentNode.getNodeName())) {
-                ST obj = new ST();
-                obj.setXMLNode(currentNode);
-                this.setComment(obj);
-            }
-            if ("isPresent".equals(currentNode.getNodeName())) {
-                this.isPresent = Boolean.parseBoolean(currentNode.getAttributes().getNamedItem("value").getNodeValue());
-            }
-            if ("questionIndex".equals(currentNode.getNodeName())) {
-                this.questionIndex = Integer.parseInt(currentNode.getAttributes().getNamedItem("value").getNodeValue());
-            }
-            if ("imagingObservationCharacteristicCollection".equals(listChilds.item(i).getNodeName())) {
-                this.imagingObservationCharacteristicCollection.setXMLNode(listChilds.item(i));
-            }
-        }
-    }
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
+		if (getTagName() == null || "".equals(getTagName())) {
+			setTagName("ImagingObservationEntity");
+		}
+		Element res = (Element)super.getXMLNode(doc);
+		if (this.listTypeCode.size() > 0) {
+			for (int i = 0; i < this.listTypeCode.size(); i++) {
+				res.appendChild(this.listTypeCode.get(i).getXMLNode(doc));
+			}
+		}
+		if (this.listQuestionTypeCode.size() > 0) {
+			for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
+				res.appendChild(this.listQuestionTypeCode.get(i).getXMLNode(doc));
+			}
+		}
+		if (this.annotatorConfidence != null) {
+			Element el_annotatorConfidence = doc.createElement("annotatorConfidence");
+			el_annotatorConfidence.setAttribute("value", this.annotatorConfidence.toString());
+			res.appendChild(el_annotatorConfidence);
+		}
+		if (this.label != null) {
+			res.appendChild(this.label.getXMLNode(doc));
+		}
+		if (this.comment != null) {
+			res.appendChild(this.comment.getXMLNode(doc));
+		}
+		if (this.isPresent != null) {
+			Element el_isPresent = doc.createElement("isPresent");
+			el_isPresent.setAttribute("value", this.isPresent.toString());
+			res.appendChild(el_isPresent);
+		}
+		if (this.questionIndex != null) {
+			Element el_questionIndex = doc.createElement("questionIndex");
+			el_questionIndex.setAttribute("value", this.questionIndex.toString());
+			res.appendChild(el_questionIndex);
+		}
+		if (this.imagingObservationCharacteristicCollection.size() > 0) {
+			res.appendChild(this.imagingObservationCharacteristicCollection.getXMLNode(doc));
+		}
+		return res;
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		super.setXMLNode(node);
+		this.listTypeCode.clear();
+		this.listQuestionTypeCode.clear();
+		NodeList listChilds = node.getChildNodes();
+		for (int i = 0; i < listChilds.getLength(); i++) {
+			Node currentNode = listChilds.item(i);
+			if ("typeCode".equals(currentNode.getNodeName())) {
+				CD obj = new CD();
+				obj.setXMLNode(currentNode);
+				this.addTypeCode(obj);
+			}
+			if ("questionTypeCode".equals(currentNode.getNodeName())) {
+				CD obj = new CD();
+				obj.setXMLNode(currentNode);
+				this.addQuestionTypeCode(obj);
+			}
+			if ("annotatorConfidence".equals(currentNode.getNodeName())) {
+				this.annotatorConfidence = Double.parseDouble(currentNode.getAttributes().getNamedItem("value").getNodeValue());
+			}
+			if ("label".equals(currentNode.getNodeName())) {
+				ST obj = new ST();
+				obj.setXMLNode(currentNode);
+				this.setLabel(obj);
+			}
+			if ("comment".equals(currentNode.getNodeName())) {
+				ST obj = new ST();
+				obj.setXMLNode(currentNode);
+				this.setComment(obj);
+			}
+			if ("isPresent".equals(currentNode.getNodeName())) {
+				this.isPresent = Boolean.parseBoolean(currentNode.getAttributes().getNamedItem("value").getNodeValue());
+			}
+			if ("questionIndex".equals(currentNode.getNodeName())) {
+				this.questionIndex = Integer.parseInt(currentNode.getAttributes().getNamedItem("value").getNodeValue());
+			}
+			if ("imagingObservationCharacteristicCollection".equals(listChilds.item(i).getNodeName())) {
+				this.imagingObservationCharacteristicCollection.setXMLNode(listChilds.item(i));
+			}
+		}
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ImagingObservationEntity oth = (ImagingObservationEntity) other;
-        if (this.listTypeCode.size() != oth.listTypeCode.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listTypeCode.size(); i++) {
-            if (!this.listTypeCode.get(i).isEqualTo(oth.listTypeCode.get(i))) {
-                return false;
-            }
-        }
-        if (this.listQuestionTypeCode.size() != oth.listQuestionTypeCode.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
-            if (!this.listQuestionTypeCode.get(i).isEqualTo(oth.listQuestionTypeCode.get(i))) {
-                return false;
-            }
-        }
-        if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence.equals(oth.annotatorConfidence)) {
-            return false;
-        }
-        if (!this.label.isEqualTo(oth.label)) {
-            return false;
-        }
-        if (!this.comment.isEqualTo(oth.comment)) {
-            return false;
-        }
-        if (this.isPresent == null ? oth.isPresent != null : !this.isPresent.equals(oth.isPresent)) {
-            return false;
-        }
-        if (this.questionIndex == null ? oth.questionIndex != null : !this.questionIndex.equals(oth.questionIndex)) {
-            return false;
-        }
-        if (!this.imagingObservationCharacteristicCollection.isEqualTo(oth.imagingObservationCharacteristicCollection)) {
-            return false;
-        }
-        return super.isEqualTo(other);
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public ImagingObservationEntity getClone() {
-        ImagingObservationEntity res = new ImagingObservationEntity();
-        for (int i = 0; i < this.listTypeCode.size(); i++) {
-            if (this.listTypeCode.get(i) != null) {
-                res.addTypeCode(this.listTypeCode.get(i).getClone());
-            }
-        }
-        for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
-            if (this.listQuestionTypeCode.get(i) != null) {
-                res.addQuestionTypeCode(this.listQuestionTypeCode.get(i).getClone());
-            }
-        }
-        if (this.getAnnotatorConfidence() != null) {
-            res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        }
-        if (this.getLabel() != null) {
-            res.setLabel(this.getLabel().getClone());
-        }
-        if (this.getComment() != null) {
-            res.setComment(this.getComment().getClone());
-        }
-        if (this.getIsPresent() != null) {
-            res.setIsPresent(this.getIsPresent());
-        }
-        if (this.getQuestionIndex() != null) {
-            res.setQuestionIndex(this.getQuestionIndex());
-        }
-        if (this.getImagingObservationCharacteristicCollection() != null) {
-            res.setImagingObservationCharacteristicCollection(this.getImagingObservationCharacteristicCollection().getClone());
-        }
-        if (this.getUniqueIdentifier() != null) {
-            res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
-        }
-        if (this.getTagName() != null) {
-            res.setTagName(this.getTagName());
-        }
-        if (this.getXsiType() != null) {
-            res.setXsiType(this.getXsiType());
-        }
-        return res;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ImagingObservationEntity oth = (ImagingObservationEntity)other;
+		if (this.listTypeCode.size() != oth.listTypeCode.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listTypeCode.size(); i++) {
+			if (!this.listTypeCode.get(i).isEqualTo(oth.listTypeCode.get(i))) {
+				return false;
+			}
+		}
+		if (this.listQuestionTypeCode.size() != oth.listQuestionTypeCode.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
+			if (!this.listQuestionTypeCode.get(i).isEqualTo(oth.listQuestionTypeCode.get(i))) {
+				return false;
+			}
+		}
+		if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence
+				.equals(oth.annotatorConfidence)) {
+			return false;
+		}
+		if (!this.label.isEqualTo(oth.label)) {
+			return false;
+		}
+		if (!this.comment.isEqualTo(oth.comment)) {
+			return false;
+		}
+		if (this.isPresent == null ? oth.isPresent != null : !this.isPresent.equals(oth.isPresent)) {
+			return false;
+		}
+		if (this.questionIndex == null ? oth.questionIndex != null : !this.questionIndex.equals(oth.questionIndex)) {
+			return false;
+		}
+		if (!this.imagingObservationCharacteristicCollection.isEqualTo(oth.imagingObservationCharacteristicCollection)) {
+			return false;
+		}
+		return super.isEqualTo(other);
+	}
+
+	@Override
+	public ImagingObservationEntity getClone()
+	{
+		ImagingObservationEntity res = new ImagingObservationEntity();
+		for (int i = 0; i < this.listTypeCode.size(); i++) {
+			if (this.listTypeCode.get(i) != null) {
+				res.addTypeCode(this.listTypeCode.get(i).getClone());
+			}
+		}
+		for (int i = 0; i < this.listQuestionTypeCode.size(); i++) {
+			if (this.listQuestionTypeCode.get(i) != null) {
+				res.addQuestionTypeCode(this.listQuestionTypeCode.get(i).getClone());
+			}
+		}
+		if (this.getAnnotatorConfidence() != null) {
+			res.setAnnotatorConfidence(this.getAnnotatorConfidence());
+		}
+		if (this.getLabel() != null) {
+			res.setLabel(this.getLabel().getClone());
+		}
+		if (this.getComment() != null) {
+			res.setComment(this.getComment().getClone());
+		}
+		if (this.getIsPresent() != null) {
+			res.setIsPresent(this.getIsPresent());
+		}
+		if (this.getQuestionIndex() != null) {
+			res.setQuestionIndex(this.getQuestionIndex());
+		}
+		if (this.getImagingObservationCharacteristicCollection() != null) {
+			res.setImagingObservationCharacteristicCollection(this.getImagingObservationCharacteristicCollection().getClone());
+		}
+		if (this.getUniqueIdentifier() != null) {
+			res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
+		}
+		if (this.getTagName() != null) {
+			res.setTagName(this.getTagName());
+		}
+		if (this.getXsiType() != null) {
+			res.setXsiType(this.getXsiType());
+		}
+		return res;
+	}
 }

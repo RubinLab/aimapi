@@ -29,97 +29,113 @@ package edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class ImagingPhysicalEntityCharacteristicCollection implements IAimXMLOperations {
+public class ImagingPhysicalEntityCharacteristicCollection implements IAimXMLOperations
+{
 
-    private List<ImagingPhysicalEntityCharacteristic> listImagingPhysicalEntityCharacteristic = new ArrayList<>();
+	private final List<ImagingPhysicalEntityCharacteristic> listImagingPhysicalEntityCharacteristic = new ArrayList<ImagingPhysicalEntityCharacteristic>();
 
-    public void addImagingPhysicalEntityCharacteristic(ImagingPhysicalEntityCharacteristic newImagingPhysicalEntityCharacteristic) {
-        this.listImagingPhysicalEntityCharacteristic.add(newImagingPhysicalEntityCharacteristic);
-    }
+	public void addImagingPhysicalEntityCharacteristic(
+			ImagingPhysicalEntityCharacteristic newImagingPhysicalEntityCharacteristic)
+	{
+		this.listImagingPhysicalEntityCharacteristic.add(newImagingPhysicalEntityCharacteristic);
+	}
 
-    public List<ImagingPhysicalEntityCharacteristic> getImagingPhysicalEntityCharacteristicList() {
-        return this.listImagingPhysicalEntityCharacteristic;
-    }
+	public List<ImagingPhysicalEntityCharacteristic> getImagingPhysicalEntityCharacteristicList()
+	{
+		return this.listImagingPhysicalEntityCharacteristic;
+	}
 
-    public int size() {
-        return this.listImagingPhysicalEntityCharacteristic.size();
-    }
+	public int size()
+	{
+		return this.listImagingPhysicalEntityCharacteristic.size();
+	}
 
-    public ImagingPhysicalEntityCharacteristic get(int index) {
-        if (index <= this.listImagingPhysicalEntityCharacteristic.size() - 1) {
-            return this.listImagingPhysicalEntityCharacteristic.get(index);
-        }
-        return null;
-    }
+	public ImagingPhysicalEntityCharacteristic get(int index)
+	{
+		if (index <= this.listImagingPhysicalEntityCharacteristic.size() - 1) {
+			return this.listImagingPhysicalEntityCharacteristic.get(index);
+		}
+		return null;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
 
-        Element imagingPhysicalEntityCharacteristicCollection = doc.createElement("imagingPhysicalEntityCharacteristicCollection");
-        for (int i = 0; i < this.listImagingPhysicalEntityCharacteristic.size(); i++) {
-            this.listImagingPhysicalEntityCharacteristic.get(i).setTagName("ImagingPhysicalEntityCharacteristic");
-            imagingPhysicalEntityCharacteristicCollection.appendChild(this.listImagingPhysicalEntityCharacteristic.get(i).getXMLNode(doc));
-        }
-        return imagingPhysicalEntityCharacteristicCollection;
-    }
+		Element imagingPhysicalEntityCharacteristicCollection = doc
+				.createElement("imagingPhysicalEntityCharacteristicCollection");
+		for (int i = 0; i < this.listImagingPhysicalEntityCharacteristic.size(); i++) {
+			this.listImagingPhysicalEntityCharacteristic.get(i).setTagName("ImagingPhysicalEntityCharacteristic");
+			imagingPhysicalEntityCharacteristicCollection.appendChild(this.listImagingPhysicalEntityCharacteristic.get(i)
+					.getXMLNode(doc));
+		}
+		return imagingPhysicalEntityCharacteristicCollection;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listImagingPhysicalEntityCharacteristic.clear();
-        NodeList tempList = node.getChildNodes();
-        for (int j = 0; j < tempList.getLength(); j++) {
-            Node currentNode = tempList.item(j);
-            if ("ImagingPhysicalEntityCharacteristic".equals(currentNode.getNodeName())) {
-                NamedNodeMap map = currentNode.getAttributes();
-                if (map.getNamedItem("xsi:type") != null) {
-                    String xsiType = map.getNamedItem("xsi:type").getNodeValue();
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listImagingPhysicalEntityCharacteristic.clear();
+		NodeList tempList = node.getChildNodes();
+		for (int j = 0; j < tempList.getLength(); j++) {
+			Node currentNode = tempList.item(j);
+			if ("ImagingPhysicalEntityCharacteristic".equals(currentNode.getNodeName())) {
+				NamedNodeMap map = currentNode.getAttributes();
+				if (map.getNamedItem("xsi:type") != null) {
+					String xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
-                } else {
-                    ImagingPhysicalEntityCharacteristic obj = new ImagingPhysicalEntityCharacteristic();
-                    obj.setXMLNode(tempList.item(j));
-                    this.addImagingPhysicalEntityCharacteristic(obj);
-                }
-            }
-        }
+				} else {
+					ImagingPhysicalEntityCharacteristic obj = new ImagingPhysicalEntityCharacteristic();
+					obj.setXMLNode(tempList.item(j));
+					this.addImagingPhysicalEntityCharacteristic(obj);
+				}
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        ImagingPhysicalEntityCharacteristicCollection oth = (ImagingPhysicalEntityCharacteristicCollection) other;
-        if (this.listImagingPhysicalEntityCharacteristic.size() != oth.listImagingPhysicalEntityCharacteristic.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listImagingPhysicalEntityCharacteristic.size(); i++) {
-            if (!this.listImagingPhysicalEntityCharacteristic.get(i).isEqualTo(oth.listImagingPhysicalEntityCharacteristic.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		ImagingPhysicalEntityCharacteristicCollection oth = (ImagingPhysicalEntityCharacteristicCollection)other;
+		if (this.listImagingPhysicalEntityCharacteristic.size() != oth.listImagingPhysicalEntityCharacteristic.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listImagingPhysicalEntityCharacteristic.size(); i++) {
+			if (!this.listImagingPhysicalEntityCharacteristic.get(i).isEqualTo(
+					oth.listImagingPhysicalEntityCharacteristic.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public ImagingPhysicalEntityCharacteristicCollection getClone() {
-        ImagingPhysicalEntityCharacteristicCollection res = new ImagingPhysicalEntityCharacteristicCollection();
-        for (int i = 0; i < this.listImagingPhysicalEntityCharacteristic.size(); i++) {
-            if (this.listImagingPhysicalEntityCharacteristic.get(i) != null) {
-                res.addImagingPhysicalEntityCharacteristic(this.listImagingPhysicalEntityCharacteristic.get(i).getClone());
-            }
-        }
-        return res;
-    }
+	public ImagingPhysicalEntityCharacteristicCollection getClone()
+	{
+		ImagingPhysicalEntityCharacteristicCollection res = new ImagingPhysicalEntityCharacteristicCollection();
+		for (int i = 0; i < this.listImagingPhysicalEntityCharacteristic.size(); i++) {
+			if (this.listImagingPhysicalEntityCharacteristic.get(i) != null) {
+				res.addImagingPhysicalEntityCharacteristic(this.listImagingPhysicalEntityCharacteristic.get(i).getClone());
+			}
+		}
+		return res;
+	}
 }

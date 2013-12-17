@@ -27,118 +27,133 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *
+ * 
  * @author localadmin
  */
-public class CDGroup implements IAimXMLOperations {
+public class CDGroup implements IAimXMLOperations
+{
 
-    private List<CR> listQualifier = new ArrayList<>();
-    private Boolean hasIsoAttributes;
-    private String tagName;
+	private List<CR> listQualifier = new ArrayList<CR>();
+	private Boolean hasIsoAttributes;
+	private String tagName;
 
-    public List<CR> getListQualifier() {
-        return this.listQualifier;
-    }
+	public List<CR> getListQualifier()
+	{
+		return this.listQualifier;
+	}
 
-    public void setQualifier(List<CR> listQualifier) {
-        this.listQualifier = listQualifier;
-        for (int i = 0; i < this.listQualifier.size(); i++) {
-            this.listQualifier.get(i).setTagName("qualifier");
-        }
-    }
+	public void setQualifier(List<CR> listQualifier)
+	{
+		this.listQualifier = listQualifier;
+		for (int i = 0; i < this.listQualifier.size(); i++) {
+			this.listQualifier.get(i).setTagName("qualifier");
+		}
+	}
 
-    public void addQualifier(CR newQualifier) {
-        newQualifier.setTagName("qualifier");
-        this.listQualifier.add(newQualifier);
-    }
+	public void addQualifier(CR newQualifier)
+	{
+		newQualifier.setTagName("qualifier");
+		this.listQualifier.add(newQualifier);
+	}
 
-    protected Boolean getHasIsoAttributes() {
-        return hasIsoAttributes;
-    }
+	protected Boolean getHasIsoAttributes()
+	{
+		return hasIsoAttributes;
+	}
 
-    protected void setHasIsoAttributes(Boolean hasIsoAttributes) {
-        this.hasIsoAttributes = hasIsoAttributes;
-    }
+	protected void setHasIsoAttributes(Boolean hasIsoAttributes)
+	{
+		this.hasIsoAttributes = hasIsoAttributes;
+	}
 
-    protected String getTagName() {
-        return tagName;
-    }
+	protected String getTagName()
+	{
+		return tagName;
+	}
 
-    protected void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
+	protected void setTagName(String tagName)
+	{
+		this.tagName = tagName;
+	}
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        if (getTagName() == null || "".equals(getTagName())) {
-            setTagName("CDGroup");
-        }
-        if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
-            this.setTagName("iso:".concat(this.getTagName()));
-        }
-        Element res = doc.createElement(getTagName());
-        if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
-            res.setAttribute("xmlns:iso", "uri:iso.org:21090");
-        }
-        if (this.listQualifier.size() > 0) {
-            for (int i = 0; i < this.listQualifier.size(); i++) {
-                res.appendChild(this.listQualifier.get(i).getXMLNode(doc));
-            }
-        }
-        return res;
-    }
+	@Override
+	public Node getXMLNode(Document doc) throws AimException
+	{
+		if (getTagName() == null || "".equals(getTagName())) {
+			setTagName("CDGroup");
+		}
+		if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
+			this.setTagName("iso:".concat(this.getTagName()));
+		}
+		Element res = doc.createElement(getTagName());
+		if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
+			res.setAttribute("xmlns:iso", "uri:iso.org:21090");
+		}
+		if (this.listQualifier.size() > 0) {
+			for (int i = 0; i < this.listQualifier.size(); i++) {
+				res.appendChild(this.listQualifier.get(i).getXMLNode(doc));
+			}
+		}
+		return res;
+	}
 
-    @Override
-    public void setXMLNode(Node node) {
-        this.listQualifier.clear();
-        NodeList listChilds = node.getChildNodes();
-        for (int i = 0; i < listChilds.getLength(); i++) {
-            Node currentNode = listChilds.item(i);
-            if ("qualifier".equals(currentNode.getNodeName()) || "iso:qualifier".equals(currentNode.getNodeName())) {
-                CR obj = new CR();
-                obj.setXMLNode(currentNode);
-                this.addQualifier(obj);
-            }
-        }
-    }
+	@Override
+	public void setXMLNode(Node node)
+	{
+		this.listQualifier.clear();
+		NodeList listChilds = node.getChildNodes();
+		for (int i = 0; i < listChilds.getLength(); i++) {
+			Node currentNode = listChilds.item(i);
+			if ("qualifier".equals(currentNode.getNodeName()) || "iso:qualifier".equals(currentNode.getNodeName())) {
+				CR obj = new CR();
+				obj.setXMLNode(currentNode);
+				this.addQualifier(obj);
+			}
+		}
+	}
 
-    @Override
-    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
+	{
+		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
+																																		// | Templates.
+	}
 
-    @Override
-    public boolean isEqualTo(Object other) {
-        CDGroup oth = (CDGroup) other;
-        if (this.listQualifier.size() != oth.listQualifier.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.listQualifier.size(); i++) {
-            if (!this.listQualifier.get(i).isEqualTo(oth.listQualifier.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEqualTo(Object other)
+	{
+		CDGroup oth = (CDGroup)other;
+		if (this.listQualifier.size() != oth.listQualifier.size()) {
+			return false;
+		}
+		for (int i = 0; i < this.listQualifier.size(); i++) {
+			if (!this.listQualifier.get(i).isEqualTo(oth.listQualifier.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public CDGroup getClone() {
-        CDGroup res = new CDGroup();
-        for (int i = 0; i < this.listQualifier.size(); i++) {
-            if (this.listQualifier.get(i) != null) {
-                res.addQualifier(this.listQualifier.get(i).getClone());
-            }
-        }
-        if (this.getTagName() != null) {
-            res.setTagName(this.getTagName());
-        }
-        return res;
-    }
+	public CDGroup getClone()
+	{
+		CDGroup res = new CDGroup();
+		for (int i = 0; i < this.listQualifier.size(); i++) {
+			if (this.listQualifier.get(i) != null) {
+				res.addQualifier(this.listQualifier.get(i).getClone());
+			}
+		}
+		if (this.getTagName() != null) {
+			res.setTagName(this.getTagName());
+		}
+		return res;
+	}
 }
