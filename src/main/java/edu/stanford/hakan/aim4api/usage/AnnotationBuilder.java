@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package edu.stanford.hakan.aim4api.usage;
+package main.java.edu.stanford.hakan.aim4api.usage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -56,9 +56,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import edu.stanford.hakan.aim4api.utility.Utility;
+import main.java.edu.stanford.hakan.aim4api.base.AimException;
+import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import main.java.edu.stanford.hakan.aim4api.utility.Utility;
 
 /**
  * 

@@ -1,376 +1,378 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AimStructure>
-	<Class name="AdjudicationObservation" abstract="false" hasParent="false" type="aim">
+	<Class name="AdjudicationObservation" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/adjudicationObservation/" />
 		</Paths>
 		<Properties>
-			<Property name="observationUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="observationScope" type="CD" isa="isoClass" inherited="false" />
-			<Property name="personObserversRoleInThisProcedure" type="CD" isa="isoClass" inherited="false" />
-			<Property name="identifierWithinAcceptedPersonObserversRole" type="ST" isa="isoClass" inherited="false" />
-			<Property name="identifierWithinRejectedPersonObserversRole" type="ST" isa="isoClass" inherited="false" />
-			<Property name="reasonForChoice" type="CD" isa="isoClass" inherited="false" />
-			<Property name="reasonForDiscordance" type="CD" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="imageQualityIssuesDiscordance" type="Boolean" isa="simpleElement" inherited="false" />
+			<Property name="observationUid" type="II" isa="isoClass" />
+			<Property name="observationScope" type="CD" isa="isoClass" />
+			<Property name="personObserversRoleInThisProcedure" type="CD" isa="isoClass" />
+			<Property name="identifierWithinAcceptedPersonObserversRole" type="ST" isa="isoClass" />
+			<Property name="identifierWithinRejectedPersonObserversRole" type="ST" isa="isoClass" />
+			<Property name="reasonForChoice" type="CD" isa="isoClass" />
+			<Property name="reasonForDiscordance" type="CD" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="imageQualityIssuesDiscordance" type="Boolean" isa="simpleElement" />
 		</Properties>
 	</Class>
-	<Class name="Algorithm" abstract="false" hasParent="false" type="aim">
+	<Class name="Algorithm" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/algorithm/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/algorithm/" />
 		</Paths>
 		<Properties>
-			<Property name="name" type="ST" isa="isoClass" inherited="false" />
-			<Property name="type" type="CD" isa="isoClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="false" />
-			<Property name="version" type="ST" isa="isoClass" inherited="false" />
-			<Property name="description" type="ST" isa="isoClass" inherited="false" />
-			<Property name="Parameter" type="Parameter" isa="aimClass" inherited="false" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="type" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="version" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="Parameter" type="Parameter" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationCollection" abstract="true" hasParent="false" type="aim">
+	<Class name="AnnotationCollection" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/" />
 			<Path value="AnnotationOfAnnotationCollection/" />
 		</Paths>
 		<Properties>
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="false" />
-			<Property name="description" type="ST" isa="isoClass" inherited="false" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="false" />
-			<Property name="user" type="User" isa="aimClass" inherited="false" />
-			<Property name="equipment" type="Equipment" isa="aimClass" inherited="false" />
-			<Property name="aimVersion" type="AimVersion" isa="simpleAttribute" inherited="false" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="user" type="User" isa="aimClass" />
+			<Property name="equipment" type="Equipment" isa="aimClass" />
+			<Property name="aimVersion" type="AimVersion" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="AnnotationEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="false" />
-			<Property name="name" type="ST" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="precedentReferencedAnnotationUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="templateUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="AuditTrail" type="AuditTrail" isa="aimClass" inherited="false" />
-			<Property name="ImagingPhysicalEntity" type="ImagingPhysicalEntity" isa="aimClass" inherited="false" />
-			<Property name="CalculationEntity" type="CalculationEntity" isa="aimClass" inherited="false" />
-			<Property name="InferenceEntity" type="InferenceEntity" isa="aimClass" inherited="false" />
-			<Property name="AnnotationRoleEntity" type="AnnotationRoleEntity" isa="aimClass" inherited="false" />
-			<Property name="LesionObservationEntity" type="LesionObservationEntity" isa="aimClass" inherited="false" />
-			<Property name="ImagingObservationEntity" type="ImagingObservationEntity" isa="aimClass" inherited="false" />
-			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="precedentReferencedAnnotationUid" type="II" isa="isoClass" />
+			<Property name="templateUid" type="II" isa="isoClass" />
+			<Property name="AuditTrail" type="AuditTrail" isa="aimClass" />
+			<Property name="ImagingPhysicalEntity" type="ImagingPhysicalEntity" isa="aimClass" />
+			<Property name="CalculationEntity" type="CalculationEntity" isa="aimClass" />
+			<Property name="InferenceEntity" type="InferenceEntity" isa="aimClass" />
+			<Property name="AnnotationRoleEntity" type="AnnotationRoleEntity" isa="aimClass" />
+			<Property name="LesionObservationEntity" type="LesionObservationEntity" isa="aimClass" />
+			<Property name="ImagingObservationEntity" type="ImagingObservationEntity" isa="aimClass" />
+			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationEntityHasPerformedTaskContextEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationEntityHasPerformedTaskContextEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='AnnotationEntityHasPerformedTaskContextEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationEntityHasPerformedTaskContextEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationEntityHasPlannedTaskContextEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationEntityHasPlannedTaskContextEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='AnnotationEntityHasPlannedTaskContextEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationEntityHasPlannedTaskContextEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotation" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotation" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/" />
 		</Paths>
 		<Properties>
-			<Property name="adjudicationObservation" type="AdjudicationObservation" isa="aimClass" inherited="false" />
-			<Property name="AnnotationOfAnnotationStatement" type="AnnotationStatement" isa="aimClass" inherited="false" />
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="true" />
-			<Property name="name" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="precedentReferencedAnnotationUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="templateUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="AuditTrail" type="AuditTrail" isa="aimClass" inherited="true" />
-			<Property name="ImagingPhysicalEntity" type="ImagingPhysicalEntity" isa="aimClass" inherited="true" />
-			<Property name="CalculationEntity" type="CalculationEntity" isa="aimClass" inherited="true" />
-			<Property name="InferenceEntity" type="InferenceEntity" isa="aimClass" inherited="true" />
-			<Property name="AnnotationRoleEntity" type="AnnotationRoleEntity" isa="aimClass" inherited="true" />
-			<Property name="LesionObservationEntity" type="LesionObservationEntity" isa="aimClass" inherited="true" />
-			<Property name="ImagingObservationEntity" type="ImagingObservationEntity" isa="aimClass" inherited="true" />
-			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="adjudicationObservation" type="AdjudicationObservation" isa="aimClass" />
+			<Property name="AnnotationOfAnnotationStatement" type="AnnotationStatement" isa="aimClass" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="precedentReferencedAnnotationUid" type="II" isa="isoClass" />
+			<Property name="templateUid" type="II" isa="isoClass" />
+			<Property name="AuditTrail" type="AuditTrail" isa="aimClass" />
+			<Property name="ImagingPhysicalEntity" type="ImagingPhysicalEntity" isa="aimClass" />
+			<Property name="CalculationEntity" type="CalculationEntity" isa="aimClass" />
+			<Property name="InferenceEntity" type="InferenceEntity" isa="aimClass" />
+			<Property name="AnnotationRoleEntity" type="AnnotationRoleEntity" isa="aimClass" />
+			<Property name="LesionObservationEntity" type="LesionObservationEntity" isa="aimClass" />
+			<Property name="ImagingObservationEntity" type="ImagingObservationEntity" isa="aimClass" />
+			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationCollection" abstract="false" hasParent="true" type="aim">
-		<Paths />
+	<Class name="AnnotationOfAnnotationCollection" abstract="false" type="aim">
+		<Paths>
+			<Path value="AnnotationOfAnnotationCollection/" />
+		</Paths>
 		<Properties>
-			<Property name="annotationOfAnnotations" type="AnnotationOfAnnotation" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="true" />
-			<Property name="user" type="User" isa="aimClass" inherited="true" />
-			<Property name="equipment" type="Equipment" isa="aimClass" inherited="true" />
-			<Property name="aimVersion" type="AimVersion" isa="simpleAttribute" inherited="true" />
+			<Property name="annotationOfAnnotations" type="AnnotationOfAnnotation" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="user" type="User" isa="aimClass" />
+			<Property name="equipment" type="Equipment" isa="aimClass" />
+			<Property name="aimVersion" type="AimVersion" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasAnnotationOfAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasAnnotationOfAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasAnnotationOfAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasAnnotationRoleEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasAnnotationRoleEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasAnnotationRoleEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasGeneralLesionObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasGeneralLesionObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasGeneralLesionObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasImageAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasImageAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasImageAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasImagingObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasImagingObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasImagingObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasInferenceEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasInferenceEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationStatementt[@xsi:type='AnnotationOfAnnotationHasInferenceEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationHasTimePointLesionObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationHasTimePointLesionObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationHasTimePointLesionObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationIsComparedWithAnnotationOfAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationIsComparedWithAnnotationOfAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='AnnotationOfAnnotationIsComparedWithAnnotationOfAnnotationStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationIsComparedWithAnnotationOfAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationIsComparedWithImageAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationIsComparedWithImageAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='AnnotationOfAnnotationIsComparedWithImageAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationOfAnnotationStatement" abstract="true" hasParent="true" type="aim">
+	<Class name="AnnotationOfAnnotationStatement" abstract="true" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationRoleEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="AnnotationRoleEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/annotationRoleEntityCollection/AnnotationRoleEntity" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationRoleEntityCollection/AnnotationRoleEntity" />
 		</Paths>
 		<Properties>
-			<Property name="roleCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="roleSequenceNumber" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="roleCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="roleSequenceNumber" type="Integer" isa="simpleElement" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AnnotationStatement" abstract="true" hasParent="false" type="aim">
+	<Class name="AnnotationStatement" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="false" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="false" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="AuditTrail" abstract="false" hasParent="false" type="aim">
+	<Class name="AuditTrail" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/auditTrailCollection/AuditTrail" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/auditTrailCollection/AuditTrail" />
 		</Paths>
 		<Properties>
-			<Property name="statusCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="false" />
-			<Property name="changeReason" type="CD" isa="isoClass" inherited="false" />
-			<Property name="worklistSubtaskUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
+			<Property name="statusCode" type="CD" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="changeReason" type="CD" isa="isoClass" />
+			<Property name="worklistSubtaskUid" type="II" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CalculationData" abstract="false" hasParent="false" type="aim">
+	<Class name="CalculationData" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='ExtendedCalculationResult']/calculationDataCollection/CalculationData/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='ExtendedCalculationResult']/calculationDataCollection/CalculationData/" />
 		</Paths>
 		<Properties>
-			<Property name="value" type="ST" isa="isoClass" inherited="false" />
-			<Property name="Coordinate" type="Coordinate" isa="aimClass" inherited="false" />
+			<Property name="value" type="ST" isa="isoClass" />
+			<Property name="Coordinate" type="Coordinate" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="CalculationEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="CalculationEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="description" type="ST" isa="isoClass" inherited="false" />
-			<Property name="mathML" type="ST" isa="isoClass" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="CalculationResult" type="CalculationResult" isa="aimClass" inherited="false" />
-			<Property name="algorithm" type="Algorithm" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="mathML" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="CalculationResult" type="CalculationResult" isa="aimClass" />
+			<Property name="algorithm" type="Algorithm" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CalculationEntityIsComparedWithCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="CalculationEntityIsComparedWithCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='CalculationEntityIsComparedWithCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CalculationEntityReferencesCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="CalculationEntityReferencesCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='CalculationEntityReferencesCalculationEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='CalculationEntityReferencesCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CalculationEntityUsesCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="CalculationEntityUsesCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='CalculationEntityUsesCalculationEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='CalculationEntityUsesCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CalculationResult" abstract="true" hasParent="false" type="aim">
+	<Class name="CalculationResult" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult/" />
 		</Paths>
 		<Properties>
-			<Property name="unitOfMeasure" type="ST" isa="isoClass" inherited="false" />
-			<Property name="dataType" type="CD" isa="isoClass" inherited="false" />
-			<Property name="Dimension" type="Dimension" isa="aimClass" inherited="false" />
-			<Property name="type" type="CalculationResultIdentifier" isa="simpleAttribute" inherited="false" />
+			<Property name="unitOfMeasure" type="ST" isa="isoClass" />
+			<Property name="dataType" type="CD" isa="isoClass" />
+			<Property name="Dimension" type="Dimension" isa="aimClass" />
+			<Property name="type" type="CalculationResultIdentifier" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="CD" abstract="false" hasParent="false" type="iso">
+	<Class name="CD" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="displayName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="originalText" type="ED_Text" isa="isoClass" inherited="false" />
-			<Property name="qualifier" type="CR" isa="isoClass" inherited="false" />
-			<Property name="group" type="CDGroup" isa="isoClass" inherited="false" />
-			<Property name="translation" type="CD" isa="isoClass" inherited="false" />
-			<Property name="source" type="XReference" isa="isoClass" inherited="false" />
-			<Property name="code" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="codeSystem" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="codeSystemName" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="codeSystemVersion" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="valueSet" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="valueSetVersion" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="id" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="codingRationale" type="set_CodingRationale" isa="simpleAttribute" inherited="false" />
+			<Property name="displayName" type="ST" isa="isoClass" />
+			<Property name="originalText" type="ED_Text" isa="isoClass" />
+			<Property name="qualifier" type="CR" isa="isoClass" />
+			<Property name="group" type="CDGroup" isa="isoClass" />
+			<Property name="translation" type="CD" isa="isoClass" />
+			<Property name="source" type="XReference" isa="isoClass" />
+			<Property name="code" type="String" isa="simpleAttribute" />
+			<Property name="codeSystem" type="String" isa="simpleAttribute" />
+			<Property name="codeSystemName" type="String" isa="simpleAttribute" />
+			<Property name="codeSystemVersion" type="String" isa="simpleAttribute" />
+			<Property name="valueSet" type="String" isa="simpleAttribute" />
+			<Property name="valueSetVersion" type="String" isa="simpleAttribute" />
+			<Property name="id" type="String" isa="simpleAttribute" />
+			<Property name="codingRationale" type="set_CodingRationale" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="CD_CV" abstract="false" hasParent="false" type="iso">
+	<Class name="CD_CV" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="displayName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="originalText" type="ED_Text" isa="isoClass" inherited="false" />
-			<Property name="qualifier" type="CR" isa="isoClass" inherited="false" />
-			<Property name="group" type="CDGroup" isa="isoClass" inherited="false" />
-			<Property name="translation" type="CD" isa="isoClass" inherited="false" />
-			<Property name="source" type="XReference" isa="isoClass" inherited="false" />
+			<Property name="displayName" type="ST" isa="isoClass" />
+			<Property name="originalText" type="ED_Text" isa="isoClass" />
+			<Property name="qualifier" type="CR" isa="isoClass" />
+			<Property name="group" type="CDGroup" isa="isoClass" />
+			<Property name="translation" type="CD" isa="isoClass" />
+			<Property name="source" type="XReference" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CDGroup" abstract="false" hasParent="false" type="iso">
+	<Class name="CDGroup" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="qualifier" type="CR" isa="isoClass" inherited="false" />
+			<Property name="qualifier" type="CR" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CharacteristicQuantification" abstract="true" hasParent="false" type="aim">
+	<Class name="CharacteristicQuantification" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification" />
@@ -378,146 +380,146 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification" />
 		</Paths>
 		<Properties>
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="valueLabel" type="ST" isa="isoClass" inherited="false" />
-			<Property name="valueDescription" type="ST" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="valueLabel" type="ST" isa="isoClass" />
+			<Property name="valueDescription" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="CompactCalculationResult" abstract="false" hasParent="true" type="aim">
+	<Class name="CompactCalculationResult" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='CompactCalculationResult']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='CompactCalculationResult']/" />
 		</Paths>
 		<Properties>
-			<Property name="value" type="ST" isa="isoClass" inherited="false" />
-			<Property name="encoding" type="CD" isa="isoClass" inherited="false" />
-			<Property name="compression" type="CD" isa="isoClass" inherited="false" />
-			<Property name="unitOfMeasure" type="ST" isa="isoClass" inherited="true" />
-			<Property name="dataType" type="CD" isa="isoClass" inherited="true" />
-			<Property name="Dimension" type="Dimension" isa="aimClass" inherited="true" />
-			<Property name="type" type="CalculationResultIdentifier" isa="simpleAttribute" inherited="true" />
+			<Property name="value" type="ST" isa="isoClass" />
+			<Property name="encoding" type="CD" isa="isoClass" />
+			<Property name="compression" type="CD" isa="isoClass" />
+			<Property name="unitOfMeasure" type="ST" isa="isoClass" />
+			<Property name="dataType" type="CD" isa="isoClass" />
+			<Property name="Dimension" type="Dimension" isa="aimClass" />
+			<Property name="type" type="CalculationResultIdentifier" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="Coordinate" abstract="false" hasParent="false" type="aim">
+	<Class name="Coordinate" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='ExtendedCalculationResult']/calculationDataCollection/CalculationData/coordinateCollection/Coordinate/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='ExtendedCalculationResult']/calculationDataCollection/CalculationData/coordinateCollection/Coordinate/" />
 		</Paths>
 		<Properties>
-			<Property name="dimensionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="position" type="Integer" isa="simpleElement" inherited="false" />
+			<Property name="dimensionIndex" type="Integer" isa="simpleElement" />
+			<Property name="position" type="Integer" isa="simpleElement" />
 		</Properties>
 	</Class>
-	<Class name="CR" abstract="false" hasParent="false" type="iso">
+	<Class name="CR" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="name" type="CD_CV" isa="isoClass" inherited="false" />
-			<Property name="value" type="CD" isa="isoClass" inherited="false" />
-			<Property name="inverted" type="Boolean" isa="simpleAttribute" inherited="false" />
+			<Property name="name" type="CD_CV" isa="isoClass" />
+			<Property name="value" type="CD" isa="isoClass" />
+			<Property name="inverted" type="Boolean" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="DicomImageReferenceEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="DicomImageReferenceEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageStudy" type="ImageStudy" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageStudy" type="ImageStudy" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="DicomImageReferenceEntityHasCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="DicomImageReferenceEntityHasCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='DicomImageReferenceEntityHasCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="DicomImageReferenceEntityHasImagingObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="DicomImageReferenceEntityHasImagingObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='DicomImageReferenceEntityHasImagingObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="DicomImageReferenceEntityHasImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="DicomImageReferenceEntityHasImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='DicomImageReferenceEntityHasImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="DicomSegmentationEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="DicomSegmentationEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/segmentationEntityCollection/SegmentationEntity[@xsi:type='DicomSegmentationEntity']/" />
 		</Paths>
 		<Properties>
-			<Property name="sopInstanceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="sopClassUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="referencedSopInstanceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="segmentNumber" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="sopInstanceUid" type="II" isa="isoClass" />
+			<Property name="sopClassUid" type="II" isa="isoClass" />
+			<Property name="referencedSopInstanceUid" type="II" isa="isoClass" />
+			<Property name="segmentNumber" type="Integer" isa="simpleElement" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="DicomSegmentationEntityHasImagingObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="DicomSegmentationEntityHasImagingObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='DicomSegmentationEntityHasImagingObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Dimension" abstract="false" hasParent="false" type="aim">
+	<Class name="Dimension" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult/Dimension/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult/Dimension/" />
 		</Paths>
 		<Properties>
-			<Property name="index" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="size" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
+			<Property name="index" type="Integer" isa="simpleElement" />
+			<Property name="size" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ED" abstract="false" hasParent="false" type="iso">
+	<Class name="ED" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="data" type="Object" isa="simpleElement" inherited="false" />
-			<Property name="xml" type="Object" isa="simpleElement" inherited="false" />
-			<Property name="reference" type="TEL" isa="isoClass" inherited="false" />
-			<Property name="integrityCheck" type="Object" isa="simpleElement" inherited="false" />
-			<Property name="thumbnail" type="ED" isa="isoClass" inherited="false" />
-			<Property name="translation" type="ED" isa="isoClass" inherited="false" />
-			<Property name="value" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="mediaType" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="charset" type="String" isa="simpleElement" inherited="false" />
-			<Property name="language" type="String" isa="simpleElement" inherited="false" />
-			<Property name="compression" type="Compression" isa="simpleAttribute" inherited="false" />
-			<Property name="integrityCheckAlgorithm" type="IntegrityCheckAlgorithm" isa="simpleAttribute" inherited="false" />
+			<Property name="data" type="Object" isa="simpleElement" />
+			<Property name="xml" type="Object" isa="simpleElement" />
+			<Property name="reference" type="TEL" isa="isoClass" />
+			<Property name="integrityCheck" type="Object" isa="simpleElement" />
+			<Property name="thumbnail" type="ED" isa="isoClass" />
+			<Property name="translation" type="ED" isa="isoClass" />
+			<Property name="value" type="String" isa="simpleAttribute" />
+			<Property name="mediaType" type="String" isa="simpleAttribute" />
+			<Property name="charset" type="xsd:string" isa="aimClass" />
+			<Property name="language" type="xsd:string" isa="aimClass" />
+			<Property name="compression" type="Compression" isa="simpleAttribute" />
+			<Property name="integrityCheckAlgorithm" type="IntegrityCheckAlgorithm" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="ED_Text" abstract="false" hasParent="false" type="iso">
+	<Class name="ED_Text" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="data" type="Object" isa="simpleElement" inherited="false" />
-			<Property name="xml" type="Object" isa="simpleElement" inherited="false" />
-			<Property name="reference" type="TEL" isa="isoClass" inherited="false" />
-			<Property name="integrityCheck" type="Object" isa="simpleElement" inherited="false" />
-			<Property name="thumbnail" type="ED" isa="isoClass" inherited="false" />
-			<Property name="translation" type="ED" isa="isoClass" inherited="false" />
-			<Property name="mediaType" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="compression" type="Compression" isa="simpleAttribute" inherited="false" />
+			<Property name="data" type="Object" isa="simpleElement" />
+			<Property name="xml" type="Object" isa="simpleElement" />
+			<Property name="reference" type="TEL" isa="isoClass" />
+			<Property name="integrityCheck" type="Object" isa="simpleElement" />
+			<Property name="thumbnail" type="ED" isa="isoClass" />
+			<Property name="translation" type="ED" isa="isoClass" />
+			<Property name="mediaType" type="String" isa="simpleAttribute" />
+			<Property name="compression" type="Compression" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="Entity" abstract="true" hasParent="false" type="aim">
+	<Class name="Entity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/" />
@@ -540,530 +542,532 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/inferenceEntityCollection/InferenceEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="false" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Equipment" abstract="false" hasParent="false" type="aim">
+	<Class name="Equipment" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/equipment/" />
 			<Path value="AnnotationOfAnnotationCollection/equipment/" />
 		</Paths>
 		<Properties>
-			<Property name="manufacturerName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="manufacturerModelName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="deviceSerialNumber" type="ST" isa="isoClass" inherited="false" />
-			<Property name="softwareVersion" type="ST" isa="isoClass" inherited="false" />
+			<Property name="manufacturerName" type="ST" isa="isoClass" />
+			<Property name="manufacturerModelName" type="ST" isa="isoClass" />
+			<Property name="deviceSerialNumber" type="ST" isa="isoClass" />
+			<Property name="softwareVersion" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ExtendedCalculationResult" abstract="false" hasParent="true" type="aim">
+	<Class name="ExtendedCalculationResult" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='ExtendedCalculationResult']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/calculationResultCollection/CalculationResult[@xsi:type='ExtendedCalculationResult']/" />
 		</Paths>
 		<Properties>
-			<Property name="CalculationData" type="CalculationData" isa="aimClass" inherited="false" />
-			<Property name="unitOfMeasure" type="ST" isa="isoClass" inherited="true" />
-			<Property name="dataType" type="CD" isa="isoClass" inherited="true" />
-			<Property name="Dimension" type="Dimension" isa="aimClass" inherited="true" />
-			<Property name="type" type="CalculationResultIdentifier" isa="simpleAttribute" inherited="true" />
+			<Property name="CalculationData" type="CalculationData" isa="aimClass" />
+			<Property name="unitOfMeasure" type="ST" isa="isoClass" />
+			<Property name="dataType" type="CD" isa="isoClass" />
+			<Property name="Dimension" type="Dimension" isa="aimClass" />
+			<Property name="type" type="CalculationResultIdentifier" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="GeneralImage" abstract="false" hasParent="false" type="aim">
+	<Class name="GeneralImage" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/imageStudy/imageSeries/imageCollection/Image/generalImage/" />
 		</Paths>
 		<Properties>
-			<Property name="patientOrientationColumn" type="ST" isa="isoClass" inherited="false" />
-			<Property name="patientOrientationRow" type="ST" isa="isoClass" inherited="false" />
+			<Property name="patientOrientationColumn" type="ST" isa="isoClass" />
+			<Property name="patientOrientationRow" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="GeneralLesionObservationEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="GeneralLesionObservationEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/lesionObservationEntityCollection/LesionObservationEntity[@xsi:type='GeneralLesionObservationEntity']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/lesionObservationEntityCollection/LesionObservationEntity[@xsi:type='GeneralLesionObservationEntity']/" />
 		</Paths>
 		<Properties>
-			<Property name="trackingIdentifier" type="ST" isa="isoClass" inherited="false" />
-			<Property name="lesionType" type="CD" isa="isoClass" inherited="false" />
-			<Property name="reconstructionInterval" type="CD" isa="isoClass" inherited="false" />
-			<Property name="laterality" type="CD" isa="isoClass" inherited="false" />
-			<Property name="lesionUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="isAdditionalObservation" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="trackingIdentifier" type="ST" isa="isoClass" />
+			<Property name="lesionType" type="CD" isa="isoClass" />
+			<Property name="reconstructionInterval" type="CD" isa="isoClass" />
+			<Property name="laterality" type="CD" isa="isoClass" />
+			<Property name="lesionUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="isAdditionalObservation" type="Boolean" isa="simpleElement" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="GeneralLesionObservationEntityHasImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="GeneralLesionObservationEntityHasImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='GeneralLesionObservationEntityHasImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="GeometricShapeEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="GeometricShapeEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/geometricShapeEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="description" type="ST" isa="isoClass" inherited="false" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="false" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="false" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="false" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="II" abstract="false" hasParent="false" type="iso">
+	<Class name="II" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="root" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="extension" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="identifierName" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="displayable" type="Boolean" isa="simpleAttribute" inherited="false" />
-			<Property name="scope" type="IdentifierScope" isa="simpleAttribute" inherited="false" />
-			<Property name="reliability" type="IdentifierReliability" isa="simpleAttribute" inherited="false" />
+			<Property name="root" type="String" isa="simpleAttribute" />
+			<Property name="extension" type="String" isa="simpleAttribute" />
+			<Property name="identifierName" type="String" isa="simpleAttribute" />
+			<Property name="displayable" type="Boolean" isa="simpleAttribute" />
+			<Property name="scope" type="IdentifierScope" isa="simpleAttribute" />
+			<Property name="reliability" type="IdentifierReliability" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="Image" abstract="false" hasParent="false" type="aim">
+	<Class name="Image" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/imageStudy/imageSeries/imageCollection/Image/" />
 		</Paths>
 		<Properties>
-			<Property name="sopClassUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="sopInstanceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="imagePlane" type="ImagePlane" isa="aimClass" inherited="false" />
-			<Property name="generalImage" type="GeneralImage" isa="aimClass" inherited="false" />
+			<Property name="sopClassUid" type="II" isa="isoClass" />
+			<Property name="sopInstanceUid" type="II" isa="isoClass" />
+			<Property name="imagePlane" type="ImagePlane" isa="aimClass" />
+			<Property name="generalImage" type="GeneralImage" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotation" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotation" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/" />
 		</Paths>
 		<Properties>
-			<Property name="SegmentationEntity" type="SegmentationEntity" isa="aimClass" inherited="false" />
-			<Property name="MarkupEntity" type="MarkupEntity" isa="aimClass" inherited="false" />
-			<Property name="ImageAnnotationStatement" type="AnnotationStatement" isa="aimClass" inherited="false" />
-			<Property name="ImageReferenceEntity" type="ImageReferenceEntity" isa="aimClass" inherited="false" />
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="true" />
-			<Property name="name" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="precedentReferencedAnnotationUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="templateUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="AuditTrail" type="AuditTrail" isa="aimClass" inherited="true" />
-			<Property name="ImagingPhysicalEntity" type="ImagingPhysicalEntity" isa="aimClass" inherited="true" />
-			<Property name="CalculationEntity" type="CalculationEntity" isa="aimClass" inherited="true" />
-			<Property name="InferenceEntity" type="InferenceEntity" isa="aimClass" inherited="true" />
-			<Property name="AnnotationRoleEntity" type="AnnotationRoleEntity" isa="aimClass" inherited="true" />
-			<Property name="LesionObservationEntity" type="LesionObservationEntity" isa="aimClass" inherited="true" />
-			<Property name="ImagingObservationEntity" type="ImagingObservationEntity" isa="aimClass" inherited="true" />
-			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="SegmentationEntity" type="SegmentationEntity" isa="aimClass" />
+			<Property name="MarkupEntity" type="MarkupEntity" isa="aimClass" />
+			<Property name="ImageAnnotationStatement" type="AnnotationStatement" isa="aimClass" />
+			<Property name="ImageReferenceEntity" type="ImageReferenceEntity" isa="aimClass" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="precedentReferencedAnnotationUid" type="II" isa="isoClass" />
+			<Property name="templateUid" type="II" isa="isoClass" />
+			<Property name="AuditTrail" type="AuditTrail" isa="aimClass" />
+			<Property name="ImagingPhysicalEntity" type="ImagingPhysicalEntity" isa="aimClass" />
+			<Property name="CalculationEntity" type="CalculationEntity" isa="aimClass" />
+			<Property name="InferenceEntity" type="InferenceEntity" isa="aimClass" />
+			<Property name="AnnotationRoleEntity" type="AnnotationRoleEntity" isa="aimClass" />
+			<Property name="LesionObservationEntity" type="LesionObservationEntity" isa="aimClass" />
+			<Property name="ImagingObservationEntity" type="ImagingObservationEntity" isa="aimClass" />
+			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationCollection" abstract="false" hasParent="true" type="aim">
-		<Paths />
+	<Class name="ImageAnnotationCollection" abstract="false" type="aim">
+		<Paths>
+			<Path value="ImageAnnotationCollection/" />
+		</Paths>
 		<Properties>
-			<Property name="person" type="Person" isa="aimClass" inherited="false" />
-			<Property name="imageAnnotations" type="ImageAnnotation" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="dateTime" type="String" isa="simpleElement" inherited="true" />
-			<Property name="user" type="User" isa="aimClass" inherited="true" />
-			<Property name="equipment" type="Equipment" isa="aimClass" inherited="true" />
-			<Property name="aimVersion" type="AimVersion" isa="simpleAttribute" inherited="true" />
+			<Property name="person" type="Person" isa="aimClass" />
+			<Property name="imageAnnotations" type="ImageAnnotation" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="dateTime" type="String" isa="simpleElement" />
+			<Property name="user" type="User" isa="aimClass" />
+			<Property name="equipment" type="Equipment" isa="aimClass" />
+			<Property name="aimVersion" type="AimVersion" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasAnnotationRoleEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasAnnotationRoleEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImageAnnotationHasAnnotationRoleEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasChildImageAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasChildImageAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasChildImageAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasDicomImageReferenceEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasDicomImageReferenceEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasDicomImageReferenceEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasDicomSegmentationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasDicomSegmentationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasDicomSegmentationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasGeneralLesionObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasGeneralLesionObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasGeneralLesionObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasImagingObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasImagingObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasImagingObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasInferenceEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasInferenceEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasInferenceEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasTextAnnotationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasTextAnnotationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasTextAnnotationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasThreeDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasThreeDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasThreeDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasTimePointLesionObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasTimePointLesionObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasTimePointLesionObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasTwoDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasTwoDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasTwoDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationHasUriImageReferenceEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationHasUriImageReferenceEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationHasUriImageReferenceEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationIsComparedWithAnnotationOfAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationIsComparedWithAnnotationOfAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImageAnnotationIsComparedWithAnnotationOfAnnotationStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImageAnnotationIsComparedWithAnnotationOfAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationIsComparedWithImageAnnotationStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImageAnnotationIsComparedWithImageAnnotationStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImageAnnotationIsComparedWithImageAnnotationStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageAnnotationStatement" abstract="true" hasParent="true" type="aim">
+	<Class name="ImageAnnotationStatement" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagePlane" abstract="false" hasParent="false" type="aim">
+	<Class name="ImagePlane" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/imageStudy/imageSeries/imageCollection/Image/imagePlane/" />
 		</Paths>
 		<Properties>
-			<Property name="rowImageOrientationX" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="rowImageOrientationY" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="rowImageOrientationZ" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="columnImageOrientationX" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="columnImageOrientationY" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="columnImageOrientationZ" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="verticalPixelSpacing" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="horizontalPixelSpacing" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="sliceThickness" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="imagePositionX" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="imagePositionY" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="imagePositionZ" type="Double" isa="simpleElement" inherited="false" />
+			<Property name="rowImageOrientationX" type="Double" isa="simpleElement" />
+			<Property name="rowImageOrientationY" type="Double" isa="simpleElement" />
+			<Property name="rowImageOrientationZ" type="Double" isa="simpleElement" />
+			<Property name="columnImageOrientationX" type="Double" isa="simpleElement" />
+			<Property name="columnImageOrientationY" type="Double" isa="simpleElement" />
+			<Property name="columnImageOrientationZ" type="Double" isa="simpleElement" />
+			<Property name="verticalPixelSpacing" type="Double" isa="simpleElement" />
+			<Property name="horizontalPixelSpacing" type="Double" isa="simpleElement" />
+			<Property name="sliceThickness" type="Double" isa="simpleElement" />
+			<Property name="imagePositionX" type="Double" isa="simpleElement" />
+			<Property name="imagePositionY" type="Double" isa="simpleElement" />
+			<Property name="imagePositionZ" type="Double" isa="simpleElement" />
 		</Properties>
 	</Class>
-	<Class name="ImageReferenceEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="ImageReferenceEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageSeries" abstract="false" hasParent="false" type="aim">
+	<Class name="ImageSeries" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/imageStudy/imageSeries/" />
 		</Paths>
 		<Properties>
-			<Property name="instanceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="modality" type="CD" isa="isoClass" inherited="false" />
-			<Property name="Image" type="Image" isa="aimClass" inherited="false" />
+			<Property name="instanceUid" type="II" isa="isoClass" />
+			<Property name="modality" type="CD" isa="isoClass" />
+			<Property name="Image" type="Image" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="ImageStudy" abstract="false" hasParent="false" type="aim">
+	<Class name="ImageStudy" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/imageStudy/" />
 		</Paths>
 		<Properties>
-			<Property name="instanceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="startDate" type="String" isa="simpleElement" inherited="false" />
-			<Property name="startTime" type="String" isa="simpleElement" inherited="false" />
-			<Property name="procedureDescription" type="ST" isa="isoClass" inherited="false" />
-			<Property name="imageSeries" type="ImageSeries" isa="aimClass" inherited="false" />
-			<Property name="ReferencedDicomObject" type="ReferencedDicomObject" isa="aimClass" inherited="false" />
+			<Property name="instanceUid" type="II" isa="isoClass" />
+			<Property name="startDate" type="String" isa="simpleElement" />
+			<Property name="startTime" type="String" isa="simpleElement" />
+			<Property name="procedureDescription" type="ST" isa="isoClass" />
+			<Property name="imageSeries" type="ImageSeries" isa="aimClass" />
+			<Property name="ReferencedDicomObject" type="ReferencedDicomObject" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationCharacteristic" abstract="false" hasParent="false" type="aim">
+	<Class name="ImagingObservationCharacteristic" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="CharacteristicQuantification" type="CharacteristicQuantification" isa="aimClass" inherited="false" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="CharacteristicQuantification" type="CharacteristicQuantification" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingObservationEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="isPresent" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="ImagingObservationCharacteristic" type="ImagingObservationCharacteristic" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="isPresent" type="Boolean" isa="simpleElement" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="ImagingObservationCharacteristic" type="ImagingObservationCharacteristic" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationEntityHasCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingObservationEntityHasCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingObservationEntityHasCalculationEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImagingObservationEntityHasCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationEntityIsFoundInImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingObservationEntityIsFoundInImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingObservationEntityIsFoundInImagingPhysicalEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImagingObservationEntityIsFoundInImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationEntityIsIdentifiedByTextAnnotationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingObservationEntityIsIdentifiedByTextAnnotationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingObservationEntityIsIdentifiedByTextAnnotationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationEntityIsIdentifiedByThreeDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingObservationEntityIsIdentifiedByThreeDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingObservationEntityIsIdentifiedByThreeDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingPhysicalEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="isPresent" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="ImagingPhysicalEntityCharacteristic" type="ImagingPhysicalEntityCharacteristic" isa="aimClass" inherited="false" />
-			<Property name="ImagingObservationCharacteristic" type="ImagingObservationCharacteristic" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="isPresent" type="Boolean" isa="simpleElement" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="ImagingPhysicalEntityCharacteristic" type="ImagingPhysicalEntityCharacteristic" isa="aimClass" />
+			<Property name="ImagingObservationCharacteristic" type="ImagingObservationCharacteristic" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntityCharacteristic" abstract="false" hasParent="false" type="aim">
+	<Class name="ImagingPhysicalEntityCharacteristic" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="CharacteristicQuantification" type="CharacteristicQuantification" isa="aimClass" inherited="false" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="CharacteristicQuantification" type="CharacteristicQuantification" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntityHasCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingPhysicalEntityHasCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasCalculationEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntityHasImagingObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingPhysicalEntityHasImagingObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasImagingObservationEntityStatement']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/annotationOfAnnotationStatementCollection/AnnotationOfAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasImagingObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntityHasTextAnnotationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingPhysicalEntityHasTextAnnotationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasTextAnnotationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntityHasThreeDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingPhysicalEntityHasThreeDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasThreeDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="InferenceEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="InferenceEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/inferenceEntityCollection/InferenceEntity/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/inferenceEntityCollection/InferenceEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="imageEvidence" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="isPresent" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="description" type="ST" isa="isoClass" inherited="false" />
-			<Property name="label" type="ST" isa="isoClass" inherited="false" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageEvidence" type="Boolean" isa="simpleElement" />
+			<Property name="isPresent" type="Boolean" isa="simpleElement" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Interval" abstract="false" hasParent="true" type="aim">
+	<Class name="Interval" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Interval']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Interval']/" />
@@ -1071,39 +1075,39 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Interval']/" />
 		</Paths>
 		<Properties>
-			<Property name="minValue" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="maxValue" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="ucumString" type="ST" isa="isoClass" inherited="false" />
-			<Property name="minOperator" type="ComparisonOperator" isa="simpleAttribute" inherited="false" />
-			<Property name="maxOperator" type="ComparisonOperator" isa="simpleAttribute" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="true" />
-			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueLabel" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueDescription" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
+			<Property name="minValue" type="Double" isa="simpleElement" />
+			<Property name="maxValue" type="Double" isa="simpleElement" />
+			<Property name="ucumString" type="ST" isa="isoClass" />
+			<Property name="minOperator" type="ComparisonOperator" isa="simpleAttribute" />
+			<Property name="maxOperator" type="ComparisonOperator" isa="simpleAttribute" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="valueLabel" type="ST" isa="isoClass" />
+			<Property name="valueDescription" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="LesionObservationEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="LesionObservationEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/lesionObservationEntityCollection/LesionObservationEntity/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/lesionObservationEntityCollection/LesionObservationEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="lesionUniqueIdentifier" type="II" isa="isoClass" inherited="false" />
-			<Property name="isAdditionalObservation" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="lesionUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="isAdditionalObservation" type="Boolean" isa="simpleElement" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="MarkupEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="MarkupEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="NonQuantifiable" abstract="false" hasParent="true" type="aim">
+	<Class name="NonQuantifiable" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='NonQuantifiable']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='NonQuantifiable']/" />
@@ -1111,16 +1115,16 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='NonQuantifiable']/" />
 		</Paths>
 		<Properties>
-			<Property name="typeCode" type="CD" isa="isoClass" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="true" />
-			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueLabel" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueDescription" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
+			<Property name="typeCode" type="CD" isa="isoClass" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="valueLabel" type="ST" isa="isoClass" />
+			<Property name="valueDescription" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Numerical" abstract="false" hasParent="true" type="aim">
+	<Class name="Numerical" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Numerical']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Numerical']/" />
@@ -1128,47 +1132,47 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Numerical']/" />
 		</Paths>
 		<Properties>
-			<Property name="ucumString" type="ST" isa="isoClass" inherited="false" />
-			<Property name="value" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="operator" type="ComparisonOperator" isa="simpleAttribute" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="true" />
-			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueLabel" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueDescription" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
+			<Property name="ucumString" type="ST" isa="isoClass" />
+			<Property name="value" type="Double" isa="simpleElement" />
+			<Property name="operator" type="ComparisonOperator" isa="simpleAttribute" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="valueLabel" type="ST" isa="isoClass" />
+			<Property name="valueDescription" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Parameter" abstract="false" hasParent="false" type="aim">
+	<Class name="Parameter" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/calculationEntityCollection/CalculationEntity/algorithm/parameterCollection/Parameter/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/calculationEntityCollection/CalculationEntity/algorithm/parameterCollection/Parameter/" />
 		</Paths>
 		<Properties>
-			<Property name="name" type="ST" isa="isoClass" inherited="false" />
-			<Property name="value" type="ST" isa="isoClass" inherited="false" />
-			<Property name="dataType" type="CD" isa="isoClass" inherited="false" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="value" type="ST" isa="isoClass" />
+			<Property name="dataType" type="CD" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Person" abstract="false" hasParent="false" type="aim">
+	<Class name="Person" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/person/" />
 		</Paths>
 		<Properties>
-			<Property name="name" type="ST" isa="isoClass" inherited="false" />
-			<Property name="id" type="ST" isa="isoClass" inherited="false" />
-			<Property name="birthDate" type="String" isa="simpleElement" inherited="false" />
-			<Property name="sex" type="ST" isa="isoClass" inherited="false" />
-			<Property name="ethnicGroup" type="ST" isa="isoClass" inherited="false" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="id" type="ST" isa="isoClass" />
+			<Property name="birthDate" type="String" isa="simpleElement" />
+			<Property name="sex" type="ST" isa="isoClass" />
+			<Property name="ethnicGroup" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="QSET_TS" abstract="true" hasParent="false" type="iso">
+	<Class name="QSET_TS" abstract="true" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="originalText" type="ED_Text" isa="isoClass" inherited="false" />
+			<Property name="originalText" type="ED_Text" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Quantile" abstract="false" hasParent="true" type="aim">
+	<Class name="Quantile" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Quantile']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Quantile']/" />
@@ -1176,28 +1180,28 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Quantile']/" />
 		</Paths>
 		<Properties>
-			<Property name="bins" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="selectedBin" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="minValue" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="maxValue" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="true" />
-			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueLabel" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueDescription" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
+			<Property name="bins" type="Integer" isa="simpleElement" />
+			<Property name="selectedBin" type="Integer" isa="simpleElement" />
+			<Property name="minValue" type="Double" isa="simpleElement" />
+			<Property name="maxValue" type="Double" isa="simpleElement" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="valueLabel" type="ST" isa="isoClass" />
+			<Property name="valueDescription" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ReferencedDicomObject" abstract="false" hasParent="false" type="aim">
+	<Class name="ReferencedDicomObject" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='DicomImageReferenceEntity']/imageStudy/referencedDicomObjectCollection/ReferencedDicomObject/" />
 		</Paths>
 		<Properties>
-			<Property name="modality" type="CD" isa="isoClass" inherited="false" />
-			<Property name="sopInstanceUid" type="II" isa="isoClass" inherited="false" />
+			<Property name="modality" type="CD" isa="isoClass" />
+			<Property name="sopInstanceUid" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="Scale" abstract="false" hasParent="true" type="aim">
+	<Class name="Scale" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Scale']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingObservationEntityCollection/ImagingObservationEntity/imagingObservationCharacteristicCollection/ImagingObservationCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Scale']/" />
@@ -1205,129 +1209,129 @@
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/imagingPhysicalEntityCollection/ImagingPhysicalEntity/imagingPhysicalEntityCharacteristicCollection/ImagingPhysicalEntityCharacteristic/characteristicQuantificationCollection/CharacteristicQuantification[@xsi:type='Scale']/" />
 		</Paths>
 		<Properties>
-			<Property name="value" type="ST" isa="isoClass" inherited="false" />
-			<Property name="type" type="ScaleType" isa="simpleAttribute" inherited="false" />
-			<Property name="annotatorConfidence" type="Double" isa="simpleElement" inherited="true" />
-			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueLabel" type="ST" isa="isoClass" inherited="true" />
-			<Property name="valueDescription" type="ST" isa="isoClass" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
+			<Property name="value" type="ST" isa="isoClass" />
+			<Property name="type" type="ScaleType" isa="simpleAttribute" />
+			<Property name="annotatorConfidence" type="Double" isa="simpleElement" />
+			<Property name="characteristicQuantificationIndex" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="valueLabel" type="ST" isa="isoClass" />
+			<Property name="valueDescription" type="ST" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="SegmentationEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="SegmentationEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/segmentationEntityCollection/SegmentationEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ST" abstract="false" hasParent="false" type="iso">
+	<Class name="ST" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="translation" type="ST" isa="isoClass" inherited="false" />
-			<Property name="value" type="String" isa="simpleAttribute" inherited="false" />
-			<Property name="language" type="String" isa="simpleElement" inherited="false" />
+			<Property name="translation" type="ST" isa="isoClass" />
+			<Property name="value" type="String" isa="simpleAttribute" />
+			<Property name="language" type="xsd:string" isa="aimClass" />
 		</Properties>
 	</Class>
-	<Class name="TaskContextEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="TaskContextEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/taskContextEntityCollection/TaskContextEntity/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/taskContextEntityCollection/TaskContextEntity/" />
 		</Paths>
 		<Properties>
-			<Property name="worklistTaskUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskDescription" type="ST" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskCategory" type="CD" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskLevel" type="CD" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskType" type="CD" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskRepeatType" type="CD" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskVariabilityType" type="CD" isa="isoClass" inherited="false" />
-			<Property name="worklistTaskVersion" type="ST" isa="isoClass" inherited="false" />
-			<Property name="worklistSubtaskUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="worklistSubtaskName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="worklistSubtaskStartDateTime" type="String" isa="simpleElement" inherited="false" />
-			<Property name="worklistSubtaskClosedDateTime" type="String" isa="simpleElement" inherited="false" />
-			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="worklistTaskUid" type="II" isa="isoClass" />
+			<Property name="worklistTaskName" type="ST" isa="isoClass" />
+			<Property name="worklistTaskDescription" type="ST" isa="isoClass" />
+			<Property name="worklistTaskCategory" type="CD" isa="isoClass" />
+			<Property name="worklistTaskLevel" type="CD" isa="isoClass" />
+			<Property name="worklistTaskType" type="CD" isa="isoClass" />
+			<Property name="worklistTaskRepeatType" type="CD" isa="isoClass" />
+			<Property name="worklistTaskVariabilityType" type="CD" isa="isoClass" />
+			<Property name="worklistTaskVersion" type="ST" isa="isoClass" />
+			<Property name="worklistSubtaskUid" type="II" isa="isoClass" />
+			<Property name="worklistSubtaskName" type="ST" isa="isoClass" />
+			<Property name="worklistSubtaskStartDateTime" type="String" isa="simpleElement" />
+			<Property name="worklistSubtaskClosedDateTime" type="String" isa="simpleElement" />
+			<Property name="TaskContextEntity" type="TaskContextEntity" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TEL" abstract="false" hasParent="true" type="iso">
+	<Class name="TEL" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="useablePeriod" type="QSET_TS" isa="isoClass" inherited="false" />
-			<Property name="use" type="set_TelecommunicationAddressUse" isa="simpleAttribute" inherited="false" />
-			<Property name="value" type="String" isa="simpleAttribute" inherited="true" />
+			<Property name="useablePeriod" type="QSET_TS" isa="isoClass" />
+			<Property name="use" type="set_TelecommunicationAddressUse" isa="simpleAttribute" />
+			<Property name="value" type="String" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="TextAnnotationEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="TextAnnotationEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/" />
 		</Paths>
 		<Properties>
-			<Property name="text" type="ST" isa="isoClass" inherited="false" />
-			<Property name="font" type="ST" isa="isoClass" inherited="false" />
-			<Property name="fontColor" type="ST" isa="isoClass" inherited="false" />
-			<Property name="fontEffect" type="ST" isa="isoClass" inherited="false" />
-			<Property name="fontSize" type="ST" isa="isoClass" inherited="false" />
-			<Property name="fontStyle" type="ST" isa="isoClass" inherited="false" />
-			<Property name="textJustify" type="ST" isa="isoClass" inherited="false" />
-			<Property name="fontOpacity" type="ST" isa="isoClass" inherited="false" />
-			<Property name="geometricShapeEntity" type="GeometricShapeEntity" isa="aimClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="text" type="ST" isa="isoClass" />
+			<Property name="font" type="ST" isa="isoClass" />
+			<Property name="fontColor" type="ST" isa="isoClass" />
+			<Property name="fontEffect" type="ST" isa="isoClass" />
+			<Property name="fontSize" type="ST" isa="isoClass" />
+			<Property name="fontStyle" type="ST" isa="isoClass" />
+			<Property name="textJustify" type="ST" isa="isoClass" />
+			<Property name="fontOpacity" type="ST" isa="isoClass" />
+			<Property name="geometricShapeEntity" type="GeometricShapeEntity" isa="aimClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionEllipse" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionEllipse" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionEllipse']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionEllipse']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionEllipsoid" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionEllipsoid" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionEllipsoid']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionEllipsoid']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionGeometricShapeEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="ThreeDimensionGeometricShapeEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionEllipse']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionEllipse']/" />
@@ -1343,139 +1347,139 @@
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionPolyline']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionGeometricShapeEntityExcludesThreeDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionGeometricShapeEntityExcludesThreeDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ThreeDimensionGeometricShapeEntityExcludesThreeDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionGeometricShapeEntityIsComprisedOfThreeDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionGeometricShapeEntityIsComprisedOfThreeDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='ThreeDimensionGeometricShapeEntityIsComprisedOfThreeDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionMultiPoint" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionMultiPoint" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionMultiPoint']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionMultiPoint']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionPoint" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionPoint" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionPoint']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionPoint']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionPolygon" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionPolygon" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionPolygon']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionPolygon']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionPolyline" abstract="false" hasParent="true" type="aim">
+	<Class name="ThreeDimensionPolyline" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionPolyline']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionPolyline']/" />
 		</Paths>
 		<Properties>
-			<Property name="frameOfReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="fiducialUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="frameOfReferenceUid" type="II" isa="isoClass" />
+			<Property name="fiducialUid" type="II" isa="isoClass" />
+			<Property name="ThreeDimensionSpatialCoordinate" type="ThreeDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="ThreeDimensionSpatialCoordinate" abstract="false" hasParent="false" type="aim">
+	<Class name="ThreeDimensionSpatialCoordinate" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='ThreeDimensionEllipse']/threeDimensionSpatialCoordinateCollection/ThreeDimensionSpatialCoordinate/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionEllipse']/threeDimensionSpatialCoordinateCollection/ThreeDimensionSpatialCoordinate/" />
@@ -1491,93 +1495,93 @@
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='ThreeDimensionPolyline']/threeDimensionSpatialCoordinateCollection/ThreeDimensionSpatialCoordinate/" />
 		</Paths>
 		<Properties>
-			<Property name="coordinateIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="x" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="y" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="z" type="Double" isa="simpleElement" inherited="false" />
+			<Property name="coordinateIndex" type="Integer" isa="simpleElement" />
+			<Property name="x" type="Double" isa="simpleElement" />
+			<Property name="y" type="Double" isa="simpleElement" />
+			<Property name="z" type="Double" isa="simpleElement" />
 		</Properties>
 	</Class>
-	<Class name="TimePointLesionObservationEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="TimePointLesionObservationEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/lesionObservationEntityCollection/LesionObservationEntity[@xsi:type='TimePointLesionObservationEntity']/" />
 			<Path value="AnnotationOfAnnotationCollection/annotationOfAnnotations/AnnotationOfAnnotation/lesionObservationEntityCollection/LesionObservationEntity[@xsi:type='TimePointLesionObservationEntity']/" />
 		</Paths>
 		<Properties>
-			<Property name="calibration" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="predecessorLesionTrackingUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="false" />
-			<Property name="therapeuticResponse" type="CD" isa="isoClass" inherited="false" />
-			<Property name="qualitativeAssessment" type="CD" isa="isoClass" inherited="false" />
-			<Property name="canEvaluateLesion" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="reasonUnableToEvaluate" type="CD" isa="isoClass" inherited="false" />
-			<Property name="canMeasureLesion" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="reasonUnableToMeasure" type="CD" isa="isoClass" inherited="false" />
-			<Property name="isUnequivocalProgression" type="Boolean" isa="simpleElement" inherited="false" />
-			<Property name="lesionUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="isAdditionalObservation" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="calibration" type="Boolean" isa="simpleElement" />
+			<Property name="predecessorLesionTrackingUid" type="II" isa="isoClass" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="therapeuticResponse" type="CD" isa="isoClass" />
+			<Property name="qualitativeAssessment" type="CD" isa="isoClass" />
+			<Property name="canEvaluateLesion" type="Boolean" isa="simpleElement" />
+			<Property name="reasonUnableToEvaluate" type="CD" isa="isoClass" />
+			<Property name="canMeasureLesion" type="Boolean" isa="simpleElement" />
+			<Property name="reasonUnableToMeasure" type="CD" isa="isoClass" />
+			<Property name="isUnequivocalProgression" type="Boolean" isa="simpleElement" />
+			<Property name="lesionUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="isAdditionalObservation" type="Boolean" isa="simpleElement" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TimePointLesionObservationEntityHasImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="TimePointLesionObservationEntityHasImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='TimePointLesionObservationEntityHasImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionCircle" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionCircle" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionCircle']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionCircle']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="uri" type="ST" isa="isoClass" inherited="true" />
-			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionEllipse" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionEllipse" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionEllipse']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionEllipse']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="uri" type="ST" isa="isoClass" inherited="true" />
-			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionGeometricShapeEntity" abstract="true" hasParent="true" type="aim">
+	<Class name="TwoDimensionGeometricShapeEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionCircle']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionCircle']/" />
@@ -1591,119 +1595,119 @@
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionPolyline']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageReferenceUid" type="II" isa="isoClass" inherited="false" />
-			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="uri" type="ST" isa="isoClass" inherited="false" />
-			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" inherited="false" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionGeometricShapeEntityExcludesTwoDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionGeometricShapeEntityExcludesTwoDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='TwoDimensionGeometricShapeEntityExcludesTwoDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionGeometricShapeEntityIsComprisedOfTwoDimensionGeometricShapeEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionGeometricShapeEntityIsComprisedOfTwoDimensionGeometricShapeEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='TwoDimensionGeometricShapeEntityIsComprisedOfTwoDimensionGeometricShapeEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionMultiPoint" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionMultiPoint" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionMultiPoint']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionMultiPoint']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="uri" type="ST" isa="isoClass" inherited="true" />
-			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionPoint" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionPoint" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionPoint']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionPoint']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="uri" type="ST" isa="isoClass" inherited="true" />
-			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionPolyline" abstract="false" hasParent="true" type="aim">
+	<Class name="TwoDimensionPolyline" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionPolyline']/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionPolyline']/" />
 		</Paths>
 		<Properties>
-			<Property name="imageReferenceUid" type="II" isa="isoClass" inherited="true" />
-			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="uri" type="ST" isa="isoClass" inherited="true" />
-			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" inherited="true" />
-			<Property name="questionTypeCode" type="CD" isa="isoClass" inherited="true" />
-			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="label" type="ST" isa="isoClass" inherited="true" />
-			<Property name="description" type="ST" isa="isoClass" inherited="true" />
-			<Property name="includeFlag" type="Boolean" isa="simpleElement" inherited="true" />
-			<Property name="comment" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineColor" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineOpacity" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineStyle" type="ST" isa="isoClass" inherited="true" />
-			<Property name="lineThickness" type="ST" isa="isoClass" inherited="true" />
-			<Property name="questionIndex" type="Integer" isa="simpleElement" inherited="true" />
-			<Property name="interpolationMethod" type="CD" isa="isoClass" inherited="true" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="TwoDimensionSpatialCoordinate" abstract="false" hasParent="false" type="aim">
+	<Class name="TwoDimensionSpatialCoordinate" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionCircle']/twoDimensionSpatialCoordinateCollection/TwoDimensionSpatialCoordinate/" />
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionCircle']/twoDimensionSpatialCoordinateCollection/TwoDimensionSpatialCoordinate/" />
@@ -1717,70 +1721,70 @@
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionPolyline']/twoDimensionSpatialCoordinateCollection/TwoDimensionSpatialCoordinate/" />
 		</Paths>
 		<Properties>
-			<Property name="coordinateIndex" type="Integer" isa="simpleElement" inherited="false" />
-			<Property name="x" type="Double" isa="simpleElement" inherited="false" />
-			<Property name="y" type="Double" isa="simpleElement" inherited="false" />
+			<Property name="coordinateIndex" type="Integer" isa="simpleElement" />
+			<Property name="x" type="Double" isa="simpleElement" />
+			<Property name="y" type="Double" isa="simpleElement" />
 		</Properties>
 	</Class>
-	<Class name="UriImageReferenceEntity" abstract="false" hasParent="true" type="aim">
+	<Class name="UriImageReferenceEntity" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity[@xsi:type='UriImageReferenceEntity']/" />
 		</Paths>
 		<Properties>
-			<Property name="uri" type="ST" isa="isoClass" inherited="false" />
-			<Property name="mimeType" type="ST" isa="isoClass" inherited="false" />
-			<Property name="uniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="mimeType" type="ST" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="UriImageReferenceEntityHasCalculationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="UriImageReferenceEntityHasCalculationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='UriImageReferenceEntityHasCalculationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="UriImageReferenceEntityHasImagingObservationEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="UriImageReferenceEntityHasImagingObservationEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='UriImageReferenceEntityHasImagingObservationEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="UriImageReferenceEntityHasImagingPhysicalEntityStatement" abstract="false" hasParent="true" type="aim">
+	<Class name="UriImageReferenceEntityHasImagingPhysicalEntityStatement" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/imageAnnotationStatementCollection/ImageAnnotationStatement[@xsi:type='UriImageReferenceEntityHasImagingPhysicalEntityStatement']/" />
 		</Paths>
 		<Properties>
-			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
-			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" inherited="true" />
+			<Property name="subjectUniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="objectUniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
-	<Class name="URL" abstract="false" hasParent="false" type="iso">
+	<Class name="URL" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="value" type="String" isa="simpleAttribute" inherited="false" />
+			<Property name="value" type="String" isa="simpleAttribute" />
 		</Properties>
 	</Class>
-	<Class name="User" abstract="false" hasParent="false" type="aim">
+	<Class name="User" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/user/" />
 			<Path value="AnnotationOfAnnotationCollection/user/" />
 		</Paths>
 		<Properties>
-			<Property name="name" type="ST" isa="isoClass" inherited="false" />
-			<Property name="loginName" type="ST" isa="isoClass" inherited="false" />
-			<Property name="roleInTrial" type="ST" isa="isoClass" inherited="false" />
-			<Property name="numberWithinRoleOfClinicalTrial" type="Integer" isa="simpleElement" inherited="false" />
+			<Property name="name" type="ST" isa="isoClass" />
+			<Property name="loginName" type="ST" isa="isoClass" />
+			<Property name="roleInTrial" type="ST" isa="isoClass" />
+			<Property name="numberWithinRoleOfClinicalTrial" type="Integer" isa="simpleElement" />
 		</Properties>
 	</Class>
-	<Class name="XReference" abstract="false" hasParent="false" type="iso">
+	<Class name="XReference" abstract="false" type="iso">
 		<Paths />
 		<Properties>
-			<Property name="xref" type="String" isa="simpleAttribute" inherited="false" />
+			<Property name="xref" type="String" isa="simpleAttribute" />
 		</Properties>
 	</Class>
 </AimStructure>

@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package edu.stanford.hakan.aim4api.base;
+package main.java.edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,152 +36,144 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * 
+ *
  * @author localadmin
  */
-public class ImageAnnotationCollection extends AnnotationCollection
-{
+public class ImageAnnotationCollection extends AnnotationCollection {
 
-	private Person person;
-	private List<ImageAnnotation> listImageAnnotations = new ArrayList<ImageAnnotation>();
+    private Person person;
+    private List<ImageAnnotation> listImageAnnotations = new ArrayList<>();
 
-	public Person getPerson()
-	{
-		return person;
-	}
+    public Person getPerson() {
+        return person;
+    }
 
-	public void setPerson(Person person)
-	{
-		person.setTagName("person");
-		this.person = person;
-	}
+    public void setPerson(Person person) {
+        person.setTagName("person");
+        this.person = person;
+    }
 
-	public void addImageAnnotation(ImageAnnotation newImageAnnotation)
-	{
-		this.listImageAnnotations.add(newImageAnnotation);
-	}
+    public void addImageAnnotation(ImageAnnotation newImageAnnotation) {
+        newImageAnnotation.setImageAnnotationCollection(this);
+        this.listImageAnnotations.add(newImageAnnotation);
+    }
 
-	public List<ImageAnnotation> getImageAnnotations()
-	{
-		return listImageAnnotations;
-	}
+    public List<ImageAnnotation> getImageAnnotations() {
+        return listImageAnnotations;
+    }
 
-	public void setImageAnnotations(List<ImageAnnotation> listImageAnnotations)
-	{
-		this.listImageAnnotations = listImageAnnotations;
-	}
+    public void setImageAnnotations(List<ImageAnnotation> listImageAnnotations) {
+        this.listImageAnnotations = listImageAnnotations;
+        for (int i = 0; i < this.listImageAnnotations.size(); i++) {
+            this.listImageAnnotations.get(i).setImageAnnotationCollection(this);
+        }
+    }
 
-	@Override
-	public Node getXMLNode(Document doc) throws AimException
-	{
-		if (getTagName() == null || "".equals(getTagName())) {
-			setTagName("ImageAnnotationCollection");
-		}
-		Element res = (Element)super.getXMLNode(doc);
-		if (this.person != null) {
-			res.appendChild(this.person.getXMLNode(doc));
-		}
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+        if (getTagName() == null || "".equals(getTagName())) {
+            setTagName("ImageAnnotationCollection");
+        }
+        Element res = (Element) super.getXMLNode(doc);
+        if (this.person != null) {
+            res.appendChild(this.person.getXMLNode(doc));
+        }
 
-		if (this.listImageAnnotations.size() > 0) {
-			Element imageAnnotations = doc.createElement("imageAnnotations");
-			for (int i = 0; i < this.listImageAnnotations.size(); i++) {
-				this.listImageAnnotations.get(i).setTagName("ImageAnnotation");
-				imageAnnotations.appendChild(this.listImageAnnotations.get(i).getXMLNode(doc));
-			}
-			res.appendChild(imageAnnotations);
-		}
+        if (this.listImageAnnotations.size() > 0) {
+            Element imageAnnotations = doc.createElement("imageAnnotations");
+            for (int i = 0; i < this.listImageAnnotations.size(); i++) {
+                this.listImageAnnotations.get(i).setTagName("ImageAnnotation");
+                imageAnnotations.appendChild(this.listImageAnnotations.get(i).getXMLNode(doc));
+            }
+            res.appendChild(imageAnnotations);
+        }
+        return res;
+    }
 
-		return res;
-	}
+    @Override
+    public void setXMLNode(Node node) {
+        this.listImageAnnotations.clear();
+        super.setXMLNode(node);
+        NodeList listChilds = node.getChildNodes();
+        for (int i = 0; i < listChilds.getLength(); i++) {
+            Node currentNode = listChilds.item(i);
+            if ("imageAnnotations".equals(currentNode.getNodeName())) {
+                NodeList tempList = currentNode.getChildNodes();
+                for (int j = 0; j < tempList.getLength(); j++) {
+                    Node childNode = tempList.item(j);
+                    if ("ImageAnnotation".equals(childNode.getNodeName())) {
+                        ImageAnnotation obj = new ImageAnnotation();
+                        obj.setXMLNode(childNode);
+                        this.addImageAnnotation(obj);
+                    }
+                }
+            }
+            if ("person".equals(currentNode.getNodeName())) {
+                Person obj = new Person();
+                obj.setXMLNode(currentNode);
+                this.setPerson(obj);
+            }
+        }
+    }
 
-	@Override
-	public void setXMLNode(Node node)
-	{
-		this.listImageAnnotations.clear();
-		super.setXMLNode(node);
-		NodeList listChilds = node.getChildNodes();
-		for (int i = 0; i < listChilds.getLength(); i++) {
-			Node currentNode = listChilds.item(i);
-			if ("imageAnnotations".equals(currentNode.getNodeName())) {
-				NodeList tempList = currentNode.getChildNodes();
-				for (int j = 0; j < tempList.getLength(); j++) {
-					Node childNode = tempList.item(j);
-					if ("ImageAnnotation".equals(childNode.getNodeName())) {
-						ImageAnnotation obj = new ImageAnnotation();
-						obj.setXMLNode(childNode);
-						this.addImageAnnotation(obj);
-					}
-				}
-			}
-			if ("person".equals(currentNode.getNodeName())) {
-				Person obj = new Person();
-				obj.setXMLNode(currentNode);
-				this.setPerson(obj);
-			}
-		}
-	}
+    @Override
+    public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
+        throw new UnsupportedOperationException("Not supported yet.");
+        // To change body of generated methods, choose Tools | Templates.
+    }
 
-	@Override
-	public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException
-	{
-		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
-																																		// | Templates.
-	}
+    @Override
+    public boolean isEqualTo(Object other) {
+        ImageAnnotationCollection oth = (ImageAnnotationCollection) other;
+        if (!this.person.isEqualTo(oth.person)) {
+            return false;
+        }
+        if (this.listImageAnnotations.size() != oth.listImageAnnotations.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listImageAnnotations.size(); i++) {
+            if (!this.listImageAnnotations.get(i).isEqualTo(oth.listImageAnnotations.get(i))) {
+                return false;
+            }
+        }
+        return super.isEqualTo(other);
+    }
 
-	@Override
-	public boolean isEqualTo(Object other)
-	{
-		ImageAnnotationCollection oth = (ImageAnnotationCollection)other;
-		if (!this.person.isEqualTo(oth.person)) {
-			return false;
-		}
-		if (this.listImageAnnotations.size() != oth.listImageAnnotations.size()) {
-			return false;
-		}
-		for (int i = 0; i < this.listImageAnnotations.size(); i++) {
-			if (!this.listImageAnnotations.get(i).isEqualTo(oth.listImageAnnotations.get(i))) {
-				return false;
-			}
-		}
-		return super.isEqualTo(other);
-	}
-
-	@Override
-	public ImageAnnotationCollection getClone()
-	{
-		ImageAnnotationCollection res = new ImageAnnotationCollection();
-		if (this.getPerson() != null) {
-			res.setPerson(this.getPerson().getClone());
-		}
-		for (int i = 0; i < this.listImageAnnotations.size(); i++) {
-			if (this.listImageAnnotations.get(i) != null) {
-				res.addImageAnnotation(this.listImageAnnotations.get(i).getClone());
-			}
-		}
-		if (this.getUniqueIdentifier() != null) {
-			res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
-		}
-		if (this.getDescription() != null) {
-			res.setDescription(this.getDescription().getClone());
-		}
-		if (this.getDateTime() != null) {
-			res.setDateTime(this.getDateTime());
-		}
-		if (this.getUser() != null) {
-			res.setUser(this.getUser().getClone());
-		}
-		if (this.getEquipment() != null) {
-			res.setEquipment(this.getEquipment().getClone());
-		}
-		if (this.getAimVersion() != null) {
-			res.setAimVersion(this.getAimVersion());
-		}
-		if (this.getTagName() != null) {
-			res.setTagName(this.getTagName());
-		}
-		if (this.getXsiType() != null) {
-			res.setXsiType(this.getXsiType());
-		}
-		return res;
-	}
+    @Override
+    public ImageAnnotationCollection getClone() {
+        ImageAnnotationCollection res = new ImageAnnotationCollection();
+        if (this.getPerson() != null) {
+            res.setPerson(this.getPerson().getClone());
+        }
+        for (int i = 0; i < this.listImageAnnotations.size(); i++) {
+            if (this.listImageAnnotations.get(i) != null) {
+                res.addImageAnnotation(this.listImageAnnotations.get(i).getClone());
+            }
+        }
+        if (this.getUniqueIdentifier() != null) {
+            res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
+        }
+        if (this.getDescription() != null) {
+            res.setDescription(this.getDescription().getClone());
+        }
+        if (this.getDateTime() != null) {
+            res.setDateTime(this.getDateTime());
+        }
+        if (this.getUser() != null) {
+            res.setUser(this.getUser().getClone());
+        }
+        if (this.getEquipment() != null) {
+            res.setEquipment(this.getEquipment().getClone());
+        }
+        if (this.getAimVersion() != null) {
+            res.setAimVersion(this.getAimVersion());
+        }
+        if (this.getTagName() != null) {
+            res.setTagName(this.getTagName());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        return res;
+    }
 }

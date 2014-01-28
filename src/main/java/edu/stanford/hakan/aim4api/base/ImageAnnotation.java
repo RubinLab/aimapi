@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package edu.stanford.hakan.aim4api.base;
+package main.java.edu.stanford.hakan.aim4api.base;
 
 import java.util.List;
 import org.w3c.dom.Document;
@@ -46,6 +46,7 @@ public class ImageAnnotation extends AnnotationEntity {
     private MarkupEntityCollection markupEntityCollection = new MarkupEntityCollection();
     private ImageAnnotationStatementCollection imageAnnotationStatementCollection = new ImageAnnotationStatementCollection();
     private ImageReferenceEntityCollection imageReferenceEntityCollection = new ImageReferenceEntityCollection();
+    private ImageAnnotationCollection imageAnnotationCollection;
 
     public SegmentationEntityCollection getSegmentationEntityCollection() {
         return segmentationEntityCollection;
@@ -95,6 +96,14 @@ public class ImageAnnotation extends AnnotationEntity {
         this.imageReferenceEntityCollection.addImageReferenceEntity(newImageReferenceEntity);
     }
 
+    public ImageAnnotationCollection getImageAnnotationCollection() {
+        return imageAnnotationCollection;
+    }
+
+    public void setImageAnnotationCollection(ImageAnnotationCollection imageAnnotationCollection) {
+        this.imageAnnotationCollection = imageAnnotationCollection;
+    }
+    
     @Override
     public Node getXMLNode(Document doc) throws AimException {
         if (getTagName() == null || "".equals(getTagName())) {
