@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior 
- * University, creator Daniel L. Rubin. 
- * 
+ * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior
+ * University, creator Daniel L. Rubin.
+ *
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this 
+ *
+ * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package main.java.edu.stanford.hakan.aim4api.base;
@@ -119,6 +119,9 @@ public class ImageStudy implements IAimXMLOperations {
             res.appendChild(this.instanceUid.getXMLNode(doc));
         }
         if (this.startDate != null) {
+            if (this.startDate.length() == 8 && !this.startDate.contains("-")) {
+                this.startDate = this.startDate.substring(0, 4) + "-" + this.startDate.substring(4, 6) + "-" + this.startDate.substring(6, 8);
+            }
             Element el_startDate = doc.createElement("startDate");
             el_startDate.setAttribute("value", this.startDate.toString());
             res.appendChild(el_startDate);
@@ -180,22 +183,22 @@ public class ImageStudy implements IAimXMLOperations {
     @Override
     public boolean isEqualTo(Object other) {
         ImageStudy oth = (ImageStudy) other;
-        if (!this.instanceUid.isEqualTo(oth.instanceUid)) {
+        if (this.instanceUid == null ? oth.instanceUid != null : !this.instanceUid.isEqualTo(oth.instanceUid)) {
             return false;
         }
-        if (this.startDate == null ? oth.startDate != null : !this.startDate.equals(oth.startDate)) {
+        if (this.startDate == null ? oth.startDate != null : !this.startDate.replace("-", "").equals(oth.startDate.replace("-", ""))) {
             return false;
         }
         if (this.startTime == null ? oth.startTime != null : !this.startTime.equals(oth.startTime)) {
             return false;
         }
-        if (!this.procedureDescription.isEqualTo(oth.procedureDescription)) {
+        if (this.procedureDescription == null ? oth.procedureDescription != null : !this.procedureDescription.isEqualTo(oth.procedureDescription)) {
             return false;
         }
-        if (!this.imageSeries.isEqualTo(oth.imageSeries)) {
+        if (this.imageSeries == null ? oth.imageSeries != null : !this.imageSeries.isEqualTo(oth.imageSeries)) {
             return false;
         }
-        if (!this.referencedDicomObjectCollection.isEqualTo(oth.referencedDicomObjectCollection)) {
+        if (this.referencedDicomObjectCollection == null ? oth.referencedDicomObjectCollection != null : !this.referencedDicomObjectCollection.isEqualTo(oth.referencedDicomObjectCollection)) {
             return false;
         }
         return true;

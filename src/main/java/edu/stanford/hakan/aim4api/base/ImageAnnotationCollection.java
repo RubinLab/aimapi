@@ -1,34 +1,36 @@
 /*
- * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior 
- * University, creator Daniel L. Rubin. 
- * 
+ * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior
+ * University, creator Daniel L. Rubin.
+ *
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this 
+ *
+ * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package main.java.edu.stanford.hakan.aim4api.base;
 
 import java.util.ArrayList;
 import java.util.List;
+import main.java.edu.stanford.hakan.aim4api.utility.GenerateId;
+import main.java.edu.stanford.hakan.aim4api.utility.Utility;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,7 +44,7 @@ import org.w3c.dom.NodeList;
 public class ImageAnnotationCollection extends AnnotationCollection {
 
     private Person person;
-    private List<ImageAnnotation> listImageAnnotations = new ArrayList<>();
+    private List<ImageAnnotation> listImageAnnotations = new ArrayList<ImageAnnotation>();
 
     public Person getPerson() {
         return person;
@@ -87,6 +89,12 @@ public class ImageAnnotationCollection extends AnnotationCollection {
             }
             res.appendChild(imageAnnotations);
         }
+
+//        //*** Audit trail operations.
+//        if (this.getIsEdited()) {
+//            this.setUniqueIdentifier(new II(GenerateId.getUUID()));
+//            this.setDateTime(Utility.getNowAtGMT());
+//        }
         return res;
     }
 
@@ -114,6 +122,19 @@ public class ImageAnnotationCollection extends AnnotationCollection {
                 this.setPerson(obj);
             }
         }
+        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
+        this.initialState = this.getClone();
+    }
+
+    public boolean getIsEdited() {
+        if (this.initialState == null) {
+            return false;
+        }
+        return !this.isEqualTo(this.initialState);
+    }
+
+    public ImageAnnotationCollection getInitialState() {
+        return (ImageAnnotationCollection) this.initialState;
     }
 
     @Override
@@ -125,14 +146,14 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     @Override
     public boolean isEqualTo(Object other) {
         ImageAnnotationCollection oth = (ImageAnnotationCollection) other;
-        if (!this.person.isEqualTo(oth.person)) {
+        if (this.person == null ? oth.person != null : !this.person.isEqualTo(oth.person)) {
             return false;
         }
         if (this.listImageAnnotations.size() != oth.listImageAnnotations.size()) {
             return false;
         }
         for (int i = 0; i < this.listImageAnnotations.size(); i++) {
-            if (!this.listImageAnnotations.get(i).isEqualTo(oth.listImageAnnotations.get(i))) {
+            if (this.listImageAnnotations.get(i) == null ? oth.listImageAnnotations.get(i) != null : !this.listImageAnnotations.get(i).isEqualTo(oth.listImageAnnotations.get(i))) {
                 return false;
             }
         }

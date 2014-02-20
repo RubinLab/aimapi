@@ -53,7 +53,8 @@ public class AimQuery {
         if (!"/".equals(collectionName.substring(0, 1))) {
             collectionName = "/" + collectionName.trim();
         }
-        String res = "declare default element namespace '" + nameSpace + "'; for $x in collection('" + collectionName + "')/ImageAnnotationCollection where " + whereClause + " return $x";
+        String res = "declare default element namespace '" + nameSpace + "'; for $x in collection('" + collectionName + "')/ImageAnnotationCollection where " + whereClause + " order by $x/uniqueIdentifier/root return $x";
+        //String res = "declare default element namespace '" + nameSpace + "'; for $x in collection('" + collectionName + "')/ImageAnnotationCollection where " + whereClause + " return $x";
         return res.replaceAll(" (?i)and ", " and ").replaceAll(" (?i)or ", " or ");
     }
 }

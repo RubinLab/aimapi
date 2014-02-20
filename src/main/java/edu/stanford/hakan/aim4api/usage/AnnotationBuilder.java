@@ -27,23 +27,8 @@
  */
 package main.java.edu.stanford.hakan.aim4api.usage;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -58,278 +43,157 @@ import org.w3c.dom.Node;
 
 import main.java.edu.stanford.hakan.aim4api.base.AimException;
 import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import main.java.edu.stanford.hakan.aim4api.utility.Utility;
+import main.java.edu.stanford.hakan.aim4api.database.exist.ExistManager;
+import main.java.edu.stanford.hakan.aim4api.utility.XML;
 
 /**
- * 
+ *
  * @author Hakan BULU
  */
-public class AnnotationBuilder
-{
+public class AnnotationBuilder {
 
-	// private static String validationResult;
-	private static String aimXMLsaveResult = "";
+    // private static String validationResult;
+    private static String aimXMLsaveResult = "";
 
-	public static String getAimXMLsaveResult()
-	{
-		return aimXMLsaveResult.trim();
-	}
+    public static String getAimXMLsaveResult() {
+        return aimXMLsaveResult.trim();
+    }
 
-	private static void setAimXMLsaveResult(String str)
-	{
-		aimXMLsaveResult = aimXMLsaveResult + str.trim() + "\r\n";
-	}
+    private static void setAimXMLsaveResult(String str) {
+        aimXMLsaveResult = aimXMLsaveResult + str.trim() + "\r\n";
+    }
 
-	private static void clearAimXMLsaveResult()
-	{
-		aimXMLsaveResult = "";
-	}
+    private static void clearAimXMLsaveResult() {
+        aimXMLsaveResult = "";
+    }
 
-	public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException
-	{
-		try {
-			clearAimXMLsaveResult();
-			Document doc = createDocument();
-			Element root = (Element)Anno.getXMLNode(doc);
-			root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
-			root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			root.setAttribute("xsi:schemaLocation",
-					"gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
-			root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-			doc.appendChild(root);
-			boolean valRes = true;
-			if (PathXSD != null) {
-				// *** Validation doc
-				valRes = AnnotationValidator.ValidateXML(doc, PathXSD);
-				setAimXMLsaveResult(AnnotationValidator.getValidationResult());
-				// *** Validation End
-			}
-			if (valRes) {
-				SaveDocucument(doc, PathXML);
-			} else {
-				setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + getAimXMLsaveResult());
-				throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): "
-						+ getAimXMLsaveResult());
-			}
-		} catch (AimException ex) {
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
-		} catch (DOMException ex) {
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
-		}
-	}
+    public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException {
+        try {
+            clearAimXMLsaveResult();
+            Document doc = XML.createDocument();
+            Element root = (Element) Anno.getXMLNode(doc);
+            XML.setBaseAttributes(root);
+//            root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
+//            root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+//            root.setAttribute("xsi:schemaLocation",
+//                    "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
+//            root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+            doc.appendChild(root);
+            boolean valRes = true;
+            if (PathXSD != null) {
+                // *** Validation doc
+                valRes = AnnotationValidator.ValidateXML(doc, PathXSD);
+                setAimXMLsaveResult(AnnotationValidator.getValidationResult());
+                // *** Validation End
+            }
+            if (valRes) {
+                String res = XML.SaveDocucument(doc, PathXML);
+                setAimXMLsaveResult(res);
+                if ("OK".equals(res)) {
+                } else {
+                    throw new AimException(res);
+                }
+            } else {
+                setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + getAimXMLsaveResult());
+                throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): "
+                        + getAimXMLsaveResult());
+            }
+        } catch (AimException | DOMException ex) {
+            setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
+            throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
+        }
+    }
 
-	public static String convertToString(ImageAnnotationCollection Anno) throws AimException
-	{
-		try {
-			Document doc = createDocument();
-			Element root = (Element)Anno.getXMLNode(doc);
-			root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
-			root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			root.setAttribute("xsi:schemaLocation",
-					"gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
-			root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-			doc.appendChild(root);
+    public static String convertToString(ImageAnnotationCollection Anno) throws AimException {
+        try {
+            Document doc = XML.createDocument();
+            Element root = (Element) Anno.getXMLNode(doc);
+            XML.setBaseAttributes(root);
+//            root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
+//            root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+//            root.setAttribute("xsi:schemaLocation",
+//                    "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
+//            root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+            doc.appendChild(root);
 
-			// set up a transformer
-			TransformerFactory transfac = TransformerFactory.newInstance();
-			Transformer trans = transfac.newTransformer();
-			trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-			trans.setOutputProperty(OutputKeys.INDENT, "yes");
+            // set up a transformer
+            TransformerFactory transfac = TransformerFactory.newInstance();
+            Transformer trans = transfac.newTransformer();
+            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
 
-			// create string from xml tree
-			StringWriter sw = new StringWriter();
-			StreamResult result = new StreamResult(sw);
-			DOMSource source = new DOMSource(doc);
-			trans.transform(source, result);
-			String xmlString = sw.toString();
-			return xmlString;
-		} catch (AimException ex) {
-			setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
-			throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
-					+ ex.getMessage());
-		} catch (DOMException ex) {
-			setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
-			throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
-					+ ex.getMessage());
-		} catch (TransformerFactoryConfigurationError ex) {
-			setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
-			throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
-					+ ex.getMessage());
-		} catch (IllegalArgumentException ex) {
-			setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
-			throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
-					+ ex.getMessage());
+            // create string from xml tree
+            StringWriter sw = new StringWriter();
+            StreamResult result = new StreamResult(sw);
+            DOMSource source = new DOMSource(doc);
+            trans.transform(source, result);
+            String xmlString = sw.toString();
+            return xmlString;
+        } catch (AimException | DOMException | TransformerFactoryConfigurationError | IllegalArgumentException | TransformerException ex) {
+            setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
+            throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
+                    + ex.getMessage());
+        }
+    }
 
-		} catch (TransformerException ex) {
-			setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
-			throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
-					+ ex.getMessage());
-		}
-	}
+    public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
+            String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
 
-	public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
-			String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException
-	{
+        String operation = "Saving";
+        try {
+            performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+                    dbUserName, dbUserPassword);
 
-		String operation = "Saving";
-		try {
-			performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-					dbUserName, dbUserPassword);
-			if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
-					.getUniqueIdentifier().getRoot())) {
-				setAimXMLsaveResult("XML " + operation + " operation is Successful.");
-			} else {
-				setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
-				throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
-			}
-		} catch (Exception ex) {
-			setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
-					+ ex.getMessage());
-			throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
-					+ ex.getMessage());
-		}
-	}
+            if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+                    .getUniqueIdentifier().getRoot())) {
+                setAimXMLsaveResult("XML " + operation + " operation is Successful.");
+            } else {
+                setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
+                throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
+            }
+        } catch (Exception ex) {
+            setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
+                    + ex.getMessage());
+            throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
+                    + ex.getMessage());
+        }
+    }
 
-	private static void SaveDocucument(Document doc, String Path) throws AimException
-	{
-		try {
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(Path));
-			transformer.transform(source, result);
-			setAimXMLsaveResult("XML Saving operation is Successful.");
-		} catch (TransformerFactoryConfigurationError ex) {
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; SaveDocucument): " + ex.getMessage());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; SaveDocucument): " + ex.getMessage());
-		} catch (IllegalArgumentException ex) {
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; SaveDocucument): " + ex.getMessage());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; SaveDocucument): " + ex.getMessage());
-		} catch (TransformerException ex) {
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; SaveDocucument): " + ex.getMessage());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; SaveDocucument): " + ex.getMessage());
-		}
-	}
+    public static void saveNode(Node node, String Path) throws AimException {
+        try {
+            Document doc = XML.createDocument();
+            Node nodeCopy = doc.importNode(node, true);
+            doc.appendChild(nodeCopy);
+            String res = XML.SaveDocucument(doc, Path);
+            setAimXMLsaveResult(res);
+            if ("OK".equals(res)) {
+            } else {
+                throw new AimException(res);
+            }
+        } catch (DOMException | AimException ex) {
+            setAimXMLsaveResult(ex.getMessage());
+            setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
+            throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
+        }
+    }
 
-	public static void saveNode(Node node, String Path) throws AimException
-	{
-		try {
-			Document doc = createDocument();
-			Node nodeCopy = doc.importNode(node, true);
-			doc.appendChild(nodeCopy);
-			SaveDocucument(doc, Path);
-		} catch (DOMException ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
-		} catch (AimException ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
-		}
-	}
+    private static void performUploadExist(ImageAnnotationCollection Anno, String Url, String Collection,
+            String FileName, String PathXSD, String userName, String password) throws AimException {
 
-	private static Document createDocument()
-	{
-		try {
-			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-			Document doc = docBuilder.newDocument();
-			return doc;
-		} catch (Exception ex) {
-			return null;
-		}
-	}
+        Document doc = XML.createDocument();
+        Element root = (Element) Anno.getXMLNode(doc);
+        XML.setBaseAttributes(root);
+        doc.appendChild(root);
+        boolean valRes = AnnotationValidator.ValidateXML(doc, PathXSD);
+        setAimXMLsaveResult(AnnotationValidator.getValidationResult());
+        if (!valRes) {
+            throw new AimException(AnnotationValidator.getValidationResult());
+        }
+        String uploadResult = ExistManager.performUploadExist(doc, Url, Collection, FileName, userName, password);
 
-	private static void performUploadExist(ImageAnnotationCollection Anno, String Url, String Collection,
-			String FileName, String PathXSD, String userName, String password) throws AimException
-	{
-		try {
-			Url = Utility.correctToUrl(Url);
-			URL url = new URL(Url + "rest/db/" + Collection + "/" + FileName);
-			URLConnection conn = url.openConnection();
-			conn.setDoInput(true);
-			conn.setDoOutput(true);
-
-			if (conn instanceof HttpURLConnection) {
-				((HttpURLConnection)conn).setRequestMethod("PUT");
-				((HttpURLConnection)conn).setRequestProperty("Content-Type", "application/xml");
-				if (!"".equals(userName.trim()) || !"".equals(password.trim())) {
-					String userPassword = userName + ":" + password;
-					String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
-					((HttpURLConnection)conn).setRequestProperty("Authorization", "Basic " + encoding);
-				}
-				((HttpURLConnection)conn).connect();
-			}
-
-			BufferedOutputStream bos = new BufferedOutputStream(conn.getOutputStream());
-
-			Document doc = createDocument();
-			Element root = (Element)Anno.getXMLNode(doc);
-			root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
-			root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			root.setAttribute("xsi:schemaLocation",
-					"gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
-			root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-			doc.appendChild(root);
-			boolean valRes = AnnotationValidator.ValidateXML(doc, PathXSD);
-			setAimXMLsaveResult(AnnotationValidator.getValidationResult());
-			if (!valRes) {
-				throw new AimException(AnnotationValidator.getValidationResult());
-			}
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			Source xmlSource = new DOMSource(doc);
-			Result outputTarget = new StreamResult(outputStream);
-			TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
-			InputStream is = new ByteArrayInputStream(outputStream.toByteArray());
-
-			BufferedInputStream bis = new BufferedInputStream(is);
-
-			int i;
-			while ((i = bis.read()) >= 0) {
-				bos.write(i);
-			}
-
-			bos.flush();
-			bos.close();
-			bis.close();
-
-			((HttpURLConnection)conn).getResponseCode();
-			((HttpURLConnection)conn).disconnect();
-
-		} catch (IOException ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-		} catch (AimException ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-		} catch (DOMException ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-		} catch (TransformerFactoryConfigurationError ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-		} catch (TransformerException ex) {
-			setAimXMLsaveResult(ex.getMessage());
-			setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-			throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): "
-					+ getAimXMLsaveResult());
-		}
-	}
+        if (!"OK".equals(uploadResult)) {
+            setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): " + uploadResult);
+            throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): " + uploadResult);
+        }
+    }
 }

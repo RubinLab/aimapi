@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior 
- * University, creator Daniel L. Rubin. 
- * 
+ * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior
+ * University, creator Daniel L. Rubin.
+ *
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this 
+ *
+ * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package main.java.edu.stanford.hakan.aim4api.base;
@@ -47,12 +47,14 @@ public class AnnotationCollection implements IAimXMLOperations {
     private Enumerations.AimVersion aimVersion;
     private String tagName;
     private String xsiType;
+    protected AnnotationCollection initialState = null;
 
     public II getUniqueIdentifier() {
         return uniqueIdentifier;
+
     }
 
-    public void setUniqueIdentifier(II uniqueIdentifier) {
+    protected void setUniqueIdentifier(II uniqueIdentifier) {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
     }
@@ -96,7 +98,7 @@ public class AnnotationCollection implements IAimXMLOperations {
         return aimVersion;
     }
 
-    public void setAimVersion(Enumerations.AimVersion aimVersion) {
+    protected void setAimVersion(Enumerations.AimVersion aimVersion) {
         this.aimVersion = aimVersion;
     }
 
@@ -194,19 +196,19 @@ public class AnnotationCollection implements IAimXMLOperations {
     @Override
     public boolean isEqualTo(Object other) {
         AnnotationCollection oth = (AnnotationCollection) other;
-        if (!this.uniqueIdentifier.isEqualTo(oth.uniqueIdentifier)) {
+        if (this.uniqueIdentifier == null ? oth.uniqueIdentifier != null : !this.uniqueIdentifier.isEqualTo(oth.uniqueIdentifier)) {
             return false;
         }
-        if (!this.description.isEqualTo(oth.description)) {
+        if (this.description == null ? oth.description != null : !this.description.isEqualTo(oth.description)) {
             return false;
         }
         if (this.dateTime == null ? oth.dateTime != null : !this.dateTime.equals(oth.dateTime)) {
             return false;
         }
-        if (!this.user.isEqualTo(oth.user)) {
+        if (this.user == null ? oth.user != null : !this.user.isEqualTo(oth.user)) {
             return false;
         }
-        if (!this.equipment.isEqualTo(oth.equipment)) {
+        if (this.equipment == null ? oth.equipment != null : !this.equipment.isEqualTo(oth.equipment)) {
             return false;
         }
         if (this.aimVersion == null ? oth.aimVersion != null : !this.aimVersion.equals(oth.aimVersion)) {

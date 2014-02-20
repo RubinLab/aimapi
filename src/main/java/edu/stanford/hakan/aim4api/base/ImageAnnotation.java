@@ -1,33 +1,35 @@
 /*
- * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior 
- * University, creator Daniel L. Rubin. 
- * 
+ * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior
+ * University, creator Daniel L. Rubin.
+ *
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this 
+ *
+ * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package main.java.edu.stanford.hakan.aim4api.base;
 
 import java.util.List;
+import main.java.edu.stanford.hakan.aim4api.utility.GenerateId;
+import main.java.edu.stanford.hakan.aim4api.utility.Utility;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -103,7 +105,7 @@ public class ImageAnnotation extends AnnotationEntity {
     public void setImageAnnotationCollection(ImageAnnotationCollection imageAnnotationCollection) {
         this.imageAnnotationCollection = imageAnnotationCollection;
     }
-    
+
     @Override
     public Node getXMLNode(Document doc) throws AimException {
         if (getTagName() == null || "".equals(getTagName())) {
@@ -121,6 +123,11 @@ public class ImageAnnotation extends AnnotationEntity {
         }
         if (this.imageReferenceEntityCollection.size() > 0) {
             res.appendChild(this.imageReferenceEntityCollection.getXMLNode(doc));
+        }
+//*** Audit trail operations.
+        if (this.getIsEdited()) {
+            this.setUniqueIdentifier(new II(GenerateId.getUUID()));
+            this.setDateTime(Utility.getNowAtGMT());
         }
         return res;
     }
@@ -144,6 +151,19 @@ public class ImageAnnotation extends AnnotationEntity {
                 this.imageReferenceEntityCollection.setXMLNode(listChilds.item(i));
             }
         }
+        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
+        this.initialState = this.getClone();
+    }
+
+    public boolean getIsEdited() {
+        if (this.initialState == null) {
+            return false;
+        }
+        return !this.isEqualTo(this.initialState);
+    }
+
+    public ImageAnnotation getInitialState() {
+        return (ImageAnnotation) this.initialState;
     }
 
     @Override
@@ -154,16 +174,16 @@ public class ImageAnnotation extends AnnotationEntity {
     @Override
     public boolean isEqualTo(Object other) {
         ImageAnnotation oth = (ImageAnnotation) other;
-        if (!this.segmentationEntityCollection.isEqualTo(oth.segmentationEntityCollection)) {
+        if (this.segmentationEntityCollection == null ? oth.segmentationEntityCollection != null : !this.segmentationEntityCollection.isEqualTo(oth.segmentationEntityCollection)) {
             return false;
         }
-        if (!this.markupEntityCollection.isEqualTo(oth.markupEntityCollection)) {
+        if (this.markupEntityCollection == null ? oth.markupEntityCollection != null : !this.markupEntityCollection.isEqualTo(oth.markupEntityCollection)) {
             return false;
         }
-        if (!this.imageAnnotationStatementCollection.isEqualTo(oth.imageAnnotationStatementCollection)) {
+        if (this.imageAnnotationStatementCollection == null ? oth.imageAnnotationStatementCollection != null : !this.imageAnnotationStatementCollection.isEqualTo(oth.imageAnnotationStatementCollection)) {
             return false;
         }
-        if (!this.imageReferenceEntityCollection.isEqualTo(oth.imageReferenceEntityCollection)) {
+        if (this.imageReferenceEntityCollection == null ? oth.imageReferenceEntityCollection != null : !this.imageReferenceEntityCollection.isEqualTo(oth.imageReferenceEntityCollection)) {
             return false;
         }
         return super.isEqualTo(other);

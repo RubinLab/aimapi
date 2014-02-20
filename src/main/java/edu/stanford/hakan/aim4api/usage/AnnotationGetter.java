@@ -27,15 +27,8 @@
  */
 package main.java.edu.stanford.hakan.aim4api.usage;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,15 +40,15 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import main.java.edu.stanford.hakan.aim4api.aimquery.AimQuery;
 import main.java.edu.stanford.hakan.aim4api.base.AimException;
 import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import main.java.edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import main.java.edu.stanford.hakan.aim4api.utility.Utility;
+import main.java.edu.stanford.hakan.aim4api.utility.XML;
 
 /**
  *
@@ -73,184 +66,7 @@ public class AnnotationGetter {
         validationResult = valResult;
     }
 
-    private static String getXMLStringFromExist(String Url, String XQuery, String dbUserName, String dbUserPassword)
-            throws AimException {
-        try {
-            Url = Utility.correctToUrl(Url);
-            String requestURL = Url + "rest/";
-            String data = "";
-
-            data += "<?xml version='1.0' encoding='UTF-8'?>";
-            data += "<query xmlns='http://exist.sourceforge.net/NS/exist' start='1' max='10000'>";
-            data += "<text>";
-            data += XQuery;
-            data += "</text>";
-            data += "<properties>";
-            data += "<property name='indent' value='yes'/>";
-            data += "</properties>";
-            data += "</query>";
-
-            URL url = new URL(requestURL);
-            URLConnection conn = url.openConnection();
-
-            conn.setRequestProperty("Content-Type", "application/xml");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            if (conn instanceof HttpURLConnection) {
-                ((HttpURLConnection) conn).setRequestMethod("POST");
-                ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
-                if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
-                    String userPassword = dbUserName + ":" + dbUserPassword;
-                    String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
-                    ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
-                }
-                ((HttpURLConnection) conn).connect();
-            }
-
-            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-
-            // write parameters
-            writer.write(data);
-            writer.flush();
-
-            // Get the response
-            StringBuilder answer = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                answer.append(line);
-            }
-            writer.close();
-            reader.close();
-
-            // Output the response
-            return (answer.toString());
-        } catch (Exception ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        }
-    }
-
-    public static String removeImageAnnotationCollectionFromServer(String Url, String nameSpace, String collection,
-            String dbUserName, String dbUserPassword, String uniqueIdentifier) throws AimException {
-        try {
-            if (!AnnotationGetter
-                    .isExistInTheServer(Url, nameSpace, collection, dbUserName, dbUserPassword, uniqueIdentifier)) {
-                throw new AimException(
-                        "AimException: The Image Annotation which you want to remove is not exist. Please check your parameters.");
-            }
-
-            String requestURL = Utility.correctToUrl(Url) + "rest/" + collection + "/AIM_" + uniqueIdentifier + ".xml";
-
-            URL url = new URL(requestURL);
-            URLConnection conn = url.openConnection();
-
-            conn.setRequestProperty("Content-Type", "application/xml");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            if (conn instanceof HttpURLConnection) {
-                ((HttpURLConnection) conn).setRequestMethod("DELETE");
-                ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
-                if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
-                    String userPassword = dbUserName + ":" + dbUserPassword;
-                    String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
-                    ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
-                }
-                ((HttpURLConnection) conn).connect();
-            }
-
-            // Get the response
-            StringBuilder answer = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                answer.append(line);
-            }
-            reader.close();
-
-            // Output the response
-            return "XML Saving operation is Successful.";
-        } catch (AimException ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        } catch (IOException ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        }
-    }
-
-    public static void deleteImageAnnotationFromServer(String serverURL, String namespace, String collection,
-            String PathXSD, String dbUserName, String dbUserPassword, String uniqueIdentifier) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private static Document getDocumentFromString(String xml) throws AimException {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            return builder.parse(new InputSource(new StringReader(xml)));
-        } catch (ParserConfigurationException ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        } catch (SAXException ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        } catch (IOException ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        }
-    }
-
-    private static List<Node> getNodesFromNodeByName(Node node, String nodeName) {
-        List<Node> res = new ArrayList<Node>();
-        if (node.getNodeName() == null ? nodeName == null : node.getNodeName().equals(nodeName)) {
-            res.add(node);
-        }
-        NodeList nodeList = node.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            res.addAll(getNodesFromNodeByName(nodeList.item(i), nodeName));
-        }
-        return res;
-    }
-
-    private static List<ImageAnnotationCollection> getImageAnnotationCollectionListFromDocument(Document doc,
-            String PathXSD) throws AimException {
-        List<ImageAnnotationCollection> res = new ArrayList<ImageAnnotationCollection>();
-        try {
-            Node firstNode = doc.getFirstChild();
-            List<Node> listNodeImageAnnotationCollections = getNodesFromNodeByName(firstNode, "ImageAnnotationCollection");
-            for (int i = 0; i < listNodeImageAnnotationCollections.size(); i++) {
-                ImageAnnotationCollection imageAnnotationCollection = new ImageAnnotationCollection();
-                Node nodeImageAnnotation = listNodeImageAnnotationCollections.get(i);
-                imageAnnotationCollection.setXMLNode(nodeImageAnnotation);
-                if (!"".equals(PathXSD.trim())) {
-                    // *** Validation Step
-                    DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-                    Document docValidation = docBuilder.newDocument();
-                    Element root = (Element) imageAnnotationCollection.getXMLNode(docValidation);
-                    root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
-                    root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-                    root.setAttribute("xsi:schemaLocation",
-                            "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
-                    root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-                    docValidation.appendChild(root);
-                    boolean valRes = AnnotationValidator.ValidateXML(docValidation, PathXSD);
-                    setValidationResult(AnnotationValidator.getValidationResult());
-                    if (!valRes) {
-                        throw new AimException(getValidationResult());
-                    }
-                }
-                res.add(imageAnnotationCollection);
-            }
-        } catch (ParserConfigurationException ex) {
-            throw new AimException(ex.getMessage());
-        } catch (AimException ex) {
-            throw new AimException(ex.getMessage());
-        } catch (DOMException ex) {
-            throw new AimException(ex.getMessage());
-        }
-        return res; // *** hakan
-    }
-
-    public static List<ImageAnnotation> getImageAnnotationsFromImageAnnotationCollectionList(
+ private static List<ImageAnnotation> getImageAnnotationsFromImageAnnotationCollectionList(
             List<ImageAnnotationCollection> listImageAnnotationCollection) {
         List<ImageAnnotation> res = new ArrayList<ImageAnnotation>();
         for (int i = 0; i < listImageAnnotationCollection.size(); i++) {
@@ -262,9 +78,9 @@ public class AnnotationGetter {
     private static List<ImageAnnotationCollection> getImageAnnotationListFromServer(String Url, String XQuery,
             String dbUserName, String dbUserPassword, String PathXSD) throws AimException {
         try {
-            String serverResponse = getXMLStringFromExist(Url, XQuery, dbUserName, dbUserPassword);
-            Document serverDoc = getDocumentFromString(serverResponse);
-            List<ImageAnnotationCollection> res = getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
+            String serverResponse = ExistManager.getXMLStringFromExist(Url, XQuery, dbUserName, dbUserPassword);
+            Document serverDoc = XML.getDocumentFromString(serverResponse);
+            List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
             return res;
         } catch (AimException ex) {
             throw new AimException("AimException: " + ex.getMessage());
@@ -321,8 +137,8 @@ public class AnnotationGetter {
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionsFromString(String text, String PathXSD)
             throws AimException {
         try {
-            Document serverDoc = getDocumentFromString(text);
-            List<ImageAnnotationCollection> res = getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
+            Document serverDoc = XML.getDocumentFromString(text);
+            List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
             return res;
         } catch (AimException ex) {
             throw new AimException("AimException: " + ex.getMessage());
@@ -492,6 +308,16 @@ public class AnnotationGetter {
         return listAnno;
     }
 
+    // *** User.loginName Equal
+    public static List<ImageAnnotation> getImageAnnotationsByUserLoginNameEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String userLoginName)
+            throws AimException {
+
+        List<ImageAnnotationCollection> tempList = getImageAnnotationCollectionByUserLoginNameEqual(serverURL,
+                namespace, collection, dbUserName, dbUserPassword, userLoginName);
+        return getImageAnnotationsFromImageAnnotationCollectionList(tempList);
+    }
+
     // *** User.loginName Contains
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUserLoginNameContains(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String userLoginName)
@@ -586,6 +412,8 @@ public class AnnotationGetter {
         String aimQL = "SELECT FROM " + collection + " WHERE person.name = '" + PersonName + "'";
         return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
     }
+    
+ 
 
     // *** Person.Name Contains
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByPersonNameContains(String serverURL,
@@ -611,6 +439,16 @@ public class AnnotationGetter {
         }
         String aimQL = "SELECT FROM " + collection + " WHERE person.id = '" + PersonId + "'";
         return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+    }
+    
+       // *** Person.Id Equal
+    public static List<ImageAnnotation> getImageAnnotationsByPersonIdEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String PersonId)
+            throws AimException {
+        
+        List<ImageAnnotationCollection> tempList = getImageAnnotationCollectionByPersonIdEqual(serverURL,
+            namespace, collection, dbUserName, dbUserPassword, PersonId);
+        return getImageAnnotationsFromImageAnnotationCollectionList(tempList);
     }
 
     // *** Person.Id Contains
@@ -763,5 +601,151 @@ public class AnnotationGetter {
         List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL,
                 "");
         return getImageAnnotationsFromImageAnnotationCollectionList(listAnno);
+    }
+
+    // *** count ImageAnnotationCollection by userName
+    public static int getCountImageAnnotationCollectionByUserNameEqual(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String userName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; count(/collection('" + collectionName + "')/ImageAnnotationCollection/user/name[lower-case(@value)=lower-case('" + userName + "')])";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotationCollection  by person Name
+    public static int getCountImageAnnotationCollectionByPersonNameEqual(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String personName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; count(/collection('" + collectionName + "')/ImageAnnotationCollection/person/name[lower-case(@value)=lower-case('" + personName + "')])";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotation by userName
+    public static int getCountImageAnnotationByUserNameEqual(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String userName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; let $iac := collection('" + collectionName + "')/ImageAnnotationCollection  where ($iac/user/name[lower-case(@value)=lower-case('" + userName + "')]) return count($iac/imageAnnotations/ImageAnnotation)";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotation by person Name
+    public static int getCountImageAnnotationByPersonNameEqual(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String personName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; let $iac := collection('" + collectionName + "')/ImageAnnotationCollection  where ($iac/person/name[lower-case(@value)=lower-case('" + personName + "')]) return count($iac/imageAnnotations/ImageAnnotation)";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotationCollection by userName
+    public static int getCountImageAnnotationCollectionByUserNameContains(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String userName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; count(/collection('" + collectionName + "')/ImageAnnotationCollection/user/name[contains(lower-case(@value),lower-case('" + userName + "'))])";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotationCollection  by person Name
+    public static int getCountImageAnnotationCollectionByPersonNameContains(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String personName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; count(/collection('" + collectionName + "')/ImageAnnotationCollection/person/name[contains(lower-case(@value),lower-case('" + personName + "'))])";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotation by userName
+    public static int getCountImageAnnotationByUserNameContains(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String userName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; let $iac := collection('" + collectionName + "')/ImageAnnotationCollection  where ($iac/user/name[contains(lower-case(@value),lower-case('" + userName + "'))]) return count($iac/imageAnnotations/ImageAnnotation)";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** count ImageAnnotation by person Name
+    public static int getCountImageAnnotationByPersonNameContains(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String personName) throws AimException {
+
+        String query = "declare default element namespace '" + nameSpace + "'; let $iac := collection('" + collectionName + "')/ImageAnnotationCollection  where ($iac/person/name[contains(lower-case(@value),lower-case('" + personName + "'))]) return count($iac/imageAnnotations/ImageAnnotation)";
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    // *** Person.Id Equal AND User.loginName Equal 
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUserLoginNameAndPersonIdEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String userLoginName, String PersonId)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (userLoginName == null || "".equals(userLoginName.trim())) {
+            throw new AimException("AimException: UserLoginName must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE user.loginName = '" + userLoginName + "' AND person.id = '" + PersonId + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }
+
+    // *** Person.Id Equal AND User.loginName Equal 
+    public static List<ImageAnnotation> getImageAnnotationsByUserLoginNameAndPersonIdEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String userLoginName, String PersonId)
+            throws AimException {
+
+        List<ImageAnnotationCollection> tempList = getImageAnnotationCollectionByUserLoginNameAndPersonIdEqual(serverURL,
+                namespace, collection, dbUserName, dbUserPassword, userLoginName, PersonId);
+        return getImageAnnotationsFromImageAnnotationCollectionList(tempList);
     }
 }

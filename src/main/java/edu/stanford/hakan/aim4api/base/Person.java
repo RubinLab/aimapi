@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior 
- * University, creator Daniel L. Rubin. 
- * 
+ * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior
+ * University, creator Daniel L. Rubin.
+ *
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this 
+ *
+ * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package main.java.edu.stanford.hakan.aim4api.base;
@@ -44,6 +44,7 @@ public class Person implements IAimXMLOperations {
     private ST sex;
     private ST ethnicGroup;
     private String tagName;
+    private Person initialState = null;
 
     public ST getName() {
         return name;
@@ -152,6 +153,19 @@ public class Person implements IAimXMLOperations {
                 this.setEthnicGroup(obj);
             }
         }
+        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
+        this.initialState = this.getClone();
+    }
+
+    public boolean getIsEdited() {
+        if (this.initialState == null) {
+            return false;
+        }
+        return !this.isEqualTo(this.initialState);
+    }
+
+    public Person getInitialState() {
+        return this.initialState;
     }
 
     @Override
@@ -162,19 +176,19 @@ public class Person implements IAimXMLOperations {
     @Override
     public boolean isEqualTo(Object other) {
         Person oth = (Person) other;
-        if (!this.name.isEqualTo(oth.name)) {
+        if (this.name == null ? oth.name != null : !this.name.isEqualTo(oth.name)) {
             return false;
         }
-        if (!this.id.isEqualTo(oth.id)) {
+        if (this.id == null ? oth.id != null : !this.id.isEqualTo(oth.id)) {
             return false;
         }
         if (this.birthDate == null ? oth.birthDate != null : !this.birthDate.equals(oth.birthDate)) {
             return false;
         }
-        if (!this.sex.isEqualTo(oth.sex)) {
+        if (this.sex == null ? oth.sex != null : !this.sex.isEqualTo(oth.sex)) {
             return false;
         }
-        if (!this.ethnicGroup.isEqualTo(oth.ethnicGroup)) {
+        if (this.ethnicGroup == null ? oth.ethnicGroup != null : !this.ethnicGroup.isEqualTo(oth.ethnicGroup)) {
             return false;
         }
         return true;

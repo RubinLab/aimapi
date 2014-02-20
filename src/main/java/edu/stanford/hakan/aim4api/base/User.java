@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior 
- * University, creator Daniel L. Rubin. 
- * 
+ * Copyright (c) 2011, The Board of Trustees of the Leland Stanford Junior
+ * University, creator Daniel L. Rubin.
+ *
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this 
+ *
+ * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation 
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package main.java.edu.stanford.hakan.aim4api.base;
@@ -43,6 +43,7 @@ public class User implements IAimXMLOperations {
     private ST roleInTrial;
     private Integer numberWithinRoleOfClinicalTrial;
     private String tagName;
+    private User initialState = null;
 
     public ST getName() {
         return name;
@@ -134,6 +135,19 @@ public class User implements IAimXMLOperations {
                 this.numberWithinRoleOfClinicalTrial = Integer.parseInt(currentNode.getAttributes().getNamedItem("value").getNodeValue());
             }
         }
+        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
+        this.initialState = this.getClone();
+    }
+
+    public boolean getIsEdited() {
+        if (this.initialState == null) {
+            return false;
+        }
+        return !this.isEqualTo(this.initialState);
+    }
+
+    public User getInitialState() {
+        return this.initialState;
     }
 
     @Override
@@ -144,13 +158,13 @@ public class User implements IAimXMLOperations {
     @Override
     public boolean isEqualTo(Object other) {
         User oth = (User) other;
-        if (!this.name.isEqualTo(oth.name)) {
+        if (this.name == null ? oth.name != null : !this.name.isEqualTo(oth.name)) {
             return false;
         }
-        if (!this.loginName.isEqualTo(oth.loginName)) {
+        if (this.loginName == null ? oth.loginName != null : !this.loginName.isEqualTo(oth.loginName)) {
             return false;
         }
-        if (!this.roleInTrial.isEqualTo(oth.roleInTrial)) {
+        if (this.roleInTrial == null ? oth.roleInTrial != null : !this.roleInTrial.isEqualTo(oth.roleInTrial)) {
             return false;
         }
         if (this.numberWithinRoleOfClinicalTrial == null ? oth.numberWithinRoleOfClinicalTrial != null : !this.numberWithinRoleOfClinicalTrial.equals(oth.numberWithinRoleOfClinicalTrial)) {
