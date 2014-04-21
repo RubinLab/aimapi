@@ -12,7 +12,7 @@ import main.java.edu.stanford.hakan.aim4api.base.Enumerations;
  */
 public class EnumerationConverter {
 
-    public static Enumerations.CalculationResultIdentifier calculationResultIdentifier(edu.stanford.hakan.aim3api.base.AimUtility.CalculationResultIdentifier calculationResultIdentifier) {
+//    public static Enumerations.CalculationResultIdentifier calculationResultIdentifier(edu.stanford.hakan.aim3api.base.AimUtility.CalculationResultIdentifier calculationResultIdentifier) {
 //        if (calculationResultIdentifier == AimUtility.CalculationResultIdentifier.Array) {
 //            return Enumerations.CalculationResultIdentifier.Array;
 //        }
@@ -28,6 +28,6 @@ public class EnumerationConverter {
 //        if (calculationResultIdentifier == AimUtility.CalculationResultIdentifier.Vector) {
 //            return Enumerations.CalculationResultIdentifier.Vector;
 //        }
-        return Enumerations.CalculationResultIdentifier.None;
-    }
+//        return Enumerations.CalculationResultIdentifier.None;
+//    }
 }
