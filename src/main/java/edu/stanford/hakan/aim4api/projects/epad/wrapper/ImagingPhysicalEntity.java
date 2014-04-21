@@ -5,7 +5,7 @@
  */
 package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
-import edu.stanford.hakan.aim3api.base.AnatomicEntityCharacteristicCollection;
+//import edu.stanford.hakan.aim3api.base.AnatomicEntityCharacteristicCollection;
 import main.java.edu.stanford.hakan.aim4api.base.CD;
 import main.java.edu.stanford.hakan.aim4api.base.ST;
 
@@ -40,7 +40,7 @@ public class ImagingPhysicalEntity extends main.java.edu.stanford.hakan.aim4api.
         + setLabel(String)
     */
 
-    private edu.stanford.hakan.aim3api.base.AnatomicEntityCharacteristicCollection anatomicEntityCharacteristicCollection = new edu.stanford.hakan.aim3api.base.AnatomicEntityCharacteristicCollection();
+    private AnatomicEntityCharacteristicCollection anatomicEntityCharacteristicCollection = new AnatomicEntityCharacteristicCollection();
 
     
     public String getCodeValue() {
