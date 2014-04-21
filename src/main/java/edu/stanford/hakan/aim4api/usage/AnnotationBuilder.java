@@ -170,7 +170,7 @@ public class AnnotationBuilder {
             } else {
                 throw new AimException(res);
             }
-        } catch (DOMException | AimException ex) {
+        } catch (Exception ex) {
             setAimXMLsaveResult(ex.getMessage());
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());

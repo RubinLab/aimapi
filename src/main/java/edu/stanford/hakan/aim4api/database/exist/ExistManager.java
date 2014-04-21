@@ -310,7 +310,7 @@ public class ExistManager {
                 }
                 res.add(imageAnnotationCollection);
             }
-        } catch (ParserConfigurationException | AimException | DOMException ex) {
+        } catch (Exception ex) {
             throw new AimException(ex.getMessage());
         }
         return res;
