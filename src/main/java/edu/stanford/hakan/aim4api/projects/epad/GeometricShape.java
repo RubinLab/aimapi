@@ -110,29 +110,38 @@ public class GeometricShape {
     }
 
     private ROIShape string2EdapShapeType(String shapeType) {
-        switch (shapeType) {
-            case "ARROW":
-                return ROIShape.ARROW;
-            case "LINE":
-                return ROIShape.LINE;
-            case "CIRCLE":
-                return ROIShape.CIRCLE;
-            case "OVAL":
-                return ROIShape.OVAL;
-            case "COMMENT":
-                return ROIShape.COMMENT;
-            case "TEXT":
-                return ROIShape.TEXT;
-            case "RECTANGLE":
-                return ROIShape.RECTANGLE;
-            case "POLY":
-                return ROIShape.POLY;
-            case "OPENPOLY":
-                return ROIShape.OPENPOLY;
-            case "SPLINE":
-                return ROIShape.SPLINE;
-            case "OPENSPLINE":
-                return ROIShape.OPENSPLINE;
+        if ("ARROW".equals(shapeType)) {
+            return ROIShape.ARROW;
+        }
+        if ("LINE".equals(shapeType)) {
+            return ROIShape.LINE;
+        }
+        if ("CIRCLE".equals(shapeType)) {
+            return ROIShape.CIRCLE;
+        }
+        if ("OVAL".equals(shapeType)) {
+            return ROIShape.OVAL;
+        }
+        if ("COMMENT".equals(shapeType)) {
+            return ROIShape.COMMENT;
+        }
+        if ("TEXT".equals(shapeType)) {
+            return ROIShape.TEXT;
+        }
+        if ("RECTANGLE".equals(shapeType)) {
+            return ROIShape.RECTANGLE;
+        }
+        if ("POLY".equals(shapeType)) {
+            return ROIShape.POLY;
+        }
+        if ("OPENPOLY".equals(shapeType)) {
+            return ROIShape.OPENPOLY;
+        }
+        if ("SPLINE".equals(shapeType)) {
+            return ROIShape.SPLINE;
+        }
+        if ("OPENSPLINE".equals(shapeType)) {
+            return ROIShape.OPENSPLINE;
         }
         return ROIShape.NONE;
     }
