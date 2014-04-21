@@ -98,7 +98,7 @@ public class AnnotationBuilder {
                 throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): "
                         + getAimXMLsaveResult());
             }
-        } catch (AimException | DOMException ex) {
+        } catch (Exception ex) {
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
         }
@@ -129,7 +129,7 @@ public class AnnotationBuilder {
             trans.transform(source, result);
             String xmlString = sw.toString();
             return xmlString;
-        } catch (AimException | DOMException | TransformerFactoryConfigurationError | IllegalArgumentException | TransformerException ex) {
+        } catch (Exception ex) {
             setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
             throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
                     + ex.getMessage());

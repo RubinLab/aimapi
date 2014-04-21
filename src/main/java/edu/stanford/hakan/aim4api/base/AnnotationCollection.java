@@ -27,6 +27,7 @@
  */
 package main.java.edu.stanford.hakan.aim4api.base;
 
+import main.java.edu.stanford.hakan.aim4api.utility.GenerateId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -124,9 +125,10 @@ public class AnnotationCollection implements IAimXMLOperations {
             setTagName("AnnotationCollection");
         }
         Element res = doc.createElement(getTagName());
-        if (this.uniqueIdentifier != null) {
-            res.appendChild(this.uniqueIdentifier.getXMLNode(doc));
+        if (this.uniqueIdentifier == null) {
+            this.setUniqueIdentifier(new II(GenerateId.getUUID()));
         }
+        res.appendChild(this.uniqueIdentifier.getXMLNode(doc));
         if (this.description != null) {
             res.appendChild(this.description.getXMLNode(doc));
         }

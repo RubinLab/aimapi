@@ -25,7 +25,7 @@ public class WrapperEpad {
 
         String whereClause = "";
         String spliter = "|~*~|";
-        
+
         //*** owner
         if (!"".equals(ownerName)) {
             if ("".equals(whereClause.trim())) {
@@ -35,7 +35,7 @@ public class WrapperEpad {
             }
             whereClause += " $x/user/name[contains(lower-case(@value), lower-case(" + ownerName + "))] ";
         }
-        
+
         //*** subject name (patient name)
         if (!"".equals(subjectName)) {
             if ("".equals(whereClause.trim())) {
@@ -44,8 +44,8 @@ public class WrapperEpad {
                 whereClause += " and ";
             }
             whereClause += " $x/person/name[contains(lower-case(@value), lower-case(" + subjectName + "))] ";
-        }      
-        
+        }
+
         //*** study from
         if (!"".equals(studyFrom)) {
             if ("".equals(whereClause.trim())) {
@@ -55,7 +55,7 @@ public class WrapperEpad {
             }
             whereClause += " $x/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/imageStudy/startDate[fn:dateTime(xs:date(@value), xs:time('00:00:00')) gt xs:dateTime('" + studyFrom + "T00:00:00')] ";
         }
-        
+
         //*** study to
         if (!"".equals(studyTo)) {
             if ("".equals(whereClause.trim())) {
@@ -65,17 +65,17 @@ public class WrapperEpad {
             }
             whereClause += " $x/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/imageStudy/startDate[fn:dateTime(xs:date(@value), xs:time('00:00:00')) lt xs:dateTime('" + studyTo + "T00:00:00')] ";
         }
-        
+
         //**** series modality
-         if (!"".equals(seriesModality)) {
+        if (!"".equals(seriesModality)) {
             if ("".equals(whereClause.trim())) {
                 whereClause = " where ";
             } else {
                 whereClause += " and ";
             }
             whereClause += " $x/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/imageStudy/imageSeries/modality/iso:displayName[contains(lower-case(@value), lower-case(" + seriesModality + "))] ";
-        }           
-         
+        }
+
         //*** annotationName
         if (!"".equals(annotationName)) {
             if ("".equals(whereClause.trim())) {
@@ -85,7 +85,7 @@ public class WrapperEpad {
             }
             whereClause += " $x/imageAnnotations/ImageAnnotation/name[contains(lower-case(@value), lower-case(" + annotationName + "))] ";
         }
-        
+
         //*** annotationTemplate
         if (!"".equals(annotationTemplate)) {
             if ("".equals(whereClause.trim())) {
@@ -95,7 +95,7 @@ public class WrapperEpad {
             }
             whereClause += " $x/imageAnnotations/ImageAnnotation/templateUid[contains(lower-case(@root), lower-case(" + annotationTemplate + "))] ";
         }
-        
+
         //*** annotationAimIdentifier
         if (!"".equals(annotationAimIdentifier)) {
             if ("".equals(whereClause.trim())) {
@@ -120,16 +120,14 @@ public class WrapperEpad {
                 + "declare namespace iso = 'uri:iso.org:21090'; "
                 + "let $sep := '" + spliter + "' "
                 + "for $x in collection('" + collection + "')/ImageAnnotationCollection " + whereClause + " " + returnClause;
-        
+
         String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
         Document serverDoc = XML.getDocumentFromString(serverResponse);
-        List<String> tempList =  ExistManager.getExistResultValueListFromDocument(serverDoc);
-        for(int i = 0 ; i < tempList.size(); i++)
-        {
+        List<String> tempList = ExistManager.getExistResultValueListFromDocument(serverDoc);
+        for (int i = 0; i < tempList.size(); i++) {
             String[] resSplit = tempList.get(i).split(Pattern.quote(spliter));
             AnnotateTableRow row = new AnnotateTableRow();
-            if(resSplit.length == 7)
-            {
+            if (resSplit.length == 7) {
                 row.setOwner(resSplit[0]);
                 row.setPatientName(resSplit[1]);
                 row.setStudyDate(resSplit[2]);
@@ -141,5 +139,13 @@ public class WrapperEpad {
             res.add(row);
         }
         return res;
+    }
+
+    public static Person createPerson(String name, String id, String sex, String birthdate) {
+        return new Person(name, id, sex, birthdate);
+    }
+
+    public static Equipment createEquipment(String name, String model, String version) {
+        return new Equipment(name, model, version);
     }
 }

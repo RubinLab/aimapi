@@ -14,6 +14,7 @@
   <source path='base'/> 
   <source path='database/exist'/> 
   <source path='projects/epad'/> 
+  <source path='projects/epad/wrapper'/> 
   <source path='usage'/> 
   <source path='utility'/> 
   <!-- The directory where the client code is (it includes all subdirectories as well), it has to be a directory in the same folder as this XML file -->

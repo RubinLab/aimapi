@@ -269,7 +269,7 @@ public class ExistManager {
             ((HttpURLConnection) conn).getResponseCode();
             ((HttpURLConnection) conn).disconnect();
             return "OK";
-        } catch (IOException | DOMException | TransformerFactoryConfigurationError | TransformerException ex) {
+        } catch (Exception ex) {
             return ex.getMessage();
         }
     }
@@ -323,8 +323,7 @@ public class ExistManager {
             return listResult.get(0).getTextContent().trim();
         }
         return "";
-    }
-    
+    }   
     
     public static  List<String> getExistResultValueListFromDocument(Document doc) {
          List<String> res = new ArrayList<>();
