@@ -20,7 +20,7 @@ public class CalculationCollection extends main.java.edu.stanford.hakan.aim4api.
 
     public List<Calculation> getCalculationList() {
         List<CalculationEntity> temp = super.getCalculationEntityList();
-        List<Calculation> res = new ArrayList<>();
+        List<Calculation> res = new ArrayList<Calculation>();
         for (int i = 0; i < temp.size(); i++) {
             res.add((Calculation) temp.get(i));
         }

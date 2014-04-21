@@ -326,7 +326,7 @@ public class ExistManager {
     }   
     
     public static  List<String> getExistResultValueListFromDocument(Document doc) {
-         List<String> res = new ArrayList<>();
+         List<String> res = new ArrayList<String>();
         Node firstNode = doc.getFirstChild();
         List<Node> listResult = XML.getNodesFromNodeByName(firstNode, "exist:value");
         for (int i = 0; i < listResult.size(); i++) {

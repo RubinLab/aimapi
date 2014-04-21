@@ -21,7 +21,7 @@ public class WrapperEpad {
     public static List<AnnotateTableRow> getAnnotateTableRows(String ownerName, String subjectName, String studyFrom, String studyTo,
             String seriesModality, String annotationName, String annotationTemplate, String annotationAimIdentifier,
             String serverURL, String nameSpace, String collection, String dbUserName, String dbUserPassword) throws AimException {
-        List<AnnotateTableRow> res = new ArrayList<>();
+        List<AnnotateTableRow> res = new ArrayList<AnnotateTableRow>();
 
         String whereClause = "";
         String spliter = "|~*~|";

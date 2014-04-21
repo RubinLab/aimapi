@@ -149,7 +149,7 @@ public class ImageAnnotation extends main.java.edu.stanford.hakan.aim4api.base.I
     }
 
     public List<Person> getListPerson() {
-        List<Person> res = new ArrayList<>();
+        List<Person> res = new ArrayList<Person>();
         Person item = (Person) this.getImageAnnotationCollection().getPerson();
         if (item != null) {
             res.add(item);
@@ -158,7 +158,7 @@ public class ImageAnnotation extends main.java.edu.stanford.hakan.aim4api.base.I
     }
 
     public List<User> getListUser() {
-        List<User> res = new ArrayList<>();
+        List<User> res = new ArrayList<User>();
         User item = (User) this.getImageAnnotationCollection().getUser();
         if (item != null) {
             res.add(item);

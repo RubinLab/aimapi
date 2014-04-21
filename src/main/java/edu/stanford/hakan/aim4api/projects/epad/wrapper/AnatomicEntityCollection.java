@@ -20,7 +20,7 @@ public class AnatomicEntityCollection  extends ImagingPhysicalEntityCollection {
 
     public List<AnatomicEntity> getAnatomicEntityCharacteristicList() {
         List<ImagingPhysicalEntity> temp = super.getImagingPhysicalEntityList();
-        List<AnatomicEntity> res = new ArrayList<>();
+        List<AnatomicEntity> res = new ArrayList<AnatomicEntity>();
         for (int i = 0; i < temp.size(); i++) {
             res.add((AnatomicEntity) temp.get(i));
         }

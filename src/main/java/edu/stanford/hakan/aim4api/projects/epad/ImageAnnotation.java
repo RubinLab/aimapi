@@ -21,8 +21,8 @@ public class ImageAnnotation {
     private Equipment equipment;
     private User user;
     private DICOMImageReference imageReference;
-    private List<GeometricShape> listGeometricShapes = new ArrayList<>();
-    private List<Calculation> listCalculation = new ArrayList<>();
+    private List<GeometricShape> listGeometricShapes = new ArrayList<GeometricShape>();
+    private List<Calculation> listCalculation = new ArrayList<Calculation>();
 
     public ImageAnnotation(String name, String modality, String description, String patientName, String patientId,
             String patientSex, String patientBirthdate, String manufacturerName, String model, String version,

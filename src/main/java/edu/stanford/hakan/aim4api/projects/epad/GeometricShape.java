@@ -29,7 +29,7 @@ public class GeometricShape {
     private ROIShape roiShape;
     private String imageUid;
     private int frame;
-    private List<TwoDCoordinate> listCoordinates = new ArrayList<>();
+    private List<TwoDCoordinate> listCoordinates = new ArrayList<TwoDCoordinate>();
 
     public GeometricShape() {
     }

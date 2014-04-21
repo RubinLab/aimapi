@@ -20,7 +20,7 @@ public class GeometricShapeCollection extends main.java.edu.stanford.hakan.aim4a
 
     public List<GeometricShape> getGeometricShapeList() {
         List<MarkupEntity> temp = super.getMarkupEntityList();
-        List<GeometricShape> res = new ArrayList<>();
+        List<GeometricShape> res = new ArrayList<GeometricShape>();
         for (int i = 0; i < temp.size(); i++) {
             res.add((GeometricShape) temp.get(i));
         }
