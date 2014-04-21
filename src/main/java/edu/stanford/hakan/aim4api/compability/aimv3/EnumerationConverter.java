@@ -4,7 +4,6 @@
  */
 package main.java.edu.stanford.hakan.aim4api.compability.aimv3;
 
-//import edu.stanford.hakan.aim3api.base.AimUtility;
 import main.java.edu.stanford.hakan.aim4api.base.Enumerations;
 
 /**
