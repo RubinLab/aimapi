@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.database.exist;
+package edu.stanford.hakan.aim4api.database.exist;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -28,15 +28,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
-import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotation;
-import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import main.java.edu.stanford.hakan.aim4api.usage.AnnotationGetter;
-import static main.java.edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationResult;
-import static main.java.edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
-import main.java.edu.stanford.hakan.aim4api.usage.AnnotationValidator;
-import main.java.edu.stanford.hakan.aim4api.utility.Utility;
-import main.java.edu.stanford.hakan.aim4api.utility.XML;
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.usage.AnnotationGetter;
+import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationResult;
+import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
+import edu.stanford.hakan.aim4api.usage.AnnotationValidator;
+import edu.stanford.hakan.aim4api.utility.Utility;
+import edu.stanford.hakan.aim4api.utility.XML;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

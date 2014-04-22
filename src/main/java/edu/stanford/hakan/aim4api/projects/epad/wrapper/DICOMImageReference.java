@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 /**
  *
  * @author Hakan
  */
-public class DICOMImageReference extends main.java.edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity {
+public class DICOMImageReference extends edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity {
     
 }

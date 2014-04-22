@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.edu.stanford.hakan.aim4api.base.MarkupEntity;
+import edu.stanford.hakan.aim4api.base.MarkupEntity;
 
 /**
  *
  * @author Hakan
  */
-public class GeometricShapeCollection extends main.java.edu.stanford.hakan.aim4api.base.MarkupEntityCollection {
+public class GeometricShapeCollection extends edu.stanford.hakan.aim4api.base.MarkupEntityCollection {
 
     public void addGeometricShape(GeometricShape newGeometricShape) {
         super.addMarkupEntity(newGeometricShape);

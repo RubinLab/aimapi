@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 /**
  *
  * @author Hakan
  */
-public class Person extends main.java.edu.stanford.hakan.aim4api.base.Person {
+public class Person extends edu.stanford.hakan.aim4api.base.Person {
 
     /*    
         Person ; Epad = Person

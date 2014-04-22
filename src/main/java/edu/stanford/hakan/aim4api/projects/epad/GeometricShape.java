@@ -2,19 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad;
+package edu.stanford.hakan.aim4api.projects.epad;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.edu.stanford.hakan.aim4api.base.II;
-import main.java.edu.stanford.hakan.aim4api.base.ST;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionCircle;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionEllipse;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionPoint;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
-import main.java.edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.TwoDimensionCircle;
+import edu.stanford.hakan.aim4api.base.TwoDimensionEllipse;
+import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
+import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
+import edu.stanford.hakan.aim4api.base.TwoDimensionPoint;
+import edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
+import edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate;
 
 /**
  *

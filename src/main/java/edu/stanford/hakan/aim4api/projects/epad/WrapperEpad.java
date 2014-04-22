@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad;
+package edu.stanford.hakan.aim4api.projects.epad;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
-import main.java.edu.stanford.hakan.aim4api.database.exist.ExistManager;
-import main.java.edu.stanford.hakan.aim4api.utility.XML;
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.database.exist.ExistManager;
+import edu.stanford.hakan.aim4api.utility.XML;
 import org.w3c.dom.Document;
 
 /**

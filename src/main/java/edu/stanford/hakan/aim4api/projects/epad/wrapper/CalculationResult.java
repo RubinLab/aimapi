@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
  * @author Hakan
  */
-public class CalculationResult extends main.java.edu.stanford.hakan.aim4api.base.ExtendedCalculationResult {
+public class CalculationResult extends edu.stanford.hakan.aim4api.base.ExtendedCalculationResult {
     
     /*
         CalculationResult ; Epad = CalcResult

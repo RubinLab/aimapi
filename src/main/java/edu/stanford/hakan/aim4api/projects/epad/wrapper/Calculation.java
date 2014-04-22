@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
-import main.java.edu.stanford.hakan.aim4api.base.Algorithm;
-import main.java.edu.stanford.hakan.aim4api.base.CD;
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.Algorithm;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
  * @author Hakan
  */
-public class Calculation extends main.java.edu.stanford.hakan.aim4api.base.CalculationEntity {
+public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEntity {
 
     /*    
         Calculation ; Epad = Calc       
@@ -182,4 +182,6 @@ public class Calculation extends main.java.edu.stanford.hakan.aim4api.base.Calcu
         }
         this.getAlgorithm().setName(new ST(algorithmName));
     }
+    
+
 }

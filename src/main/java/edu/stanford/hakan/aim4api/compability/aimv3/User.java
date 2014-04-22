@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.compability.aimv3;
+package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
@@ -21,8 +21,8 @@ public class User  {
 //        this.setRoleInTrial(user.getRoleInTrial());
 //    }
 
-//    public main.java.edu.stanford.hakan.aim4api.base.User toAimV4() {
-//        main.java.edu.stanford.hakan.aim4api.base.User res = new main.java.edu.stanford.hakan.aim4api.base.User();
+//    public edu.stanford.hakan.aim4api.base.User toAimV4() {
+//        edu.stanford.hakan.aim4api.base.User res = new edu.stanford.hakan.aim4api.base.User();
 //        res.setLoginName(new ST(this.getLoginName()));
 //        res.setName(new ST(this.getName()));
 //        res.setNumberWithinRoleOfClinicalTrial(this.getNumberWithinRoleOfClinicalTrial());

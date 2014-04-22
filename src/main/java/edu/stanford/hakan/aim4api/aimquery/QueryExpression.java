@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package main.java.edu.stanford.hakan.aim4api.aimquery;
+package edu.stanford.hakan.aim4api.aimquery;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.AimException;
 
 /**
  *

@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package main.java.edu.stanford.hakan.aim4api.aimquery;
+package edu.stanford.hakan.aim4api.aimquery;
 
 import java.util.ArrayList;
 import java.util.List;

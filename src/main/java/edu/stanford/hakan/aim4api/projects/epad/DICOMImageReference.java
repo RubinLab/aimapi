@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad;
+package edu.stanford.hakan.aim4api.projects.epad;
 
-import main.java.edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
-import main.java.edu.stanford.hakan.aim4api.base.II;
-import main.java.edu.stanford.hakan.aim4api.base.Image;
-import main.java.edu.stanford.hakan.aim4api.base.ImageSeries;
-import main.java.edu.stanford.hakan.aim4api.base.ImageStudy;
+import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.Image;
+import edu.stanford.hakan.aim4api.base.ImageSeries;
+import edu.stanford.hakan.aim4api.base.ImageStudy;
 
 /**
  *

@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
  * @author Hakan
  */
-public class Quantile extends main.java.edu.stanford.hakan.aim4api.base.Quantile {
+public class Quantile extends edu.stanford.hakan.aim4api.base.Quantile {
 
     /*
         Quantile ; Epad = Quant

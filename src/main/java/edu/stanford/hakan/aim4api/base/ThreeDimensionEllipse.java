@@ -25,7 +25,7 @@
 * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 * POSSIBILITY OF SUCH DAMAGE.
 */
-package main.java.edu.stanford.hakan.aim4api.base;
+package edu.stanford.hakan.aim4api.base;
 
 import java.util.List;
 import org.w3c.dom.Document;

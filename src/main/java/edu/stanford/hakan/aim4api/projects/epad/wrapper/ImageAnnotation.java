@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.edu.stanford.hakan.aim4api.base.CD;
-import main.java.edu.stanford.hakan.aim4api.base.Equipment;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.Equipment;
 
 /**
  *
  * @author Hakan
  */
-public class ImageAnnotation extends main.java.edu.stanford.hakan.aim4api.base.ImageAnnotation {
+public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnotation {
 
     /*
      ImageAnnotation ; Epad = Aim

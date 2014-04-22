@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;

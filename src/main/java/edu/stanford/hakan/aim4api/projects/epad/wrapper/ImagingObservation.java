@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
-import main.java.edu.stanford.hakan.aim4api.base.CD;
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
  * @author Hakan
  */
-public class ImagingObservation extends main.java.edu.stanford.hakan.aim4api.base.ImagingObservationEntity {
+public class ImagingObservation extends edu.stanford.hakan.aim4api.base.ImagingObservationEntity {
 
     /*
         ImagingObservationEntity ; V3 = ImagingObservation ; Epad = IO    

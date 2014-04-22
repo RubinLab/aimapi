@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 /**
  *

@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 //import edu.stanford.hakan.aim3api.base.AnatomicEntityCharacteristicCollection;
-import main.java.edu.stanford.hakan.aim4api.base.CD;
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
  * @author Hakan
  */
-public class ImagingPhysicalEntity extends main.java.edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity {
+public class ImagingPhysicalEntity extends edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity {
     /*
         ImagingPhysicalEntity ; V3 = AnatomicEntity ; Epad = AE
 

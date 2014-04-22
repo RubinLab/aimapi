@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.compability.aimv3;
+package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
@@ -13,9 +13,9 @@ import main.java.edu.stanford.hakan.aim4api.base.ST;
 //public class CalculationResult extends edu.stanford.hakan.aim3api.base.CalculationResult {
 public class CalculationResult {
 
-//    public main.java.edu.stanford.hakan.aim4api.base.CalculationResult toAimV4() {
+//    public edu.stanford.hakan.aim4api.base.CalculationResult toAimV4() {
 //        
-//        main.java.edu.stanford.hakan.aim4api.base.CalculationResult res = new main.java.edu.stanford.hakan.aim4api.base.CalculationResult();
+//        edu.stanford.hakan.aim4api.base.CalculationResult res = new edu.stanford.hakan.aim4api.base.CalculationResult();
 //        
 //        //this.getCalculationDataCollection()
 //        //this.getDimensionCollection()

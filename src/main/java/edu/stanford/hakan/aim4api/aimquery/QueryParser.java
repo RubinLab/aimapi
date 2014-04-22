@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package main.java.edu.stanford.hakan.aim4api.aimquery;
+package edu.stanford.hakan.aim4api.aimquery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.AimException;
 
 /**
  *

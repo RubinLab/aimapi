@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad;
+package edu.stanford.hakan.aim4api.projects.epad;
 
-import main.java.edu.stanford.hakan.aim4api.base.Algorithm;
-import main.java.edu.stanford.hakan.aim4api.base.CD;
-import main.java.edu.stanford.hakan.aim4api.base.CalculationData;
-import main.java.edu.stanford.hakan.aim4api.base.CalculationEntity;
-import main.java.edu.stanford.hakan.aim4api.base.Dimension;
-import main.java.edu.stanford.hakan.aim4api.base.Enumerations;
-import main.java.edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
-import main.java.edu.stanford.hakan.aim4api.base.II;
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.Algorithm;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.CalculationData;
+import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.Dimension;
+import edu.stanford.hakan.aim4api.base.Enumerations;
+import edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *

@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad;
+package edu.stanford.hakan.aim4api.projects.epad;
 
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
@@ -31,7 +31,7 @@ public class Person {
         this.birthdate = birthdate;
     }
 
-    public Person(main.java.edu.stanford.hakan.aim4api.base.Person personAimV4) {
+    public Person(edu.stanford.hakan.aim4api.base.Person personAimV4) {
         if (personAimV4.getName() != null) {
             this.name = personAimV4.getName().getValue();
         }
@@ -78,8 +78,8 @@ public class Person {
         this.birthdate = birthdate;
     }
 
-    public main.java.edu.stanford.hakan.aim4api.base.Person toAimV4() {
-        main.java.edu.stanford.hakan.aim4api.base.Person res = new main.java.edu.stanford.hakan.aim4api.base.Person();
+    public edu.stanford.hakan.aim4api.base.Person toAimV4() {
+        edu.stanford.hakan.aim4api.base.Person res = new edu.stanford.hakan.aim4api.base.Person();
         res.setName(new ST(this.getName()));
         res.setId(new ST(this.getId()));
         res.setSex(new ST(this.getSex()));

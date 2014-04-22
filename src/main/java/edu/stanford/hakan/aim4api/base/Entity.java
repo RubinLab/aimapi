@@ -25,9 +25,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package main.java.edu.stanford.hakan.aim4api.base;
+package edu.stanford.hakan.aim4api.base;
 
-import main.java.edu.stanford.hakan.aim4api.utility.GenerateId;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic;
-import main.java.edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollection;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollection;
 
 /**
  *

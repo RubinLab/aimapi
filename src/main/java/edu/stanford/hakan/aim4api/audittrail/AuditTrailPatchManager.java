@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.audittrail;
+package edu.stanford.hakan.aim4api.audittrail;
 
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
-import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotation;
-import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 
 /**
  *

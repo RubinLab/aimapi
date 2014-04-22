@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 /**
  *
  * @author Hakan
  */
-public class TwoDimensionSpatialCoordinate extends main.java.edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate{
+public class TwoDimensionSpatialCoordinate extends edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate{
     
     /*    
         TwoDimensionSpatialCoordinate ; Epad = TwoDCoordinate

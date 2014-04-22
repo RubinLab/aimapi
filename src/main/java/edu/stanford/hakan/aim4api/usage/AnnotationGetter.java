@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package main.java.edu.stanford.hakan.aim4api.usage;
+package edu.stanford.hakan.aim4api.usage;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,13 +42,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import main.java.edu.stanford.hakan.aim4api.aimquery.AimQuery;
-import main.java.edu.stanford.hakan.aim4api.base.AimException;
-import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotation;
-import main.java.edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import main.java.edu.stanford.hakan.aim4api.database.exist.ExistManager;
-import main.java.edu.stanford.hakan.aim4api.utility.Utility;
-import main.java.edu.stanford.hakan.aim4api.utility.XML;
+import edu.stanford.hakan.aim4api.aimquery.AimQuery;
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.database.exist.ExistManager;
+import edu.stanford.hakan.aim4api.utility.Utility;
+import edu.stanford.hakan.aim4api.utility.XML;
 
 /**
  *

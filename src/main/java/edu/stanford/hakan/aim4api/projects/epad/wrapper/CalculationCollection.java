@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad.wrapper;
+package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationEntity;
 
 /**
  *
  * @author Hakan
  */
-public class CalculationCollection extends main.java.edu.stanford.hakan.aim4api.base.CalculationEntityCollection {
+public class CalculationCollection extends edu.stanford.hakan.aim4api.base.CalculationEntityCollection {
 
     public void addCalculation(Calculation newCalculation) {
         super.addCalculationEntity(newCalculation);

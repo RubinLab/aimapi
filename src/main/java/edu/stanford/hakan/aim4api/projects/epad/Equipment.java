@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.stanford.hakan.aim4api.projects.epad;
+package edu.stanford.hakan.aim4api.projects.epad;
 
-import main.java.edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.ST;
 
 /**
  *
@@ -25,7 +25,7 @@ public class Equipment {
         this.version = version;
     }
 
-    public Equipment(main.java.edu.stanford.hakan.aim4api.base.Equipment equipmentAimV4) {
+    public Equipment(edu.stanford.hakan.aim4api.base.Equipment equipmentAimV4) {
         if (equipmentAimV4.getManufacturerName() != null) {
             this.name = equipmentAimV4.getManufacturerName().getValue();
         }
@@ -61,8 +61,8 @@ public class Equipment {
         this.version = version;
     }
 
-    public main.java.edu.stanford.hakan.aim4api.base.Equipment toAimV4() {
-        main.java.edu.stanford.hakan.aim4api.base.Equipment res = new main.java.edu.stanford.hakan.aim4api.base.Equipment();
+    public edu.stanford.hakan.aim4api.base.Equipment toAimV4() {
+        edu.stanford.hakan.aim4api.base.Equipment res = new edu.stanford.hakan.aim4api.base.Equipment();
         res.setManufacturerName(new ST(this.getName()));
         res.setManufacturerModelName(new ST(this.getModel()));
         res.setSoftwareVersion(new ST(this.getVersion()));
