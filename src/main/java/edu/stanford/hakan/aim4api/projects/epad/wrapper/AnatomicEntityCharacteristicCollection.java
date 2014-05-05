@@ -16,7 +16,7 @@ import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollec
  */
 public class AnatomicEntityCharacteristicCollection extends ImagingPhysicalEntityCharacteristicCollection {
 
-    public void addAnatomicEntityCharacteristic(AnatomicEntityCharacteristic newAnatomicEntityCharacteristic) {
+    public void AddAnatomicEntityCharacteristic(AnatomicEntityCharacteristic newAnatomicEntityCharacteristic) {
         super.addImagingPhysicalEntityCharacteristic(newAnatomicEntityCharacteristic);
     }
 

@@ -6,6 +6,7 @@ package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ST;
 
 /**
@@ -15,57 +16,59 @@ import edu.stanford.hakan.aim4api.base.ST;
 public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEntity {
 
     /*    
-        Calculation ; Epad = Calc       
+     Calculation ; Epad = Calc       
         
-        //*** ReferencedGeometricShape was renamed to ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement 
-        //*** but I couldn't see the ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement in the AIM V4 structure.
-        //*** there is ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement and it is a kind of ImageAnnotationStatement
-        //*** ImageAnnotation contains ImageAnnotationStatementCollection
-        //*** in the Epad, the function is used to getReferencedGeometricShapeCollection and getReferencedGeometricShapeCollection is used to clone the Calculation class.
-        //*** in AIM API, each class has its own clone method, so the function may not be necessary anymore.
-        ? setReferencedGeometricShapeCollection(ReferencedGeometricShapeCollection) 
+     //*** ReferencedGeometricShape was renamed to ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement 
+     //*** but I couldn't see the ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement in the AIM V4 structure.
+     //*** there is ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement and it is a kind of ImageAnnotationStatement
+     //*** ImageAnnotation contains ImageAnnotationStatementCollection
+     //*** in the Epad, the function is used to getReferencedGeometricShapeCollection and getReferencedGeometricShapeCollection is used to clone the Calculation class.
+     //*** in AIM API, each class has its own clone method, so the function may not be necessary anymore.
+     ? setReferencedGeometricShapeCollection(ReferencedGeometricShapeCollection) 
         
-        //*** ReferencedCalculation was renamed to CalculationEntityReferencesCalculationEntityStatement
-        //*** CalculationEntityReferencesCalculationEntityStatement is used in ImageAnnotationStatementCollection
-        //*** ImageAnnotation contains ImageAnnotationStatementCollection
-        ? setReferencedCalculationCollection(ReferencedCalculationCollection) 
+     //*** ReferencedCalculation was renamed to CalculationEntityReferencesCalculationEntityStatement
+     //*** CalculationEntityReferencesCalculationEntityStatement is used in ImageAnnotationStatementCollection
+     //*** ImageAnnotation contains ImageAnnotationStatementCollection
+     ? setReferencedCalculationCollection(ReferencedCalculationCollection) 
         
-        //*** I don't thing so it is used by Epad. Because it is related with creating ontology intances.
-        ? setRdfID(String)
+     //*** I don't thing so it is used by Epad. Because it is related with creating ontology intances.
+     ? setRdfID(String)
         
-        + setMathML(String) 
-        + setDescription(String) 
-        + setCodingSchemeVersion(String) 
-        + setCodingSchemeDesignator(String) 
+     + setMathML(String) 
+     + setDescription(String) 
+     + setCodingSchemeVersion(String) 
+     + setCodingSchemeDesignator(String) 
         
-        //*** I searched in Epad and It seems like unnecessary.
-        ? setCodeValueCanBeNull(boolean) 
+     //*** I searched in Epad and It seems like unnecessary.
+     ? setCodeValueCanBeNull(boolean) 
         
-        + setCodeValue(String) 
-        + setCodeMeaning(String) 
-        + setCalculationResultCollection(CalculationResultCollection) 
+     + setCodeValue(String) 
+     + setCodeMeaning(String) 
+     + setCalculationResultCollection(CalculationResultCollection) 
         
-        //*** It seems that, it is always set by zero. 
-        ? setCagridId(Integer) 
+     //*** It seems that, it is always set by zero. 
+     ? setCagridId(Integer) 
         
-        + setAlgorithmVersion(String) 
-        + setAlgorithmName(String) 
-        + getUid() 
-        + getDescription() 
-        + getCodingSchemeVersion() 
-        + getCodingSchemeDesignator() 
-        + getCodeValue() 
-        + getCodeMeaning() 
-        + getCalculationResultCollection() 
-        + getAlgorithmVersion() 
-        + getAlgorithmName()     
-    */
-    
+     + setAlgorithmVersion(String) 
+     + setAlgorithmName(String) 
+     + getUid() 
+     + getDescription() 
+     + getCodingSchemeVersion() 
+     + getCodingSchemeDesignator() 
+     + getCodeValue() 
+     + getCodeMeaning() 
+     + getCalculationResultCollection() 
+     + getAlgorithmVersion() 
+     + getAlgorithmName()     
+     */
     public String getUid() {
         if (this.getUniqueIdentifier() != null) {
             return this.getUniqueIdentifier().getRoot();
         }
         return "";
+    }
+    public void setUid(String uid) {
+        super.setUniqueIdentifier(new II(uid));
     }
 
     public String getDescriptionEpad() {
@@ -94,8 +97,8 @@ public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEnti
             this.setMathML(new ST());
         }
         this.getMathML().setValue(mathML);
-    } 
-    
+    }
+
     public String getCodeValue() {
         if (this.getListTypeCode() != null && this.getListTypeCode().size() > 0) {
             return this.getListTypeCode().get(0).getCode();
@@ -124,7 +127,7 @@ public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEnti
         this.getListTypeCode().get(0).setCodeSystem(codeMeaning);
 
     }
-    
+
     public String getCodingSchemeVersion() {
         if (this.getListTypeCode() != null && this.getListTypeCode().size() > 0) {
             return this.getListTypeCode().get(0).getCodeSystemVersion();
@@ -182,6 +185,18 @@ public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEnti
         }
         this.getAlgorithm().setName(new ST(algorithmName));
     }
-    
+
+    public void setCalculationResultCollection(edu.stanford.hakan.aim4api.projects.epad.wrapper.CalculationResultCollection calculationResultCollection) {
+        super.setCalculationResultCollection(calculationResultCollection);
+    }
+
+    @Override
+    public CalculationResultCollection getCalculationResultCollection() {
+        return (CalculationResultCollection) super.getCalculationResultCollection();
+    }
+
+    public CalculationResult getItem(int j) {
+        return (CalculationResult) super.getCalculationResultCollection().get(j).getClone();
+    }
 
 }

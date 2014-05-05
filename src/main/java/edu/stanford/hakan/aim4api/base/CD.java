@@ -68,10 +68,7 @@ public class CD implements IAimXMLOperations {
      * @param codingSchemeDesignator = codeSystemName
      * @param codingSchemeVersion = codeSystemVersion
      */
-    public CD(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
-        
-        
-        
+    public CD(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {  
         this.code = codeValue;
         this.codeSystem = codeMeaning;
         this.codeSystemName = codingSchemeDesignator;

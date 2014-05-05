@@ -7,6 +7,8 @@ package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.ST;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,37 +17,36 @@ import edu.stanford.hakan.aim4api.base.ST;
 public class ImagingObservation extends edu.stanford.hakan.aim4api.base.ImagingObservationEntity {
 
     /*
-        ImagingObservationEntity ; V3 = ImagingObservation ; Epad = IO    
+     ImagingObservationEntity ; V3 = ImagingObservation ; Epad = IO    
 
-        //*** I need the detail of this function.
-        ? addAll(Collection<? extends ImagingObservation>)
+     //*** I need the detail of this function.
+     ? addAll(Collection<? extends ImagingObservation>)
         
-        + getAnnotatorConfidence()
-        + getCodeMeaning()
-        + getCodeValue()
-        + getCodingSchemeDesignator()
-        + getImagingObservationCharacteristicCollection()
-        + getLabel()
-        + setAnnotatorConfidence(double)      
+     + getAnnotatorConfidence()
+     + getCodeMeaning()
+     + getCodeValue()
+     + getCodingSchemeDesignator()
+     + getImagingObservationCharacteristicCollection()
+     + getLabel()
+     + setAnnotatorConfidence(double)      
     
-        //*** It seems that, it is always set by zero.
-        ? setCagridId(Integer)
+     //*** It seems that, it is always set by zero.
+     ? setCagridId(Integer)
     
-        + setCodeMeaning(String)
-        + setCodeValue(String)
-        + setCodingSchemeDesignator(String)
-        + setCodingSchemeVersion(String)
-        + setImagingObservationCharacteristicCollection(ImagingObservationCharacteristicCollection)
-        + setIsPresent(Boolean)
-        + setLabel(String)
+     + setCodeMeaning(String)
+     + setCodeValue(String)
+     + setCodingSchemeDesignator(String)
+     + setCodingSchemeVersion(String)
+     + setImagingObservationCharacteristicCollection(ImagingObservationCharacteristicCollection)
+     + setIsPresent(Boolean)
+     + setLabel(String)
     
-        //*** ReferencedGeometricShape was renamed to ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement 
-        //*** but I couldn't see the ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement in the AIM V4 structure.
-        //*** there is ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement and it is a kind of ImageAnnotationStatement
-        //*** ImageAnnotation contains ImageAnnotationStatementCollection
-        ? setListReferencedGeometricShape(List<ReferencedGeometricShape>)
-    */
-    
+     //*** ReferencedGeometricShape was renamed to ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement 
+     //*** but I couldn't see the ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement in the AIM V4 structure.
+     //*** there is ImagingObservationEntityIsIdentifiedByTwoDimensionGeometricShapeEntityStatement and it is a kind of ImageAnnotationStatement
+     //*** ImageAnnotation contains ImageAnnotationStatementCollection
+     ? setListReferencedGeometricShape(List<ReferencedGeometricShape>)
+     */
     public String getCodeValue() {
         if (this.getListTypeCode() != null && this.getListTypeCode().size() > 0) {
             return this.getListTypeCode().get(0).getCode();
@@ -116,6 +117,23 @@ public class ImagingObservation extends edu.stanford.hakan.aim4api.base.ImagingO
         }
         this.getLabel().setValue(label);
     }
+
+    public ImagingObservationCharacteristicCollection getImagingObservationCharacteristicCollectionEpad() {
+        return (ImagingObservationCharacteristicCollection) super.getImagingObservationCharacteristicCollection();
+    }
+
+    public ImagingObservationCharacteristic getItem(int j) {
+        return (ImagingObservationCharacteristic) super.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().get(j).getClone();
+    }
+
+    public List<ImagingObservationCharacteristic> getIOCs() {
+        List<ImagingObservationCharacteristic> result = new ArrayList<ImagingObservationCharacteristic>();
+        for (int i = 0; i < super.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size(); i++) {
+            result.add((ImagingObservationCharacteristic) super.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().get(i).getClone());
+        }
+        return result;
+    }
+    
 
 
 }

@@ -5,6 +5,7 @@
  */
 package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
+import edu.stanford.hakan.aim4api.base.Enumerations;
 import edu.stanford.hakan.aim4api.base.ST;
 
 /**
@@ -58,4 +59,12 @@ public class Numerical extends edu.stanford.hakan.aim4api.base.Numerical {
         this.getLabel().setValue(label);
     }
 
+    public Enumerations.ComparisonOperator getComparisonOperators() {
+        return super.getOperator();
+    }
+    
+    
+    public void  setComparisonOperators(Enumerations.ComparisonOperator comparisonOperator) {
+        super.setOperator(comparisonOperator);
+    }
 }

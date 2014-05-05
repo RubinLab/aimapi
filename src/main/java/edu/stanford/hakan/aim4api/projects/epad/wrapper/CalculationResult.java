@@ -45,4 +45,24 @@ public class CalculationResult extends edu.stanford.hakan.aim4api.base.ExtendedC
         }
         this.getUnitOfMeasure().setValue(unitOfMeasure);
     }
+
+    public int getNumberOfDimensions() {
+        if (this.getCalculationDataCollection() == null) {
+            return 0;
+        }
+        return this.getCalculationDataCollection().size();
+    }
+
+    public CalculationDataCollection getCalculationDataCollectionEpad() {
+        return (CalculationDataCollection) super.getCalculationDataCollection();
+    }
+
+    public CalculationData getItem(int k) {
+        return (CalculationData) super.getCalculationDataCollection().getCalculationDataList().get(k).getClone();
+    }
+
+    public Dimension getDimItem(int k) {
+        return (Dimension) super.getDimensionCollection().getDimensionList().get(k).getClone();
+    }
+
 }

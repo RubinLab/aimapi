@@ -5,6 +5,9 @@
  */
 package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Hakan
@@ -50,5 +53,16 @@ public class AnatomicEntityCharacteristic extends ImagingPhysicalEntityCharacter
 //            res.setTagName(this.getTagName());
 //        }
 //        return res;
+    }
+
+    public CharacteristicQuantificationCollection getCharacteristicQuantificationCollectionEpad() {
+        return (CharacteristicQuantificationCollection) super.getCharacteristicQuantificationCollection();
+    }
+
+
+
+    public List<CharacteristicQuantification> getQuantificationList() {
+        return getCharacteristicQuantificationCollectionEpad().getCharacteristicQuantificationListEpad();
+
     }
 }

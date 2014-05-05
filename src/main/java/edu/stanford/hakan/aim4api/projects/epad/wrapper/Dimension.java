@@ -13,17 +13,23 @@ import edu.stanford.hakan.aim4api.base.ST;
  */
 public class Dimension extends edu.stanford.hakan.aim4api.base.Dimension {
     /*
-        Epad = CalcDimension
+     Epad = CalcDimension
     
-        + getLabel()
+     + getLabel()
         
-        //*** It seems that, it is always set by zero.
-        ? setCagridId(Integer)
+     //*** It seems that, it is always set by zero.
+     ? setCagridId(Integer)
         
-        + setIndex(Integer)
-        + setLabel(String)
-        + setSize(Integer)
-    */
+     + setIndex(Integer)
+     + setLabel(String)
+     + setSize(Integer)
+     */
+
+    public Dimension(Integer index, Integer size, String label) {
+        super.setIndex(index);
+        super.setSize(size);
+        this.setLabel(label);
+    }
 
     public String getLabelEpad() {
         if (this.getLabel() != null) {
@@ -38,5 +44,7 @@ public class Dimension extends edu.stanford.hakan.aim4api.base.Dimension {
         }
         this.getLabel().setValue(label);
     }
+    
+  
 
 }

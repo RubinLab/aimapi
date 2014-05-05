@@ -42,6 +42,9 @@ public class TwoDimensionSpatialCoordinate implements IAimXMLOperations {
     private Double x;
     private Double y;
     private String tagName;
+    private TwoDimensionSpatialCoordinateCollection twoDimensionSpatialCoordinateCollection;
+    private TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity;
+    
 
     public TwoDimensionSpatialCoordinate() {
     }
@@ -88,6 +91,23 @@ public class TwoDimensionSpatialCoordinate implements IAimXMLOperations {
     protected void setTagName(String tagName) {
         this.tagName = tagName;
     }
+
+    public TwoDimensionSpatialCoordinateCollection getTwoDimensionSpatialCoordinateCollection() {
+        return twoDimensionSpatialCoordinateCollection;
+    }
+
+    public void setTwoDimensionSpatialCoordinateCollection(TwoDimensionSpatialCoordinateCollection twoDimensionSpatialCoordinateCollection) {
+        this.twoDimensionSpatialCoordinateCollection = twoDimensionSpatialCoordinateCollection;
+    } 
+
+    public TwoDimensionGeometricShapeEntity getTwoDimensionGeometricShapeEntity() {
+        return twoDimensionGeometricShapeEntity;
+    }
+
+    public void setTwoDimensionGeometricShapeEntity(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
+        this.twoDimensionGeometricShapeEntity = twoDimensionGeometricShapeEntity;
+    }
+    
 
     @Override
     public Node getXMLNode(Document doc) throws AimException {

@@ -18,7 +18,7 @@ public class AnatomicEntityCollection  extends ImagingPhysicalEntityCollection {
         super.addImagingPhysicalEntity(newAnatomicEntity);
     }
 
-    public List<AnatomicEntity> getAnatomicEntityCharacteristicList() {
+    public List<AnatomicEntity> getAnatomicEntityList() {
         List<ImagingPhysicalEntity> temp = super.getImagingPhysicalEntityList();
         List<AnatomicEntity> res = new ArrayList<AnatomicEntity>();
         for (int i = 0; i < temp.size(); i++) {
@@ -27,6 +27,7 @@ public class AnatomicEntityCollection  extends ImagingPhysicalEntityCollection {
         return res;
     }
 
+     @Override
     public AnatomicEntity get(int index) {
         if (index >= 0 && index <= super.getImagingPhysicalEntityList().size() - 1) {
             return (AnatomicEntity) super.getImagingPhysicalEntityList().get(index);

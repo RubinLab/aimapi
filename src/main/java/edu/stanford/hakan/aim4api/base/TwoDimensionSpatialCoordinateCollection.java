@@ -42,10 +42,13 @@ import org.w3c.dom.NodeList;
  */
 public class TwoDimensionSpatialCoordinateCollection implements IAimXMLOperations {
 
-    private final List<TwoDimensionSpatialCoordinate> listTwoDimensionSpatialCoordinate = new ArrayList<TwoDimensionSpatialCoordinate>();
+    private final List<TwoDimensionSpatialCoordinate> listTwoDimensionSpatialCoordinate = new ArrayList<TwoDimensionSpatialCoordinate>();    
+    private TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity;
 
     public void addTwoDimensionSpatialCoordinate(TwoDimensionSpatialCoordinate newTwoDimensionSpatialCoordinate) {
         this.listTwoDimensionSpatialCoordinate.add(newTwoDimensionSpatialCoordinate);
+        newTwoDimensionSpatialCoordinate.setTwoDimensionSpatialCoordinateCollection(this);
+        newTwoDimensionSpatialCoordinate.setTwoDimensionGeometricShapeEntity(twoDimensionGeometricShapeEntity);
     }
 
     public List<TwoDimensionSpatialCoordinate> getTwoDimensionSpatialCoordinateList() {
@@ -62,6 +65,14 @@ public class TwoDimensionSpatialCoordinateCollection implements IAimXMLOperation
         }
         return null;
     }
+
+    public TwoDimensionGeometricShapeEntity getTwoDimensionGeometricShapeEntity() {
+        return twoDimensionGeometricShapeEntity;
+    }
+
+    public void setTwoDimensionGeometricShapeEntity(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
+        this.twoDimensionGeometricShapeEntity = twoDimensionGeometricShapeEntity;
+    }   
 
     @Override
     public Node getXMLNode(Document doc) throws AimException {

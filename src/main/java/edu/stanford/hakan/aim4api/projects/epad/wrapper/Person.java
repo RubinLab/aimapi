@@ -4,6 +4,8 @@
  */
 package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
+import edu.stanford.hakan.aim4api.base.ST;
+
 /**
  *
  * @author Hakan
@@ -11,15 +13,14 @@ package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 public class Person extends edu.stanford.hakan.aim4api.base.Person {
 
     /*    
-        Person ; Epad = Person
+     Person ; Epad = Person
         
-        + getName()
-        + getId()    
-    */
-    
+     + getName()
+     + getId()    
+     */
     public String getNameEpad() {
         if (this.getName() != null) {
-            return this.getName().getValue();
+            return super.getName().getValue();
         }
         return "";
     }
@@ -29,5 +30,17 @@ public class Person extends edu.stanford.hakan.aim4api.base.Person {
             return this.getId().getValue();
         }
         return "";
+    }
+
+    public void setName(String name) {
+        super.setName(new ST(name));
+    }
+
+    public void setId(String id) {
+        super.setId(new ST(id));
+    }
+
+    public void setSex(String sex) {
+        super.setSex(new ST(sex));
     }
 }

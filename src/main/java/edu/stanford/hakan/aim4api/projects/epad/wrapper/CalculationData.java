@@ -23,21 +23,25 @@ public class CalculationData extends edu.stanford.hakan.aim4api.base.Calculation
         ? setCagridId(Integer) 
         
         + setCoordinateCollection(CoordinateCollection)
-        + setValue(Double)
-    */
-    
+     + setValue(Double)
+     */
+
     public String getValueEpad() {
-        if (this.getValue() != null) {
-            return this.getValue().getValue();
+        if (super.getValue() != null) {
+            return super.getValue().getValue();
         }
         return "";
     }
 
     public void setValue(String value) {
-        if (this.getValue() == null) {
-            this.setValue(new ST());
+        if (super.getValue() == null) {
+            super.setValue(new ST());
         }
         this.getValue().setValue(value);
     }
-    
+
+    public Coordinate getCoordItem(int k) {
+        return (Coordinate) super.getCoordinateCollection().getCoordinateList().get(k).getClone();
+    }
+
 }

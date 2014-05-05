@@ -56,6 +56,7 @@ public class TwoDimensionGeometricShapeEntity extends GeometricShapeEntity {
 
     public void setTwoDimensionSpatialCoordinateCollection(TwoDimensionSpatialCoordinateCollection twoDimensionSpatialCoordinateCollection) {
         this.twoDimensionSpatialCoordinateCollection = twoDimensionSpatialCoordinateCollection;
+        this.twoDimensionSpatialCoordinateCollection.setTwoDimensionGeometricShapeEntity(this);
     }
 
     public void addTwoDimensionSpatialCoordinate(TwoDimensionSpatialCoordinate newTwoDimensionSpatialCoordinate) {

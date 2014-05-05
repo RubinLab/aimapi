@@ -7,6 +7,7 @@ package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 //import edu.stanford.hakan.aim3api.base.AnatomicEntityCharacteristicCollection;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ST;
 
 /**
@@ -120,6 +121,11 @@ public class ImagingPhysicalEntity extends edu.stanford.hakan.aim4api.base.Imagi
 
     public void setAnatomicEntityCharacteristicCollection(AnatomicEntityCharacteristicCollection anatomicEntityCharacteristicCollection) {
         this.anatomicEntityCharacteristicCollection = anatomicEntityCharacteristicCollection;
+    }
+    
+    public void setUniqueIdentifier(String uniqueIdentifier)
+    {
+        super.setUniqueIdentifier(new II(uniqueIdentifier));
     }
     
     

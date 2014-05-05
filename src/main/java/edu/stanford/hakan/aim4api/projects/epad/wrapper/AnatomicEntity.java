@@ -10,6 +10,9 @@ package edu.stanford.hakan.aim4api.projects.epad.wrapper;
  *
  * @author Hakan
  */
-public class AnatomicEntity extends ImagingPhysicalEntity{
-    
+public class AnatomicEntity extends ImagingPhysicalEntity {
+
+    public AnatomicEntityCharacteristic getItem(int j) {
+        return super.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().get(j).getClone();
+    }
 }
