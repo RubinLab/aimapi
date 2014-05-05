@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class InferenceEntityCollection implements IAimXMLOperations
 {
 
-private final List<InferenceEntity> listInferenceEntity = new ArrayList<InferenceEntity>();
+private List<InferenceEntity> listInferenceEntity = new ArrayList<InferenceEntity>();
 
 public void addInferenceEntity(InferenceEntity newInferenceEntity)
 {

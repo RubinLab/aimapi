@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ReferencedDicomObjectCollection implements IAimXMLOperations
 {
 
-private final List<ReferencedDicomObject> listReferencedDicomObject = new ArrayList<ReferencedDicomObject>();
+private List<ReferencedDicomObject> listReferencedDicomObject = new ArrayList<ReferencedDicomObject>();
 
 public void addReferencedDicomObject(ReferencedDicomObject newReferencedDicomObject)
 {

@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class AuditTrailCollection implements IAimXMLOperations {
 
-    private final List<AuditTrail> listAuditTrail = new ArrayList<AuditTrail>();
+    private List<AuditTrail> listAuditTrail = new ArrayList<AuditTrail>();
 
     public void addAuditTrail(AuditTrail newAuditTrail) {
         this.listAuditTrail.add(newAuditTrail);

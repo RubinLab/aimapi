@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  */
 public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnotation {
 
-    private static final Logger logger = Logger.getLogger("ImageAnnotation");
+    private static Logger logger = Logger.getLogger("ImageAnnotation");
 
     //*** add getter and setters for the following ones.
     private String LINE_LENGTH = "LineLength";

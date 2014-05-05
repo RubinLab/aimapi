@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class AnnotationOfAnnotationStatementCollection implements IAimXMLOperations {
 
-    private final List<AnnotationStatement> listAnnotationOfAnnotationStatement = new ArrayList<AnnotationStatement>();
+    private List<AnnotationStatement> listAnnotationOfAnnotationStatement = new ArrayList<AnnotationStatement>();
 
     public void addAnnotationOfAnnotationStatement(AnnotationStatement newAnnotationOfAnnotationStatement) {
         this.listAnnotationOfAnnotationStatement.add(newAnnotationOfAnnotationStatement);

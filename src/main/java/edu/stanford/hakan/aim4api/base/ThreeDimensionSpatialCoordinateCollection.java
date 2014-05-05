@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ThreeDimensionSpatialCoordinateCollection implements IAimXMLOperations
 {
 
-private final List<ThreeDimensionSpatialCoordinate> listThreeDimensionSpatialCoordinate = new ArrayList<ThreeDimensionSpatialCoordinate>();
+private List<ThreeDimensionSpatialCoordinate> listThreeDimensionSpatialCoordinate = new ArrayList<ThreeDimensionSpatialCoordinate>();
 
 public void addThreeDimensionSpatialCoordinate(ThreeDimensionSpatialCoordinate newThreeDimensionSpatialCoordinate)
 {

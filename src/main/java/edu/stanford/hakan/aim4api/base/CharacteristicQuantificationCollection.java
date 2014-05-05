@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class CharacteristicQuantificationCollection implements IAimXMLOperations
 {
 
-private final List<CharacteristicQuantification> listCharacteristicQuantification = new ArrayList<CharacteristicQuantification>();
+private List<CharacteristicQuantification> listCharacteristicQuantification = new ArrayList<CharacteristicQuantification>();
 
 public void addCharacteristicQuantification(CharacteristicQuantification newCharacteristicQuantification)
 {

@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ImagingObservationEntityCollection implements IAimXMLOperations
 {
 
-private final List<ImagingObservationEntity> listImagingObservationEntity = new ArrayList<ImagingObservationEntity>();
+private List<ImagingObservationEntity> listImagingObservationEntity = new ArrayList<ImagingObservationEntity>();
 
 public void addImagingObservationEntity(ImagingObservationEntity newImagingObservationEntity)
 {

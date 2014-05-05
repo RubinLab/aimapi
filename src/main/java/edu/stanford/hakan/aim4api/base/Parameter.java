@@ -27,6 +27,7 @@
 */
 package edu.stanford.hakan.aim4api.base;
 
+import java.io.Serializable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,7 +37,7 @@ import org.w3c.dom.NodeList;
 *
 * @author localadmin
 */
-public class Parameter implements IAimXMLOperations {
+public class Parameter implements IAimXMLOperations,Serializable  {
 
 private ST name;
 private ST value;

@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ImageReferenceEntityCollection implements IAimXMLOperations
 {
 
-private final List<ImageReferenceEntity> listImageReferenceEntity = new ArrayList<ImageReferenceEntity>();
+private List<ImageReferenceEntity> listImageReferenceEntity = new ArrayList<ImageReferenceEntity>();
 
 public void addImageReferenceEntity(ImageReferenceEntity newImageReferenceEntity)
 {

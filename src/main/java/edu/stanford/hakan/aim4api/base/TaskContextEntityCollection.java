@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class TaskContextEntityCollection implements IAimXMLOperations
 {
 
-private final List<TaskContextEntity> listTaskContextEntity = new ArrayList<TaskContextEntity>();
+private List<TaskContextEntity> listTaskContextEntity = new ArrayList<TaskContextEntity>();
 
 public void addTaskContextEntity(TaskContextEntity newTaskContextEntity)
 {

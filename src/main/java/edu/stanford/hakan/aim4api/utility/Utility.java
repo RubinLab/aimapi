@@ -39,8 +39,8 @@ import java.util.TimeZone;
 public class Utility {
 
     public static String getNowAtGMT() {
-        final Date currentTime = new Date();
-        final SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy'T'hh:mm:ssa'.Zone:'z");
+        Date currentTime = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy'T'hh:mm:ssa'.Zone:'z");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(currentTime);
     }

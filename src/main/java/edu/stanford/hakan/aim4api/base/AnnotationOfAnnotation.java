@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import java.io.Serializable;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,7 +38,7 @@ import org.w3c.dom.NodeList;
  *
  * @author localadmin
  */
-public class AnnotationOfAnnotation extends AnnotationEntity {
+public class AnnotationOfAnnotation extends AnnotationEntity implements Serializable {
 
     public AnnotationOfAnnotation() {
         setXsiType("AnnotationOfAnnotation");

@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class DimensionCollection implements IAimXMLOperations
 {
 
-private final List<Dimension> listDimension = new ArrayList<Dimension>();
+private List<Dimension> listDimension = new ArrayList<Dimension>();
 
 public void addDimension(Dimension newDimension)
 {

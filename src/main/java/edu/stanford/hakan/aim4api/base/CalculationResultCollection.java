@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class CalculationResultCollection implements IAimXMLOperations {
 
-    private final List<CalculationResult> listCalculationResult = new ArrayList<CalculationResult>();
+    private List<CalculationResult> listCalculationResult = new ArrayList<CalculationResult>();
 
     public void addCalculationResult(CalculationResult newCalculationResult) {
         this.listCalculationResult.add(newCalculationResult);

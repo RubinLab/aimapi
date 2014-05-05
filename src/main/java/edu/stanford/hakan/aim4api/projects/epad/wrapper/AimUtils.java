@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class AimUtils {
 
 
-    private static final Logger logger = Logger.getLogger("AimUtils");
+    private static Logger logger = Logger.getLogger("AimUtils");
     
 //    /**
 //     * create a geometric shape for this image

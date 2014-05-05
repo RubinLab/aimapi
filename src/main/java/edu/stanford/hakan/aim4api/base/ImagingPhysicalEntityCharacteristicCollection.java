@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class ImagingPhysicalEntityCharacteristicCollection implements IAimXMLOperations {
 
-    private final List<ImagingPhysicalEntityCharacteristic> listImagingPhysicalEntityCharacteristic = new ArrayList<ImagingPhysicalEntityCharacteristic>();
+    private List<ImagingPhysicalEntityCharacteristic> listImagingPhysicalEntityCharacteristic = new ArrayList<ImagingPhysicalEntityCharacteristic>();
 
     public void addImagingPhysicalEntityCharacteristic(
             ImagingPhysicalEntityCharacteristic newImagingPhysicalEntityCharacteristic) {

@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
  */
 public class AnatomicEntityCharacteristicCollectionV2 {
 
-    private final List<AnatomicEntityCharacteristic> listAnatomicEntityCharacteristic = new ArrayList<AnatomicEntityCharacteristic>();
+    private List<AnatomicEntityCharacteristic> listAnatomicEntityCharacteristic = new ArrayList<AnatomicEntityCharacteristic>();
 
     public void addAnatomicEntityCharacteristic(AnatomicEntityCharacteristic newAnatomicEntityCharacteristic) {
         this.listAnatomicEntityCharacteristic.add(newAnatomicEntityCharacteristic);

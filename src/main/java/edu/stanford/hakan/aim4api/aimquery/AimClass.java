@@ -39,7 +39,7 @@ class AimClass
 
 	private String name;
 	private String type;
-	private final boolean isAbstract;
+	private boolean isAbstract;
 	private List<String> listXPaths;
 	private List<AimProperty> listAimProperties;
 

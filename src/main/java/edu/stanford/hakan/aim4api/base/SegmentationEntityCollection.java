@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class SegmentationEntityCollection implements IAimXMLOperations
 {
 
-private final List<SegmentationEntity> listSegmentationEntity = new ArrayList<SegmentationEntity>();
+private List<SegmentationEntity> listSegmentationEntity = new ArrayList<SegmentationEntity>();
 
 public void addSegmentationEntity(SegmentationEntity newSegmentationEntity)
 {

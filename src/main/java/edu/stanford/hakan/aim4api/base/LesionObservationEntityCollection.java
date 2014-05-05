@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class LesionObservationEntityCollection implements IAimXMLOperations
 {
 
-private final List<LesionObservationEntity> listLesionObservationEntity = new ArrayList<LesionObservationEntity>();
+private List<LesionObservationEntity> listLesionObservationEntity = new ArrayList<LesionObservationEntity>();
 
 public void addLesionObservationEntity(LesionObservationEntity newLesionObservationEntity)
 {

@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ParameterCollection implements IAimXMLOperations
 {
 
-private final List<Parameter> listParameter = new ArrayList<Parameter>();
+private List<Parameter> listParameter = new ArrayList<Parameter>();
 
 public void addParameter(Parameter newParameter)
 {

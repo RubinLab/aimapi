@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class ImagingObservationCharacteristicCollection implements IAimXMLOperations {
 
-    private final List<ImagingObservationCharacteristic> listImagingObservationCharacteristic = new ArrayList<ImagingObservationCharacteristic>();
+    private List<ImagingObservationCharacteristic> listImagingObservationCharacteristic = new ArrayList<ImagingObservationCharacteristic>();
 
     public void addImagingObservationCharacteristic(ImagingObservationCharacteristic newImagingObservationCharacteristic) {
         this.listImagingObservationCharacteristic.add(newImagingObservationCharacteristic);

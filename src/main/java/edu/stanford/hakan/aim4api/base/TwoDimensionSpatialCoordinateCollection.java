@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class TwoDimensionSpatialCoordinateCollection implements IAimXMLOperations {
 
-    private final List<TwoDimensionSpatialCoordinate> listTwoDimensionSpatialCoordinate = new ArrayList<TwoDimensionSpatialCoordinate>();    
+    private List<TwoDimensionSpatialCoordinate> listTwoDimensionSpatialCoordinate = new ArrayList<TwoDimensionSpatialCoordinate>();    
     private TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity;
 
     public void addTwoDimensionSpatialCoordinate(TwoDimensionSpatialCoordinate newTwoDimensionSpatialCoordinate) {

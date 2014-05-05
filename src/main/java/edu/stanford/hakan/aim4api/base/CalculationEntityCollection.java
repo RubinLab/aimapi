@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class CalculationEntityCollection implements IAimXMLOperations
 {
 
-private final List<CalculationEntity> listCalculationEntity = new ArrayList<CalculationEntity>();
+private List<CalculationEntity> listCalculationEntity = new ArrayList<CalculationEntity>();
 
 public void addCalculationEntity(CalculationEntity newCalculationEntity)
 {

@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  *
  * @author localadmin
  */
-public class AnnotationStatement implements Serializable, IAimXMLOperations {
+public class AnnotationStatement implements IAimXMLOperations {
 
     private II subjectUniqueIdentifier;
     private II objectUniqueIdentifier;

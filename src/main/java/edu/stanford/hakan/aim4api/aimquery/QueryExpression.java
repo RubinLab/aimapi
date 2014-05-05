@@ -58,7 +58,7 @@ public class QueryExpression {
     private String value = "";
     private String function = "";
     private List<String> listXQuery;
-    private final List<AimClass> listAimClass;
+    private List<AimClass> listAimClass;
 
     public QueryExpression(String expression, String leftSide, String function, String value) throws AimException {
         this.listXQuery = new ArrayList<String>();

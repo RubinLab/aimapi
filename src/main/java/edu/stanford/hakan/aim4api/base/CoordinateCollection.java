@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class CoordinateCollection implements IAimXMLOperations
 {
 
-private final List<Coordinate> listCoordinate = new ArrayList<Coordinate>();
+private List<Coordinate> listCoordinate = new ArrayList<Coordinate>();
 
 public void addCoordinate(Coordinate newCoordinate)
 {

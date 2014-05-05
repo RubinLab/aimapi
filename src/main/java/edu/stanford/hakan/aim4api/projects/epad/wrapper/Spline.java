@@ -15,7 +15,7 @@ import edu.stanford.hakan.aim4api.base.ST;
  */
 public class Spline extends GeometricShape {
 
-    private final static String splineKey = "^~^spline^~^";
+    private static String splineKey = "^~^spline^~^";
 
     public static String getSplineKey() {
         return splineKey;

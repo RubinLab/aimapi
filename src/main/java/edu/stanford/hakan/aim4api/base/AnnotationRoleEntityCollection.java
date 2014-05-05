@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class AnnotationRoleEntityCollection implements IAimXMLOperations {
 
-    private final List<AnnotationRoleEntity> listAnnotationRoleEntity = new ArrayList<AnnotationRoleEntity>();
+    private List<AnnotationRoleEntity> listAnnotationRoleEntity = new ArrayList<AnnotationRoleEntity>();
 
     public void addAnnotationRoleEntity(AnnotationRoleEntity newAnnotationRoleEntity) {
         this.listAnnotationRoleEntity.add(newAnnotationRoleEntity);

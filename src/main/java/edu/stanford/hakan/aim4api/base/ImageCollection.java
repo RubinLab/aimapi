@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ImageCollection implements IAimXMLOperations
 {
 
-private final List<Image> listImage = new ArrayList<Image>();
+private List<Image> listImage = new ArrayList<Image>();
 
 public void addImage(Image newImage)
 {

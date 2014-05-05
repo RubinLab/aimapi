@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
  */
 public class AnnotationOfAnnotationCollection extends AnnotationCollection {
 
-    private final List<AnnotationOfAnnotation> listAnnotationOfAnnotation = new ArrayList<AnnotationOfAnnotation>();
+    private List<AnnotationOfAnnotation> listAnnotationOfAnnotation = new ArrayList<AnnotationOfAnnotation>();
 
     public void addAnnotationOfAnnotation(AnnotationOfAnnotation newAnnotationOfAnnotation) {
         this.listAnnotationOfAnnotation.add(newAnnotationOfAnnotation);

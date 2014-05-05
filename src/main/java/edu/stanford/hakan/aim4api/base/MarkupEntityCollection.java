@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class MarkupEntityCollection implements IAimXMLOperations
 {
 
-private final List<MarkupEntity> listMarkupEntity = new ArrayList<MarkupEntity>();
+private List<MarkupEntity> listMarkupEntity = new ArrayList<MarkupEntity>();
 
 public void addMarkupEntity(MarkupEntity newMarkupEntity)
 {

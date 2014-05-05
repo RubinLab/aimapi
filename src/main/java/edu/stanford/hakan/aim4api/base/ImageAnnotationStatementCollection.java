@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 public class ImageAnnotationStatementCollection implements IAimXMLOperations
 {
 
-private final List<AnnotationStatement> listImageAnnotationStatement = new ArrayList<AnnotationStatement>();
+private List<AnnotationStatement> listImageAnnotationStatement = new ArrayList<AnnotationStatement>();
 
 public void addImageAnnotationStatement(AnnotationStatement newImageAnnotationStatement)
 {
