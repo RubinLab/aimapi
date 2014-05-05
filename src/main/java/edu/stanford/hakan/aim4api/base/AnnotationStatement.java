@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import java.io.Serializable;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -37,7 +39,7 @@ import org.w3c.dom.NodeList;
  *
  * @author localadmin
  */
-public class AnnotationStatement implements IAimXMLOperations {
+public class AnnotationStatement implements Serializable, IAimXMLOperations {
 
     private II subjectUniqueIdentifier;
     private II objectUniqueIdentifier;
