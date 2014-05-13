@@ -234,6 +234,11 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     public String getNameEpad() {
         return this.getName().getValue();
     }
+    
+    public void setName(String name)
+    {
+        super.setName(new ST(name));
+    }
 
     public GeometricShapeCollection getGeometricShapeCollection() {
         return (GeometricShapeCollection) super.getMarkupEntityCollection();

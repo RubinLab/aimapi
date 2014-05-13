@@ -33,7 +33,7 @@ public class TwoDCoordinate extends TwoDimensionSpatialCoordinate {
 	
 
 
-	public TwoDCoordinate(Integer coordinateIndex,
+	public TwoDCoordinate(Integer cagridId, Integer coordinateIndex,
 			String imageReferenceUID, Integer referencedFrameNumber, Double x,
 			Double y) {
 		

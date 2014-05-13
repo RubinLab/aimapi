@@ -11,10 +11,10 @@ package edu.stanford.hakan.aim4api.projects.epad.wrapper;
  * @author Hakan
  */
 public class Enumerations {
-
+    
     public enum ROIShape {
 
-        NONE, LINE, RECTANGLE, CIRCLE, OVAL, POLY, OPENPOLY, COMMENT, ARROW, SPLINE, OPENSPLINE, TEXT, ELLIPSE, NORMAL
+        NONE, LINE, RECTANGLE, CIRCLE, OVAL, POLY, OPENPOLY, COMMENT, ARROW, SPLINE, OPENSPLINE, TEXT, ELLIPSE, NORMAL, PAINTBRUSH, ERASER
     }
 
     public enum QuestionType {
