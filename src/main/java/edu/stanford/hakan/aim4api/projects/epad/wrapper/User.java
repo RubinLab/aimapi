@@ -5,6 +5,7 @@
 package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import edu.stanford.hakan.aim4api.base.ST;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,6 +13,7 @@ import edu.stanford.hakan.aim4api.base.ST;
  */
 public class User extends edu.stanford.hakan.aim4api.base.User {
     
+	private static final Logger logger = Logger.getLogger("aim4api.base.User");
     /*    
         User ; Epad = User
     
@@ -26,30 +28,32 @@ public class User extends edu.stanford.hakan.aim4api.base.User {
     */
     
     public String getNameEpad() {
-        if (this.getName() != null) {
-            this.getName().getValue();
+        if (super.getName() != null) {
+            super.getName().getValue();
         }
         return "";
     }
 
     public void setName(String name) {
-        if (this.getName() == null) {
-            this.setName(new ST());
+        if (super.getName() == null) {
+            super.setName(new ST());
         }
-        this.getName().setValue(name);
+        super.getName().setValue(name);
     }
 
     public String getLoginNameEpad() {
-        if (this.getLoginName() != null) {
-            this.getLoginName().getValue();
+        if (super.getLoginName() != null) {
+            super.getLoginName().getValue();
         }
         return "";
     }
 
     public void setLoginName(String name) {
-        if (this.getLoginName() == null) {
-            this.setLoginName(new ST());
+        if (super.getLoginName() == null) {
+            super.setLoginName(new ST());
         }
-        this.getLoginName().setValue(name);
+        logger.info("[Hakan] User.java setLoginName - input param = " + name + " [Hakan]");
+        super.getLoginName().setValue(name);
+        logger.info("[Hakan] User.java setLoginName - super.getLoginName().getValue() =  " + super.getLoginName().getValue() + " [Hakan]");
     }
 }
