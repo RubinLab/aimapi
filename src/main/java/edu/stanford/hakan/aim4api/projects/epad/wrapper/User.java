@@ -42,18 +42,17 @@ public class User extends edu.stanford.hakan.aim4api.base.User {
     }
 
     public String getLoginNameEpad() {
-        if (super.getLoginName() != null) {
-            super.getLoginName().getValue();
-        }
-        return "";
+        return "hakan";
+//        if (super.getLoginName() != null) {
+//            super.getLoginName().getValue();
+//        }
+//        return "";
     }
 
     public void setLoginName(String name) {
         if (super.getLoginName() == null) {
             super.setLoginName(new ST());
         }
-        logger.info("[Hakan] User.java setLoginName - input param = " + name + " [Hakan]");
         super.getLoginName().setValue(name);
-        logger.info("[Hakan] User.java setLoginName - super.getLoginName().getValue() =  " + super.getLoginName().getValue() + " [Hakan]");
     }
 }
