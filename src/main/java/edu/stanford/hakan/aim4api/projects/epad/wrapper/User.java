@@ -29,7 +29,7 @@ public class User extends edu.stanford.hakan.aim4api.base.User {
     
     public String getNameEpad() {
         if (super.getName() != null) {
-            super.getName().getValue();
+           return super.getName().getValue();
         }
         return "";
     }
@@ -42,11 +42,10 @@ public class User extends edu.stanford.hakan.aim4api.base.User {
     }
 
     public String getLoginNameEpad() {
-        return "hakan";
-//        if (super.getLoginName() != null) {
-//            super.getLoginName().getValue();
-//        }
-//        return "";
+        if (super.getLoginName() != null) {
+           return super.getLoginName().getValue();
+        }
+        return "";
     }
 
     public void setLoginName(String name) {
