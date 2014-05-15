@@ -171,15 +171,17 @@ public class AimUtils {
 
     public static String formatSeriesDate(String seriesDate) {
 
-        DateTimeFormat incoming = DateTimeFormat.getFormat("yyyyMMdd");
-        Date date = new Date();
-        try {
-            date = incoming.parse(seriesDate.substring(0, 8));
-        } catch (Exception e) {
-            logger.info("Error: formatSeriesDate " + e.getMessage());
-        }
-        DateTimeFormat outgoing = DateTimeFormat.getFormat("MM/dd/yyyy");
-        return outgoing.format(date);
+//        DateTimeFormat incoming = DateTimeFormat.getFormat("yyyyMMdd");
+//        Date date = new Date();
+//        try {
+//            date = incoming.parse(seriesDate.substring(0, 8));
+//        } catch (Exception e) {
+//            logger.info("Error: formatSeriesDate " + e.getMessage());
+//        }
+//        DateTimeFormat outgoing = DateTimeFormat.getFormat("MM/dd/yyyy");
+//        return outgoing.format(date);
+        
+        return "01/01/1900";
     }
     
     

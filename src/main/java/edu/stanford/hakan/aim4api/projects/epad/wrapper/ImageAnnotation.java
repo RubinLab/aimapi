@@ -428,10 +428,12 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
             ImageReferenceEntity imageReference = imageList.get(0);
             DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
             ImageStudy study = dicomImageReference.getImageStudy();
-            DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
-            Date date = new Date();
-            date = fmt.parse(study.getStartDate().substring(0, 10));
-            return date;
+//            DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
+//            Date date = new Date();
+//            date = fmt.parse(study.getStartDate().substring(0, 10));
+//            return date;
+            
+            return new Date();
         } catch (Exception e) {
             logger.info("Error: ImageAnnotation.getStudyDate " + e.getMessage());
             e.printStackTrace();
@@ -441,9 +443,11 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
 
     public String formatStudyDate() {
         try {
-            Date studyDate = this.getStudyDate();
-            DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
-            return fmt.format(studyDate);
+//            Date studyDate = this.getStudyDate();
+//            DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
+//            return fmt.format(studyDate);
+            
+            return "1900-01-01";
         } catch (Exception e) {
             logger.info("Error: ImageAnnotation.formatStudyDate " + e.getMessage());
             e.printStackTrace();
@@ -677,9 +681,11 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
 
     // create a default name for an annotation
     public String todaysDate() {
-        Date today = new Date();
-        DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
-        return fmt.format(today);
+//        Date today = new Date();
+//        DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        return fmt.format(today);
+        
+        return "1900-01-01'T'01:01:01";
     }
 
     // create a default name for an annotation
