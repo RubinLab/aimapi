@@ -13,6 +13,7 @@ import edu.stanford.hakan.aim4api.base.Enumerations;
 import edu.stanford.hakan.aim4api.base.Equipment;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.Image;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ImageCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageSeries;
@@ -91,6 +92,8 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
             String studyTime) {
 
         super();
+        
+        this.setImageAnnotationCollection(new ImageAnnotationCollection());
 
         super.setName(new ST(name));
         super.setDateTime(todaysDate());
