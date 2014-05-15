@@ -28,7 +28,7 @@ import java.util.List;
 public class Aim extends edu.stanford.hakan.aim4api.projects.epad.wrapper.ImageAnnotation {
 
     public Aim(String name, String modality, String description, String patientName, String patientId, String patientSex, String patientBirthdate, String manufacturerName, String model, String version, int activeImage, User user, String imageUid, String seriesUid, String studyUid, String studyDate, String studyTime) {
-          super(name, modality, description, patientName, patientId, patientSex, patientBirthdate, manufacturerName, model, version, activeImage, user, imageUid, seriesUid, studyUid, studyDate, studyTime);
+        super(name, modality, description, patientName, patientId, patientSex, patientBirthdate, manufacturerName, model, version, activeImage, user, imageUid, seriesUid, studyUid, studyDate, studyTime);
     }
 
 //    public Aim(String name, String modality, String description,
