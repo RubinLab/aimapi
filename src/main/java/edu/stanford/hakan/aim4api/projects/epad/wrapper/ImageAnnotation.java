@@ -29,6 +29,7 @@ import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
 import edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
 import edu.stanford.hakan.aim4api.projects.epad.wrapper.Enumerations.ROIShape;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -93,6 +94,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
 
         super();
         
+          super.setUniqueIdentifier(new II( GenerateId.getUUID()));
         this.setImageAnnotationCollection(new ImageAnnotationCollection());
 
         super.setName(new ST(name));
