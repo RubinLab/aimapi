@@ -51,7 +51,7 @@ public class ImagingPhysicalEntityCharacteristic extends edu.stanford.hakan.aim4
     }
 
     public void setCodeValue(String codeValue) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCode(codeValue);
@@ -65,7 +65,7 @@ public class ImagingPhysicalEntityCharacteristic extends edu.stanford.hakan.aim4
     }
 
     public void setCodeMeaning(String codeMeaning) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystem(codeMeaning);
@@ -80,7 +80,7 @@ public class ImagingPhysicalEntityCharacteristic extends edu.stanford.hakan.aim4
     }
 
     public void setCodingSchemeVersion(String codingSchemeVersion) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystemVersion(codingSchemeVersion);
@@ -94,7 +94,7 @@ public class ImagingPhysicalEntityCharacteristic extends edu.stanford.hakan.aim4
     }
 
     public void setCodingSchemeDesignator(String codingSchemeDesignator) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystemName(codingSchemeDesignator);

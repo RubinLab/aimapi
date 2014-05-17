@@ -94,7 +94,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
 
         super();
         
-          super.setUniqueIdentifier(new II( GenerateId.getUUID()));
+        super.setUniqueIdentifier(new II( GenerateId.getUUID()));
         this.setImageAnnotationCollection(new ImageAnnotationCollection());
 
         super.setName(new ST(name));
@@ -164,7 +164,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public void setCodeValue(String codeValue) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCode(codeValue);
@@ -178,7 +178,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public void setCodeMeaning(String codeMeaning) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystem(codeMeaning);
@@ -193,7 +193,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public void setCodingSchemeVersion(String codingSchemeVersion) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystemVersion(codingSchemeVersion);
@@ -207,7 +207,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public void setCodingSchemeDesignator(String codingSchemeDesignator) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystemName(codingSchemeDesignator);

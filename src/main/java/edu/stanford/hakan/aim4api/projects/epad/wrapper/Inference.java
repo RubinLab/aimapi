@@ -40,7 +40,7 @@ public class Inference extends edu.stanford.hakan.aim4api.base.InferenceEntity {
     }
 
     public void setCodeValue(String codeValue) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCode(codeValue);
@@ -54,7 +54,7 @@ public class Inference extends edu.stanford.hakan.aim4api.base.InferenceEntity {
     }
 
     public void setCodeMeaning(String codeMeaning) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystem(codeMeaning);
@@ -69,7 +69,7 @@ public class Inference extends edu.stanford.hakan.aim4api.base.InferenceEntity {
     }
 
     public void setCodingSchemeVersion(String codingSchemeVersion) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystemVersion(codingSchemeVersion);
@@ -83,7 +83,7 @@ public class Inference extends edu.stanford.hakan.aim4api.base.InferenceEntity {
     }
 
     public void setCodingSchemeDesignator(String codingSchemeDesignator) {
-        if (this.getListTypeCode() == null && this.getListTypeCode().size() <= 0) {
+        if (this.getListTypeCode() == null || this.getListTypeCode().size() <= 0) {
             this.getListTypeCode().add(new CD());
         }
         this.getListTypeCode().get(0).setCodeSystemName(codingSchemeDesignator);
