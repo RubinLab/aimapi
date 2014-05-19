@@ -149,11 +149,19 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public AnatomicEntityCollection getAnatomicEntityCollection() {
-        return (AnatomicEntityCollection) super.getImagingPhysicalEntityCollection();
+        AnatomicEntityCollection res = new AnatomicEntityCollection();
+        for (edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity imagingPhysicalEntity : super.getImagingPhysicalEntityCollection().getImagingPhysicalEntityList()) {
+            res.addAnatomicEntity((AnatomicEntity) imagingPhysicalEntity);
+        }
+        return res;
     }
 
     public CalculationCollection getCalculationCollection() {
-        return (CalculationCollection) super.getCalculationEntityCollection();
+        CalculationCollection res = new CalculationCollection();
+        for (edu.stanford.hakan.aim4api.base.CalculationEntity calculationEntity : super.getCalculationEntityCollection().getCalculationEntityList()) {
+            res.addCalculation((Calculation) calculationEntity);
+        }
+        return res;
     }
 
     public String getCodeValue() {
@@ -246,7 +254,11 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public GeometricShapeCollection getGeometricShapeCollection() {
-        return (GeometricShapeCollection) super.getMarkupEntityCollection();
+        GeometricShapeCollection res = new GeometricShapeCollection();
+        for (edu.stanford.hakan.aim4api.base.MarkupEntity markupEntity : super.getMarkupEntityCollection().getMarkupEntityList()) {
+            res.addGeometricShape((GeometricShape) markupEntity);
+        }
+        return res;
     }
 
     public String getUniqueIdentifierEpad() {
@@ -258,11 +270,19 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
     }
 
     public ImagingObservationCollection getImagingObservationCollection() {
-        return (ImagingObservationCollection) super.getImagingObservationEntityCollection();
+        ImagingObservationCollection res = new ImagingObservationCollection();
+        for (edu.stanford.hakan.aim4api.base.ImagingObservationEntity imagingObservationEntity : super.getImagingObservationEntityCollection().getImagingObservationEntityList()) {
+            res.addImagingObservation((ImagingObservation) imagingObservationEntity);
+        }
+        return res;
     }
 
     public InferenceCollection getInferenceCollection() {
-        return (InferenceCollection) super.getInferenceEntityCollection();
+        InferenceCollection res = new InferenceCollection();
+        for (edu.stanford.hakan.aim4api.base.InferenceEntity inferenceEntity : super.getInferenceEntityCollection().getInferenceEntityList()) {
+            res.addInference((Inference) inferenceEntity);
+        }
+        return res;
     }
 
     public String getSeriesId() {
