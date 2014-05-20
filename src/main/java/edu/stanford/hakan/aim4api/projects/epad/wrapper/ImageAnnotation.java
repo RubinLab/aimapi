@@ -927,7 +927,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
             coord.setImageReferenceUID(imageUid);
             coord.setReferencedFrameNumber(frame);
             coord.setCoordinateIndex(i);
-            shape.addSpatialCoordinate(new TwoDimensionSpatialCoordinate(i, imageUid, frame, coord.getX(), coord.getY()));
+            shape.addSpatialCoordinate(new TwoDimensionSpatialCoordinate(0, i, imageUid, frame, coord.getX(), coord.getY()));
         }
         return shape;
     }

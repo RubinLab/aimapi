@@ -39,7 +39,7 @@ public class TwoDimensionSpatialCoordinate extends edu.stanford.hakan.aim4api.ba
          
      }
     
-     public TwoDimensionSpatialCoordinate(Integer coordinateIndex, String imageReferenceUID, Integer referencedFrameNumber, Double x, Double y)
+     public TwoDimensionSpatialCoordinate(Integer cagridId, Integer coordinateIndex, String imageReferenceUID, Integer referencedFrameNumber, Double x, Double y)
      {
          super.setCoordinateIndex(coordinateIndex);
          this.setImageReferenceUID(imageReferenceUID);
