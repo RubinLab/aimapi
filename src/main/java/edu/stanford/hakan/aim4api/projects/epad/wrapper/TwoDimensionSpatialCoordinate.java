@@ -7,6 +7,7 @@
 package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 
 /**
  *
@@ -49,10 +50,14 @@ public class TwoDimensionSpatialCoordinate extends edu.stanford.hakan.aim4api.ba
      
      }
     public void setImageReferenceUID(String imageReferenceUID) {
+        if(super.getTwoDimensionGeometricShapeEntity() == null)
+            super.setTwoDimensionGeometricShapeEntity(new TwoDimensionGeometricShapeEntity());
         super.getTwoDimensionGeometricShapeEntity().setImageReferenceUid(new II(imageReferenceUID));
     }
 
     public void setReferencedFrameNumber(int referencedFrameNumber) {
+        if(super.getTwoDimensionGeometricShapeEntity() == null)
+            super.setTwoDimensionGeometricShapeEntity(new TwoDimensionGeometricShapeEntity());
         super.getTwoDimensionGeometricShapeEntity().setReferencedFrameNumber(referencedFrameNumber);
     }
 }
