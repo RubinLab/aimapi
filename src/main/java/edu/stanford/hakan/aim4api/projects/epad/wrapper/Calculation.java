@@ -164,7 +164,7 @@ public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEnti
     }
 
     public void setAlgorithmVersion(String algorithmVersion) {
-        if (this.getAlgorithm() != null) {
+        if (this.getAlgorithm() == null) {
             Algorithm algorithm = new Algorithm();
             this.setAlgorithm(algorithm);
         }
@@ -179,7 +179,7 @@ public class Calculation extends edu.stanford.hakan.aim4api.base.CalculationEnti
     }
 
     public void setAlgorithmName(String algorithmName) {
-        if (this.getAlgorithm() != null) {
+        if (this.getAlgorithm() == null) {
             Algorithm algorithm = new Algorithm();
             this.setAlgorithm(algorithm);
         }

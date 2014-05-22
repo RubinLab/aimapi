@@ -30,15 +30,12 @@ public class TwoDCoordinate extends TwoDimensionSpatialCoordinate {
 //		
 //
 //	}
-	
+    public TwoDCoordinate(Integer cagridId, Integer coordinateIndex,
+            String imageReferenceUID, Integer referencedFrameNumber, Double x,
+            Double y) {
 
-
-	public TwoDCoordinate(Integer cagridId, Integer coordinateIndex,
-			String imageReferenceUID, Integer referencedFrameNumber, Double x,
-			Double y) {
-		
-		super(cagridId,coordinateIndex,
-			 imageReferenceUID,  referencedFrameNumber,  x,
-			 y);
-	}
+        super(cagridId, coordinateIndex,
+                imageReferenceUID, referencedFrameNumber, x,
+                y);
+    }
 }

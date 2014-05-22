@@ -857,11 +857,7 @@ public class ImageAnnotation extends edu.stanford.hakan.aim4api.base.ImageAnnota
 
     public double getLineLenghtCalculation() {
         return -1;
-    }
-
-    
-
-
+    } 
 
     private List<GeometricShape> createShapes(String imageUid, int frame,
 			ROIShape roiShape, List<TwoDCoordinate> coords, double pixelSpacingX, double pixelSpacingY) {
