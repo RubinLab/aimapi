@@ -4,7 +4,7 @@
  */
 package edu.stanford.hakan.aim4api.wrappers.epad.old;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
+
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ImageSeries;
 import edu.stanford.hakan.aim4api.base.ImageStudy;

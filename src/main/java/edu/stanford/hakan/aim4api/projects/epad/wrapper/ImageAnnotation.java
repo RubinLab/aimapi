@@ -5,7 +5,6 @@
  */
 package edu.stanford.hakan.aim4api.projects.epad.wrapper;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;

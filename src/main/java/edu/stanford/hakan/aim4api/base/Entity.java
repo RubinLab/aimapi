@@ -53,6 +53,10 @@ public class Entity implements IAimXMLOperations {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
     }
+    
+    public void setUniqueIdentifier() {
+        this.setUniqueIdentifier(new II(GenerateId.getUUID()));
+    }
 
     protected String getTagName() {
         return tagName;
