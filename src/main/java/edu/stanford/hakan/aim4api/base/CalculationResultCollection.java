@@ -133,4 +133,12 @@ public class CalculationResultCollection implements IAimXMLOperations {
         }
         return res;
     }
+
+    public List<ExtendedCalculationResult> getExtendedCalculationResultList() {
+        List<ExtendedCalculationResult> res = new ArrayList<ExtendedCalculationResult>();
+        for (int i = 0; i < this.listCalculationResult.size(); i++) {
+            res.add((ExtendedCalculationResult) this.listCalculationResult.get(i));
+        }
+        return res;
+    }
 }

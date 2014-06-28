@@ -46,14 +46,13 @@ public class ImagingPhysicalEntityCollection implements IAimXMLOperations
 private List<ImagingPhysicalEntity> listImagingPhysicalEntity = new ArrayList<ImagingPhysicalEntity>();
 
 public void addImagingPhysicalEntity(ImagingPhysicalEntity newImagingPhysicalEntity)
-{
-this.listImagingPhysicalEntity.add(newImagingPhysicalEntity);
-}
+    {
+        this.listImagingPhysicalEntity.add(newImagingPhysicalEntity);
+    }
 
-public List<ImagingPhysicalEntity> getImagingPhysicalEntityList()
-{
-return this.listImagingPhysicalEntity;
-}
+    public List<ImagingPhysicalEntity> getImagingPhysicalEntityList() {
+        return this.listImagingPhysicalEntity;
+    }
 
 public int size()
 {

@@ -76,6 +76,9 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("ImageAnnotationCollection");
         }
+        if (getAimVersion()== null || Enumerations.AimVersion.None.equals(getAimVersion())) {
+            setAimVersion(Enumerations.AimVersion.AIMv4_0);
+        }
         Element res = (Element) super.getXMLNode(doc);
         if (this.person != null) {
             res.appendChild(this.person.getXMLNode(doc));
