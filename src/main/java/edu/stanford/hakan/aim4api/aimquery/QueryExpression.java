@@ -27,17 +27,20 @@
  */
 package edu.stanford.hakan.aim4api.aimquery;
 
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.utility.EPADConfig;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -45,14 +48,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import edu.stanford.hakan.aim4api.base.AimException;
-
 /**
  *
  * @author Hakan
  */
 public class QueryExpression {
 
+    private static final String aimQLXmlFilePath = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir") + EPADConfig.getInstance().getStringPropertyValue("aimQLXml");
+    
+    
     private String expression = "";
     private String leftSide = "";
     private String value = "";
@@ -202,8 +206,17 @@ public class QueryExpression {
     }
 
     private void fillTheListAimClasses() throws AimException {
-        URL xmlPath = getClass().getResource("AimXPath.xml");
-        Element docElement = getDocumentElement(xmlPath.getFile());
+//        URL xmlPath = getClass().getResource("AimXPath.xml");
+//        Element docElement = getDocumentElement(xmlPath.getFile());
+        
+        //String xmlPath = "C:\\Users\\Hakan\\Dropbox\\RubinLab\\aimapi\\src\\main\\java\\edu\\stanford\\hakan\\aim4api\\aimquery\\AimXPath.xml";
+//        URL xmlPath = null;
+//        try {
+//            xmlPath = new URL("../resources/schema/AimXPath.xml");
+//        } catch (MalformedURLException ex) {
+//            Logger.getLogger(QueryExpression.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        Element docElement = getDocumentElement(aimQLXmlFilePath);
         NodeList listAimStructure = docElement.getChildNodes();
         for (int i = 0; i < listAimStructure.getLength(); i++) {
             if ("Class".equals(listAimStructure.item(i).getNodeName())) {

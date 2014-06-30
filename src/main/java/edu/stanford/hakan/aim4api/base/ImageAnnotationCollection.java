@@ -46,6 +46,8 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     private Person person;
     private List<ImageAnnotation> listImageAnnotations = new ArrayList<ImageAnnotation>();
 
+
+    
     public Person getPerson() {
         return person;
     }

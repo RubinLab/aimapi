@@ -748,4 +748,34 @@ public class AnnotationGetter {
                 namespace, collection, dbUserName, dbUserPassword, userLoginName, PersonId);
         return getImageAnnotationsFromImageAnnotationCollectionList(tempList);
     }
+    
+    // *** Person.Id Equal AND User.name Equal 
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUserNameAndPersonIdEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String userName, String PersonId)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (userName == null || "".equals(userName.trim())) {
+            throw new AimException("AimException: UserName must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE user.name = '" + userName + "' AND person.id = '" + PersonId + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }    
+
+    // *** ImageSeries.instanceUid Equal
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageSeriesInstanceUIDEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String instanceUid)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (instanceUid == null || "".equals(instanceUid.trim())) {
+            throw new AimException("AimException: instanceUid must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageSeries.instanceUid = '" + instanceUid + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }
 }

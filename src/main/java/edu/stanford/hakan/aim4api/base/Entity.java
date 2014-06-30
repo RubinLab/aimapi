@@ -49,7 +49,7 @@ public class Entity implements IAimXMLOperations {
         return uniqueIdentifier;
     }
 
-    protected void setUniqueIdentifier(II uniqueIdentifier) {
+    public void setUniqueIdentifier(II uniqueIdentifier) {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
     }

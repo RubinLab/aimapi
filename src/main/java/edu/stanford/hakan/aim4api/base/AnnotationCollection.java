@@ -50,12 +50,15 @@ public class AnnotationCollection implements IAimXMLOperations {
     private String xsiType;
     protected AnnotationCollection initialState = null;
 
-    public II getUniqueIdentifier() {
-        return uniqueIdentifier;
-
+    public AnnotationCollection() {
+        this.setUniqueIdentifier(new II(GenerateId.getUUID()));
     }
 
-    protected void setUniqueIdentifier(II uniqueIdentifier) {
+    public II getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+
+    public void setUniqueIdentifier(II uniqueIdentifier) {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
     }

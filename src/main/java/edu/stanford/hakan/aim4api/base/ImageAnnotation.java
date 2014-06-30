@@ -124,7 +124,7 @@ public class ImageAnnotation extends AnnotationEntity {
         if (this.imageReferenceEntityCollection.size() > 0) {
             res.appendChild(this.imageReferenceEntityCollection.getXMLNode(doc));
         }
-//*** Audit trail operations.
+        //*** Audit trail operations.
         if (this.getIsEdited()) {
             this.setUniqueIdentifier(new II(GenerateId.getUUID()));
             this.setDateTime(Utility.getNowAtGMT());
