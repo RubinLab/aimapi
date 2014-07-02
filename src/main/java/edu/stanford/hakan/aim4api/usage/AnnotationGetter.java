@@ -762,7 +762,7 @@ public class AnnotationGetter {
         String aimQL = "SELECT FROM " + collection + " WHERE user.name = '" + userName + "' AND person.id = '" + PersonId + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
         return listAnno;
-    }    
+    }
 
     // *** ImageSeries.instanceUid Equal
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageSeriesInstanceUIDEqual(String serverURL,
@@ -775,6 +775,18 @@ public class AnnotationGetter {
         }
 
         String aimQL = "SELECT FROM " + collection + " WHERE ImageSeries.instanceUid = '" + instanceUid + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }
+
+    // *** All ImageAnnotationCollections
+    public static List<ImageAnnotationCollection> getAllImageAnnotationCollections(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.uniqueIdentifier.root <> '-'";
         List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
         return listAnno;
     }
