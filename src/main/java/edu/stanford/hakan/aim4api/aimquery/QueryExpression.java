@@ -206,23 +206,17 @@ public class QueryExpression {
     }
 
     private void fillTheListAimClasses() throws AimException {
-//        URL xmlPath = getClass().getResource("AimXPath.xml");
-//        Element docElement = getDocumentElement(xmlPath.getFile());
-        
-//        String xmlPath = "C:\\Users\\Hakan\\Dropbox\\RubinLab\\aimapi\\src\\main\\java\\edu\\stanford\\hakan\\aim4api\\aimquery\\AimXPath.xml";
-//        Element docElement = getDocumentElement(xmlPath);
-        
-        
-//        URL xmlPath = null;
-//        try {
-//            xmlPath = new URL("../resources/schema/AimXPath.xml");
-//        } catch (MalformedURLException ex) {
-//            Logger.getLogger(QueryExpression.class.getName()).log(Level.SEVERE, null, ex);
-//        }        
-
     	
-
-    	Element docElement = getDocumentElement(aimQLXmlFilePath);
+    	Boolean runningOnTheServer = true;
+    	
+    	Element docElement = null;
+    	if(!runningOnTheServer) {
+    		URL xmlPath = getClass().getResource("AimXPath.xml");
+    		docElement = getDocumentElement(xmlPath.getFile());
+    	}
+    	else { 		
+    		docElement = getDocumentElement(aimQLXmlFilePath);
+    	}      
         
         NodeList listAimStructure = docElement.getChildNodes();
         for (int i = 0; i < listAimStructure.getLength(); i++) {

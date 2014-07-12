@@ -27,11 +27,21 @@
  */
 package edu.stanford.hakan.aim4api.usage;
 
+import edu.stanford.hakan.aim4api.aimquery.AimQuery;
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.database.exist.ExistManager;
+import edu.stanford.hakan.aim4api.utility.Utility;
+import edu.stanford.hakan.aim4api.utility.XML;
+import edu.stanford.hakan.aim4api.utility.dotnet.StreamWriter;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,15 +50,8 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import edu.stanford.hakan.aim4api.aimquery.AimQuery;
-import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.base.ImageAnnotation;
-import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import edu.stanford.hakan.aim4api.database.exist.ExistManager;
-import edu.stanford.hakan.aim4api.utility.Utility;
-import edu.stanford.hakan.aim4api.utility.XML;
 
 /**
  *
@@ -66,7 +69,7 @@ public class AnnotationGetter {
         validationResult = valResult;
     }
 
- private static List<ImageAnnotation> getImageAnnotationsFromImageAnnotationCollectionList(
+    private static List<ImageAnnotation> getImageAnnotationsFromImageAnnotationCollectionList(
             List<ImageAnnotationCollection> listImageAnnotationCollection) {
         List<ImageAnnotation> res = new ArrayList<ImageAnnotation>();
         for (int i = 0; i < listImageAnnotationCollection.size(); i++) {
@@ -412,8 +415,6 @@ public class AnnotationGetter {
         String aimQL = "SELECT FROM " + collection + " WHERE person.name = '" + PersonName + "'";
         return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
     }
-    
- 
 
     // *** Person.Name Contains
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByPersonNameContains(String serverURL,
@@ -440,14 +441,14 @@ public class AnnotationGetter {
         String aimQL = "SELECT FROM " + collection + " WHERE person.id = '" + PersonId + "'";
         return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
     }
-    
-       // *** Person.Id Equal
+
+    // *** Person.Id Equal
     public static List<ImageAnnotation> getImageAnnotationsByPersonIdEqual(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String PersonId)
             throws AimException {
-        
+
         List<ImageAnnotationCollection> tempList = getImageAnnotationCollectionByPersonIdEqual(serverURL,
-            namespace, collection, dbUserName, dbUserPassword, PersonId);
+                namespace, collection, dbUserName, dbUserPassword, PersonId);
         return getImageAnnotationsFromImageAnnotationCollectionList(tempList);
     }
 
@@ -608,7 +609,9 @@ public class AnnotationGetter {
             String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
             String userName) throws AimException {
 
-        String query = "declare default element namespace '" + nameSpace + "'; count(/collection('" + collectionName + "')/ImageAnnotationCollection/user/name[lower-case(@value)=lower-case('" + userName + "')])";
+        //String query = "declare default element namespace '" + nameSpace + "'; count(/collection('" + collectionName + "')/ImageAnnotationCollection/user/name[lower-case(@value)=lower-case('" + userName + "')])";
+        String query = "declare default element namespace '" + nameSpace + "'; let $iac := collection('" + collectionName + "')/ImageAnnotationCollection  where ($iac/user/name[lower-case(@value)=lower-case('" + userName + "')]) return count($iac)";
+
         String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
         Document serverDoc = XML.getDocumentFromString(serverResponse);
         String res = ExistManager.getExistResultValueFromDocument(serverDoc);
@@ -748,7 +751,7 @@ public class AnnotationGetter {
                 namespace, collection, dbUserName, dbUserPassword, userLoginName, PersonId);
         return getImageAnnotationsFromImageAnnotationCollectionList(tempList);
     }
-    
+
     // *** Person.Id Equal AND User.name Equal 
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUserNameAndPersonIdEqual(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String userName, String PersonId)
@@ -789,5 +792,205 @@ public class AnnotationGetter {
         String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.uniqueIdentifier.root <> '-'";
         List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
         return listAnno;
+    }
+
+    // *** count ImageAnnotation by person Name
+    public static int getStudyIdByPersonID(String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword,
+            String personID) throws AimException {
+
+        String query = " declare default element namespace '" + nameSpace + "'; ";
+
+        String listPatientIds = "";
+        String strPatientIds = "";
+
+//        for (int i = 1; i <= 400; i++) {
+//            strPatientIds += "~Patient:" + Integer.toString(i);
+//        }
+//        query += " let $strPatientIds := '" + strPatientIds + "' ";
+//=====================================================================================
+        for (int i = 1; i <= 40; i++) {
+            if (i != 40) {
+                listPatientIds += "'Patient:" + Integer.toString(i) + "',";
+            } else {
+                listPatientIds += "'Patient:" + Integer.toString(i) + "'";
+            }
+        }
+        query += " let $listPatientIds := (" + listPatientIds + ") ";
+
+//=====================================================================================
+//        String patientQuery = "";
+//        for(int pid = 1; pid <= 100; pid++)
+//        {
+//            if(pid != 100)
+//              patientQuery += "@value='Patient:" + Integer.toString(pid) + "' or ";
+//            else
+//              patientQuery += "@value='Patient:" + Integer.toString(pid) + "'";
+//        }
+//=====================================================================================
+        //query += " for $iac in collection('" + collectionName + "')/ImageAnnotationCollection "; 
+        //query += " where ($iac/person/id[" + patientQuery + "]) ";
+        //query += " let $pid := $iac/person/id[@value]  ";
+        //query += " where one-or-more(index-of($pids, $pid)) ";
+        //=========================return nothing ====================
+//        query += " for $id in $listPatientIds "; 
+//        query += " let $iac := collection('" + collectionName + "')/ImageAnnotationCollection/person/id[@value = $id ]  ";    
+//        query += " return $iac/imageAnnotations/ImageAnnotation[1]/imageReferenceEntityCollection[1]/ImageReferenceEntity[1]/imageStudy[1] ";
+        //=============================================
+        //=============================================
+//        query += " for $iac in collection('" + collectionName + "')/ImageAnnotationCollection "; 
+//        query += " where $iac/person/id[index-of($listPatientIds, @value) > 0]  ";    
+//        query += " return $iac/imageAnnotations/ImageAnnotation[1]/imageReferenceEntityCollection[1]/ImageReferenceEntity[1]/imageStudy[1] ";
+        //=============================================
+        //=============================================
+        query += " for $iac in collection('" + collectionName + "')/ImageAnnotationCollection ";
+        query += " return $iac/imageAnnotations/ImageAnnotation[1]/imageReferenceEntityCollection[1]/ImageReferenceEntity[1]/imageStudy[1] ";
+        //=============================================
+
+        String serverResponse = ExistManager.getXMLStringFromExist(serverURL, query, dbUserName, dbUserPassword);
+
+        Document serverDoc = XML.getDocumentFromString(serverResponse);
+        String res = ExistManager.getExistResultValueFromDocument(serverDoc);
+        if ("".equals(res)) {
+            return -1;
+        }
+        return Integer.parseInt(res);
+    }
+
+    public static void refreshTheAnnotationCountXML(String xmlPath, String serverURL,
+            String nameSpace, String collectionName, String dbUserName, String dbUserPassword) throws AimException, IOException {
+
+        String query = " declare default element namespace '" + nameSpace + "'; ";
+        query += " for $iac in collection('" + collectionName + "')/ImageAnnotationCollection ";
+        //query += " return ($iac/uniqueIdentifier,$iac/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity/twoDimensionSpatialCoordinateCollection/TwoDimensionSpatialCoordinate, $iac/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/imageStudy) ";
+        query += " return ($iac/uniqueIdentifier, $iac/imageAnnotations/ImageAnnotation/markupEntityCollection, $iac/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection) ";
+        //query += " return $iac/uniqueIdentifier ";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        System.out.println(dateFormat.format(cal.getTime()));
+
+        Document doc = null;
+        int totalCount = -1;
+        int totalRetrieved = 0;
+        int pageCount = 50001;
+        String serverResponse = "";
+        int startIndex = 1;
+        StringBuilder sb = new StringBuilder();
+
+        serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(serverURL, query, dbUserName, dbUserPassword, 101, 100);
+        doc = XML.getDocumentFromString(serverResponse);
+        totalCount = ExistManager.getHitsCountFromDocument(doc);
+
+        while (true) {
+            serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(serverURL, query, dbUserName, dbUserPassword, startIndex, pageCount);
+            serverResponse = serverResponse.replace(serverResponse.substring(0, serverResponse.indexOf(">") + 1), "");
+            serverResponse = serverResponse.replace("xmlns=\"gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM\"", "");
+            serverResponse = serverResponse.replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+            serverResponse = serverResponse.replace("xsi:", "");
+            serverResponse = serverResponse.replace("</exist:result>", "");
+            sb.append(serverResponse);
+
+            totalRetrieved = startIndex + pageCount - 1;
+            if (totalRetrieved >= totalCount) {
+                break;
+            }
+            if (totalCount - totalRetrieved < pageCount) {
+                pageCount = totalCount - totalRetrieved;
+            }
+            startIndex = startIndex + pageCount;
+        }
+
+        doc = XML.getDocumentFromString("<results>" + serverResponse + "</results>");
+        //doc.getFirstChild().getChildNodes()
+        //XML.SaveDocucument(doc, xmlPath);
+
+        cal = Calendar.getInstance();
+        System.out.println(dateFormat.format(cal.getTime()));
+        
+        Node node = doc.getFirstChild();
+        boolean uidOK = false;
+        boolean markupOK = false;
+        boolean irefOK = false;
+
+        String annotationID = "";
+        String imageID = "";
+        String frameID = "";
+        String studyID = "";
+        String seriesID = "";
+
+        StreamWriter sw = new StreamWriter(xmlPath.replace(".xml", ".txt"));
+        NodeList listChilds = node.getChildNodes();
+        for (int i = 0; i < listChilds.getLength(); i++) {
+            Node currentNode = listChilds.item(i);
+
+            if ("uniqueIdentifier".equals(currentNode.getNodeName())) {
+                annotationID = currentNode.getAttributes().getNamedItem("root").getNodeValue();
+                uidOK = true;
+            } else if ("markupEntityCollection".equals(currentNode.getNodeName())) {
+                NodeList listMarkupEntityCollection = currentNode.getChildNodes();
+                for (int j = 0; j < listMarkupEntityCollection.getLength(); j++) {
+                    Node nodeMarkupEntity = listMarkupEntityCollection.item(j);
+                    if ("MarkupEntity".equals(nodeMarkupEntity.getNodeName())) {
+                        NodeList listMarkupChilds = nodeMarkupEntity.getChildNodes();
+                        for (int k = 0; k < listMarkupChilds.getLength(); k++) {
+                            Node nodeMarkupEntityChild = listMarkupChilds.item(k);
+                            if ("imageReferenceUid".equals(nodeMarkupEntityChild.getNodeName())) {
+                                imageID = nodeMarkupEntityChild.getAttributes().getNamedItem("root").getNodeValue();
+                            } else if ("referencedFrameNumber".equals(nodeMarkupEntityChild.getNodeName())) {
+                                frameID = nodeMarkupEntityChild.getAttributes().getNamedItem("value").getNodeValue();
+                            }
+                        }
+                    }
+                }
+                markupOK = true;
+            } else if ("imageReferenceEntityCollection".equals(currentNode.getNodeName())) {
+                NodeList listImageReferenceEntityCollection = currentNode.getChildNodes();
+                for (int j = 0; j < listImageReferenceEntityCollection.getLength(); j++) {
+                    Node nodeImageReferenceEntity = listImageReferenceEntityCollection.item(j);
+                    NodeList listChildImageReferenceEntity = nodeImageReferenceEntity.getChildNodes();
+                    for (int k = 0; k < listChildImageReferenceEntity.getLength(); k++) {
+                        Node nodeImageStudy = listChildImageReferenceEntity.item(k);
+                        if ("imageStudy".equals(nodeImageStudy.getNodeName())) {
+                            NodeList listChildImageStudy = nodeImageStudy.getChildNodes();
+                            for (int l = 0; l < listChildImageStudy.getLength(); l++) {
+                                Node nodeImageSeries = listChildImageStudy.item(l);
+                                if ("instanceUid".equals(nodeImageSeries.getNodeName())) {
+                                    studyID = nodeImageSeries.getAttributes().getNamedItem("root").getNodeValue();
+                                } else if ("imageSeries".equals(nodeImageSeries.getNodeName())) {
+                                    NodeList listChildImageSeries = nodeImageSeries.getChildNodes();
+                                    for (int m = 0; m < listChildImageSeries.getLength(); m++) {
+                                        Node nodeChildImageSeries = listChildImageSeries.item(m);
+                                        if ("instanceUid".equals(nodeChildImageSeries.getNodeName())) {
+                                            seriesID = nodeChildImageSeries.getAttributes().getNamedItem("root").getNodeValue();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                irefOK = true;
+            }
+
+            if (uidOK && markupOK && irefOK) {
+                uidOK = false;
+                markupOK = false;
+                irefOK = false;
+
+                sw.WriteLine(seriesID + "~" + studyID + "~" + imageID + "~" + frameID + "~" + annotationID);
+
+                annotationID = "";
+                imageID = "";
+                frameID = "";
+                studyID = "";
+                seriesID = "";
+            }
+        }
+
+        sw.Close();
+
+        cal = Calendar.getInstance();
+        System.out.println(dateFormat.format(cal.getTime()));
+        System.out.println("done");
     }
 }

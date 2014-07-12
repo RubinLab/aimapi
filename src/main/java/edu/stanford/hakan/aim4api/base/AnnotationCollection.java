@@ -62,6 +62,12 @@ public class AnnotationCollection implements IAimXMLOperations {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
     }
+    
+    
+    public String  refreshUniqueIdentifier() {
+        this.setUniqueIdentifier(new II(GenerateId.getUUID()));
+        return this.getUniqueIdentifier().getRoot();
+    }
 
     public ST getDescription() {
         return description;

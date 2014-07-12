@@ -4,6 +4,15 @@
  */
 package edu.stanford.hakan.aim4api.database.exist;
 
+import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.usage.AnnotationGetter;
+import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationResult;
+import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
+import edu.stanford.hakan.aim4api.usage.AnnotationValidator;
+import edu.stanford.hakan.aim4api.utility.Utility;
+import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -28,18 +37,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.base.ImageAnnotation;
-import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import edu.stanford.hakan.aim4api.usage.AnnotationGetter;
-import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationResult;
-import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
-import edu.stanford.hakan.aim4api.usage.AnnotationValidator;
-import edu.stanford.hakan.aim4api.utility.Utility;
-import edu.stanford.hakan.aim4api.utility.XML;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -107,7 +108,7 @@ public class ExistManager {
     }
      
      
-     public static String getXMLStringFromExist(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int endIndex)
+     public static String getXMLStringFromExistWithStartIndexEndIndex(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int endIndex)
             throws AimException {
         try {
             Url = Utility.correctToUrl(Url);
@@ -121,6 +122,67 @@ public class ExistManager {
                 throw new AimException("AimException: endIndex must be greater than startIndex");
             }
             int count = endIndex - startIndex + 1;
+            data += "<?xml version='1.0' encoding='UTF-8'?>";
+            data += "<query xmlns='http://exist.sourceforge.net/NS/exist' start='" + Integer.toString(startIndex) + "' max='" + Integer.toString(count) + "'>";
+            data += "<text>";
+            data += XQuery;
+            data += "</text>";
+            data += "<properties>";
+            data += "<property name='indent' value='yes'/>";
+            data += "</properties>";
+            data += "</query>";
+
+            URL url = new URL(requestURL);
+            URLConnection conn = url.openConnection();
+
+            conn.setRequestProperty("Content-Type", "application/xml");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+
+            if (conn instanceof HttpURLConnection) {
+                ((HttpURLConnection) conn).setRequestMethod("POST");
+                ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
+                if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
+                    String userPassword = dbUserName + ":" + dbUserPassword;
+                    String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
+                    ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
+                }
+                ((HttpURLConnection) conn).connect();
+            }
+
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+
+            // write parameters
+            writer.write(data);
+            writer.flush();
+
+            // Get the response
+            StringBuilder answer = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                answer.append(line);
+            }
+            writer.close();
+            reader.close();
+
+            // Output the response
+            return (answer.toString());
+        } catch (Exception ex) {
+            throw new AimException("AimException: " + ex.getMessage());
+        }
+    }
+     
+     public static String getXMLStringFromExistWithStartIndexCount(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int count)
+            throws AimException {
+        try {
+            Url = Utility.correctToUrl(Url);
+            String requestURL = Url + "rest/";
+            String data = "";
+
+            if (startIndex <= 0) {
+                startIndex = 1;
+            }
             data += "<?xml version='1.0' encoding='UTF-8'?>";
             data += "<query xmlns='http://exist.sourceforge.net/NS/exist' start='" + Integer.toString(startIndex) + "' max='" + Integer.toString(count) + "'>";
             data += "<text>";
@@ -323,8 +385,25 @@ public class ExistManager {
             return listResult.get(0).getTextContent().trim();
         }
         return "";
-    }   
-    
+    }
+
+    public static int getHitsCountFromDocument(Document doc) {
+        Node firstNode = doc.getFirstChild();
+        List<Node> listResult = XML.getNodesFromNodeByName(firstNode, "exist:result");
+        if (listResult.size() > 0) {
+            NamedNodeMap namedNodeMap = listResult.get(0).getAttributes();
+            if (namedNodeMap != null) {
+                String hits = namedNodeMap.getNamedItem("exist:hits").getNodeValue();
+                try {
+                    return Integer.parseInt(hits);
+                } catch (Exception ex) {
+                    return -1;
+                }
+            }
+        }
+        return -1;
+    }
+
     public static  List<String> getExistResultValueListFromDocument(Document doc) {
          List<String> res = new ArrayList<String>();
         Node firstNode = doc.getFirstChild();
