@@ -29,6 +29,7 @@ package edu.stanford.hakan.aim4api.aimquery;
 
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.utility.EPADConfig;
+import edu.stanford.hakan.aim4api.utility.Globals;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -53,9 +54,6 @@ import org.xml.sax.SAXException;
  * @author Hakan
  */
 public class QueryExpression {
-
-    private static final String aimQLXmlFilePath = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir") + EPADConfig.getInstance().getStringPropertyValue("aimQLXml");
-    
     
     private String expression = "";
     private String leftSide = "";
@@ -206,18 +204,8 @@ public class QueryExpression {
     }
 
     private void fillTheListAimClasses() throws AimException {
-    	
-    	Boolean runningOnTheServer = true;
-    	
-    	Element docElement = null;
-    	if(!runningOnTheServer) {
-    		URL xmlPath = getClass().getResource("AimXPath.xml");
-    		docElement = getDocumentElement(xmlPath.getFile());
-    	}
-    	else { 		
-    		docElement = getDocumentElement(aimQLXmlFilePath);
-    	}      
-        
+
+        Element docElement = getDocumentElement(Globals.getAimQLXmlFilePath());
         NodeList listAimStructure = docElement.getChildNodes();
         for (int i = 0; i < listAimStructure.getLength(); i++) {
             if ("Class".equals(listAimStructure.item(i).getNodeName())) {

@@ -32,8 +32,11 @@ import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
+import edu.stanford.hakan.aim4api.database.exist.ExistResponderThread;
+import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import edu.stanford.hakan.aim4api.utility.XML;
+import edu.stanford.hakan.aim4api.utility.dotnet.StreamReader;
 import edu.stanford.hakan.aim4api.utility.dotnet.StreamWriter;
 import java.io.File;
 import java.io.IOException;
@@ -857,68 +860,91 @@ public class AnnotationGetter {
         return Integer.parseInt(res);
     }
 
-    public static void refreshTheAnnotationCountXML(String xmlPath, String serverURL,
+    public static void refreshTheAnnotationCountXML(String serverURL,
             String nameSpace, String collectionName, String dbUserName, String dbUserPassword) throws AimException, IOException {
 
         String query = " declare default element namespace '" + nameSpace + "'; ";
         query += " for $iac in collection('" + collectionName + "')/ImageAnnotationCollection ";
-        //query += " return ($iac/uniqueIdentifier,$iac/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity/twoDimensionSpatialCoordinateCollection/TwoDimensionSpatialCoordinate, $iac/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection/ImageReferenceEntity/imageStudy) ";
-        query += " return ($iac/uniqueIdentifier, $iac/imageAnnotations/ImageAnnotation/markupEntityCollection, $iac/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection) ";
-        //query += " return $iac/uniqueIdentifier ";
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        System.out.println(dateFormat.format(cal.getTime()));
+        query += " return ($iac/uniqueIdentifier, $iac/person/id, $iac/imageAnnotations/ImageAnnotation/markupEntityCollection, $iac/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection) ";
+        
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//        Calendar cal = Calendar.getInstance();
+//        System.out.println(dateFormat.format(cal.getTime()));
 
         Document doc = null;
-        int totalCount = -1;
+        int totalCount = 0;
         int totalRetrieved = 0;
-        int pageCount = 50001;
+        int pageCount = 10000;
         String serverResponse = "";
         int startIndex = 1;
         StringBuilder sb = new StringBuilder();
 
-        serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(serverURL, query, dbUserName, dbUserPassword, 101, 100);
+        serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(serverURL, query, dbUserName, dbUserPassword, 1, 1);
         doc = XML.getDocumentFromString(serverResponse);
         totalCount = ExistManager.getHitsCountFromDocument(doc);
 
+        if(totalCount > pageCount)
+            pageCount = totalCount /3;
+        
+        List<ExistResponderThread> listThreads = new ArrayList<>();
         while (true) {
-            serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(serverURL, query, dbUserName, dbUserPassword, startIndex, pageCount);
-            serverResponse = serverResponse.replace(serverResponse.substring(0, serverResponse.indexOf(">") + 1), "");
-            serverResponse = serverResponse.replace("xmlns=\"gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM\"", "");
-            serverResponse = serverResponse.replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
-            serverResponse = serverResponse.replace("xsi:", "");
-            serverResponse = serverResponse.replace("</exist:result>", "");
-            sb.append(serverResponse);
-
+            listThreads.add(new ExistResponderThread(serverURL+"~"+query+"~"+ dbUserName+"~"+ dbUserPassword+"~"+ startIndex+"~"+ pageCount));
             totalRetrieved = startIndex + pageCount - 1;
             if (totalRetrieved >= totalCount) {
                 break;
             }
-            if (totalCount - totalRetrieved < pageCount) {
-                pageCount = totalCount - totalRetrieved;
-            }
             startIndex = startIndex + pageCount;
         }
-
-        doc = XML.getDocumentFromString("<results>" + serverResponse + "</results>");
-        //doc.getFirstChild().getChildNodes()
-        //XML.SaveDocucument(doc, xmlPath);
-
-        cal = Calendar.getInstance();
-        System.out.println(dateFormat.format(cal.getTime()));
         
+        for (ExistResponderThread thread : listThreads) {
+            thread.start();
+        }
+
+        boolean allOK = false;
+        while (!allOK) {
+            allOK = true;
+            for (ExistResponderThread thread : listThreads) {
+                if (!thread.isFinished()) {
+                    allOK = false;
+                }
+            }
+        }
+
+        
+//        cal = Calendar.getInstance();
+//        System.out.println("=== Replaced started " + dateFormat.format(cal.getTime()));
+        
+        for (ExistResponderThread thread : listThreads) {
+            serverResponse = thread.getRespond();
+            serverResponse = serverResponse.replace(serverResponse.substring(0, serverResponse.indexOf(">") + 1), "");
+//            serverResponse = serverResponse.replace("xmlns=\"gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM\"", "");
+//            serverResponse = serverResponse.replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "");
+//            serverResponse = serverResponse.replace("xsi:", "");
+            serverResponse = serverResponse.replace("</exist:result>", "");
+            sb.append(serverResponse);
+        }
+//        cal = Calendar.getInstance();
+//        System.out.println("=== Replaced ended " + dateFormat.format(cal.getTime()));
+
+        doc = XML.getDocumentFromString("<results>" + sb.toString() + "</results>");
+
+//        cal = Calendar.getInstance();
+//        System.out.println(dateFormat.format(cal.getTime()));
+
         Node node = doc.getFirstChild();
         boolean uidOK = false;
         boolean markupOK = false;
         boolean irefOK = false;
+        boolean patOK = false;
 
+        String patientID = "";
         String annotationID = "";
         String imageID = "";
         String frameID = "";
         String studyID = "";
         String seriesID = "";
 
-        StreamWriter sw = new StreamWriter(xmlPath.replace(".xml", ".txt"));
+        StreamWriter sw = new StreamWriter(Globals.getAnnotationListTxtFilePath());
         NodeList listChilds = node.getChildNodes();
         for (int i = 0; i < listChilds.getLength(); i++) {
             Node currentNode = listChilds.item(i);
@@ -926,6 +952,9 @@ public class AnnotationGetter {
             if ("uniqueIdentifier".equals(currentNode.getNodeName())) {
                 annotationID = currentNode.getAttributes().getNamedItem("root").getNodeValue();
                 uidOK = true;
+            } else if ("id".equals(currentNode.getNodeName())) {
+                patientID = currentNode.getAttributes().getNamedItem("value").getNodeValue();
+                patOK = true;
             } else if ("markupEntityCollection".equals(currentNode.getNodeName())) {
                 NodeList listMarkupEntityCollection = currentNode.getChildNodes();
                 for (int j = 0; j < listMarkupEntityCollection.getLength(); j++) {
@@ -972,25 +1001,40 @@ public class AnnotationGetter {
                 irefOK = true;
             }
 
-            if (uidOK && markupOK && irefOK) {
+            if (uidOK && patOK && markupOK && irefOK) {
                 uidOK = false;
                 markupOK = false;
                 irefOK = false;
-
-                sw.WriteLine(seriesID + "~" + studyID + "~" + imageID + "~" + frameID + "~" + annotationID);
+                patOK = false;
+                
+                String line = patientID + "~" + seriesID + "~" + studyID + "~" + imageID + "~" + frameID + "~" + annotationID;
+                sw.WriteLine(line);
 
                 annotationID = "";
                 imageID = "";
                 frameID = "";
                 studyID = "";
                 seriesID = "";
+                patientID = "";
             }
         }
 
         sw.Close();
 
-        cal = Calendar.getInstance();
-        System.out.println(dateFormat.format(cal.getTime()));
-        System.out.println("done");
+//        cal = Calendar.getInstance();
+//        System.out.println(dateFormat.format(cal.getTime()));
+//        System.out.println("done");
+    }
+
+    public static List<String> getAnnotationsTableRows() throws IOException {
+        List<String> res = new ArrayList<String>();
+
+        StreamReader sr = new StreamReader(Globals.getAnnotationListTxtFilePath());
+        while (sr.Peek() > 0) {
+            res.add(sr.ReadLine());
+        }
+        sr.Close();
+
+        return res;
     }
 }

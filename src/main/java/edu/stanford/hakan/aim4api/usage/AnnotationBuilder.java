@@ -139,17 +139,19 @@ public class AnnotationBuilder {
     public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
 
+        boolean checkTheServer = true;
         String operation = "Saving";
         try {
             performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                     dbUserName, dbUserPassword);
-
-            if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
-                    .getUniqueIdentifier().getRoot())) {
-                setAimXMLsaveResult("XML " + operation + " operation is Successful.");
-            } else {
-                setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
-                throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
+            if (checkTheServer) {
+                if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+                        .getUniqueIdentifier().getRoot())) {
+                    setAimXMLsaveResult("XML " + operation + " operation is Successful.");
+                } else {
+                    setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
+                    throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
+                }
             }
         } catch (Exception ex) {
             setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
