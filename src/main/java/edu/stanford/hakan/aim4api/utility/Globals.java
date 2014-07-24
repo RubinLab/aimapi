@@ -28,21 +28,24 @@ public class Globals {
             if (f.exists() && !f.isDirectory()) {
                 return fileName;
             }
-        } catch (Exception ex) {
-            String fileNameServer = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
-                    + EPADConfig.getInstance().getStringPropertyValue("aimQLXml");
-            File f = new File(fileNameServer);
-            if (f.exists() && !f.isDirectory()) {
-                return fileNameServer;
-            }
-            String fileName = "AimXPath.xml";
-            f = new File(fileName);
-            if (!f.exists()) {
-                try {
-                    f.createNewFile();
-                } catch (IOException exIO) {
+        } catch (Exception ex1) {
+            try {
+                String fileNameServer = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
+                        + EPADConfig.getInstance().getStringPropertyValue("aimQLXml");
+                File f = new File(fileNameServer);
+                if (f.exists() && !f.isDirectory()) {
+                    return fileNameServer;
                 }
-                return fileName;
+            } catch (Exception ex2) {
+                String fileName = "AimXPath.xml";
+                File f = new File(fileName);
+                if (!f.exists()) {
+                    try {
+                        f.createNewFile();
+                    } catch (Exception ex3) {
+                    }
+                    return fileName;
+                }
             }
         }
         return "";
@@ -50,28 +53,30 @@ public class Globals {
 
     public static String getAnnotationListTxtFilePath() {
         try {
-            URL xmlPath = Globals.class
-                    .getResource("../files/AnnotationsList.txt");
+            URL xmlPath = Globals.class.getResource("../files/AnnotationsList.txt");
             String fileName = xmlPath.getFile();
             File f = new File(fileName);
             if (f.exists() && !f.isDirectory()) {
                 return fileName;
             }
-        } catch (Exception ex) {
-            String fileNameServer = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
-                + "AnnotationsList.txt";
-            File f = new File(fileNameServer);
-            if (f.exists() && !f.isDirectory()) {
-                return fileNameServer;
-            }
-            String fileName = "AnnotationsList.txt";
-            f = new File(fileName);
-            if (!f.exists()) {
-                try {
-                    f.createNewFile();
-                } catch (IOException exIO) {
+        } catch (Exception ex1) {
+            try {
+                String fileNameServer = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
+                        + "AnnotationsList.txt";
+                File f = new File(fileNameServer);
+                if (f.exists() && !f.isDirectory()) {
+                    return fileNameServer;
                 }
-                return fileName;
+            } catch (Exception ex2) {
+                String fileName = "AnnotationsList.txt";
+                File f = new File(fileName);
+                if (!f.exists()) {
+                    try {
+                        f.createNewFile();
+                    } catch (Exception ex3) {
+                    }
+                    return fileName;
+                }
             }
         }
         return "";

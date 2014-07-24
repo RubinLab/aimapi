@@ -909,7 +909,6 @@ public class AnnotationGetter {
                 }
             }
         }
-
         
 //        cal = Calendar.getInstance();
 //        System.out.println("=== Replaced started " + dateFormat.format(cal.getTime()));
@@ -1018,9 +1017,7 @@ public class AnnotationGetter {
                 patientID = "";
             }
         }
-
         sw.Close();
-
 //        cal = Calendar.getInstance();
 //        System.out.println(dateFormat.format(cal.getTime()));
 //        System.out.println("done");
@@ -1028,13 +1025,11 @@ public class AnnotationGetter {
 
     public static List<String> getAnnotationsTableRows() throws IOException {
         List<String> res = new ArrayList<String>();
-
         StreamReader sr = new StreamReader(Globals.getAnnotationListTxtFilePath());
         while (sr.Peek() > 0) {
             res.add(sr.ReadLine());
         }
         sr.Close();
-
         return res;
     }
 }
