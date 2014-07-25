@@ -42,10 +42,12 @@ public class Globals {
                 if (!f.exists()) {
                     try {
                         f.createNewFile();
+                        return fileName;
                     } catch (Exception ex3) {
+                        return "";
                     }
-                    return fileName;
                 }
+                return fileName;
             }
         }
         return "";
@@ -73,10 +75,12 @@ public class Globals {
                 if (!f.exists()) {
                     try {
                         f.createNewFile();
+                        return fileName;
                     } catch (Exception ex3) {
+                        return "";
                     }
-                    return fileName;
                 }
+                return fileName;
             }
         }
         return "";
