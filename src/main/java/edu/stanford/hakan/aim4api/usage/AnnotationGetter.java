@@ -1025,7 +1025,8 @@ public class AnnotationGetter {
 
     public static List<String> getAnnotationsTableRows() throws IOException {
         List<String> res = new ArrayList<String>();
-        StreamReader sr = new StreamReader(Globals.getAnnotationListTxtFilePath());
+        String fileName = Globals.getAnnotationListTxtFilePath();
+        StreamReader sr = new StreamReader(fileName);
         while (sr.Peek() > 0) {
             res.add(sr.ReadLine());
         }

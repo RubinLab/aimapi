@@ -13,6 +13,7 @@
   <source path='audittrail'/> 
   <source path='base'/> 
   <source path='database/exist'/> 
+  <source path='database/mysql'/> 
   <source path='projects/epad'/> 
   <source path='projects/epad/wrapper'/> 
   <source path='usage'/> 
