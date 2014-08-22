@@ -62,6 +62,8 @@ import org.xml.sax.SAXException;
  */
 public class AnnotationGetter {
 
+	private static final int MAX_RECORDS = 10000;
+	
     private static String validationResult;
 
     public static String getValidationResult() {
@@ -82,9 +84,9 @@ public class AnnotationGetter {
     }
 
     private static List<ImageAnnotationCollection> getImageAnnotationListFromServer(String Url, String XQuery,
-            String dbUserName, String dbUserPassword, String PathXSD) throws AimException {
+            String dbUserName, String dbUserPassword, String PathXSD, int startIndex, int maxRecords) throws AimException {
         try {
-            String serverResponse = ExistManager.getXMLStringFromExist(Url, XQuery, dbUserName, dbUserPassword);
+            String serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(Url, XQuery, dbUserName, dbUserPassword, 1, maxRecords);
             Document serverDoc = XML.getDocumentFromString(serverResponse);
             List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
             return res;
@@ -153,6 +155,12 @@ public class AnnotationGetter {
 
     public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
             String dbUserPassword, String aimQuery, String PathXSD) throws AimException {
+    	return getWithAimQuery(serverURL, namespace, dbUserName,
+                dbUserPassword, aimQuery, PathXSD, 1, MAX_RECORDS);
+    }
+    
+    public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
+                String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
         if (namespace == null || "".equals(namespace.trim())) {
             throw new AimException("AimException: Namespace must be defined");
         }
@@ -163,7 +171,7 @@ public class AnnotationGetter {
             throw new AimException("AimException: AimQuery must be defined");
         }
         String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
-        return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD);// getDocumentFromServer(serverURL,
+        return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, startIndex, maxRecords);// getDocumentFromServer(serverURL,
         // namespace,
         // XQuery);
     }
@@ -789,11 +797,18 @@ public class AnnotationGetter {
     public static List<ImageAnnotationCollection> getAllImageAnnotationCollections(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword)
             throws AimException {
+    	return getAllImageAnnotationCollections(serverURL,
+                namespace, collection, dbUserName, dbUserPassword, 1, MAX_RECORDS);
+    }
+    
+    public static List<ImageAnnotationCollection> getAllImageAnnotationCollections(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, int startIndex, int maxRecords)
+            throws AimException {
         serverURL = Utility.correctToUrl(serverURL);
         control(serverURL, namespace, collection);
 
         String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.uniqueIdentifier.root <> '-'";
-        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "", startIndex, maxRecords);
         return listAnno;
     }
 
