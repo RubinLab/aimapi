@@ -38,6 +38,7 @@ import edu.stanford.hakan.aim4api.utility.Utility;
 import edu.stanford.hakan.aim4api.utility.XML;
 import edu.stanford.hakan.aim4api.utility.dotnet.StreamReader;
 import edu.stanford.hakan.aim4api.utility.dotnet.StreamWriter;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -45,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -207,6 +209,25 @@ public class AnnotationGetter {
             return null;
         }
         return listAnno.get(0);
+    }
+    
+    //*** ImageAnnotationCollection.uniqueIdentifier list Equals
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUniqueIdentifierList(String serverURL, String namespace, String collection, 
+    		String dbUserName, String dbUserPassword, String[] uniqueIdentifiers) throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (uniqueIdentifiers == null || "".equals(uniqueIdentifiers.length == 0)) {
+            throw new AimException("AimException: UniqueIdentifiers must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE ";
+        String operator = "";
+        for (String uniqueIdentifier : uniqueIdentifiers)
+        {
+        	aimQL = aimQL + operator + "ImageAnnotationCollection.uniqueIdentifier.root = '" + uniqueIdentifier + "'";
+        	operator = " OR ";
+        }
+        return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
     }
 
     // *** ImageAnnotationCollection.description Equal
