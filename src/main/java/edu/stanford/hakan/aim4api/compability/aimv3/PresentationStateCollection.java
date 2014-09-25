@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class PresentationStateCollection {
+public class PresentationStateCollection implements IAimXMLOperations {
 
     private List<PresentationState> listPresentationState = new ArrayList<PresentationState>();
 
@@ -50,6 +51,18 @@ public class PresentationStateCollection {
         return this.listPresentationState;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element presentationStateCollection = doc.createElement("presentationStateCollection");
+        for (int i = 0; i < listPresentationState.size(); i++) {
+            presentationStateCollection.appendChild(listPresentationState.get(i).getXMLNode(doc));
+        }
+
+        return presentationStateCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listPresentationState.clear();
@@ -62,5 +75,18 @@ public class PresentationStateCollection {
                 this.addPresentationState(obj);
             }
         }
+    }
+       
+    public boolean isEqualTo(Object other) {
+        PresentationStateCollection oth = (PresentationStateCollection) other;
+        if (this.listPresentationState.size() != oth.listPresentationState.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listPresentationState.size(); i++) {
+            if (!this.listPresentationState.get(i).isEqualTo(oth.listPresentationState.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

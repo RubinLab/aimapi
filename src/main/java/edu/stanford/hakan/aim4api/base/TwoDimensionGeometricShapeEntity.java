@@ -199,4 +199,8 @@ public class TwoDimensionGeometricShapeEntity extends GeometricShapeEntity {
         }
         return res;
     }
+
+    public List<TwoDimensionSpatialCoordinate> getTwoDimensionSpatialCoordinateList() {
+        return this.twoDimensionSpatialCoordinateCollection.getTwoDimensionSpatialCoordinateList();
+    }
 }

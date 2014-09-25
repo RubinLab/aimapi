@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,7 +39,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class NonQuantifiable extends CharacteristicQuantification {
+public class NonQuantifiable extends CharacteristicQuantification implements IAimXMLOperations {
 
     private String codeValue;
     private String codeMeaning;
@@ -92,6 +94,23 @@ public class NonQuantifiable extends CharacteristicQuantification {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+
+        characteristicQuantification.setAttribute("codeValue", this.getCodeValue());
+        characteristicQuantification.setAttribute("codeMeaning", this.getCodeMeaning());
+        characteristicQuantification.setAttribute("codingSchemeDesignator", this.getCodingSchemeDesignator());
+        if (this.getCodingSchemeVersion() != null) {
+            characteristicQuantification.setAttribute("codingSchemeVersion", this.getCodingSchemeVersion());
+        }
+
+        return characteristicQuantification;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
 
@@ -104,17 +123,72 @@ public class NonQuantifiable extends CharacteristicQuantification {
         }
     }
 
+    private void Control() throws AimException {
+
+        if (this.getCodeValue() == null) {
+            throw new AimException("AimException: NonQuantifiable's codeValue can not be null");
+        }
+        if (this.getCodeMeaning() == null) {
+            throw new AimException("AimException: NonQuantifiable's codeMeaning can not be null");
+        }
+        if (this.getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: NonQuantifiable's codingSchemeDesignator can not be null");
+        }
+    }
+    
+    @Override
+    public boolean isEqualTo(Object other) {
+        NonQuantifiable oth = (NonQuantifiable) other;
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        return super.isEqualTo(other);
+    }
+
     @Override
     public edu.stanford.hakan.aim4api.base.CharacteristicQuantification toAimV4() {
         edu.stanford.hakan.aim4api.base.NonQuantifiable res = new edu.stanford.hakan.aim4api.base.NonQuantifiable();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setComment(Converter.toST(this.getName()));
-        CD typeCode = new CD();
-        typeCode.setCode(this.getCodeValue());
-        typeCode.setCodeSystem(this.getCodeMeaning());
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
-        res.setTypeCode(typeCode);
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setComment(Converter.toST(this.getName()));//
+        CD typeCode = new CD();//
+        typeCode.setCode(this.getCodeValue());//
+        typeCode.setCodeSystem(this.getCodeMeaning());//
+        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        res.setTypeCode(typeCode);//
         return res;
+    }
+
+    public NonQuantifiable(edu.stanford.hakan.aim4api.base.NonQuantifiable v4) {
+        setXsiType("NonQuantifiable");
+        this.setCagridId(0);
+        if (v4.getTypeCode() != null) {
+            CD typeCode = v4.getTypeCode();
+            if (typeCode.getCode() != null) {
+                this.setCodeValue(typeCode.getCode());
+            }
+            if (typeCode.getCodeSystem() != null) {
+                this.setCodeMeaning(typeCode.getCodeSystem());
+            }
+            if (typeCode.getCodeSystemName() != null) {
+                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+            }
+            if (typeCode.getCodeSystemVersion() != null) {
+                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+            }
+        }
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        if (v4.getComment() != null) {
+            this.setName(v4.getComment().getValue());
+        }
     }
 }

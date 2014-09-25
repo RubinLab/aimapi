@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class SpatialCoordinateCollection {
+public class SpatialCoordinateCollection implements IAimXMLOperations {
 
     private List<SpatialCoordinate> listSpatialCoordinate = new ArrayList<SpatialCoordinate>();
 
@@ -54,6 +55,17 @@ public class SpatialCoordinateCollection {
         return this.listSpatialCoordinate;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element spatialCoordinateCollection = doc.createElement("spatialCoordinateCollection");
+        for (int i = 0; i < listSpatialCoordinate.size(); i++) {
+            spatialCoordinateCollection.appendChild(this.listSpatialCoordinate.get(i).getXMLNode(doc));
+        }
+        return spatialCoordinateCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listSpatialCoordinate.clear();
@@ -76,6 +88,19 @@ public class SpatialCoordinateCollection {
         }
     }
 
+    public boolean isEqualTo(Object other) {
+        SpatialCoordinateCollection oth = (SpatialCoordinateCollection) other;
+        if (this.listSpatialCoordinate.size() != oth.listSpatialCoordinate.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listSpatialCoordinate.size(); i++) {
+            if (!this.listSpatialCoordinate.get(i).isEqualTo(oth.listSpatialCoordinate.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection toAimV4(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
         edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection();
         List<SpatialCoordinate> list = this.getSpatialCoordinateList();
@@ -85,4 +110,14 @@ public class SpatialCoordinateCollection {
         }
         return res;
     }
+
+    public SpatialCoordinateCollection(edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection v4, edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity geoShapeV4) {
+        List<edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate> listV4 = v4.getTwoDimensionSpatialCoordinateList();
+        for (edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate itemV4 : listV4) {
+            itemV4.setTwoDimensionGeometricShapeEntity(geoShapeV4);
+            this.AddSpatialCoordinate(new TwoDimensionSpatialCoordinate(itemV4));
+        }
+    }
+    
+    
 }

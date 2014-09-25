@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Image {
+public class Image implements IAimXMLOperations {
 
     private Integer cagridId;
     private String sopClassUID;
@@ -84,6 +86,19 @@ public class Image {
         this.imageURL = imageURL;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element image = doc.createElement("Image");
+        image.setAttribute("cagridId", Integer.toString(getCagridId()));
+        image.setAttribute("sopClassUID", this.sopClassUID);
+        image.setAttribute("sopInstanceUID", this.sopInstanceUID);
+        return image;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -92,10 +107,47 @@ public class Image {
         this.sopInstanceUID = map.getNamedItem("sopInstanceUID").getNodeValue();
     }
 
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: Image's cagridId can not be null");
+        }
+        if (getSopClassUID() == null) {
+            throw new AimException("AimException: Image's sopClassUID can not be null");
+        }
+        if (getSopInstanceUID() == null) {
+            throw new AimException("AimException: Image's sopInstanceUID can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        Image oth = (Image) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.sopClassUID == null ? oth.sopClassUID != null : !this.sopClassUID.equals(oth.sopClassUID)) {
+            return false;
+        }
+        if (this.sopInstanceUID == null ? oth.sopInstanceUID != null : !this.sopInstanceUID.equals(oth.sopInstanceUID)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.Image toAimV4() {
         edu.stanford.hakan.aim4api.base.Image res = new edu.stanford.hakan.aim4api.base.Image();
         res.setSopClassUid(Converter.toII(this.getSopClassUID()));
         res.setSopInstanceUid(Converter.toII(this.getSopInstanceUID()));
         return res;
+    }
+
+    public Image(edu.stanford.hakan.aim4api.base.Image v4) {
+        this.setCagridId(0);
+        if (v4.getSopClassUid() != null) {
+            this.setSopClassUID(v4.getSopClassUid().getRoot());
+        }
+        if (v4.getSopInstanceUid() != null) {
+            this.setSopInstanceUID(v4.getSopInstanceUid().getRoot());
+        }
     }
 }

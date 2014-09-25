@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class GeometricShapeCollection {
+public class GeometricShapeCollection implements IAimXMLOperations {
 
     private List<GeometricShape> listGeometricShape = new ArrayList<GeometricShape>();
 
@@ -53,6 +54,16 @@ public class GeometricShapeCollection {
         return this.listGeometricShape;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+        Element geometricShapeCollection = doc.createElement("geometricShapeCollection");
+        for (int i = 0; i < this.listGeometricShape.size(); i++) {
+            geometricShapeCollection.appendChild(this.listGeometricShape.get(i).getXMLNode(doc));
+        }
+        return geometricShapeCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listGeometricShape.clear();
@@ -67,6 +78,19 @@ public class GeometricShapeCollection {
         }
     }
 
+    public boolean isEqualTo(Object other) {
+        GeometricShapeCollection oth = (GeometricShapeCollection) other;
+        if (this.listGeometricShape.size() != oth.listGeometricShape.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listGeometricShape.size(); i++) {
+            if (!this.listGeometricShape.get(i).isEqualTo(oth.listGeometricShape.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.MarkupEntityCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.MarkupEntityCollection res = new edu.stanford.hakan.aim4api.base.MarkupEntityCollection();
         List<GeometricShape> list = this.getGeometricShapeList();
@@ -74,5 +98,22 @@ public class GeometricShapeCollection {
             res.addMarkupEntity(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public GeometricShapeCollection(edu.stanford.hakan.aim4api.base.MarkupEntityCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.MarkupEntity> listV4 = v4.getMarkupEntityList();
+        for (edu.stanford.hakan.aim4api.base.MarkupEntity itemV4 : listV4) {
+            if ("TwoDimensionCircle".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new Circle((edu.stanford.hakan.aim4api.base.TwoDimensionCircle) itemV4));
+            } else if ("TwoDimensionEllipse".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new Ellipse((edu.stanford.hakan.aim4api.base.TwoDimensionEllipse) itemV4));
+            } else if ("TwoDimensionMultiPoint".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new MultiPoint((edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint) itemV4));
+            } else if ("TwoDimensionPoint".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new Point((edu.stanford.hakan.aim4api.base.TwoDimensionPoint) itemV4));
+            } else if ("TwoDimensionPolyline".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new Polyline((edu.stanford.hakan.aim4api.base.TwoDimensionPolyline) itemV4));
+            }
+        }
     }
 }

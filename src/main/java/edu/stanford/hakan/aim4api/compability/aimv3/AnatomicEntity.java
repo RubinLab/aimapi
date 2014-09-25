@@ -27,8 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class AnatomicEntity {
+public class AnatomicEntity implements IAimXMLOperations {
 
     private Integer cagridId;
     private String codeValue;
@@ -142,6 +142,33 @@ public class AnatomicEntity {
         this.anatomicEntityCharacteristicCollection.AddAnatomicEntityCharacteristic(newAnatomicEntityCharacteristic);
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element anatomicEntity = doc.createElement("AnatomicEntity");
+        anatomicEntity.setAttribute("cagridId", this.cagridId.toString());
+        anatomicEntity.setAttribute("codeValue", this.codeValue);
+        anatomicEntity.setAttribute("codeMeaning", this.codeMeaning);
+        anatomicEntity.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            anatomicEntity.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        if (this.annotatorConfidence != null) {
+            anatomicEntity.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+        }
+        if (this.isPresent != null) {
+            anatomicEntity.setAttribute("isPresent", this.isPresent.toString());
+        }
+        anatomicEntity.setAttribute("label", this.label);
+        if (this.anatomicEntityCharacteristicCollection.getAnatomicEntityCharacteristicList().size() > 0) {
+            anatomicEntity.appendChild(this.anatomicEntityCharacteristicCollection.getXMLNode(doc));
+        }
+        return anatomicEntity;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -167,8 +194,56 @@ public class AnatomicEntity {
         }
         this.label = map.getNamedItem("label").getNodeValue();
     }
+   
 
-    public edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity toAimV4() {
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: AnatomicEntity's cagridId can not be null");
+        }
+        if (getCodeValue() == null) {
+            throw new AimException("AimException: AnatomicEntity's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: AnatomicEntity's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: AnatomicEntity's codingSchemeDesignator can not be null");
+        }
+        if (getLabel() == null) {
+            throw new AimException("AimException: AnatomicEntity's label can not be null");
+        }
+    }
+    
+    public boolean isEqualTo(Object other) {
+        AnatomicEntity oth = (AnatomicEntity) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence.equals(oth.annotatorConfidence)) {
+            return false;
+        }
+        if (this.isPresent == null ? oth.isPresent != null : !this.isPresent.equals(oth.isPresent)) {
+            return false;
+        }
+        if (this.label == null ? oth.label != null : !this.label.equals(oth.label)) {
+            return false;
+        }
+        return this.anatomicEntityCharacteristicCollection.isEqualTo(oth.anatomicEntityCharacteristicCollection);
+    }
+
+     public edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity toAimV4() {
         edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity res = new edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity();
         CD typeCode = new CD();
         typeCode.setCode(this.getCodeValue());
@@ -182,6 +257,32 @@ public class AnatomicEntity {
         //*** will be
         res.setImagingPhysicalEntityCharacteristicCollection(this.getAnatomicEntityCharacteristicCollection().toAimV4());
         return res;
+    }
+
+    public AnatomicEntity(edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity v4) {
+        this.setCagridId(0);
+        if (v4.getListTypeCode().size() > 0) {
+            CD typeCode = v4.getListTypeCode().get(0);
+            if (typeCode.getCode() != null) {
+                this.setCodeValue(typeCode.getCode());
+            }
+            if (typeCode.getCodeSystem() != null) {
+                this.setCodeMeaning(typeCode.getCodeSystem());
+            }
+            if (typeCode.getCodeSystemName() != null) {
+                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+            }
+            if (typeCode.getCodeSystemVersion() != null) {
+                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+            }
+        }
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        this.setCagridId(0);
+        this.setIsPresent(v4.getIsPresent());
+        if (v4.getLabel() != null) {
+            this.setLabel(v4.getLabel().getValue());
+        }
+        this.setAnatomicEntityCharacteristicCollection(new AnatomicEntityCharacteristicCollection(v4.getImagingPhysicalEntityCharacteristicCollection()));
     }
 
 }

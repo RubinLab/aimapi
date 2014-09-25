@@ -27,16 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ImageReference {
+public class ImageReference implements IImageReference, IAimXMLOperations {
 
     private Integer cagridId;
     private String xsiType;
@@ -76,16 +77,46 @@ public class ImageReference {
         this.xsiType = xsiType;
     }
 
+    @Override
     public Integer getCagridId() {
         return this.cagridId;
     }
 
+    @Override
     public void setCagridId(Integer cagridId) {
         this.cagridId = cagridId;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element imageReference = doc.createElement("ImageReference");
+        imageReference.setAttribute("cagridId", Integer.toString(getCagridId()));
+        imageReference.setAttribute("xsi:type", this.xsiType);
+
+        return imageReference;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
+    }
+
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ImageReference's cagridId can not be null");
+        }
+    }
+    
+    public boolean isEqualTo(Object other) {
+        ImageReference oth = (ImageReference) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        return true;
     }
 }

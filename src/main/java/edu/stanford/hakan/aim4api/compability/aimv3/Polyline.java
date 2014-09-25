@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -34,7 +36,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Polyline extends GeometricShape {
+public class Polyline extends GeometricShape implements IAimXMLOperations {
 
     public Polyline() {
         super();
@@ -47,8 +49,19 @@ public class Polyline extends GeometricShape {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+        return super.getXMLNode(doc);
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
+    }
+
+    
+    @Override
+    public boolean isEqualTo(Object other) {
+        return super.isEqualTo(other);
     }
 
     @Override
@@ -62,5 +75,25 @@ public class Polyline extends GeometricShape {
         res.setShapeIdentifier(this.getShapeIdentifier());
         res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
         return res;
+    }
+
+    public Polyline(edu.stanford.hakan.aim4api.base.TwoDimensionPolyline v4) {
+        setXsiType("Polyline");
+        this.setCagridId(0);
+        this.setIncludeFlag(v4.getIncludeFlag());
+        if (v4.getLineColor() != null) {
+            this.setLineColor(v4.getLineColor().getValue());
+        }
+        if (v4.getLineOpacity() != null) {
+            this.setLineOpacity(v4.getLineOpacity().getValue());
+        }
+        if (v4.getLineStyle() != null) {
+            this.setLineStyle(v4.getLineStyle().getValue());
+        }
+        if (v4.getLineThickness() != null) {
+            this.setLineThickness(v4.getLineThickness().getValue());
+        }
+        this.setShapeIdentifier(v4.getShapeIdentifier());
+        this.setSpatialCoordinateCollection(new SpatialCoordinateCollection(v4.getTwoDimensionSpatialCoordinateCollection(), v4));
     }
 }

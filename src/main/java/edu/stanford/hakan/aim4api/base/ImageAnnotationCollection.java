@@ -27,13 +27,16 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
-import java.util.ArrayList;
-import java.util.List;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.utility.Utility;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -46,8 +49,6 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     private Person person;
     private List<ImageAnnotation> listImageAnnotations = new ArrayList<ImageAnnotation>();
 
-
-    
     public Person getPerson() {
         return person;
     }
@@ -78,7 +79,7 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("ImageAnnotationCollection");
         }
-        if (getAimVersion()== null || Enumerations.AimVersion.None.equals(getAimVersion())) {
+        if (getAimVersion() == null || Enumerations.AimVersion.None.equals(getAimVersion())) {
             setAimVersion(Enumerations.AimVersion.AIMv4_0);
         }
         Element res = (Element) super.getXMLNode(doc);
@@ -106,6 +107,21 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     @Override
     public void setXMLNode(Node node) {
         this.listImageAnnotations.clear();
+
+        NamedNodeMap map = node.getAttributes();
+        if (map.getNamedItem("aimVersion") != null) {
+            super.setAimVersion(Enumerations.AimVersion.valueOf(map.getNamedItem("aimVersion").getNodeValue().replace('.', '_')));
+        }
+
+        if (Enumerations.AimVersion.AIMv4_0 != super.getAimVersion()) {
+            try {
+                node = AnnotationConverter.annotationV3ToV4(node);
+                super.setAimVersion(Enumerations.AimVersion.AIMv4_0);
+            } catch (AimException ex) {
+                Logger.getLogger(AnnotationCollection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         super.setXMLNode(node);
         NodeList listChilds = node.getChildNodes();
         for (int i = 0; i < listChilds.getLength(); i++) {

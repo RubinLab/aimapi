@@ -27,16 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 
 /**
  *
  * @author Hakan BULU
  */
-public class WebImageReference extends ImageReference {
+public class WebImageReference extends ImageReference implements IAimXMLOperations {
 
     private String uri;
 
@@ -59,10 +60,37 @@ public class WebImageReference extends ImageReference {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+        
+        this.Control();
+
+        Element imageReference = (Element) super.getXMLNode(doc);
+        imageReference.setAttribute("uri", this.getUri());
+        return imageReference;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
 
         NamedNodeMap map = node.getAttributes();
         this.uri = map.getNamedItem("uri").getNodeValue();
+    }
+
+    private void Control() throws AimException {
+
+        if (this.getUri() == null) {
+            throw new AimException("AimException: WebImageReference's uri can not be null");
+        }
+    }
+    
+            
+    @Override
+    public boolean isEqualTo(Object other) {
+        WebImageReference oth = (WebImageReference) other;
+        if (this.uri == null ? oth.uri != null : !this.uri.equals(oth.uri)) {
+            return false;
+        }       
+        return super.isEqualTo(other);
     }
 }

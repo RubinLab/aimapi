@@ -30,6 +30,7 @@ package edu.stanford.hakan.aim4api.base;
 import java.util.List;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.utility.Utility;
+import java.util.ArrayList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -257,6 +258,24 @@ public class ImageAnnotation extends AnnotationEntity {
         }
         if (this.getXsiType() != null) {
             res.setXsiType(this.getXsiType());
+        }
+        return res;
+    }
+
+    public List<TwoDimensionGeometricShapeEntity> getTwoDimensionShapes() {
+        List<TwoDimensionGeometricShapeEntity> res = new ArrayList<TwoDimensionGeometricShapeEntity>();
+        for (MarkupEntity markup : this.markupEntityCollection.getMarkupEntityList()) {
+            if (markup.getXsiType().equals("TwoDimensionPolyline")) {
+                res.add((TwoDimensionPolyline) markup);
+            } else if (markup.getXsiType().equals("TwoDimensionMultiPoint")) {
+                res.add((TwoDimensionMultiPoint) markup);
+            } else if (markup.getXsiType().equals("TwoDimensionPoint")) {
+                res.add((TwoDimensionPoint) markup);
+            } else if (markup.getXsiType().equals("TwoDimensionCircle")) {
+                res.add((TwoDimensionCircle) markup);
+            } else if (markup.getXsiType().equals("TwoDimensionEllipse")) {
+                res.add((TwoDimensionEllipse) markup);
+            }
         }
         return res;
     }

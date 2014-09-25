@@ -27,16 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author Hakan BULU
  */
-public class PresentationState {
+public class PresentationState implements IAimXMLOperations {
 
     private Integer cagridId;
     private String sopInstanceUID;
@@ -55,12 +56,47 @@ public class PresentationState {
 
     public void setSopInstanceUID(String sopInstanceUID) {
         this.sopInstanceUID = sopInstanceUID;
-    }   
-    
+    }
+
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element presentationState = doc.createElement("PresentationState");
+        presentationState.setAttribute("cagridId", Integer.toString(this.cagridId));
+        presentationState.setAttribute("sopInstanceUID", this.sopInstanceUID);
+        return presentationState;
+
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.sopInstanceUID = map.getNamedItem("sopInstanceUID").getNodeValue();
+    }
+
+   
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: PresentationState's cagridId can not be null");
+        }
+        if (getSopInstanceUID() == null) {
+            throw new AimException("AimException: PresentationState's sopInstanceUID can not be null");
+        }
+    }
+    
+    
+    public boolean isEqualTo(Object other) {
+        PresentationState oth = (PresentationState) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.sopInstanceUID == null ? oth.sopInstanceUID != null : !this.sopInstanceUID.equals(oth.sopInstanceUID)) {
+            return false;
+        }
+        return true;
     }
 }

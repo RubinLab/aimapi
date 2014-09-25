@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Person {
+public class Person implements IAimXMLOperations {
 
     private Integer cagridId;
     private String name;
@@ -123,6 +125,28 @@ public class Person {
         this.rdfID = rdfID;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element person = doc.createElement("Person");
+        person.setAttribute("cagridId", this.cagridId.toString());
+        person.setAttribute("name", this.name);
+        person.setAttribute("id", this.id);
+        if (this.birthDate != null) {
+            person.setAttribute("birthDate", this.birthDate.toString());
+        }
+        if (this.sex != null) {
+            person.setAttribute("sex", this.sex);
+        }
+        if (this.ethnicGroup != null) {
+            person.setAttribute("ethnicGroup", this.ethnicGroup);
+        }
+        return person;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -140,13 +164,66 @@ public class Person {
         }
     }
 
+   
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: Person's cagridId can not be null");
+        }
+        if (getName() == null) {
+            throw new AimException("AimException: Person's name can not be null");
+        }
+        if (getId() == null) {
+            throw new AimException("AimException: Person's id can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        Person oth = (Person) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.name == null ? oth.name != null : !this.name.equals(oth.name)) {
+            return false;
+        }
+        if (this.id == null ? oth.id != null : !this.id.equals(oth.id)) {
+            return false;
+        }
+        if (this.birthDate == null ? oth.birthDate != null : !this.birthDate.equals(oth.birthDate)) {
+            return false;
+        }
+        if (this.sex == null ? oth.sex != null : !this.sex.equals(oth.sex)) {
+            return false;
+        }
+        if (this.ethnicGroup == null ? oth.ethnicGroup != null : !this.ethnicGroup.equals(oth.ethnicGroup)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.Person toAimV4() {
         edu.stanford.hakan.aim4api.base.Person res = new edu.stanford.hakan.aim4api.base.Person();
-        res.setBirthDate(this.getBirthDate());
-        res.setEthnicGroup(Converter.toST(this.getEthnicGroup()));
-        res.setId(Converter.toST(this.getId()));
-        res.setName(Converter.toST(this.getName()));
+        res.setBirthDate(this.getBirthDate());//
+        res.setEthnicGroup(Converter.toST(this.getEthnicGroup()));//
+        res.setId(Converter.toST(this.getId()));//
+        res.setName(Converter.toST(this.getName()));//
         res.setSex(Converter.toST(this.getSex()));
         return res;
+    }
+
+    public Person(edu.stanford.hakan.aim4api.base.Person v4) {
+        this.setCagridId(0);
+        this.setBirthDate(v4.getBirthDate());
+        if (v4.getEthnicGroup() != null) {
+            this.setEthnicGroup(v4.getEthnicGroup().getValue());
+        }
+        if (v4.getId() != null) {
+            this.setId(v4.getId().getValue());
+        }
+        if (v4.getName() != null) {
+            this.setName(v4.getName().getValue());
+        }
+        if (v4.getSex() != null) {
+            this.setSex(v4.getSex().getValue());
+        }
     }
 }

@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Inference {
+public class Inference implements IAimXMLOperations {
 
     private Integer cagridId;
     private String codeValue;
@@ -114,8 +115,30 @@ public class Inference {
 
     public void setImageEvidence(Boolean imageEvidence) {
         this.imageEvidence = imageEvidence;
-    }   
-    
+    }
+
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element inference = doc.createElement("Inference");
+        inference.setAttribute("cagridId", this.cagridId.toString());
+        inference.setAttribute("codeValue", this.codeValue);
+        inference.setAttribute("codeMeaning", this.codeMeaning);
+        inference.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            inference.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        if (this.annotatorConfidence != null) {
+            inference.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+        }
+        inference.setAttribute("imageEvidence", this.imageEvidence.toString());
+        return inference;
+
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -131,18 +154,84 @@ public class Inference {
         }
         this.imageEvidence = Boolean.parseBoolean(map.getNamedItem("imageEvidence").getNodeValue());
     }
+
     
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: Inference's cagridId can not be null");
+        }
+        if (getCodeValue() == null) {
+            throw new AimException("AimException: Inference's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: Inference's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: Inference's codingSchemeDesignator can not be null");
+        }
+        if (getImageEvidence() == null) {
+            throw new AimException("AimException: Inference's imageEvidence can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        Inference oth = (Inference) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence.equals(oth.annotatorConfidence)) {
+            return false;
+        }
+        if (this.imageEvidence == null ? oth.imageEvidence != null : !this.imageEvidence.equals(oth.imageEvidence)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.InferenceEntity toAimV4() {
         edu.stanford.hakan.aim4api.base.InferenceEntity res = new edu.stanford.hakan.aim4api.base.InferenceEntity();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        CD typeCode = new CD();
-        typeCode.setCode(this.getCodeValue());
-        typeCode.setCodeSystem(this.getCodeMeaning());
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
-        res.addTypeCode(typeCode);
-        res.setImageEvidence(this.getImageEvidence());
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        CD typeCode = new CD();//
+        typeCode.setCode(this.getCodeValue());//
+        typeCode.setCodeSystem(this.getCodeMeaning());//
+        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        res.addTypeCode(typeCode);//
+        res.setImageEvidence(this.getImageEvidence());//
         return res;
 
+    }
+
+    public Inference(edu.stanford.hakan.aim4api.base.InferenceEntity v4) {
+        this.setCagridId(0);
+        if (v4.getListTypeCode().size() > 0) {
+            CD typeCode = v4.getListTypeCode().get(0);
+            if (typeCode.getCode() != null) {
+                this.setCodeValue(typeCode.getCode());
+            }
+            if (typeCode.getCodeSystem() != null) {
+                this.setCodeMeaning(typeCode.getCodeSystem());
+            }
+            if (typeCode.getCodeSystemName() != null) {
+                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+            }
+            if (typeCode.getCodeSystemVersion() != null) {
+                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+            }
+        }
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        this.setImageEvidence(v4.getImageEvidence());
     }
 }

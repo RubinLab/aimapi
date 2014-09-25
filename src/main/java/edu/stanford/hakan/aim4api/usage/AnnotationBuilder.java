@@ -98,7 +98,7 @@ public class AnnotationBuilder {
                 throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): "
                         + getAimXMLsaveResult());
             }
-        } catch (Exception ex) {
+        } catch (AimException | DOMException ex) {
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
         }

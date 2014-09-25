@@ -37,13 +37,11 @@ import java.io.Serializable;
 public class AimUtility implements Serializable {
 
     public enum CalculationResultIdentifier {
-
         None, Scalar, Vector, Histogram, Matrix, Array
     };
 
     public enum ComparisonOperators {
-
-        None, Equal, NotEqual, LessThan, LessThanEqual, GreaterThan, GreaterThanEqual
+        None,Equal, NotEqual, LessThan, LessThanEqual, GreaterThan, GreaterThanEqual
     };
-
+    
 }

@@ -12,7 +12,7 @@
   <source path='aimquery'/> 
   <source path='audittrail'/> 
   <source path='base'/> 
-  <source path='compability/aimV3'/> 
+  <source path='compability/aimv3'/> 
   <source path='database/exist'/> 
   <source path='database/mysql'/> 
   <source path='projects/epad'/> 

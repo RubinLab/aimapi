@@ -27,19 +27,20 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ReferencedAnnotation {
+public class ReferencedAnnotation implements IAimXMLOperations {
 
     private Integer cagridId;
     private String referencedAnnotationUID;
@@ -88,6 +89,27 @@ public class ReferencedAnnotation {
         this.listAnnotationRole.add(newRole);
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element referencedAnnotation = doc.createElement("ReferencedAnnotation");
+        referencedAnnotation.setAttribute("cagridId", Integer.toString(this.cagridId));
+        referencedAnnotation.setAttribute("referencedAnnotationUID", this.referencedAnnotationUID);
+
+        Element annotationRole = doc.createElement("annotationRole");
+        for (int i = 0; i < this.listAnnotationRole.size(); i++) {
+            annotationRole.appendChild(this.listAnnotationRole.get(i).getXMLNode(doc));
+        }
+        if (this.listAnnotationRole.size() > 0) {
+            referencedAnnotation.appendChild(annotationRole);
+        }
+
+        return referencedAnnotation;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listAnnotationRole.clear();
@@ -110,4 +132,33 @@ public class ReferencedAnnotation {
         this.referencedAnnotationUID = map.getNamedItem("referencedAnnotationUID").getNodeValue();
     }
 
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ReferencedAnnotation's cagridId can not be null");
+        }
+        if (getReferencedAnnotationUID() == null) {
+            throw new AimException("AimException: ReferencedAnnotation's referencedAnnotationUID can not be null");
+        }
+    }
+    
+    
+    public boolean isEqualTo(Object other) {
+        ReferencedAnnotation oth = (ReferencedAnnotation) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.referencedAnnotationUID == null ? oth.referencedAnnotationUID != null : !this.referencedAnnotationUID.equals(oth.referencedAnnotationUID)) {
+            return false;
+        }
+        if (this.listAnnotationRole.size() != oth.listAnnotationRole.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listAnnotationRole.size(); i++) {
+            if (!this.listAnnotationRole.get(i).isEqualTo(oth.listAnnotationRole.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

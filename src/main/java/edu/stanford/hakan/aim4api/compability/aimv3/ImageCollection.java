@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ImageCollection {
+public class ImageCollection implements IAimXMLOperations {
 
     private List<Image> listImage = new ArrayList<Image>();
 
@@ -53,6 +54,18 @@ public class ImageCollection {
         return this.listImage;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element imageCollection = doc.createElement("imageCollection");
+        for (int i = 0; i < this.listImage.size(); i++) {
+            imageCollection.appendChild(this.listImage.get(i).getXMLNode(doc));
+        }
+
+        return imageCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listImage.clear();
@@ -66,6 +79,19 @@ public class ImageCollection {
             }
         }
     }
+    
+    public boolean isEqualTo(Object other) {
+        ImageCollection oth = (ImageCollection) other;
+        if (this.listImage.size() != oth.listImage.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listImage.size(); i++) {
+            if (!this.listImage.get(i).isEqualTo(oth.listImage.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public edu.stanford.hakan.aim4api.base.ImageCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.ImageCollection res = new edu.stanford.hakan.aim4api.base.ImageCollection();
@@ -74,5 +100,12 @@ public class ImageCollection {
             res.addImage(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public ImageCollection(edu.stanford.hakan.aim4api.base.ImageCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.Image> listV4 = v4.getImageList();
+        for (edu.stanford.hakan.aim4api.base.Image itemV4 : listV4) {
+            this.AddImage(new Image(itemV4));
+        }
     }
 }

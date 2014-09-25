@@ -27,8 +27,9 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -39,7 +40,7 @@ import org.w3c.dom.NodeList;
  *
  * @author pc
  */
-public class CalculationResult {
+public class CalculationResult implements IAimXMLOperations {
 
     private Integer cagridId;
     private AimUtility.CalculationResultIdentifier type;
@@ -114,6 +115,26 @@ public class CalculationResult {
         this.unitOfMeasure = unitOfMeasure;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element calculationResult = doc.createElement("CalculationResult");
+        calculationResult.setAttribute("cagridId", this.cagridId.toString());
+        calculationResult.setAttribute("type", this.type.toString());
+        calculationResult.setAttribute("numberOfDimensions", this.numberOfDimensions.toString());
+        calculationResult.setAttribute("unitOfMeasure", this.unitOfMeasure);
+        if (this.calculationDataCollection.getCalculationDataList().size() > 0) {
+            calculationResult.appendChild(this.calculationDataCollection.getXMLNode(doc));
+        }
+        if (this.dimensionCollection.getDimensionList().size() > 0) {
+            calculationResult.appendChild(this.dimensionCollection.getXMLNode(doc));
+        }
+        return calculationResult;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -131,14 +152,64 @@ public class CalculationResult {
         this.numberOfDimensions = Integer.parseInt(map.getNamedItem("numberOfDimensions").getNodeValue());
         this.unitOfMeasure = map.getNamedItem("unitOfMeasure").getNodeValue();
     }
+   
+    private void Control() throws AimException {
+
+        if (getCagridId() == null) {
+            throw new AimException("AimException: CalculationResult's cagridId can not be null");
+        }
+        if (getType() == null) {
+            throw new AimException("AimException: CalculationResult's type can not be null");
+        }
+        if (getNumberOfDimensions() == null) {
+            throw new AimException("AimException: CalculationResult's numberOfDimensions can not be null");
+        }
+        if (getUnitOfMeasure() == null) {
+            throw new AimException("AimException: CalculationResult's unitOfMeasure can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        CalculationResult oth = (CalculationResult) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.type == null ? oth.type != null : !this.type.equals(oth.type)) {
+            return false;
+        }
+        if (this.numberOfDimensions == null ? oth.numberOfDimensions != null : !this.numberOfDimensions.equals(oth.numberOfDimensions)) {
+            return false;
+        }
+        if (this.unitOfMeasure == null ? oth.unitOfMeasure != null : !this.unitOfMeasure.equals(oth.unitOfMeasure)) {
+            return false;
+        }
+        if (!this.calculationDataCollection.isEqualTo(oth.calculationDataCollection)) {
+            return false;
+        }
+        if (!this.dimensionCollection.isEqualTo(oth.dimensionCollection)) {
+            return false;
+        }
+        return true;
+    }
 
     public edu.stanford.hakan.aim4api.base.CalculationResult toAimV4() {
         edu.stanford.hakan.aim4api.base.ExtendedCalculationResult res = new edu.stanford.hakan.aim4api.base.ExtendedCalculationResult();
-        res.setDimensionCollection(this.getDimensionCollection().toAimV4());
-        res.setUnitOfMeasure(Converter.toST(this.getUnitOfMeasure()));
-        res.setCalculationDataCollection(this.getCalculationDataCollection().toAimV4());
+        res.setDimensionCollection(this.getDimensionCollection().toAimV4());//
+        res.setUnitOfMeasure(Converter.toST(this.getUnitOfMeasure()));//
+        res.setCalculationDataCollection(this.getCalculationDataCollection().toAimV4());//
         res.setType(Converter.toAimV4(this.getType())); //
         res.setDataType(new CD("", "", "", ""));
         return res;
+    }
+
+    public CalculationResult(edu.stanford.hakan.aim4api.base.ExtendedCalculationResult v4) {
+        this.setCagridId(0);
+        this.setCalculationDataCollection(new CalculationDataCollection(v4.getCalculationDataCollection()));
+        this.setDimensionCollection(new DimensionCollection(v4.getDimensionCollection()));
+        this.setType(Converter.toAimV3(v4.getType()));
+        this.setNumberOfDimensions(0);
+        if (v4.getUnitOfMeasure() != null) {
+            this.setUnitOfMeasure(v4.getUnitOfMeasure().getValue());
+        }
     }
 }

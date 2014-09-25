@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class CalculationCollection {
+public class CalculationCollection implements IAimXMLOperations {
 
     private List<Calculation> listCalculation = new ArrayList<Calculation>();
 
@@ -53,6 +54,17 @@ public class CalculationCollection {
         return this.listCalculation;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element calculationCollection = doc.createElement("calculationCollection");
+        for (int i = 0; i < this.listCalculation.size(); i++) {
+            calculationCollection.appendChild(this.listCalculation.get(i).getXMLNode(doc));
+        }
+        return calculationCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listCalculation.clear();
@@ -65,6 +77,19 @@ public class CalculationCollection {
                 this.AddCalculation(obj);
             }
         }
+    }    
+
+    public boolean isEqualTo(Object other) {
+        CalculationCollection oth = (CalculationCollection) other;
+        if (this.listCalculation.size() != oth.listCalculation.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listCalculation.size(); i++) {
+            if (!this.listCalculation.get(i).isEqualTo(oth.listCalculation.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public edu.stanford.hakan.aim4api.base.CalculationEntityCollection toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation) {
@@ -74,5 +99,12 @@ public class CalculationCollection {
             res.addCalculationEntity(itemV3.toAimV4(imageAnnotation));
         }
         return res;
+    }
+
+    public CalculationCollection(edu.stanford.hakan.aim4api.base.CalculationEntityCollection v4, edu.stanford.hakan.aim4api.base.ImageAnnotation ia) {
+        List<edu.stanford.hakan.aim4api.base.CalculationEntity> listV4 = v4.getCalculationEntityList();
+        for (edu.stanford.hakan.aim4api.base.CalculationEntity itemV4 : listV4) {
+            this.AddCalculation(new Calculation(itemV4, ia));
+        }
     }
 }

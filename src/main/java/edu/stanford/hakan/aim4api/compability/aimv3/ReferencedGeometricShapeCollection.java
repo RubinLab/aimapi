@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author pc
  */
-public class ReferencedGeometricShapeCollection {
+public class ReferencedGeometricShapeCollection implements IAimXMLOperations {
 
     private List<ReferencedGeometricShape> listReferencedGeometricShape = new ArrayList<ReferencedGeometricShape>();
 
@@ -50,6 +51,17 @@ public class ReferencedGeometricShapeCollection {
         return this.listReferencedGeometricShape;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element referencedGeometricShapeCollection = doc.createElement("referencedGeometricShapeCollection");
+        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+            referencedGeometricShapeCollection.appendChild(this.listReferencedGeometricShape.get(i).getXMLNode(doc));
+        }
+        return referencedGeometricShapeCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listReferencedGeometricShape.clear();
@@ -62,5 +74,18 @@ public class ReferencedGeometricShapeCollection {
                 this.AddReferencedGeometricShape(obj);
             }
         }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ReferencedGeometricShapeCollection oth = (ReferencedGeometricShapeCollection) other;
+        if (this.listReferencedGeometricShape.size() != oth.listReferencedGeometricShape.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+            if (!this.listReferencedGeometricShape.get(i).isEqualTo(oth.listReferencedGeometricShape.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

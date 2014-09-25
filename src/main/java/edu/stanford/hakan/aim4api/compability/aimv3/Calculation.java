@@ -27,10 +27,10 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.Algorithm;
-import edu.stanford.hakan.aim4api.base.CD;
-
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
+import edu.stanford.hakan.aim4api.base.CD;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class Calculation {
+public class Calculation implements IAimXMLOperations {
 
     private Integer cagridId;
     private String uid;
@@ -210,6 +210,44 @@ public class Calculation {
         this.codeValueCanBeNull = codeValueCanBeNull;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+        this.Control();
+
+        Element calculation = doc.createElement("Calculation");
+        calculation.setAttribute("cagridId", this.cagridId.toString());
+        calculation.setAttribute("uid", this.uid);
+        calculation.setAttribute("description", this.description);
+        if (this.mathML != null) {
+            calculation.setAttribute("mathML", this.mathML);
+        }
+        if (this.codeValue != null) {
+            calculation.setAttribute("codeValue", this.codeValue);
+        }
+        calculation.setAttribute("codeMeaning", this.codeMeaning);
+        calculation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            calculation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        if (this.algorithmName != null) {
+            calculation.setAttribute("algorithmName", this.algorithmName);
+        }
+        if (this.algorithmVersion != null) {
+            calculation.setAttribute("algorithmVersion", this.algorithmVersion);
+        }
+        if (this.referencedCalculationCollection.getReferencedCalculationList().size() > 0) {
+            calculation.appendChild(this.referencedCalculationCollection.getXMLNode(doc));
+        }
+        if (this.calculationResultCollection.getCalculationResultList().size() > 0) {
+            calculation.appendChild(this.calculationResultCollection.getXMLNode(doc));
+        }
+        if (this.referencedGeometricShapeCollection.getReferencedGeometricShapeList().size() > 0) {
+            calculation.appendChild(this.referencedGeometricShapeCollection.getXMLNode(doc));
+        }
+        return calculation;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -244,6 +282,72 @@ public class Calculation {
         if (map.getNamedItem("algorithmVersion") != null) {
             this.algorithmVersion = map.getNamedItem("algorithmVersion").getNodeValue();
         }
+    }    
+
+    private void Control() throws AimException {
+
+        if (getCagridId() == null) {
+            throw new AimException("AimException: Calculation's cagridId can not be null");
+        }
+        if (getUid() == null) {
+            throw new AimException("AimException: Calculation's uid can not be null");
+        }
+        if (getDescription() == null) {
+            throw new AimException("AimException: Calculation's description can not be null");
+        }
+        if (!this.codeValueCanBeNull && getCodeValue() == null) {
+            throw new AimException("AimException: Calculation's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: Calculation's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: Calculation's codingSchemeDesignator can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        Calculation oth = (Calculation) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.uid == null ? oth.uid != null : !this.uid.equals(oth.uid)) {
+            return false;
+        }
+        if (this.description == null ? oth.description != null : !this.description.equals(oth.description)) {
+            return false;
+        }
+        if (this.mathML == null ? oth.mathML != null : !this.mathML.equals(oth.mathML)) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.algorithmName == null ? oth.algorithmName != null : !this.algorithmName.equals(oth.algorithmName)) {
+            return false;
+        }
+        if (this.algorithmVersion == null ? oth.algorithmVersion != null : !this.algorithmVersion.equals(oth.algorithmVersion)) {
+            return false;
+        }
+        if (!this.referencedCalculationCollection.isEqualTo(oth.referencedCalculationCollection)) {
+            return false;
+        }
+        if (!this.calculationResultCollection.isEqualTo(oth.calculationResultCollection)) {
+            return false;
+        }
+        if (!this.referencedGeometricShapeCollection.isEqualTo(oth.referencedGeometricShapeCollection)) {
+            return false;
+        }
+        return true;
     }
 
     public edu.stanford.hakan.aim4api.base.CalculationEntity toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation) {
@@ -254,14 +358,14 @@ public class Calculation {
         algorithm.setVersion(Converter.toST(this.getAlgorithmVersion()));
         algorithm.addType(new CD("", "", "", ""));
         res.setAlgorithm(algorithm);
-        res.setCalculationResultCollection(this.getCalculationResultCollection().toAimV4());
-        res.setDescription(Converter.toST(this.getDescription()));
-        res.setMathML(Converter.toST(this.getMathML()));
+        res.setCalculationResultCollection(this.getCalculationResultCollection().toAimV4());//
+        res.setDescription(Converter.toST(this.getDescription()));//
+        res.setMathML(Converter.toST(this.getMathML()));//
         CD typeCode = new CD();
         typeCode.setCode(this.getCodeValue());
         typeCode.setCodeSystem(this.getCodeMeaning());
         typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         res.addTypeCode(typeCode);
 
         if (this.getReferencedCalculationCollection().getReferencedCalculationList().size() > 0) {
@@ -276,5 +380,61 @@ public class Calculation {
             }
         }
         return res;
+    }
+
+    public Calculation(edu.stanford.hakan.aim4api.base.CalculationEntity v4, edu.stanford.hakan.aim4api.base.ImageAnnotation ia) {
+        this.setCagridId(0);
+        this.setUid(v4.getUniqueIdentifier().getRoot());
+        if (v4.getAlgorithm() != null) {
+            this.setAlgorithmName(v4.getAlgorithm().getName().getValue());
+            this.setAlgorithmVersion(v4.getAlgorithm().getVersion().getValue());
+        }
+        if (v4.getCalculationResultCollection().getExtendedCalculationResultList().size() > 0) {
+            this.setCalculationResultCollection(new CalculationResultCollection(v4.getCalculationResultCollection()));
+        }
+        if (v4.getDescription() != null) {
+            this.setDescription(v4.getDescription().getValue());
+        }
+        if (v4.getMathML() != null) {
+            this.setMathML(v4.getMathML().getValue());
+        }
+        if (v4.getListTypeCode().size() > 0) {
+            CD typeCode = v4.getListTypeCode().get(0);
+            if (typeCode.getCode() != null) {
+                this.setCodeValue(typeCode.getCode());
+            }
+            if (typeCode.getCodeSystem() != null) {
+                this.setCodeMeaning(typeCode.getCodeSystem());
+            }
+            if (typeCode.getCodeSystemName() != null) {
+                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+            }
+            if (typeCode.getCodeSystemVersion() != null) {
+                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+            }
+        }
+
+        List<AnnotationStatement> listAnnotationStatement = ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList();
+        String annotationStatementID = "";
+        for (int i = 0; i < listAnnotationStatement.size(); i++) {
+            AnnotationStatement annotationStatement = listAnnotationStatement.get(i);
+            if ("ImagingPhysicalEntityHasCalculationEntityStatement".equals(annotationStatement.getXsiType())) {
+                if (v4.getUniqueIdentifier().getRoot().equals(annotationStatement.getSubjectUniqueIdentifier().getRoot())) {
+                    annotationStatementID = annotationStatement.getObjectUniqueIdentifier().getRoot();
+                }
+            }
+        }
+        String referencedShapeIdentifier = "";
+        for (int i = 0; i < listAnnotationStatement.size(); i++) {
+            AnnotationStatement annotationStatement = listAnnotationStatement.get(i);
+            if ("ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement".equals(annotationStatement.getXsiType())) {
+                if (annotationStatementID.equals(annotationStatement.getObjectUniqueIdentifier().getRoot())) {
+                    referencedShapeIdentifier = annotationStatement.getSubjectUniqueIdentifier().getRoot();
+                }
+            }
+        }
+        if (!"".equals(referencedShapeIdentifier)) {
+            this.addReferencedGeometricShape(new ReferencedGeometricShape(0, Integer.parseInt(referencedShapeIdentifier)));
+        }
     }
 }

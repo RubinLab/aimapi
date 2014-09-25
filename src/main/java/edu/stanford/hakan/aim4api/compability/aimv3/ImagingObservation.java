@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class ImagingObservation {
+public class ImagingObservation implements IAimXMLOperations {
 
     private Integer cagridId;
     private String codeValue;
@@ -165,6 +167,44 @@ public class ImagingObservation {
         this.listReferencedGeometricShape = listReferencedGeometricShape;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element imagingObservation = doc.createElement("ImagingObservation");
+        imagingObservation.setAttribute("cagridId", this.cagridId.toString());
+        imagingObservation.setAttribute("codeValue", this.codeValue);
+        imagingObservation.setAttribute("codeMeaning", this.codeMeaning);
+        imagingObservation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            imagingObservation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        if (this.comment != null) {
+            imagingObservation.setAttribute("comment", this.comment);
+        }
+        if (this.annotatorConfidence != null) {
+            imagingObservation.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+        }
+        if (this.isPresent != null) {
+            imagingObservation.setAttribute("isPresent", this.isPresent.toString());
+        }
+        imagingObservation.setAttribute("label", this.label);
+
+        Element referencedGeometricShape = doc.createElement("referencedGeometricShape");
+        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+            referencedGeometricShape.appendChild(this.listReferencedGeometricShape.get(i).getXMLNode(doc));
+        }
+        if (this.listReferencedGeometricShape.size() > 0) {
+            imagingObservation.appendChild(referencedGeometricShape);
+        }
+        if (this.imagingObservationCharacteristicCollection.getImagingObservationCharacteristicList().size() > 0) {
+            imagingObservation.appendChild(this.imagingObservationCharacteristicCollection.getXMLNode(doc));
+        }
+        return imagingObservation;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listReferencedGeometricShape.clear();
@@ -204,19 +244,111 @@ public class ImagingObservation {
         this.label = map.getNamedItem("label").getNodeValue();
     }
 
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ImagingObservation's cagridId can not be null");
+        }
+        if (getCodeValue() == null) {
+            throw new AimException("AimException: ImagingObservation's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: ImagingObservation's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: ImagingObservation's codingSchemeDesignator can not be null");
+        }
+        if (getLabel() == null) {
+            throw new AimException("AimException: ImagingObservation's label can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ImagingObservation oth = (ImagingObservation) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.comment == null ? oth.comment != null : !this.comment.equals(oth.comment)) {
+            return false;
+        }
+        if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence.equals(oth.annotatorConfidence)) {
+            return false;
+        }
+        if (this.isPresent == null ? oth.isPresent != null : !this.isPresent.equals(oth.isPresent)) {
+            return false;
+        }
+        if (this.label == null ? oth.label != null : !this.label.equals(oth.label)) {
+            return false;
+        }
+        if (!this.imagingObservationCharacteristicCollection.isEqualTo(oth.imagingObservationCharacteristicCollection)) {
+            return false;
+        }
+        if (this.listReferencedGeometricShape.size() != oth.listReferencedGeometricShape.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+            if (!this.listReferencedGeometricShape.get(i).isEqualTo(oth.listReferencedGeometricShape.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.ImagingObservationEntity toAimV4() {
         edu.stanford.hakan.aim4api.base.ImagingObservationEntity res = new edu.stanford.hakan.aim4api.base.ImagingObservationEntity();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setComment(Converter.toST(this.getComment()));
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setComment(Converter.toST(this.getComment()));//
         CD typeCode = new CD();
-        typeCode.setCode(this.getCodeValue());
-        typeCode.setCodeSystem(this.getCodeMeaning());
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
-        res.addTypeCode(typeCode);
-        res.setImagingObservationCharacteristicCollection(this.getImagingObservationCharacteristicCollection().toAimV4());
+        typeCode.setCode(this.getCodeValue());//
+        typeCode.setCodeSystem(this.getCodeMeaning());//
+        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        res.addTypeCode(typeCode);//
+        res.setImagingObservationCharacteristicCollection(this.getImagingObservationCharacteristicCollection().toAimV4());//
         res.setIsPresent(this.getIsPresent());
         res.setLabel(Converter.toST(this.getLabel()));
         return res;
+    }
+
+    public ImagingObservation(edu.stanford.hakan.aim4api.base.ImagingObservationEntity v4) {
+        this.setCagridId(0);
+        if (v4.getListTypeCode().size() > 0) {
+            CD typeCode = v4.getListTypeCode().get(0);
+            if (typeCode.getCode() != null) {
+                this.setCodeValue(typeCode.getCode());
+            }
+            if (typeCode.getCodeSystem() != null) {
+                this.setCodeMeaning(typeCode.getCodeSystem());
+            }
+            if (typeCode.getCodeSystemName() != null) {
+                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+            }
+            if (typeCode.getCodeSystemVersion() != null) {
+                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+            }
+        }
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        if (v4.getComment() != null) {
+            this.setComment(v4.getComment().getValue());
+        }
+        if (v4.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size() > 0) {
+            this.setImagingObservationCharacteristicCollection(new ImagingObservationCharacteristicCollection(v4.getImagingObservationCharacteristicCollection()));
+        }
+        this.setIsPresent(v4.getIsPresent());
+        if (v4.getLabel() != null) {
+            this.setLabel(v4.getLabel().getValue());
+        }
     }
 }

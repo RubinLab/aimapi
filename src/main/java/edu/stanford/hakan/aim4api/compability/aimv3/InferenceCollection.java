@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class InferenceCollection {
+public class InferenceCollection implements IAimXMLOperations {
 
     private List<Inference> listInference = new ArrayList<Inference>();
 
@@ -53,6 +54,18 @@ public class InferenceCollection {
         return this.listInference;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element inferenceCollection = doc.createElement("inferenceCollection");
+        for (int i = 0; i < this.listInference.size(); i++) {
+            inferenceCollection.appendChild(this.listInference.get(i).getXMLNode(doc));
+        }
+
+        return inferenceCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listInference.clear();
@@ -67,6 +80,20 @@ public class InferenceCollection {
         }
     }
 
+    
+    public boolean isEqualTo(Object other) {
+        InferenceCollection oth = (InferenceCollection) other;
+        if (this.listInference.size() != oth.listInference.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listInference.size(); i++) {
+            if (!this.listInference.get(i).isEqualTo(oth.listInference.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.InferenceEntityCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.InferenceEntityCollection res = new edu.stanford.hakan.aim4api.base.InferenceEntityCollection();
         List<Inference> list = this.getInferenceList();
@@ -74,5 +101,12 @@ public class InferenceCollection {
             res.addInferenceEntity(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public InferenceCollection(edu.stanford.hakan.aim4api.base.InferenceEntityCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.InferenceEntity> listV4 = v4.getInferenceEntityList();
+        for (edu.stanford.hakan.aim4api.base.InferenceEntity itemV4 : listV4) {
+            this.AddInference(new Inference(itemV4));
+        }
     }
 }

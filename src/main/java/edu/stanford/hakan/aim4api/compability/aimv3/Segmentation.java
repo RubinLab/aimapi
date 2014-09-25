@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -39,7 +41,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class Segmentation {
+public class Segmentation implements IAimXMLOperations {
 
     private Integer cagridId;
     private String sopInstanceUID;
@@ -111,6 +113,30 @@ public class Segmentation {
         this.sopInstanceUID = sopInstanceUID;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element segmentation = doc.createElement("Segmentation");
+        segmentation.setAttribute("cagridId", this.cagridId.toString());
+        segmentation.setAttribute("sopInstanceUID", this.sopInstanceUID);
+        segmentation.setAttribute("sopClassUID", this.sopClassUID);
+        segmentation.setAttribute("referencedSopInstanceUID", this.referencedSopInstanceUID);
+        segmentation.setAttribute("segmentNumber", this.segmentNumber.toString());
+
+        Element imagingObservation = doc.createElement("imagingObservation");
+        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+            imagingObservation.appendChild(this.listImagingObservation.get(i).getXMLNode(doc));
+        }
+        if (this.listImagingObservation.size() > 0) {
+            segmentation.appendChild(imagingObservation);
+        }
+
+        return segmentation;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listImagingObservation.clear();
@@ -136,12 +162,72 @@ public class Segmentation {
         this.segmentNumber = Integer.parseInt(map.getNamedItem("segmentNumber").getNodeValue());
     }
 
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: Segmentation's cagridId can not be null");
+        }
+        if (getSopInstanceUID() == null) {
+            throw new AimException("AimException: Segmentation's sopInstanceUID can not be null");
+        }
+        if (getSopClassUID() == null) {
+            throw new AimException("AimException: Segmentation's sopClassUID can not be null");
+        }
+        if (getReferencedSopInstanceUID() == null) {
+            throw new AimException("AimException: Segmentation's referencedSopInstanceUID can not be null");
+        }
+        if (getSegmentNumber() == null) {
+            throw new AimException("AimException: Segmentation's segmentNumber can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        Segmentation oth = (Segmentation) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.sopInstanceUID == null ? oth.sopInstanceUID != null : !this.sopInstanceUID.equals(oth.sopInstanceUID)) {
+            return false;
+        }
+        if (this.sopClassUID == null ? oth.sopClassUID != null : !this.sopClassUID.equals(oth.sopClassUID)) {
+            return false;
+        }
+        if (this.referencedSopInstanceUID == null ? oth.referencedSopInstanceUID != null : !this.referencedSopInstanceUID.equals(oth.referencedSopInstanceUID)) {
+            return false;
+        }
+        if (this.segmentNumber == null ? oth.segmentNumber != null : !this.segmentNumber.equals(oth.segmentNumber)) {
+            return false;
+        }
+        if (this.listImagingObservation.size() != oth.listImagingObservation.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+            if (!this.listImagingObservation.get(i).isEqualTo(oth.listImagingObservation.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.SegmentationEntity toAimV4() {
         edu.stanford.hakan.aim4api.base.DicomSegmentationEntity res = new edu.stanford.hakan.aim4api.base.DicomSegmentationEntity();
-        res.setReferencedSopInstanceUid(Converter.toII(this.getReferencedSopInstanceUID()));
-        res.setSegmentNumber(this.getSegmentNumber());
+        res.setReferencedSopInstanceUid(Converter.toII(this.getReferencedSopInstanceUID()));//
+        res.setSegmentNumber(this.getSegmentNumber());//
         res.setSopClassUid(Converter.toII(this.getSopClassUID()));
         res.setSopInstanceUid(Converter.toII(this.getSopInstanceUID()));
         return res;
+    }
+
+    public Segmentation(edu.stanford.hakan.aim4api.base.DicomSegmentationEntity v4) {
+        this.setCagridId(0);
+        if (v4.getReferencedSopInstanceUid() != null) {
+            this.setReferencedSopInstanceUID(v4.getReferencedSopInstanceUid().getRoot());
+        }
+        this.setSegmentNumber(v4.getSegmentNumber());
+        if (v4.getSopClassUid() != null) {
+            this.setSopClassUID(v4.getSopClassUid().getRoot());
+        }
+        if (v4.getSopInstanceUid() != null) {
+            this.setSopInstanceUID(v4.getSopInstanceUid().getRoot());
+        }
     }
 }

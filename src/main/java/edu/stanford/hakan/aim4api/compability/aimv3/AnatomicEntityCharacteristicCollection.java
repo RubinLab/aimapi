@@ -27,11 +27,12 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -39,7 +40,7 @@ import org.w3c.dom.NodeList;
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class AnatomicEntityCharacteristicCollection {
+public class AnatomicEntityCharacteristicCollection implements IAimXMLOperations {
 
     private List<AnatomicEntityCharacteristic> listAnatomicEntityCharacteristic = new ArrayList<AnatomicEntityCharacteristic>();
 
@@ -51,6 +52,18 @@ public class AnatomicEntityCharacteristicCollection {
         return this.listAnatomicEntityCharacteristic;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element anatomicEntityCharacteristicCollection = doc.createElement("anatomicEntityCharacteristicCollection");
+        for (int i = 0; i < this.listAnatomicEntityCharacteristic.size(); i++) {
+            anatomicEntityCharacteristicCollection.appendChild(this.listAnatomicEntityCharacteristic.get(i).getXMLNode(doc));
+        }
+
+        return anatomicEntityCharacteristicCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listAnatomicEntityCharacteristic.clear();
@@ -63,6 +76,20 @@ public class AnatomicEntityCharacteristicCollection {
             }
         }
     }
+   
+    
+    public boolean isEqualTo(Object other) {
+        AnatomicEntityCharacteristicCollection oth = (AnatomicEntityCharacteristicCollection) other;
+        if (this.listAnatomicEntityCharacteristic.size() != oth.listAnatomicEntityCharacteristic.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listAnatomicEntityCharacteristic.size(); i++) {
+            if (!this.listAnatomicEntityCharacteristic.get(i).isEqualTo(oth.listAnatomicEntityCharacteristic.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollection res = new edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollection();
@@ -71,5 +98,15 @@ public class AnatomicEntityCharacteristicCollection {
             res.addImagingPhysicalEntityCharacteristic(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public AnatomicEntityCharacteristicCollection(edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristicCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic> listV4 = v4.getImagingPhysicalEntityCharacteristicList();
+        for (edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic itemV4 : listV4) {
+            this.AddAnatomicEntityCharacteristic(new AnatomicEntityCharacteristic(itemV4));
+        }
+    }
+
+    public AnatomicEntityCharacteristicCollection() {
     }
 }

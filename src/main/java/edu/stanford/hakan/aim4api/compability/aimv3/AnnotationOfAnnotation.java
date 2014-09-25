@@ -25,21 +25,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
- package edu.stanford.hakan.aim4api.compability.aimv3;
+package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import org.w3c.dom.NodeList;
-
-
-import org.w3c.dom.Element;
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class AnnotationOfAnnotation extends Annotation{
+public class AnnotationOfAnnotation extends Annotation implements IAimXMLOperations {
 
     private ReferencedAnnotationCollection referencedAnnotationCollection;
 
@@ -65,8 +64,21 @@ public class AnnotationOfAnnotation extends Annotation{
 
     public void setReferencedAnnotationCollection(ReferencedAnnotationCollection referencedAnnotationCollection) {
         this.referencedAnnotationCollection = referencedAnnotationCollection;
-    }   
-    
+    }
+
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element annotation = (Element) super.getXMLNode(doc);
+
+        if (this.getReferencedAnnotationCollection().getReferencedAnnotationList().size() > 0) {
+            annotation.appendChild(this.getReferencedAnnotationCollection().getXMLNode(doc));
+        }
+        return annotation;
+
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
         NodeList nodelist = node.getChildNodes();
@@ -76,4 +88,14 @@ public class AnnotationOfAnnotation extends Annotation{
             }
         }
     }
+
+    @Override
+    public boolean isEqualTo(Object other) {
+        AnnotationOfAnnotation oth = (AnnotationOfAnnotation) other;  
+         if (!this.referencedAnnotationCollection.isEqualTo(oth.referencedAnnotationCollection)) {
+            return false;
+        }
+        return super.isEqualTo(other);
+    }
+
 }

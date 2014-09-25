@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Equipment {
+public class Equipment implements IAimXMLOperations {
 
     private Integer cagridId;
     private String manufacturerName;
@@ -85,6 +87,24 @@ public class Equipment {
         this.softwareVersion = softwareVersion;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element equipment = doc.createElement("Equipment");
+        equipment.setAttribute("cagridId", Integer.toString(getCagridId()));
+        equipment.setAttribute("manufacturerName", this.manufacturerName);
+        if (this.manufacturerModelName != null) {
+            equipment.setAttribute("manufacturerModelName", this.manufacturerModelName);
+        }
+        if (this.softwareVersion != null) {
+            equipment.setAttribute("softwareVersion", this.softwareVersion);
+        }
+        return equipment;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -98,11 +118,50 @@ public class Equipment {
         }
     }
 
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: Equipment's cagridId can not be null");
+        }
+        if (getManufacturerName() == null) {
+            throw new AimException("AimException: Equipment's manufacturerName can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        Equipment oth = (Equipment) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.manufacturerName == null ? oth.manufacturerName != null : !this.manufacturerName.equals(oth.manufacturerName)) {
+            return false;
+        }
+        if (this.manufacturerModelName == null ? oth.manufacturerModelName != null : !this.manufacturerModelName.equals(oth.manufacturerModelName)) {
+            return false;
+        }
+        if (this.softwareVersion == null ? oth.softwareVersion != null : !this.softwareVersion.equals(oth.softwareVersion)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.Equipment toAimV4() {
         edu.stanford.hakan.aim4api.base.Equipment res = new edu.stanford.hakan.aim4api.base.Equipment();
         res.setManufacturerModelName(Converter.toST(this.getManufacturerModelName()));
         res.setManufacturerName(Converter.toST(this.getManufacturerName()));
         res.setSoftwareVersion(Converter.toST(this.getSoftwareVersion()));
         return res;
+    }
+
+    public Equipment(edu.stanford.hakan.aim4api.base.Equipment v4) {
+        this.setCagridId(0);
+        if (v4.getManufacturerModelName() != null) {
+            this.setManufacturerModelName(v4.getManufacturerModelName().getValue());
+        }
+        if (v4.getManufacturerName() != null) {
+            this.setManufacturerName(v4.getManufacturerName().getValue());
+        }
+        if (v4.getSoftwareVersion() != null) {
+            this.setSoftwareVersion(v4.getSoftwareVersion().getValue());
+        }
     }
 }

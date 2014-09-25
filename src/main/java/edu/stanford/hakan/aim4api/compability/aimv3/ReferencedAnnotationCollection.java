@@ -27,33 +27,46 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 /**
  *
  * @author Hakan BULU
  */
-public class ReferencedAnnotationCollection {
-
-    private List<ReferencedAnnotation> listReferencedAnnotation = new ArrayList<ReferencedAnnotation>();
-
-    public void AddReferencedAnnotation(ReferencedAnnotation newReferencedAnnotation) {
+public class ReferencedAnnotationCollection  implements IAimXMLOperations  {
+    
+     private List<ReferencedAnnotation> listReferencedAnnotation = new ArrayList<ReferencedAnnotation>();
+   
+    public void AddReferencedAnnotation(ReferencedAnnotation newReferencedAnnotation)
+    {
         this.listReferencedAnnotation.add(newReferencedAnnotation);
     }
-
-    public List<ReferencedAnnotation> getReferencedAnnotationList() {
+    
+    public List<ReferencedAnnotation> getReferencedAnnotationList()
+    {
         return this.listReferencedAnnotation;
     }
+    
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {     
+        
+        Element referencedAnnotationCollection = doc.createElement("referencedAnnotationCollection"); 
+        for (int i = 0; i < this.listReferencedAnnotation.size(); i++) {
+            referencedAnnotationCollection.appendChild(this.listReferencedAnnotation.get(i).getXMLNode(doc));
+        }        
+        return referencedAnnotationCollection;
+    }
 
-    public void setXMLNode(Node node) {
-
+    @Override
+    public void setXMLNode(Node node) {        
+       
         this.listReferencedAnnotation.clear();
-
+        
         NodeList tempList = node.getChildNodes();
         for (int j = 0; j < tempList.getLength(); j++) {
             if ("ReferencedAnnotation".equals(tempList.item(j).getNodeName())) {
@@ -62,5 +75,18 @@ public class ReferencedAnnotationCollection {
                 this.AddReferencedAnnotation(obj);
             }
         }
+    }
+    
+    public boolean isEqualTo(Object other) {
+        ReferencedAnnotationCollection oth = (ReferencedAnnotationCollection) other;
+        if (this.listReferencedAnnotation.size() != oth.listReferencedAnnotation.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listReferencedAnnotation.size(); i++) {
+            if (!this.listReferencedAnnotation.get(i).isEqualTo(oth.listReferencedAnnotation.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

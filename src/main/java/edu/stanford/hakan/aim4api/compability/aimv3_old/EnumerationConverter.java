@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.stanford.hakan.aim4api.compability.aimv3;
+package edu.stanford.hakan.aim4api.compability.aimv3_old;
 
 import edu.stanford.hakan.aim4api.base.Enumerations;
 

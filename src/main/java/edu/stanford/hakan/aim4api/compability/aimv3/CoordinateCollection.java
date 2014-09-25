@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class CoordinateCollection {
+public class CoordinateCollection implements IAimXMLOperations {
 
     private List<Coordinate> listCoordinate = new ArrayList<Coordinate>();
 
@@ -53,6 +54,17 @@ public class CoordinateCollection {
         return this.listCoordinate;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element coordinateCollection = doc.createElement("coordinateCollection");
+        for (int i = 0; i < this.listCoordinate.size(); i++) {
+            coordinateCollection.appendChild(this.listCoordinate.get(i).getXMLNode(doc));
+        }
+        return coordinateCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listCoordinate.clear();
@@ -65,6 +77,19 @@ public class CoordinateCollection {
                 this.AddCoordinate(obj);
             }
         }
+    }    
+    
+    public boolean isEqualTo(Object other) {
+        CoordinateCollection oth = (CoordinateCollection) other;
+        if (this.listCoordinate.size() != oth.listCoordinate.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listCoordinate.size(); i++) {
+            if (!this.listCoordinate.get(i).isEqualTo(oth.listCoordinate.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public edu.stanford.hakan.aim4api.base.CoordinateCollection toAimV4() {
@@ -74,5 +99,12 @@ public class CoordinateCollection {
             res.addCoordinate(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public CoordinateCollection(edu.stanford.hakan.aim4api.base.CoordinateCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.Coordinate> listV4 = v4.getCoordinateList();
+        for (edu.stanford.hakan.aim4api.base.Coordinate itemV4 : listV4) {
+            this.AddCoordinate(new Coordinate(itemV4));
+        }
     }
 }

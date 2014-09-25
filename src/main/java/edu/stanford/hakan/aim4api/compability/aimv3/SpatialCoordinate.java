@@ -27,16 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author pc
  */
-public class SpatialCoordinate {
+public class SpatialCoordinate implements ISpatialCoordinate, IAimXMLOperations {
 
     private Integer cagridId;
     private Integer coordinateIndex;
@@ -50,25 +51,65 @@ public class SpatialCoordinate {
         return this.xsiType;
     }
 
+    @Override
     public Integer getCagridId() {
         return this.cagridId;
     }
 
+    @Override
     public void setCagridId(Integer cagridId) {
         this.cagridId = cagridId;
     }
 
+    @Override
     public Integer getCoordinateIndex() {
         return this.coordinateIndex;
     }
 
+    @Override
     public void setCoordinateIndex(Integer coordinateIndex) {
         this.coordinateIndex = coordinateIndex;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element spatialCoordinate = doc.createElement("SpatialCoordinate");
+        spatialCoordinate.setAttribute("cagridId", this.cagridId.toString());
+        spatialCoordinate.setAttribute("coordinateIndex", this.coordinateIndex.toString());
+        spatialCoordinate.setAttribute("xsi:type", this.xsiType);
+        return spatialCoordinate;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.coordinateIndex = Integer.parseInt(map.getNamedItem("coordinateIndex").getNodeValue());
     }
+
+    private void Control() throws AimException {
+
+        if (getCagridId() == null) {
+            throw new AimException("AimException: SpatialCoordinate's cagridId can not be null");
+        }
+        if (getCoordinateIndex() == null) {
+            throw new AimException("AimException: SpatialCoordinate's coordinateIndex can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        SpatialCoordinate oth = (SpatialCoordinate) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.coordinateIndex == null ? oth.coordinateIndex != null : !this.coordinateIndex.equals(oth.coordinateIndex)) {
+            return false;
+        }
+        return true;
+    }
+    
+
 }

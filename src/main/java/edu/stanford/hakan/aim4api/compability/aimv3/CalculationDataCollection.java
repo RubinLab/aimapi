@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class CalculationDataCollection {
+public class CalculationDataCollection implements IAimXMLOperations {
 
     private List<CalculationData> listCalculationData = new ArrayList<CalculationData>();
 
@@ -53,6 +54,17 @@ public class CalculationDataCollection {
         return this.listCalculationData;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element calculationDataCollection = doc.createElement("calculationDataCollection");
+        for (int i = 0; i < this.listCalculationData.size(); i++) {
+            calculationDataCollection.appendChild(this.listCalculationData.get(i).getXMLNode(doc));
+        }
+        return calculationDataCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listCalculationData.clear();
@@ -65,6 +77,19 @@ public class CalculationDataCollection {
                 this.AddCalculationData(obj);
             }
         }
+    }   
+
+    public boolean isEqualTo(Object other) {
+        CalculationDataCollection oth = (CalculationDataCollection) other;
+        if (this.listCalculationData.size() != oth.listCalculationData.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listCalculationData.size(); i++) {
+            if (!this.listCalculationData.get(i).isEqualTo(oth.listCalculationData.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public edu.stanford.hakan.aim4api.base.CalculationDataCollection toAimV4() {
@@ -74,5 +99,12 @@ public class CalculationDataCollection {
             res.addCalculationData(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public CalculationDataCollection(edu.stanford.hakan.aim4api.base.CalculationDataCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.CalculationData> listV4 = v4.getCalculationDataList();
+        for (edu.stanford.hakan.aim4api.base.CalculationData itemV4 : listV4) {
+            this.AddCalculationData(new CalculationData(itemV4));
+        }
     }
 }

@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class DimensionCollection {
+public class DimensionCollection implements IAimXMLOperations {
 
     private List<Dimension> listDimension = new ArrayList<Dimension>();
 
@@ -53,6 +54,17 @@ public class DimensionCollection {
         return this.listDimension;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element dimensionCollection = doc.createElement("dimensionCollection");
+        for (int i = 0; i < this.listDimension.size(); i++) {
+            dimensionCollection.appendChild(this.listDimension.get(i).getXMLNode(doc));
+        }
+        return dimensionCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listDimension.clear();
@@ -66,6 +78,19 @@ public class DimensionCollection {
             }
         }
     }
+    
+    public boolean isEqualTo(Object other) {
+        DimensionCollection oth = (DimensionCollection) other;
+        if (this.listDimension.size() != oth.listDimension.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listDimension.size(); i++) {
+            if (!this.listDimension.get(i).isEqualTo(oth.listDimension.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public edu.stanford.hakan.aim4api.base.DimensionCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.DimensionCollection res = new edu.stanford.hakan.aim4api.base.DimensionCollection();
@@ -74,5 +99,12 @@ public class DimensionCollection {
             res.addDimension(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public DimensionCollection(edu.stanford.hakan.aim4api.base.DimensionCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.Dimension> listV4 = v4.getDimensionList();
+        for (edu.stanford.hakan.aim4api.base.Dimension itemV4 : listV4) {
+            this.AddDimension(new Dimension(itemV4));
+        }
     }
 }

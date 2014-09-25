@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Numerical extends CharacteristicQuantification {
+public class Numerical extends CharacteristicQuantification implements IAimXMLOperations {
 
     private String ucumString;
     private Double value;
@@ -81,6 +83,20 @@ public class Numerical extends CharacteristicQuantification {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+        characteristicQuantification.setAttribute("ucumString", this.getUcumString());
+        characteristicQuantification.setAttribute("value", this.getValue().toString());
+        if (this.getComparisonOperators() != null) {
+            characteristicQuantification.setAttribute("operator", this.getComparisonOperators().toString());
+        }
+        return characteristicQuantification;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
 
@@ -92,14 +108,53 @@ public class Numerical extends CharacteristicQuantification {
         }
     }
 
+    
+    private void Control() throws AimException {
+        if (this.getUcumString() == null) {
+            throw new AimException("AimException: Numerical's ucumString can not be null");
+        }
+        if (this.getValue() == null) {
+            throw new AimException("AimException: Numerical's value can not be null");
+        }
+    }
+
+    @Override
+    public boolean isEqualTo(Object other) {
+        Numerical oth = (Numerical) other;
+        if (this.ucumString == null ? oth.ucumString != null : !this.ucumString.equals(oth.ucumString)) {
+            return false;
+        }
+        if (this.value == null ? oth.value != null : !this.value.equals(oth.value)) {
+            return false;
+        }
+        if (this.operator == null ? oth.operator != null : !this.operator.equals(oth.operator)) {
+            return false;
+        }
+        return super.isEqualTo(other);
+    }
+
     @Override
     public edu.stanford.hakan.aim4api.base.CharacteristicQuantification toAimV4() {
         edu.stanford.hakan.aim4api.base.Numerical res = new edu.stanford.hakan.aim4api.base.Numerical();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setValue(this.getValue());
-        res.setUcumString(Converter.toST(this.getUcumString()));
-        res.setOperator(Converter.toAimV4(this.getComparisonOperators()));
-        res.setComment(Converter.toST(this.getName()));
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setValue(this.getValue());//
+        res.setUcumString(Converter.toST(this.getUcumString()));//
+        res.setOperator(Converter.toAimV4(this.getComparisonOperators()));//
+        res.setComment(Converter.toST(this.getName()));//
         return res;
+    }
+
+    public Numerical(edu.stanford.hakan.aim4api.base.Numerical v4) {
+        setXsiType("Numerical");
+        this.setCagridId(0);
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        if (v4.getUcumString() != null) {
+            this.setUcumString(v4.getUcumString().getValue());
+        }
+        if (v4.getComment() != null) {
+            this.setName(v4.getComment().getValue());
+        }
+        this.setValue(v4.getValue());
+        this.setComparisonOperators(Converter.toAimV3(v4.getOperator()));
     }
 }

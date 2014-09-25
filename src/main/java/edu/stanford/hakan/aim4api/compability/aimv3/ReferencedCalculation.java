@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author pc
  */
-public class ReferencedCalculation {
+public class ReferencedCalculation implements IAimXMLOperations {
 
     private Integer cagridId;
     private String uniqueIdentifier;
@@ -66,6 +68,18 @@ public class ReferencedCalculation {
         this.uniqueIdentifier = uniqueIdentifier;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element referencedCalculation = doc.createElement("ReferencedCalculation");
+        referencedCalculation.setAttribute("cagridId", Integer.toString(this.cagridId));
+        referencedCalculation.setAttribute("uniqueIdentifier", this.uniqueIdentifier);
+        return referencedCalculation;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -74,10 +88,34 @@ public class ReferencedCalculation {
 
     }
 
+   
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ReferencedCalculation's cagridId can not be null");
+        }
+        if (getUniqueIdentifier() == null) {
+            throw new AimException("AimException: ReferencedCalculation's uniqueIdentifier can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ReferencedCalculation oth = (ReferencedCalculation) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.uniqueIdentifier == null ? oth.uniqueIdentifier != null : !this.uniqueIdentifier.equals(oth.uniqueIdentifier)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.CalculationEntityReferencesCalculationEntityStatement toAimV4(Calculation calculation) {
         edu.stanford.hakan.aim4api.base.CalculationEntityReferencesCalculationEntityStatement res = new edu.stanford.hakan.aim4api.base.CalculationEntityReferencesCalculationEntityStatement();
         res.setSubjectUniqueIdentifier(Converter.toII(calculation.getUid()));
         res.setObjectUniqueIdentifier(Converter.toII(this.getUniqueIdentifier()));
         return res;
     }
+
+//    public ReferencedCalculation(edu.stanford.hakan.aim4api.base.CalculationEntityReferencesCalculationEntityStatement v4) {
+//    }
 }

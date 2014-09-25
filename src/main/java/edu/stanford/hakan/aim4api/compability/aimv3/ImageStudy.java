@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -37,7 +39,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class ImageStudy {
+public class ImageStudy implements IAimXMLOperations {
 
     private Integer cagridId;
     private String instanceUID;
@@ -95,6 +97,27 @@ public class ImageStudy {
         this.startTime = startTime;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element imageStudy = doc.createElement("ImageStudy");
+        imageStudy.setAttribute("cagridId", Integer.toString(getCagridId()));
+        imageStudy.setAttribute("instanceUID", this.instanceUID);
+        imageStudy.setAttribute("startDate", this.startDate);
+        imageStudy.setAttribute("startTime", this.startTime);
+
+        if (this.imageSeries != null) {
+            Element _imageSeries = doc.createElement("imageSeries");
+            _imageSeries.appendChild(this.imageSeries.getXMLNode(doc));
+            imageStudy.appendChild(_imageSeries);
+        }
+
+        return imageStudy;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -118,6 +141,39 @@ public class ImageStudy {
         this.startTime = map.getNamedItem("startTime").getNodeValue();
     }
 
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ImageStudy's cagridId can not be null");
+        }
+        if (getInstanceUID() == null) {
+            throw new AimException("AimException: ImageStudy's instanceUID can not be null");
+        }
+        if (getStartDate() == null) {
+            throw new AimException("AimException: ImageStudy's startDate can not be null");
+        }
+        if (getStartTime() == null) {
+            throw new AimException("AimException: ImageStudy's startTime can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ImageStudy oth = (ImageStudy) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.instanceUID == null ? oth.instanceUID != null : !this.instanceUID.equals(oth.instanceUID)) {
+            return false;
+        }
+        if (this.startDate == null ? oth.startDate != null : !this.startDate.equals(oth.startDate)) {
+            return false;
+        }
+        if (this.startTime == null ? oth.startTime != null : !this.startTime.equals(oth.startTime)) {
+            return false;
+        }
+        return this.imageSeries.isEqualTo(oth.imageSeries);
+    }
+
     public edu.stanford.hakan.aim4api.base.ImageStudy toAimV4() {
         edu.stanford.hakan.aim4api.base.ImageStudy res = new edu.stanford.hakan.aim4api.base.ImageStudy();
         res.setImageSeries(this.getImageSeries().toAimV4());
@@ -126,4 +182,17 @@ public class ImageStudy {
         res.setStartTime(this.getStartTime());
         return res;
     }
+
+    public ImageStudy(edu.stanford.hakan.aim4api.base.ImageStudy v4) {
+        this.setCagridId(0);
+        if (v4.getImageSeries() != null) {
+            this.setImageSeries(new ImageSeries(v4.getImageSeries()));
+        }
+        if (v4.getInstanceUid() != null) {
+            this.setInstanceUID(v4.getInstanceUid().getRoot());
+        }
+        this.setStartDate(v4.getStartDate());
+        this.setStartTime(v4.getStartTime());
+    }
+
 }

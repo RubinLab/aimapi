@@ -27,19 +27,20 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ImageReferenceCollection {
+public class ImageReferenceCollection implements IAimXMLOperations {
 
     private List<ImageReference> listImageReference = new ArrayList<ImageReference>();
 
@@ -54,6 +55,17 @@ public class ImageReferenceCollection {
         return this.listImageReference;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element imageReferenceCollection = doc.createElement("imageReferenceCollection");
+        for (int i = 0; i < this.listImageReference.size(); i++) {
+            imageReferenceCollection.appendChild(this.listImageReference.get(i).getXMLNode(doc));
+        }
+        return imageReferenceCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listImageReference.clear();
@@ -75,6 +87,19 @@ public class ImageReferenceCollection {
         }
     }
 
+    public boolean isEqualTo(Object other) {
+        ImageReferenceCollection oth = (ImageReferenceCollection) other;
+        if (this.listImageReference.size() != oth.listImageReference.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listImageReference.size(); i++) {
+            if (!this.listImageReference.get(i).isEqualTo(oth.listImageReference.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.ImageReferenceEntityCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.ImageReferenceEntityCollection res = new edu.stanford.hakan.aim4api.base.ImageReferenceEntityCollection();
         List<ImageReference> list = this.getImageReferenceList();
@@ -83,5 +108,14 @@ public class ImageReferenceCollection {
             res.addImageReferenceEntity(itemV3Plus.toAimV4());
         }
         return res;
+    }
+
+    public ImageReferenceCollection(edu.stanford.hakan.aim4api.base.ImageReferenceEntityCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.ImageReferenceEntity> listV4 = v4.getImageReferenceEntityList();
+        for (edu.stanford.hakan.aim4api.base.ImageReferenceEntity itemV4 : listV4) {
+            if ("DicomImageReferenceEntity".equals(itemV4.getXsiType())) {
+                this.AddImageReference(new DICOMImageReference((edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity) itemV4));
+            }
+        }
     }
 }

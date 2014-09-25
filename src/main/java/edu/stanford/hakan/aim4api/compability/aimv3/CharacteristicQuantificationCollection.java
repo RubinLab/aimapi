@@ -27,19 +27,20 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class CharacteristicQuantificationCollection {
+public class CharacteristicQuantificationCollection implements IAimXMLOperations {
 
     private List<CharacteristicQuantification> listCharacteristicQuantification = new ArrayList<CharacteristicQuantification>();
 
@@ -54,6 +55,18 @@ public class CharacteristicQuantificationCollection {
         return this.listCharacteristicQuantification;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element characteristicQuantificationCollection = doc.createElement("characteristicQuantificationCollection");
+        for (int i = 0; i < this.listCharacteristicQuantification.size(); i++) {
+            characteristicQuantificationCollection.appendChild(this.listCharacteristicQuantification.get(i).getXMLNode(doc));
+        }
+
+        return characteristicQuantificationCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         this.listCharacteristicQuantification.clear();
         NodeList tempList = node.getChildNodes();
@@ -86,8 +99,21 @@ public class CharacteristicQuantificationCollection {
                 }
             }
         }
+    }    
+
+    public boolean isEqualTo(Object other) {
+        CharacteristicQuantificationCollection oth = (CharacteristicQuantificationCollection) other;
+        if (this.listCharacteristicQuantification.size() != oth.listCharacteristicQuantification.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listCharacteristicQuantification.size(); i++) {
+            if (!this.listCharacteristicQuantification.get(i).isEqualTo(oth.listCharacteristicQuantification.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
-    
+
     public edu.stanford.hakan.aim4api.base.CharacteristicQuantificationCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.CharacteristicQuantificationCollection res = new edu.stanford.hakan.aim4api.base.CharacteristicQuantificationCollection();
         List<edu.stanford.hakan.aim4api.compability.aimv3.CharacteristicQuantification> list = this.getCharacteristicQuantificationList();
@@ -95,5 +121,22 @@ public class CharacteristicQuantificationCollection {
             res.addCharacteristicQuantification(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public CharacteristicQuantificationCollection(edu.stanford.hakan.aim4api.base.CharacteristicQuantificationCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.CharacteristicQuantification> listV4 = v4.getCharacteristicQuantificationList();
+        for (edu.stanford.hakan.aim4api.base.CharacteristicQuantification itemV4 : listV4) {
+            if ("Interval".equals(itemV4.getXsiType())) {
+                this.AddCharacteristicQuantification(new Interval((edu.stanford.hakan.aim4api.base.Interval) itemV4));
+            } else if ("NonQuantifiable".equals(itemV4.getXsiType())) {
+                this.AddCharacteristicQuantification(new NonQuantifiable((edu.stanford.hakan.aim4api.base.NonQuantifiable) itemV4));
+            } else if ("Numerical".equals(itemV4.getXsiType())) {
+                this.AddCharacteristicQuantification(new Numerical((edu.stanford.hakan.aim4api.base.Numerical) itemV4));
+            } else if ("Quantile".equals(itemV4.getXsiType())) {
+                this.AddCharacteristicQuantification(new Quantile((edu.stanford.hakan.aim4api.base.Quantile) itemV4));
+            } else if ("Scale".equals(itemV4.getXsiType())) {
+                this.AddCharacteristicQuantification(new Scale((edu.stanford.hakan.aim4api.base.Scale) itemV4));
+            }
+        }
     }
 }

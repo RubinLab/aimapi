@@ -27,8 +27,10 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.ComparisonOperators;
+import edu.stanford.hakan.aim4api.base.AimException;
+
 import edu.stanford.hakan.aim4api.base.Enumerations;
+import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.ComparisonOperators;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -38,7 +40,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Interval extends CharacteristicQuantification {
+public class Interval extends CharacteristicQuantification implements IAimXMLOperations {
 
     private Double minValue;
     private Double maxValue;
@@ -103,6 +105,22 @@ public class Interval extends CharacteristicQuantification {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+
+        characteristicQuantification.setAttribute("minValue", this.getMinValue().toString());
+        characteristicQuantification.setAttribute("maxValue", this.getMaxValue().toString());
+        characteristicQuantification.setAttribute("minOperator", this.getMinOperator().toString());
+        characteristicQuantification.setAttribute("ucumString", this.getUcumString());
+        characteristicQuantification.setAttribute("maxOperator", this.getMaxOperator().toString());
+
+        return characteristicQuantification;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
 
@@ -114,16 +132,73 @@ public class Interval extends CharacteristicQuantification {
         this.maxOperator = AimUtility.ComparisonOperators.valueOf(map.getNamedItem("maxOperator").getNodeValue());
     }
 
+    
+    private void Control() throws AimException {
+
+        if (this.getMinValue() == null) {
+            throw new AimException("AimException: Interval's minValue can not be null");
+        }
+        if (this.getMaxValue() == null) {
+            throw new AimException("AimException: Interval's maxValue can not be null");
+        }
+        if (this.getMinOperator() == null) {
+            throw new AimException("AimException: Interval's minOperator can not be null");
+        }
+        if (this.getUcumString() == null) {
+            throw new AimException("AimException: Interval's ucumString can not be null");
+        }
+        if (this.getMaxOperator() == null) {
+            throw new AimException("AimException: Interval's maxOperator can not be null");
+        }
+    }
+
+    @Override
+    public boolean isEqualTo(Object other) {
+        Interval oth = (Interval) other;
+        if (this.minValue == null ? oth.minValue != null : !this.minValue.equals(oth.minValue)) {
+            return false;
+        }
+        if (this.maxValue == null ? oth.maxValue != null : !this.maxValue.equals(oth.maxValue)) {
+            return false;
+        }
+        if (this.minOperator == null ? oth.minOperator != null : !this.minOperator.equals(oth.minOperator)) {
+            return false;
+        }
+        if (this.ucumString == null ? oth.ucumString != null : !this.ucumString.equals(oth.ucumString)) {
+            return false;
+        }
+        if (this.maxOperator == null ? oth.maxOperator != null : !this.maxOperator.equals(oth.maxOperator)) {
+            return false;
+        }
+        return super.isEqualTo(other);
+    }
+
     @Override
     public edu.stanford.hakan.aim4api.base.CharacteristicQuantification toAimV4() {
         edu.stanford.hakan.aim4api.base.Interval res = new edu.stanford.hakan.aim4api.base.Interval();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setMaxOperator(Converter.toAimV4(this.getMaxOperator()));
-        res.setMaxValue(this.getMaxValue());
-        res.setMinOperator(Converter.toAimV4(this.getMinOperator()));
-        res.setMinValue(this.getMinValue());
-        res.setUcumString(Converter.toST(this.getUcumString()));
-        res.setComment(Converter.toST(this.getName()));
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setMaxOperator(Converter.toAimV4(this.getMaxOperator()));//
+        res.setMaxValue(this.getMaxValue());//
+        res.setMinOperator(Converter.toAimV4(this.getMinOperator()));//
+        res.setMinValue(this.getMinValue());//
+        res.setUcumString(Converter.toST(this.getUcumString()));//
+        res.setComment(Converter.toST(this.getName()));//
         return res;
+    }
+
+    public Interval(edu.stanford.hakan.aim4api.base.Interval v4) {
+        setXsiType("Interval");
+        this.setCagridId(0);
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        this.setMaxOperator(Converter.toAimV3(v4.getMaxOperator()));
+        this.setMaxValue(v4.getMaxValue());
+        this.setMinOperator(Converter.toAimV3(v4.getMinOperator()));
+        this.setMinValue(v4.getMinValue());
+        if (v4.getUcumString() != null) {
+            this.setUcumString(v4.getUcumString().getValue());
+        }
+        if (v4.getComment() != null) {
+            this.setName(v4.getComment().getValue());
+        }
     }
 }

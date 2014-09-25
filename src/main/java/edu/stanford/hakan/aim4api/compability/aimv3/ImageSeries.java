@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,7 +40,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class ImageSeries {
+public class ImageSeries implements IAimXMLOperations {
 
     private ImageCollection imageCollection = new ImageCollection();
     private Integer cagridId;
@@ -80,6 +82,23 @@ public class ImageSeries {
         this.imageCollection.AddImage(image);
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element imageSeries = doc.createElement("ImageSeries");
+        imageSeries.setAttribute("cagridId", Integer.toString(getCagridId()));
+        imageSeries.setAttribute("instanceUID", this.instanceUID);
+
+        if (this.imageCollection.getImageList().size() > 0) {
+            imageSeries.appendChild(this.imageCollection.getXMLNode(doc));
+        }
+
+        return imageSeries;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -94,11 +113,42 @@ public class ImageSeries {
         this.instanceUID = map.getNamedItem("instanceUID").getNodeValue();
     }
 
+   
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ImageSeries's cagridId can not be null");
+        }
+        if (getInstanceUID() == null) {
+            throw new AimException("AimException: ImageSeries's instanceUID can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ImageSeries oth = (ImageSeries) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.instanceUID == null ? oth.instanceUID != null : !this.instanceUID.equals(oth.instanceUID)) {
+            return false;
+        }
+        return this.imageCollection.isEqualTo(oth.imageCollection);
+    }
+
     public edu.stanford.hakan.aim4api.base.ImageSeries toAimV4() {
         edu.stanford.hakan.aim4api.base.ImageSeries res = new edu.stanford.hakan.aim4api.base.ImageSeries();
         res.setImageCollection(this.getImageCollection().toAimV4());
         res.setInstanceUid(Converter.toII(this.getInstanceUID()));
         res.setModality(new CD("", "", "", ""));
         return res;
+    }
+
+    public ImageSeries(edu.stanford.hakan.aim4api.base.ImageSeries v4) {
+        this.setCagridId(0);
+        if (v4.getImageCollection().getImageList().size() > 0) {
+            this.setImageCollection(new ImageCollection(v4.getImageCollection()));
+        }
+        if (v4.getInstanceUid() != null) {
+            this.setInstanceUID(v4.getInstanceUid().getRoot());
+        }
     }
 }

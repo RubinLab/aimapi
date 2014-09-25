@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Scale extends CharacteristicQuantification {
+public class Scale extends CharacteristicQuantification implements IAimXMLOperations {
 
     private String comment;
     private String description;
@@ -81,6 +83,24 @@ public class Scale extends CharacteristicQuantification {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+
+        if (this.getComment() != null) {
+            characteristicQuantification.setAttribute("comment", this.getComment());
+        }
+        if (this.getDescription() != null) {
+            characteristicQuantification.setAttribute("description", this.getDescription());
+        }
+        characteristicQuantification.setAttribute("value", this.getValue());
+
+        return characteristicQuantification;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         super.setXMLNode(node);
@@ -95,13 +115,49 @@ public class Scale extends CharacteristicQuantification {
         this.value = map.getNamedItem("value").getNodeValue();
     }
 
+    private void Control() throws AimException {
+        if (this.getValue() == null) {
+            throw new AimException("AimException: Scale's value can not be null");
+        }
+    }
+
+    @Override
+    public boolean isEqualTo(Object other) {
+        Scale oth = (Scale) other;
+        if (this.comment == null ? oth.comment != null : !this.comment.equals(oth.comment)) {
+            return false;
+        }
+        if (this.description == null ? oth.description != null : !this.description.equals(oth.description)) {
+            return false;
+        }
+        if (this.value == null ? oth.value != null : !this.value.equals(oth.value)) {
+            return false;
+        }
+        return super.isEqualTo(other);
+    }
+
     @Override
     public edu.stanford.hakan.aim4api.base.CharacteristicQuantification toAimV4() {
         edu.stanford.hakan.aim4api.base.Scale res = new edu.stanford.hakan.aim4api.base.Scale();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setComment(Converter.toST(this.getComment()));
-        res.setValue(Converter.toST(this.getValue()));
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setComment(Converter.toST(this.getComment()));//
+        res.setValue(Converter.toST(this.getValue()));//
         res.setLabel(Converter.toST(this.getDescription())); //*** label-description
         return res;
+    }
+
+    public Scale(edu.stanford.hakan.aim4api.base.Scale v4) {
+        setXsiType("Scale");
+        this.setCagridId(0);
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        if (v4.getValue() != null) {
+            this.setValue(v4.getValue().getValue());
+        }
+        if (v4.getComment() != null) {
+            this.setComment(v4.getComment().getValue());
+        }
+        if (v4.getLabel() != null) {
+            this.setDescription(v4.getLabel().getValue());
+        }
     }
 }

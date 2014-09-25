@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ImagingObservationCollection {
+public class ImagingObservationCollection implements IAimXMLOperations {
 
     private List<ImagingObservation> listImagingObservation = new ArrayList<ImagingObservation>();
 
@@ -53,6 +54,18 @@ public class ImagingObservationCollection {
         return this.listImagingObservation;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element imagingObservationCollection = doc.createElement("imagingObservationCollection");
+        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+            imagingObservationCollection.appendChild(this.listImagingObservation.get(i).getXMLNode(doc));
+        }
+
+        return imagingObservationCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listImagingObservation.clear();
@@ -67,6 +80,20 @@ public class ImagingObservationCollection {
         }
     }
 
+   
+    public boolean isEqualTo(Object other) {
+        ImagingObservationCollection oth = (ImagingObservationCollection) other;
+        if (this.listImagingObservation.size() != oth.listImagingObservation.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+            if (!this.listImagingObservation.get(i).isEqualTo(oth.listImagingObservation.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.ImagingObservationEntityCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.ImagingObservationEntityCollection res = new edu.stanford.hakan.aim4api.base.ImagingObservationEntityCollection();
         List<ImagingObservation> list = this.getImagingObservationList();
@@ -74,5 +101,12 @@ public class ImagingObservationCollection {
             res.addImagingObservationEntity(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public ImagingObservationCollection(edu.stanford.hakan.aim4api.base.ImagingObservationEntityCollection v4) {
+        List<edu.stanford.hakan.aim4api.base.ImagingObservationEntity> listV4 = v4.getImagingObservationEntityList();
+        for (edu.stanford.hakan.aim4api.base.ImagingObservationEntity itemV4 : listV4) {
+            this.AddImagingObservation(new ImagingObservation(itemV4));
+        }
     }
 }

@@ -27,17 +27,18 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class AimStatus {
+public class AimStatus implements IAimXMLOperations {
 
     private Integer cagridId;
     private Double annotationVersion;
@@ -116,6 +117,27 @@ public class AimStatus {
         this.codingSchemeVersion = codingSchemeVersion;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element aimStatus = doc.createElement("AimStatus");
+        aimStatus.setAttribute("cagridId", this.cagridId.toString());
+        aimStatus.setAttribute("annotationVersion", this.annotationVersion.toString());
+        aimStatus.setAttribute("codeValue", this.codeValue);
+        aimStatus.setAttribute("codeMeaning", this.codeMeaning);
+        aimStatus.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            aimStatus.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        if (this.authorizedBy != null) {
+            aimStatus.setAttribute("authorizedBy", this.authorizedBy);
+        }
+        return aimStatus;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -130,6 +152,49 @@ public class AimStatus {
         if (map.getNamedItem("authorizedBy") != null) {
             this.authorizedBy = map.getNamedItem("authorizedBy").getNodeValue();
         }
+    }    
+
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: AimStatus's cagridId can not be null");
+        }
+        if (getAnnotationVersion() == null) {
+            throw new AimException("AimException: AimStatus's annotationVersion can not be null");
+        }
+        if (getCodeValue() == null) {
+            throw new AimException("AimException: AimStatus's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: AimStatus's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: AimStatus's codingSchemeDesignator can not be null");
+        }
     }
 
+    public boolean isEqualTo(Object other) {
+        AimStatus oth = (AimStatus) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.annotationVersion == null ? oth.annotationVersion != null : !this.annotationVersion.equals(oth.annotationVersion)) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.authorizedBy == null ? oth.authorizedBy != null : !this.authorizedBy.equals(oth.authorizedBy)) {
+            return false;
+        }
+        return true;
+    }
 }

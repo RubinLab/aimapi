@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,7 +40,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class ImagingObservationCharacteristic {
+public class ImagingObservationCharacteristic implements IAimXMLOperations {
 
     private Integer cagridId;
     private String codeValue;
@@ -140,6 +142,33 @@ public class ImagingObservationCharacteristic {
         this.characteristicQuantificationCollection.AddCharacteristicQuantification(newCharacteristicQuantification);
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element imagingObservationCharacteristic = doc.createElement("ImagingObservationCharacteristic");
+        imagingObservationCharacteristic.setAttribute("cagridId", this.cagridId.toString());
+        imagingObservationCharacteristic.setAttribute("codeValue", this.codeValue);
+        imagingObservationCharacteristic.setAttribute("codeMeaning", this.codeMeaning);
+        imagingObservationCharacteristic.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            imagingObservationCharacteristic.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        if (this.comment != null) {
+            imagingObservationCharacteristic.setAttribute("comment", this.comment);
+        }
+        if (this.annotatorConfidence != null) {
+            imagingObservationCharacteristic.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+        }
+        imagingObservationCharacteristic.setAttribute("label", this.label);
+        if (this.characteristicQuantificationCollection.getCharacteristicQuantificationList().size() > 0) {
+            imagingObservationCharacteristic.appendChild(this.characteristicQuantificationCollection.getXMLNode(doc));
+        }
+        return imagingObservationCharacteristic;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -166,18 +195,95 @@ public class ImagingObservationCharacteristic {
         this.label = map.getNamedItem("label").getNodeValue();
     }
 
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ImagingObservationCharacteristic's cagridId can not be null");
+        }
+        if (getCodeValue() == null) {
+            throw new AimException("AimException: ImagingObservationCharacteristic's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: ImagingObservationCharacteristic's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: ImagingObservationCharacteristic's codingSchemeDesignator can not be null");
+        }
+        if (getLabel() == null) {
+            throw new AimException("AimException: ImagingObservationCharacteristic's label can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ImagingObservationCharacteristic oth = (ImagingObservationCharacteristic) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.comment == null ? oth.comment != null : !this.comment.equals(oth.comment)) {
+            return false;
+        }
+        if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence.equals(oth.annotatorConfidence)) {
+            return false;
+        }
+        if (this.label == null ? oth.label != null : !this.label.equals(oth.label)) {
+            return false;
+        }
+        return this.characteristicQuantificationCollection.isEqualTo(oth.characteristicQuantificationCollection);
+    }
+
     public edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic toAimV4() {
         edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic res = new edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setCharacteristicQuantificationCollection(this.getCharacteristicQuantificationCollection().toAimV4());
-        res.setComment(Converter.toST(this.getComment()));
-        res.setLabel(Converter.toST(this.getLabel()));
-        CD typeCode = new CD();
-        typeCode.setCode(this.getCodeValue());
-        typeCode.setCodeSystem(this.getCodeMeaning());
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
-        res.addTypeCode(typeCode);
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setCharacteristicQuantificationCollection(this.getCharacteristicQuantificationCollection().toAimV4());//
+        res.setComment(Converter.toST(this.getComment()));//
+        res.setLabel(Converter.toST(this.getLabel()));//
+        CD typeCode = new CD();//
+        typeCode.setCode(this.getCodeValue());//
+        typeCode.setCodeSystem(this.getCodeMeaning());//
+        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        res.addTypeCode(typeCode);//
         return res;
+    }
+
+    public ImagingObservationCharacteristic(edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic v4) {
+        this.setCagridId(0);
+        if (v4.getListTypeCode().size() > 0) {
+            CD typeCode = v4.getListTypeCode().get(0);
+            if (typeCode.getCode() != null) {
+                this.setCodeValue(typeCode.getCode());
+            }
+            if (typeCode.getCodeSystem() != null) {
+                this.setCodeMeaning(typeCode.getCodeSystem());
+            }
+            if (typeCode.getCodeSystemName() != null) {
+                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+            }
+            if (typeCode.getCodeSystemVersion() != null) {
+                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+            }
+        }
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        if (v4.getCharacteristicQuantificationCollection().getCharacteristicQuantificationList().size() > 0) {
+            this.setCharacteristicQuantificationCollection(new CharacteristicQuantificationCollection(v4.getCharacteristicQuantificationCollection()));
+        }
+        if (v4.getComment() != null) {
+            this.setComment(v4.getComment().getValue());
+        }
+        if (v4.getLabel() != null) {
+            this.setLabel(v4.getLabel().getValue());
+        }
     }
 }

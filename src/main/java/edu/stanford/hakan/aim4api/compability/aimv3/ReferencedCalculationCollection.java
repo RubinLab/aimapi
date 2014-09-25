@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ReferencedCalculationCollection {
+public class ReferencedCalculationCollection implements IAimXMLOperations {
 
     private List<ReferencedCalculation> listReferencedCalculation = new ArrayList<ReferencedCalculation>();
 
@@ -50,6 +51,17 @@ public class ReferencedCalculationCollection {
         return this.listReferencedCalculation;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element referencedCalculationCollection = doc.createElement("referencedCalculationCollection");
+        for (int i = 0; i < this.listReferencedCalculation.size(); i++) {
+            referencedCalculationCollection.appendChild(this.listReferencedCalculation.get(i).getXMLNode(doc));
+        }
+        return referencedCalculationCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listReferencedCalculation.clear();
@@ -62,5 +74,18 @@ public class ReferencedCalculationCollection {
                 this.AddReferencedCalculation(obj);
             }
         }
+    }
+    
+    public boolean isEqualTo(Object other) {
+        ReferencedCalculationCollection oth = (ReferencedCalculationCollection) other;
+        if (this.listReferencedCalculation.size() != oth.listReferencedCalculation.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listReferencedCalculation.size(); i++) {
+            if (!this.listReferencedCalculation.get(i).isEqualTo(oth.listReferencedCalculation.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

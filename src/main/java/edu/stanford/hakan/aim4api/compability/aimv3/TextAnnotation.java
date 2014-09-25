@@ -27,19 +27,20 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class TextAnnotation {
+public class TextAnnotation implements IAimXMLOperations {
 
     public Integer cagridId;
     private String font;
@@ -158,6 +159,48 @@ public class TextAnnotation {
         this.listMultiPoint.add(newMultiPoint);
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+        
+        Element textAnnotation = doc.createElement("TextAnnotation");
+        textAnnotation.setAttribute("cagridId", this.cagridId.toString());
+        if (this.font != null) {
+            textAnnotation.setAttribute("font", this.font);
+        }
+        if (this.fontColor != null) {
+            textAnnotation.setAttribute("fontColor", this.fontColor);
+        }
+        if (this.fontEffect != null) {
+            textAnnotation.setAttribute("fontEffect", this.fontEffect);
+        }
+        if (this.fontSize != null) {
+            textAnnotation.setAttribute("fontSize", this.fontSize);
+        }
+        if (this.fontStyle != null) {
+            textAnnotation.setAttribute("fontStyle", this.fontStyle);
+        }
+        textAnnotation.setAttribute("text", this.text);
+        if (this.textJustify != null) {
+            textAnnotation.setAttribute("textJustify", this.textJustify);
+        }
+        if (this.fontOpacity != null) {
+            textAnnotation.setAttribute("fontOpacity", this.fontOpacity);
+        }
+
+        Element multiPoint = doc.createElement("multiPoint");
+        for (int i = 0; i < this.listMultiPoint.size(); i++) {
+            multiPoint.appendChild(this.listMultiPoint.get(i).getXMLNode(doc));
+        }
+        if (this.listMultiPoint.size() > 0) {
+            textAnnotation.appendChild(multiPoint);
+        }
+
+        return textAnnotation;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listMultiPoint.clear();
@@ -199,5 +242,54 @@ public class TextAnnotation {
         if (map.getNamedItem("fontOpacity") != null) {
             this.fontOpacity = map.getNamedItem("fontOpacity").getNodeValue();
         }
+    }
+
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: TextAnnotation's cagridId can not be null");
+        }
+        if (getText() == null) {
+            throw new AimException("AimException: TextAnnotation's text can not be null");
+        }
+    }
+    
+    public boolean isEqualTo(Object other) {
+        TextAnnotation oth = (TextAnnotation) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.font == null ? oth.font != null : !this.font.equals(oth.font)) {
+            return false;
+        }
+        if (this.fontColor == null ? oth.fontColor != null : !this.fontColor.equals(oth.fontColor)) {
+            return false;
+        }
+        if (this.fontEffect == null ? oth.fontEffect != null : !this.fontEffect.equals(oth.fontEffect)) {
+            return false;
+        }
+        if (this.fontSize == null ? oth.fontSize != null : !this.fontSize.equals(oth.fontSize)) {
+            return false;
+        }  
+        if (this.fontStyle == null ? oth.fontStyle != null : !this.fontStyle.equals(oth.fontStyle)) {
+            return false;
+        }
+        if (this.text == null ? oth.text != null : !this.text.equals(oth.text)) {
+            return false;
+        }
+        if (this.textJustify == null ? oth.textJustify != null : !this.textJustify.equals(oth.textJustify)) {
+            return false;
+        }
+        if (this.fontOpacity == null ? oth.fontOpacity != null : !this.fontOpacity.equals(oth.fontOpacity)) {
+            return false;
+        }        
+        if (this.listMultiPoint.size() != oth.listMultiPoint.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listMultiPoint.size(); i++) {
+            if (!this.listMultiPoint.get(i).isEqualTo(oth.listMultiPoint.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -27,16 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author Hakan BULU
  */
-public class AnnotationRole {
+public class AnnotationRole implements IAimXMLOperations {
 
     private Integer cagridId;
     private String codeValue;
@@ -105,6 +106,24 @@ public class AnnotationRole {
         this.roleSequenceNumber = roleSequenceNumber;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element annotationRole = doc.createElement("AnnotationRole");
+        annotationRole.setAttribute("cagridId", Integer.toString(this.cagridId));
+        annotationRole.setAttribute("codeValue", this.codeValue);
+        annotationRole.setAttribute("codeMeaning", this.codeMeaning);
+        annotationRole.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+        if (this.codingSchemeVersion != null) {
+            annotationRole.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+        }
+        annotationRole.setAttribute("roleSequenceNumber", Integer.toString(this.roleSequenceNumber));
+        return annotationRole;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -116,5 +135,47 @@ public class AnnotationRole {
             this.codingSchemeVersion = map.getNamedItem("codingSchemeVersion").getNodeValue();
         }
         this.roleSequenceNumber = Integer.parseInt(map.getNamedItem("roleSequenceNumber").getNodeValue());
+    }
+    
+
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: AnnotationRole's cagridId can not be null");
+        }
+        if (getCodeValue() == null) {
+            throw new AimException("AimException: AnnotationRole's codeValue can not be null");
+        }
+        if (getCodeMeaning() == null) {
+            throw new AimException("AimException: AnnotationRole's codeMeaning can not be null");
+        }
+        if (getCodingSchemeDesignator() == null) {
+            throw new AimException("AimException: AnnotationRole's codingSchemeDesignator can not be null");
+        }
+        if (getRoleSequenceNumber() == null) {
+            throw new AimException("AimException: AnnotationRole's roleSequenceNumber can not be null");
+        }
+    }
+    
+    public boolean isEqualTo(Object other) {
+        AnnotationRole oth = (AnnotationRole) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.codeValue == null ? oth.codeValue != null : !this.codeValue.equals(oth.codeValue)) {
+            return false;
+        }
+        if (this.codeMeaning == null ? oth.codeMeaning != null : !this.codeMeaning.equals(oth.codeMeaning)) {
+            return false;
+        }
+        if (this.codingSchemeDesignator == null ? oth.codingSchemeDesignator != null : !this.codingSchemeDesignator.equals(oth.codingSchemeDesignator)) {
+            return false;
+        }
+        if (this.codingSchemeVersion == null ? oth.codingSchemeVersion != null : !this.codingSchemeVersion.equals(oth.codingSchemeVersion)) {
+            return false;
+        }
+        if (this.roleSequenceNumber == null ? oth.roleSequenceNumber != null : !this.roleSequenceNumber.equals(oth.roleSequenceNumber)) {
+            return false;
+        }
+        return true;
     }
 }

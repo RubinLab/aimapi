@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,7 +40,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class GeometricShape {
+public class GeometricShape implements IGeometricShape, IAimXMLOperations {
 
     private Integer cagridId;
     private String lineColor;
@@ -71,70 +73,87 @@ public class GeometricShape {
         this.shapeIdentifier = shapeIdentifier;
     }
 
+    @Override
     public Integer getCagridId() {
         return this.cagridId;
     }
 
+    @Override
     public void setCagridId(Integer cagridId) {
         this.cagridId = cagridId;
     }
 
+    @Override
     public Boolean getIncludeFlag() {
         return this.includeFlag;
     }
 
+    @Override
     public void setIncludeFlag(Boolean includeFlag) {
         this.includeFlag = includeFlag;
     }
 
+    @Override
     public String getLineColor() {
         return this.lineColor;
     }
 
+    @Override
     public void setLineColor(String lineColor) {
         this.lineColor = lineColor;
     }
 
+    @Override
     public String getLineOpacity() {
         return this.lineOpacity;
     }
 
+    @Override
     public void setLineOpacity(String lineOpacity) {
         this.lineOpacity = lineOpacity;
     }
 
+    @Override
     public String getLineStyle() {
         return this.lineStyle;
     }
 
+    @Override
     public void setLineStyle(String lineStyle) {
         this.lineStyle = lineStyle;
     }
 
+    @Override
     public String getLineThickness() {
         return this.lineThickness;
     }
 
+    @Override
     public void setLineThickness(String lineThickness) {
         this.lineThickness = lineThickness;
     }
 
+    @Override
     public Integer getShapeIdentifier() {
         return this.shapeIdentifier;
     }
 
+    @Override
     public void setShapeIdentifier(Integer shapeIdentifier) {
         this.shapeIdentifier = shapeIdentifier;
     }
 
+    @Override
     public void setSpatialCoordinateCollection(SpatialCoordinateCollection spatialCoordinateCollection) {
         this.spatialCoordinateCollection = spatialCoordinateCollection;
     }
 
+    @Override
     public SpatialCoordinateCollection getSpatialCoordinateCollection() {
         return this.spatialCoordinateCollection;
     }
 
+    @Override
     public void addSpatialCoordinate(SpatialCoordinate spatialCoordinate) {
         this.spatialCoordinateCollection.AddSpatialCoordinate(spatialCoordinate);
     }
@@ -143,6 +162,37 @@ public class GeometricShape {
         return this.spatialCoordinateCollection.getSpatialCoordinateList();
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element geometricShape = doc.createElement("GeometricShape");
+        geometricShape.setAttribute("cagridId", this.cagridId.toString());
+        if (this.lineColor != null) {
+            geometricShape.setAttribute("lineColor", this.lineColor);
+        }
+        if (this.lineOpacity != null) {
+            geometricShape.setAttribute("lineOpacity", this.lineOpacity);
+        }
+        if (this.lineStyle != null) {
+            geometricShape.setAttribute("lineStyle", this.lineStyle);
+        }
+        if (this.lineThickness != null) {
+            geometricShape.setAttribute("lineThickness", this.lineThickness);
+        }
+        geometricShape.setAttribute("includeFlag", this.includeFlag.toString());
+        geometricShape.setAttribute("shapeIdentifier", this.shapeIdentifier.toString());
+        geometricShape.setAttribute("xsi:type", this.xsiType);
+        if (this.spatialCoordinateCollection.getSpatialCoordinateList().size() > 0) {
+            geometricShape.appendChild(this.spatialCoordinateCollection.getXMLNode(doc));
+        }
+
+        return geometricShape;
+
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -172,6 +222,45 @@ public class GeometricShape {
 
     }
 
+
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: GeometricShape's cagridId can not be null");
+        }
+        if (getIncludeFlag() == null) {
+            throw new AimException("AimException: GeometricShape's includeFlag can not be null");
+        }
+        if (getShapeIdentifier() == null) {
+            throw new AimException("AimException: GeometricShape's shapeIdentifier can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        GeometricShape oth = (GeometricShape) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.lineColor == null ? oth.lineColor != null : !this.lineColor.equals(oth.lineColor)) {
+            return false;
+        }
+        if (this.lineOpacity == null ? oth.lineOpacity != null : !this.lineOpacity.equals(oth.lineOpacity)) {
+            return false;
+        }
+        if (this.lineStyle == null ? oth.lineStyle != null : !this.lineStyle.equals(oth.lineStyle)) {
+            return false;
+        }
+        if (this.lineThickness == null ? oth.lineThickness != null : !this.lineThickness.equals(oth.lineThickness)) {
+            return false;
+        }
+        if (this.includeFlag == null ? oth.includeFlag != null : !this.includeFlag.equals(oth.includeFlag)) {
+            return false;
+        }
+        if (this.shapeIdentifier == null ? oth.shapeIdentifier != null : !this.shapeIdentifier.equals(oth.shapeIdentifier)) {
+            return false;
+        }
+        return this.spatialCoordinateCollection.isEqualTo(oth.spatialCoordinateCollection);
+    }
+
     public edu.stanford.hakan.aim4api.base.MarkupEntity toAimV4() {
         edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity res = null;
 
@@ -196,4 +285,7 @@ public class GeometricShape {
         res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
         return res;
     }
+
+//    public GeometricShape(edu.stanford.hakan.aim4api.base.MarkupEntity v4) {        
+//    }
 }

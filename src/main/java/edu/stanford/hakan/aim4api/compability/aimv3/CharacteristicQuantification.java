@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class CharacteristicQuantification {
+public class CharacteristicQuantification implements ICharacteristicQuantification, IAimXMLOperations {
 
     private Integer cagridId;
     private String name;
@@ -51,34 +53,90 @@ public class CharacteristicQuantification {
         return xsiType;
     }
 
+    @Override
     public Double getAnnotatorConfidence() {
         return annotatorConfidence;
     }
 
+    @Override
     public void setAnnotatorConfidence(Double annotatorConfidence) {
         this.annotatorConfidence = annotatorConfidence;
     }
 
+    @Override
     public Integer getCagridId() {
         return cagridId;
     }
 
+    @Override
     public void setCagridId(Integer cagridId) {
         this.cagridId = cagridId;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element characteristicQuantification = doc.createElement("CharacteristicQuantification");
+        characteristicQuantification.setAttribute("cagridId", this.cagridId.toString());
+        characteristicQuantification.setAttribute("name", this.name);
+        if (this.annotatorConfidence != null) {
+            characteristicQuantification.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+        }
+        characteristicQuantification.setAttribute("xsi:type", this.xsiType);
+
+        return characteristicQuantification;
+    }
+
+    @Override
+    public void setXMLNode(Node node) {
+
+        NamedNodeMap map = node.getAttributes();
+        this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
+        this.name = map.getNamedItem("name").getNodeValue();
+        if (map.getNamedItem("annotatorConfidence") != null) {
+            this.annotatorConfidence = Double.parseDouble(map.getNamedItem("annotatorConfidence").getNodeValue());
+        }
+    }   
+
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: CharacteristicQuantification's cagridId can not be null");
+        }
+        if (getName() == null) {
+            throw new AimException("AimException: CharacteristicQuantification's name can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        CharacteristicQuantification oth = (CharacteristicQuantification) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.name == null ? oth.name != null : !this.name.equals(oth.name)) {
+            return false;
+        }
+        if (this.annotatorConfidence == null ? oth.annotatorConfidence != null : !this.annotatorConfidence.equals(oth.annotatorConfidence)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.CharacteristicQuantification toAimV4() {
         edu.stanford.hakan.aim4api.base.CharacteristicQuantification res = new edu.stanford.hakan.aim4api.base.CharacteristicQuantification();
-        res.setAnnotatorConfidence(this.getAnnotatorConfidence());
-        res.setLabel(Converter.toST(this.getName()));
+        res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
+        res.setLabel(Converter.toST(this.getName()));//
         return res;
     }
 
@@ -102,13 +160,15 @@ public class CharacteristicQuantification {
         return ((NonQuantifiable) this);
     }
 
-    public void setXMLNode(Node node) {
-
-        NamedNodeMap map = node.getAttributes();
-        this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
-        this.name = map.getNamedItem("name").getNodeValue();
-        if (map.getNamedItem("annotatorConfidence") != null) {
-            this.annotatorConfidence = Double.parseDouble(map.getNamedItem("annotatorConfidence").getNodeValue());
+    public CharacteristicQuantification(edu.stanford.hakan.aim4api.base.CharacteristicQuantification v4) {
+        this.setCagridId(0);
+        this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
+        if (v4.getLabel() != null) {
+            this.setName(v4.getLabel().getValue());
         }
+    }
+
+    public CharacteristicQuantification() {
+
     }
 }

@@ -27,16 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import org.w3c.dom.Element;
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate {
+public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implements IAimXMLOperations {
 
     private Double x;
     private Double y;
@@ -91,6 +92,19 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+       
+        this.Control();
+        
+        Element spatialCoordinate = (Element) super.getXMLNode(doc);
+        spatialCoordinate.setAttribute("x", this.getX().toString());
+        spatialCoordinate.setAttribute("y", this.getY().toString());
+        spatialCoordinate.setAttribute("z", this.getZ().toString());
+        spatialCoordinate.setAttribute("frameOfReferenceUID", this.getFrameOfReferenceUID());
+        return spatialCoordinate;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
         NamedNodeMap map = node.getAttributes();
@@ -98,5 +112,40 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate {
         this.setX(Double.parseDouble(map.getNamedItem("x").getNodeValue()));
         this.setY(Double.parseDouble(map.getNamedItem("y").getNodeValue()));
         this.setZ(Double.parseDouble(map.getNamedItem("z").getNodeValue()));
+    }
+
+    private void Control() throws AimException {
+
+        if (this.getX() == null) {
+            throw new AimException("AimException: ThreeDimensionSpatialCoordinate's x can not be null");
+        }
+        if (this.getY() == null) {
+            throw new AimException("AimException: ThreeDimensionSpatialCoordinate's y can not be null");
+        }
+        if (this.getZ() == null) {
+            throw new AimException("AimException: ThreeDimensionSpatialCoordinate's z can not be null");
+        }
+        if (this.getFrameOfReferenceUID() == null) {
+            throw new AimException("AimException: ThreeDimensionSpatialCoordinate's frameOfReferenceUID can not be null");
+        }
+    }
+    
+        
+    @Override
+    public boolean isEqualTo(Object other) {
+        ThreeDimensionSpatialCoordinate oth = (ThreeDimensionSpatialCoordinate) other;
+        if (this.x == null ? oth.x != null : !this.x.equals(oth.x)) {
+            return false;
+        }
+        if (this.y == null ? oth.y != null : !this.y.equals(oth.y)) {
+            return false;
+        }
+        if (this.z == null ? oth.z != null : !this.z.equals(oth.z)) {
+            return false;
+        }
+        if (this.frameOfReferenceUID == null ? oth.frameOfReferenceUID != null : !this.frameOfReferenceUID.equals(oth.frameOfReferenceUID)) {
+            return false;
+        }       
+        return super.isEqualTo(other);
     }
 }

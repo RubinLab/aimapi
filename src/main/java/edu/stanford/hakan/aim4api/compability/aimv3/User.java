@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -36,7 +38,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class User {
+public class User implements IAimXMLOperations {
 
     private Integer cagridId;
     private String name;
@@ -95,6 +97,25 @@ public class User {
         this.roleInTrial = roleInTrial;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element user = doc.createElement("User");
+        user.setAttribute("cagridId", this.cagridId.toString());
+        user.setAttribute("name", this.name);
+        user.setAttribute("loginName", this.loginName);
+        if (this.roleInTrial != null) {
+            user.setAttribute("roleInTrial", this.roleInTrial);
+        }
+        if (this.numberWithinRoleOfClinicalTrial != null) {
+            user.setAttribute("numberWithinRoleOfClinicalTrial", Integer.toString(this.numberWithinRoleOfClinicalTrial));
+        }
+        return user;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NamedNodeMap map = node.getAttributes();
@@ -109,12 +130,59 @@ public class User {
         }
     }
 
+    
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: User's cagridId can not be null");
+        }
+        if (getName() == null) {
+            throw new AimException("AimException: User's name can not be null");
+        }
+        if (getLoginName() == null) {
+            throw new AimException("AimException: User's loginName can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        User oth = (User) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.name == null ? oth.name != null : !this.name.equals(oth.name)) {
+            return false;
+        }
+        if (this.loginName == null ? oth.loginName != null : !this.loginName.equals(oth.loginName)) {
+            return false;
+        }
+        if (this.roleInTrial == null ? oth.roleInTrial != null : !this.roleInTrial.equals(oth.roleInTrial)) {
+            return false;
+        }
+        if (this.numberWithinRoleOfClinicalTrial == null ? oth.numberWithinRoleOfClinicalTrial != null : !this.numberWithinRoleOfClinicalTrial.equals(oth.numberWithinRoleOfClinicalTrial)) {
+            return false;
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.User toAimV4() {
         edu.stanford.hakan.aim4api.base.User res = new edu.stanford.hakan.aim4api.base.User();
-        res.setLoginName(Converter.toST(this.getLoginName()));
-        res.setName(Converter.toST(this.getName()));
+        res.setLoginName(Converter.toST(this.getLoginName()));//
+        res.setName(Converter.toST(this.getName()));//
         res.setNumberWithinRoleOfClinicalTrial(this.getNumberWithinRoleOfClinicalTrial());
         res.setRoleInTrial(Converter.toST(this.getRoleInTrial()));
         return res;
+    }
+
+    public User(edu.stanford.hakan.aim4api.base.User v4) {
+        this.setCagridId(0);
+        if (v4.getLoginName() != null) {
+            this.setLoginName(v4.getLoginName().getValue());
+        }
+        if (v4.getName() != null) {
+            this.setName(v4.getName().getValue());
+        }
+        this.setNumberWithinRoleOfClinicalTrial(v4.getNumberWithinRoleOfClinicalTrial());
+        if (v4.getRoleInTrial() != null) {
+            this.setRoleInTrial(v4.getRoleInTrial().getValue());
+        }
     }
 }

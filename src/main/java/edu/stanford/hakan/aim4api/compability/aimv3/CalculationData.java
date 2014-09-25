@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -37,7 +39,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Hakan BULU
  */
-public class CalculationData {
+public class CalculationData implements IAimXMLOperations {
 
     private CoordinateCollection coordinateCollection = new CoordinateCollection();
     private Integer cagridId;
@@ -80,6 +82,22 @@ public class CalculationData {
         this.coordinateCollection.AddCoordinate(newCoordinate);
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element calculationData = doc.createElement("CalculationData");
+        calculationData.setAttribute("cagridId", this.cagridId.toString());
+        calculationData.setAttribute("value", this.value.toString());
+        if (this.coordinateCollection.getCoordinateList().size() > 0) {
+            calculationData.appendChild(this.coordinateCollection.getXMLNode(doc));
+        }
+        return calculationData;
+
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         NodeList listChils = node.getChildNodes();
@@ -92,6 +110,27 @@ public class CalculationData {
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.value = Double.parseDouble(map.getNamedItem("value").getNodeValue());
+    }    
+
+    private void Control() throws AimException {
+
+        if (getCagridId() == null) {
+            throw new AimException("AimException: CalculationData's cagridId can not be null");
+        }
+        if (getValue() == null) {
+            throw new AimException("AimException: CalculationData's value can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        CalculationData oth = (CalculationData) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.value == null ? oth.value != null : !this.value.equals(oth.value)) {
+            return false;
+        }
+        return this.coordinateCollection.isEqualTo(oth.coordinateCollection);
     }
 
     public edu.stanford.hakan.aim4api.base.CalculationData toAimV4() {
@@ -99,5 +138,15 @@ public class CalculationData {
         res.setCoordinateCollection(this.getCoordinateCollection().toAimV4());
         res.setValue(Converter.toST(this.getValue()));
         return res;
+    }
+
+    public CalculationData(edu.stanford.hakan.aim4api.base.CalculationData v4) {
+        this.setCagridId(0);
+        if (v4.getCoordinateCollection().getCoordinateList().size() > 0) {
+            this.setCoordinateCollection(new CoordinateCollection(v4.getCoordinateCollection()));
+        }
+        if (v4.getValue() != null) {
+            this.setValue(Double.parseDouble(v4.getValue().getValue()));
+        }
     }
 }

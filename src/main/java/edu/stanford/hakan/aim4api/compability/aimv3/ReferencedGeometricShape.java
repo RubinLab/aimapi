@@ -27,11 +27,12 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityHasCalculationEntityStatement;
 import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -41,7 +42,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class ReferencedGeometricShape {
+public class ReferencedGeometricShape implements IAimXMLOperations {
 
     private Integer cagridId;
     private Integer referencedShapeIdentifier;
@@ -70,10 +71,42 @@ public class ReferencedGeometricShape {
         this.referencedShapeIdentifier = referencedShapeIdentifier;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+
+        Element referencedGeometricShape = doc.createElement("ReferencedGeometricShape");
+        referencedGeometricShape.setAttribute("cagridId", this.cagridId.toString());
+        referencedGeometricShape.setAttribute("referencedShapeIdentifier", this.referencedShapeIdentifier.toString());
+        return referencedGeometricShape;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.referencedShapeIdentifier = Integer.parseInt(map.getNamedItem("referencedShapeIdentifier").getNodeValue());
+    }
+
+    private void Control() throws AimException {
+        if (getCagridId() == null) {
+            throw new AimException("AimException: ReferencedGeometricShape's cagridId can not be null");
+        }
+        if (getReferencedShapeIdentifier() == null) {
+            throw new AimException("AimException: ReferencedGeometricShape's referencedShapeIdentifier can not be null");
+        }
+    }
+
+    public boolean isEqualTo(Object other) {
+        ReferencedGeometricShape oth = (ReferencedGeometricShape) other;
+        if (this.cagridId != oth.cagridId) {
+            return false;
+        }
+        if (this.referencedShapeIdentifier == null ? oth.referencedShapeIdentifier != null : !this.referencedShapeIdentifier.equals(oth.referencedShapeIdentifier)) {
+            return false;
+        }
+        return true;
     }
 
     public void toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation, II calculationUniqueIdentifier) {

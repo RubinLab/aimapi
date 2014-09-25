@@ -28,6 +28,8 @@
 package edu.stanford.hakan.aim4api.base;
 
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -163,10 +165,22 @@ public class AnnotationCollection implements IAimXMLOperations {
 
     @Override
     public void setXMLNode(Node node) {
+        
         NamedNodeMap map = node.getAttributes();
-        if (map.getNamedItem("aimVersion") != null) {
-            this.aimVersion = Enumerations.AimVersion.valueOf(map.getNamedItem("aimVersion").getNodeValue());
-        }
+//        if (map.getNamedItem("aimVersion") != null) {
+//            this.aimVersion = Enumerations.AimVersion.valueOf(map.getNamedItem("aimVersion").getNodeValue().replace('.', '_'));
+//        }
+//        
+//        if(Enumerations.AimVersion.AIMv4_0 != this.aimVersion )
+//        {
+//            try {
+//                node = AnnotationConverter.annotationV3ToV4(node);
+//                this.aimVersion = Enumerations.AimVersion.AIMv4_0;
+//            } catch (AimException ex) {
+//                Logger.getLogger(AnnotationCollection.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+        
         if (map.getNamedItem("xsiType") != null) {
             this.xsiType = map.getNamedItem("xsiType").getNodeValue();
         }

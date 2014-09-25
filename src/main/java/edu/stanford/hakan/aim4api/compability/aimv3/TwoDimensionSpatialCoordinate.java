@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,7 +39,7 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class TwoDimensionSpatialCoordinate extends SpatialCoordinate {
+public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements IAimXMLOperations {
 
     private String imageReferenceUID;
     private Integer referencedFrameNumber;
@@ -92,6 +94,19 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate {
     }
 
     @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        this.Control();
+        
+        Element spatialCoordinate = (Element) super.getXMLNode(doc);
+        spatialCoordinate.setAttribute("imageReferenceUID", this.getImageReferenceUID());
+        spatialCoordinate.setAttribute("referencedFrameNumber", this.getReferencedFrameNumber().toString());
+        spatialCoordinate.setAttribute("x", this.getX().toString());
+        spatialCoordinate.setAttribute("y", this.getY().toString());
+        return spatialCoordinate;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
         NamedNodeMap map = node.getAttributes();
@@ -99,6 +114,42 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate {
         this.setReferencedFrameNumber(Integer.parseInt(map.getNamedItem("referencedFrameNumber").getNodeValue()));
         this.setX(Double.parseDouble(map.getNamedItem("x").getNodeValue()));
         this.setY(Double.parseDouble(map.getNamedItem("y").getNodeValue()));
+    }
+
+    
+    private void Control() throws AimException {
+        if (this.getImageReferenceUID() == null) {
+            throw new AimException("AimException: TwoDimensionSpatialCoordinate's imageReferenceUID can not be null");
+        }
+        if (this.getReferencedFrameNumber() == null) {
+            throw new AimException("AimException: TwoDimensionSpatialCoordinate's referencedFrameNumber can not be null");
+        }
+        if (this.getX() == null) {
+            throw new AimException("AimException: TwoDimensionSpatialCoordinate's x can not be null");
+        }
+        if (this.getY() == null) {
+            throw new AimException("AimException: TwoDimensionSpatialCoordinate's y can not be null");
+        }
+    }
+    
+        
+        
+    @Override
+    public boolean isEqualTo(Object other) {
+        TwoDimensionSpatialCoordinate oth = (TwoDimensionSpatialCoordinate) other;
+        if (this.x == null ? oth.x != null : !this.x.equals(oth.x)) {
+            return false;
+        }
+        if (this.y == null ? oth.y != null : !this.y.equals(oth.y)) {
+            return false;
+        }
+        if (this.imageReferenceUID == null ? oth.imageReferenceUID != null : !this.imageReferenceUID.equals(oth.imageReferenceUID)) {
+            return false;
+        }
+        if (this.referencedFrameNumber == null ? oth.referencedFrameNumber != null : !this.referencedFrameNumber.equals(oth.referencedFrameNumber)) {
+            return false;
+        }
+        return super.isEqualTo(other);
     }
 
     public edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate toAimV4(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
@@ -111,6 +162,20 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate {
         res.getTwoDimensionGeometricShapeEntity().setReferencedFrameNumber(this.getReferencedFrameNumber());
         res.getTwoDimensionGeometricShapeEntity().setImageReferenceUid(Converter.toII(this.getImageReferenceUID()));
         return res;
+    }
+
+    public TwoDimensionSpatialCoordinate(edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate v4) {
+        setXsiType("TwoDimensionSpatialCoordinate");
+        this.setCagridId(0);
+        this.setCoordinateIndex(v4.getCoordinateIndex());
+        this.setX(v4.getX());
+        this.setY(v4.getY());
+        if (v4.getTwoDimensionGeometricShapeEntity() != null && v4.getTwoDimensionGeometricShapeEntity().getImageReferenceUid() != null) {
+            this.setImageReferenceUID(v4.getTwoDimensionGeometricShapeEntity().getImageReferenceUid().getRoot());
+        }
+        if (v4.getTwoDimensionGeometricShapeEntity() != null) {
+            this.setReferencedFrameNumber(v4.getTwoDimensionGeometricShapeEntity().getReferencedFrameNumber());
+        }
     }
 
 }

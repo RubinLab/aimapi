@@ -27,18 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  *
  * @author Hakan BULU
  */
-public class ImagingObservationCharacteristicCollection {
+public class ImagingObservationCharacteristicCollection implements IAimXMLOperations {
 
     private List<ImagingObservationCharacteristic> listImagingObservationCharacteristic = new ArrayList<ImagingObservationCharacteristic>();
 
@@ -53,6 +54,17 @@ public class ImagingObservationCharacteristicCollection {
         return this.listImagingObservationCharacteristic;
     }
 
+    @Override
+    public Node getXMLNode(Document doc) throws AimException {
+
+        Element imagingObservationCharacteristicCollection = doc.createElement("imagingObservationCharacteristicCollection");
+        for (int i = 0; i < this.listImagingObservationCharacteristic.size(); i++) {
+            imagingObservationCharacteristicCollection.appendChild(this.listImagingObservationCharacteristic.get(i).getXMLNode(doc));
+        }
+        return imagingObservationCharacteristicCollection;
+    }
+
+    @Override
     public void setXMLNode(Node node) {
 
         this.listImagingObservationCharacteristic.clear();
@@ -67,6 +79,20 @@ public class ImagingObservationCharacteristicCollection {
         }
     }
 
+        
+    public boolean isEqualTo(Object other) {
+        ImagingObservationCharacteristicCollection oth = (ImagingObservationCharacteristicCollection) other;
+        if (this.listImagingObservationCharacteristic.size() != oth.listImagingObservationCharacteristic.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.listImagingObservationCharacteristic.size(); i++) {
+            if (!this.listImagingObservationCharacteristic.get(i).isEqualTo(oth.listImagingObservationCharacteristic.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristicCollection toAimV4() {
         edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristicCollection res = new edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristicCollection();
         List<ImagingObservationCharacteristic> list = this.getImagingObservationCharacteristicList();
@@ -74,5 +100,12 @@ public class ImagingObservationCharacteristicCollection {
             res.addImagingObservationCharacteristic(itemV3.toAimV4());
         }
         return res;
+    }
+
+    public ImagingObservationCharacteristicCollection(edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristicCollection v4) {
+       List<edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic> listV4 = v4.getImagingObservationCharacteristicList();
+        for (edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic itemV4 : listV4) {
+            this.AddImagingObservationCharacteristic(new ImagingObservationCharacteristic(itemV4));
+        }
     }
 }
