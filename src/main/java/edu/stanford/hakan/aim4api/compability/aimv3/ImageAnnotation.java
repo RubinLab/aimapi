@@ -49,8 +49,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
     private ImageReferenceCollection imageReferenceCollection = new ImageReferenceCollection();
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
-    private TextAnnotationCollection textAnnotationCollection= new TextAnnotationCollection();
-    
+    private TextAnnotationCollection textAnnotationCollection= new TextAnnotationCollection();    
 
     public ImageAnnotation() {
         super();

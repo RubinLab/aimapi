@@ -121,6 +121,7 @@ public class DatabaseOperations {
 
         doc = XML.getDocumentFromString("<results>" + sb.toString() + "</results>");
 
+        
         Node node = doc.getFirstChild();
         boolean uidOK = false;
         boolean markupOK = false;
@@ -200,16 +201,17 @@ public class DatabaseOperations {
             } else {
                 if (!uidOK && "exist".equals(currentNode.getNodeName())) {
                     annotationID = currentNode.getTextContent();
+                    if(annotationID.equals("e1lu3gachgs31rjsxs81bdllsjwijq73dtm4y5jr"))
+                        annotationID = "e1lu3gachgs31rjsxs81bdllsjwijq73dtm4y5jr";
                     uidOK = true;
                 } else if (!patOK && uidOK && "exist".equals(currentNode.getNodeName())) {
                     patientID = currentNode.getTextContent();
                     patOK = true;
-
                 } else if (!userOK && patOK && uidOK && "exist".equals(currentNode.getNodeName())) {
                     userLoginName = currentNode.getTextContent();
                     userOK = true;
 
-                } else if ("ImageStudy".equals(currentNode.getNodeName())) {
+                } else if (userOK && patOK && uidOK && "ImageStudy".equals(currentNode.getNodeName())) {
                     studyID = currentNode.getAttributes().getNamedItem("instanceUID").getNodeValue();
                     NodeList childsImageStudy = currentNode.getChildNodes();
                     for (int j = 0; j < childsImageStudy.getLength(); j++) {
