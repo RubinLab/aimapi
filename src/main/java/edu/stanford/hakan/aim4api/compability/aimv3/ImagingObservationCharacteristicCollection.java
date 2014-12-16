@@ -54,15 +54,15 @@ public class ImagingObservationCharacteristicCollection implements IAimXMLOperat
         return this.listImagingObservationCharacteristic;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element imagingObservationCharacteristicCollection = doc.createElement("imagingObservationCharacteristicCollection");
-        for (int i = 0; i < this.listImagingObservationCharacteristic.size(); i++) {
-            imagingObservationCharacteristicCollection.appendChild(this.listImagingObservationCharacteristic.get(i).getXMLNode(doc));
-        }
-        return imagingObservationCharacteristicCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element imagingObservationCharacteristicCollection = doc.createElement("imagingObservationCharacteristicCollection");
+//        for (int i = 0; i < this.listImagingObservationCharacteristic.size(); i++) {
+//            imagingObservationCharacteristicCollection.appendChild(this.listImagingObservationCharacteristic.get(i).getXMLNode(doc));
+//        }
+//        return imagingObservationCharacteristicCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

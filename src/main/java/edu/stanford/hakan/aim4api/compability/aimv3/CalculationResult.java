@@ -115,24 +115,24 @@ public class CalculationResult implements IAimXMLOperations {
         this.unitOfMeasure = unitOfMeasure;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element calculationResult = doc.createElement("CalculationResult");
-        calculationResult.setAttribute("cagridId", this.cagridId.toString());
-        calculationResult.setAttribute("type", this.type.toString());
-        calculationResult.setAttribute("numberOfDimensions", this.numberOfDimensions.toString());
-        calculationResult.setAttribute("unitOfMeasure", this.unitOfMeasure);
-        if (this.calculationDataCollection.getCalculationDataList().size() > 0) {
-            calculationResult.appendChild(this.calculationDataCollection.getXMLNode(doc));
-        }
-        if (this.dimensionCollection.getDimensionList().size() > 0) {
-            calculationResult.appendChild(this.dimensionCollection.getXMLNode(doc));
-        }
-        return calculationResult;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element calculationResult = doc.createElement("CalculationResult");
+//        calculationResult.setAttribute("cagridId", this.cagridId.toString());
+//        calculationResult.setAttribute("type", this.type.toString());
+//        calculationResult.setAttribute("numberOfDimensions", this.numberOfDimensions.toString());
+//        calculationResult.setAttribute("unitOfMeasure", this.unitOfMeasure);
+//        if (this.calculationDataCollection.getCalculationDataList().size() > 0) {
+//            calculationResult.appendChild(this.calculationDataCollection.getXMLNode(doc));
+//        }
+//        if (this.dimensionCollection.getDimensionList().size() > 0) {
+//            calculationResult.appendChild(this.dimensionCollection.getXMLNode(doc));
+//        }
+//        return calculationResult;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

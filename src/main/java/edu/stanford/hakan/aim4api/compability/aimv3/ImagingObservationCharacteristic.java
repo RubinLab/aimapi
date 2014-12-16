@@ -142,31 +142,31 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         this.characteristicQuantificationCollection.AddCharacteristicQuantification(newCharacteristicQuantification);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imagingObservationCharacteristic = doc.createElement("ImagingObservationCharacteristic");
-        imagingObservationCharacteristic.setAttribute("cagridId", this.cagridId.toString());
-        imagingObservationCharacteristic.setAttribute("codeValue", this.codeValue);
-        imagingObservationCharacteristic.setAttribute("codeMeaning", this.codeMeaning);
-        imagingObservationCharacteristic.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            imagingObservationCharacteristic.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.comment != null) {
-            imagingObservationCharacteristic.setAttribute("comment", this.comment);
-        }
-        if (this.annotatorConfidence != null) {
-            imagingObservationCharacteristic.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-        }
-        imagingObservationCharacteristic.setAttribute("label", this.label);
-        if (this.characteristicQuantificationCollection.getCharacteristicQuantificationList().size() > 0) {
-            imagingObservationCharacteristic.appendChild(this.characteristicQuantificationCollection.getXMLNode(doc));
-        }
-        return imagingObservationCharacteristic;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imagingObservationCharacteristic = doc.createElement("ImagingObservationCharacteristic");
+//        imagingObservationCharacteristic.setAttribute("cagridId", this.cagridId.toString());
+//        imagingObservationCharacteristic.setAttribute("codeValue", this.codeValue);
+//        imagingObservationCharacteristic.setAttribute("codeMeaning", this.codeMeaning);
+//        imagingObservationCharacteristic.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            imagingObservationCharacteristic.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.comment != null) {
+//            imagingObservationCharacteristic.setAttribute("comment", this.comment);
+//        }
+//        if (this.annotatorConfidence != null) {
+//            imagingObservationCharacteristic.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+//        }
+//        imagingObservationCharacteristic.setAttribute("label", this.label);
+//        if (this.characteristicQuantificationCollection.getCharacteristicQuantificationList().size() > 0) {
+//            imagingObservationCharacteristic.appendChild(this.characteristicQuantificationCollection.getXMLNode(doc));
+//        }
+//        return imagingObservationCharacteristic;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

@@ -66,17 +66,17 @@ public class AnnotationOfAnnotation extends Annotation implements IAimXMLOperati
         this.referencedAnnotationCollection = referencedAnnotationCollection;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element annotation = (Element) super.getXMLNode(doc);
-
-        if (this.getReferencedAnnotationCollection().getReferencedAnnotationList().size() > 0) {
-            annotation.appendChild(this.getReferencedAnnotationCollection().getXMLNode(doc));
-        }
-        return annotation;
-
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element annotation = (Element) super.getXMLNode(doc);
+//
+//        if (this.getReferencedAnnotationCollection().getReferencedAnnotationList().size() > 0) {
+//            annotation.appendChild(this.getReferencedAnnotationCollection().getXMLNode(doc));
+//        }
+//        return annotation;
+//
+//    }
 
     @Override
     public void setXMLNode(Node node) {

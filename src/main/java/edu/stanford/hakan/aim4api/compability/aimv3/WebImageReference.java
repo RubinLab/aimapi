@@ -59,15 +59,15 @@ public class WebImageReference extends ImageReference implements IAimXMLOperatio
         this.uri = uri;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        
-        this.Control();
-
-        Element imageReference = (Element) super.getXMLNode(doc);
-        imageReference.setAttribute("uri", this.getUri());
-        return imageReference;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        
+//        this.Control();
+//
+//        Element imageReference = (Element) super.getXMLNode(doc);
+//        imageReference.setAttribute("uri", this.getUri());
+//        return imageReference;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

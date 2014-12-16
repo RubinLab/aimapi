@@ -54,15 +54,15 @@ public class CoordinateCollection implements IAimXMLOperations {
         return this.listCoordinate;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element coordinateCollection = doc.createElement("coordinateCollection");
-        for (int i = 0; i < this.listCoordinate.size(); i++) {
-            coordinateCollection.appendChild(this.listCoordinate.get(i).getXMLNode(doc));
-        }
-        return coordinateCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element coordinateCollection = doc.createElement("coordinateCollection");
+//        for (int i = 0; i < this.listCoordinate.size(); i++) {
+//            coordinateCollection.appendChild(this.listCoordinate.get(i).getXMLNode(doc));
+//        }
+//        return coordinateCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

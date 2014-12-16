@@ -162,35 +162,35 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
         return this.spatialCoordinateCollection.getSpatialCoordinateList();
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element geometricShape = doc.createElement("GeometricShape");
-        geometricShape.setAttribute("cagridId", this.cagridId.toString());
-        if (this.lineColor != null) {
-            geometricShape.setAttribute("lineColor", this.lineColor);
-        }
-        if (this.lineOpacity != null) {
-            geometricShape.setAttribute("lineOpacity", this.lineOpacity);
-        }
-        if (this.lineStyle != null) {
-            geometricShape.setAttribute("lineStyle", this.lineStyle);
-        }
-        if (this.lineThickness != null) {
-            geometricShape.setAttribute("lineThickness", this.lineThickness);
-        }
-        geometricShape.setAttribute("includeFlag", this.includeFlag.toString());
-        geometricShape.setAttribute("shapeIdentifier", this.shapeIdentifier.toString());
-        geometricShape.setAttribute("xsi:type", this.xsiType);
-        if (this.spatialCoordinateCollection.getSpatialCoordinateList().size() > 0) {
-            geometricShape.appendChild(this.spatialCoordinateCollection.getXMLNode(doc));
-        }
-
-        return geometricShape;
-
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element geometricShape = doc.createElement("GeometricShape");
+//        geometricShape.setAttribute("cagridId", this.cagridId.toString());
+//        if (this.lineColor != null) {
+//            geometricShape.setAttribute("lineColor", this.lineColor);
+//        }
+//        if (this.lineOpacity != null) {
+//            geometricShape.setAttribute("lineOpacity", this.lineOpacity);
+//        }
+//        if (this.lineStyle != null) {
+//            geometricShape.setAttribute("lineStyle", this.lineStyle);
+//        }
+//        if (this.lineThickness != null) {
+//            geometricShape.setAttribute("lineThickness", this.lineThickness);
+//        }
+//        geometricShape.setAttribute("includeFlag", this.includeFlag.toString());
+//        geometricShape.setAttribute("shapeIdentifier", this.shapeIdentifier.toString());
+//        geometricShape.setAttribute("xsi:type", this.xsiType);
+//        if (this.spatialCoordinateCollection.getSpatialCoordinateList().size() > 0) {
+//            geometricShape.appendChild(this.spatialCoordinateCollection.getXMLNode(doc));
+//        }
+//
+//        return geometricShape;
+//
+//    }
 
     @Override
     public void setXMLNode(Node node) {
@@ -274,6 +274,8 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
             res = new edu.stanford.hakan.aim4api.base.TwoDimensionPoint();
         } else if ("Polyline".equals(this.getXsiType())) {
             res = new edu.stanford.hakan.aim4api.base.TwoDimensionPolyline();
+        } else if ("Spline".equals(this.getXsiType())) {
+            res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpline();
         }
 
         res.setIncludeFlag(this.getIncludeFlag());

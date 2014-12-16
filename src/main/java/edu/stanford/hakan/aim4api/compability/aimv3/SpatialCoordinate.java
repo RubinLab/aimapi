@@ -71,17 +71,17 @@ public class SpatialCoordinate implements ISpatialCoordinate, IAimXMLOperations 
         this.coordinateIndex = coordinateIndex;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element spatialCoordinate = doc.createElement("SpatialCoordinate");
-        spatialCoordinate.setAttribute("cagridId", this.cagridId.toString());
-        spatialCoordinate.setAttribute("coordinateIndex", this.coordinateIndex.toString());
-        spatialCoordinate.setAttribute("xsi:type", this.xsiType);
-        return spatialCoordinate;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element spatialCoordinate = doc.createElement("SpatialCoordinate");
+//        spatialCoordinate.setAttribute("cagridId", this.cagridId.toString());
+//        spatialCoordinate.setAttribute("coordinateIndex", this.coordinateIndex.toString());
+//        spatialCoordinate.setAttribute("xsi:type", this.xsiType);
+//        return spatialCoordinate;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

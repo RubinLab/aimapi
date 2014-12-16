@@ -210,42 +210,42 @@ public class Calculation implements IAimXMLOperations {
         this.codeValueCanBeNull = codeValueCanBeNull;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        this.Control();
-
-        Element calculation = doc.createElement("Calculation");
-        calculation.setAttribute("cagridId", this.cagridId.toString());
-        calculation.setAttribute("uid", this.uid);
-        calculation.setAttribute("description", this.description);
-        if (this.mathML != null) {
-            calculation.setAttribute("mathML", this.mathML);
-        }
-        if (this.codeValue != null) {
-            calculation.setAttribute("codeValue", this.codeValue);
-        }
-        calculation.setAttribute("codeMeaning", this.codeMeaning);
-        calculation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            calculation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.algorithmName != null) {
-            calculation.setAttribute("algorithmName", this.algorithmName);
-        }
-        if (this.algorithmVersion != null) {
-            calculation.setAttribute("algorithmVersion", this.algorithmVersion);
-        }
-        if (this.referencedCalculationCollection.getReferencedCalculationList().size() > 0) {
-            calculation.appendChild(this.referencedCalculationCollection.getXMLNode(doc));
-        }
-        if (this.calculationResultCollection.getCalculationResultList().size() > 0) {
-            calculation.appendChild(this.calculationResultCollection.getXMLNode(doc));
-        }
-        if (this.referencedGeometricShapeCollection.getReferencedGeometricShapeList().size() > 0) {
-            calculation.appendChild(this.referencedGeometricShapeCollection.getXMLNode(doc));
-        }
-        return calculation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        this.Control();
+//
+//        Element calculation = doc.createElement("Calculation");
+//        calculation.setAttribute("cagridId", this.cagridId.toString());
+//        calculation.setAttribute("uid", this.uid);
+//        calculation.setAttribute("description", this.description);
+//        if (this.mathML != null) {
+//            calculation.setAttribute("mathML", this.mathML);
+//        }
+//        if (this.codeValue != null) {
+//            calculation.setAttribute("codeValue", this.codeValue);
+//        }
+//        calculation.setAttribute("codeMeaning", this.codeMeaning);
+//        calculation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            calculation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.algorithmName != null) {
+//            calculation.setAttribute("algorithmName", this.algorithmName);
+//        }
+//        if (this.algorithmVersion != null) {
+//            calculation.setAttribute("algorithmVersion", this.algorithmVersion);
+//        }
+//        if (this.referencedCalculationCollection.getReferencedCalculationList().size() > 0) {
+//            calculation.appendChild(this.referencedCalculationCollection.getXMLNode(doc));
+//        }
+//        if (this.calculationResultCollection.getCalculationResultList().size() > 0) {
+//            calculation.appendChild(this.calculationResultCollection.getXMLNode(doc));
+//        }
+//        if (this.referencedGeometricShapeCollection.getReferencedGeometricShapeList().size() > 0) {
+//            calculation.appendChild(this.referencedGeometricShapeCollection.getXMLNode(doc));
+//        }
+//        return calculation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

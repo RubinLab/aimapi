@@ -73,21 +73,21 @@ public class DICOMImageReference extends ImageReference implements IAimXMLOperat
         this.presentationStateCollection.addPresentationState(presentationState);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imageReference = (Element) super.getXMLNode(doc);
-        Element imageStudy = doc.createElement("imageStudy");
-        imageStudy.appendChild(this.ImageStudy.getXMLNode(doc));
-        imageReference.appendChild(imageStudy);
-        if (this.getPresentationStateCollection() != null && this.getPresentationStateCollection().getPresentationStateList().size() > 0) {
-            imageReference.appendChild(this.getPresentationStateCollection().getXMLNode(doc));
-        }
-
-        return imageReference;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imageReference = (Element) super.getXMLNode(doc);
+//        Element imageStudy = doc.createElement("imageStudy");
+//        imageStudy.appendChild(this.ImageStudy.getXMLNode(doc));
+//        imageReference.appendChild(imageStudy);
+//        if (this.getPresentationStateCollection() != null && this.getPresentationStateCollection().getPresentationStateList().size() > 0) {
+//            imageReference.appendChild(this.getPresentationStateCollection().getXMLNode(doc));
+//        }
+//
+//        return imageReference;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

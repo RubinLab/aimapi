@@ -71,16 +71,16 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
         this.referencedShapeIdentifier = referencedShapeIdentifier;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element referencedGeometricShape = doc.createElement("ReferencedGeometricShape");
-        referencedGeometricShape.setAttribute("cagridId", this.cagridId.toString());
-        referencedGeometricShape.setAttribute("referencedShapeIdentifier", this.referencedShapeIdentifier.toString());
-        return referencedGeometricShape;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element referencedGeometricShape = doc.createElement("ReferencedGeometricShape");
+//        referencedGeometricShape.setAttribute("cagridId", this.cagridId.toString());
+//        referencedGeometricShape.setAttribute("referencedShapeIdentifier", this.referencedShapeIdentifier.toString());
+//        return referencedGeometricShape;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

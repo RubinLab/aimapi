@@ -117,25 +117,25 @@ public class AimStatus implements IAimXMLOperations {
         this.codingSchemeVersion = codingSchemeVersion;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element aimStatus = doc.createElement("AimStatus");
-        aimStatus.setAttribute("cagridId", this.cagridId.toString());
-        aimStatus.setAttribute("annotationVersion", this.annotationVersion.toString());
-        aimStatus.setAttribute("codeValue", this.codeValue);
-        aimStatus.setAttribute("codeMeaning", this.codeMeaning);
-        aimStatus.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            aimStatus.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.authorizedBy != null) {
-            aimStatus.setAttribute("authorizedBy", this.authorizedBy);
-        }
-        return aimStatus;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element aimStatus = doc.createElement("AimStatus");
+//        aimStatus.setAttribute("cagridId", this.cagridId.toString());
+//        aimStatus.setAttribute("annotationVersion", this.annotationVersion.toString());
+//        aimStatus.setAttribute("codeValue", this.codeValue);
+//        aimStatus.setAttribute("codeMeaning", this.codeMeaning);
+//        aimStatus.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            aimStatus.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.authorizedBy != null) {
+//            aimStatus.setAttribute("authorizedBy", this.authorizedBy);
+//        }
+//        return aimStatus;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

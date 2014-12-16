@@ -25,8 +25,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package edu.stanford.hakan.aim4api.compability.aimv3_old;
+package edu.stanford.hakan.aim4api.compability.aimv3;
 
+
+import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -34,25 +36,49 @@ import org.w3c.dom.Node;
  *
  * @author Hakan BULU
  */
-public class Point extends GeometricShape {
+public class Spline extends GeometricShape implements IAimXMLOperations {
 
-    public Point() {
+    public Spline() {
         super();
-        setXsiType("Point");
+        setXsiType("Spline");
     }
 
-    public Point(Integer cagridId, String lineColor, String lineOpacity, String lineStyle, String lineThickness, Boolean includeFlag, Integer shapeIdentifier) {
+    public Spline(Integer cagridId, String lineColor, String lineOpacity, String lineStyle, String lineThickness, Boolean includeFlag, Integer shapeIdentifier) {
         super(cagridId, lineColor, lineOpacity, lineStyle, lineThickness, includeFlag, shapeIdentifier);
-        setXsiType("Point");
+        setXsiType("Spline");
     }
+
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        return super.getXMLNode(doc);
+//    }
 
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
     }
 
-    public Point(edu.stanford.hakan.aim4api.base.TwoDimensionPoint v4) {
-        setXsiType("Point");
+    
+    @Override
+    public boolean isEqualTo(Object other) {
+        return super.isEqualTo(other);
+    }
+
+    @Override
+    public edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity toAimV4() {
+        edu.stanford.hakan.aim4api.base.TwoDimensionSpline res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpline();
+        res.setIncludeFlag(this.getIncludeFlag());
+        res.setLineColor(Converter.toST(this.getLineColor()));
+        res.setLineOpacity(Converter.toST(this.getLineOpacity()));
+        res.setLineStyle(Converter.toST(this.getLineStyle()));
+        res.setLineThickness(Converter.toST(this.getLineThickness()));
+        res.setShapeIdentifier(this.getShapeIdentifier());
+        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
+        return res;
+    }
+
+    public Spline(edu.stanford.hakan.aim4api.base.TwoDimensionSpline v4) {
+        setXsiType("Spline");
         this.setCagridId(0);
         this.setIncludeFlag(v4.getIncludeFlag());
         if (v4.getLineColor() != null) {
@@ -69,18 +95,5 @@ public class Point extends GeometricShape {
         }
         this.setShapeIdentifier(v4.getShapeIdentifier());
         this.setSpatialCoordinateCollection(new SpatialCoordinateCollection(v4.getTwoDimensionSpatialCoordinateCollection(), v4));
-    }
-
-    @Override
-    public edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity toAimV4() {
-        edu.stanford.hakan.aim4api.base.TwoDimensionPoint res = new edu.stanford.hakan.aim4api.base.TwoDimensionPoint();
-        res.setIncludeFlag(this.getIncludeFlag());
-        res.setLineColor(Converter.toST(this.getLineColor()));
-        res.setLineOpacity(Converter.toST(this.getLineOpacity()));
-        res.setLineStyle(Converter.toST(this.getLineStyle()));
-        res.setLineThickness(Converter.toST(this.getLineThickness()));
-        res.setShapeIdentifier(this.getShapeIdentifier());
-        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
-        return res;
     }
 }

@@ -125,26 +125,26 @@ public class Person implements IAimXMLOperations {
         this.rdfID = rdfID;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element person = doc.createElement("Person");
-        person.setAttribute("cagridId", this.cagridId.toString());
-        person.setAttribute("name", this.name);
-        person.setAttribute("id", this.id);
-        if (this.birthDate != null) {
-            person.setAttribute("birthDate", this.birthDate.toString());
-        }
-        if (this.sex != null) {
-            person.setAttribute("sex", this.sex);
-        }
-        if (this.ethnicGroup != null) {
-            person.setAttribute("ethnicGroup", this.ethnicGroup);
-        }
-        return person;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element person = doc.createElement("Person");
+//        person.setAttribute("cagridId", this.cagridId.toString());
+//        person.setAttribute("name", this.name);
+//        person.setAttribute("id", this.id);
+//        if (this.birthDate != null) {
+//            person.setAttribute("birthDate", this.birthDate.toString());
+//        }
+//        if (this.sex != null) {
+//            person.setAttribute("sex", this.sex);
+//        }
+//        if (this.ethnicGroup != null) {
+//            person.setAttribute("ethnicGroup", this.ethnicGroup);
+//        }
+//        return person;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

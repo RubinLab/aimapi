@@ -167,42 +167,42 @@ public class ImagingObservation implements IAimXMLOperations {
         this.listReferencedGeometricShape = listReferencedGeometricShape;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imagingObservation = doc.createElement("ImagingObservation");
-        imagingObservation.setAttribute("cagridId", this.cagridId.toString());
-        imagingObservation.setAttribute("codeValue", this.codeValue);
-        imagingObservation.setAttribute("codeMeaning", this.codeMeaning);
-        imagingObservation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            imagingObservation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.comment != null) {
-            imagingObservation.setAttribute("comment", this.comment);
-        }
-        if (this.annotatorConfidence != null) {
-            imagingObservation.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-        }
-        if (this.isPresent != null) {
-            imagingObservation.setAttribute("isPresent", this.isPresent.toString());
-        }
-        imagingObservation.setAttribute("label", this.label);
-
-        Element referencedGeometricShape = doc.createElement("referencedGeometricShape");
-        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
-            referencedGeometricShape.appendChild(this.listReferencedGeometricShape.get(i).getXMLNode(doc));
-        }
-        if (this.listReferencedGeometricShape.size() > 0) {
-            imagingObservation.appendChild(referencedGeometricShape);
-        }
-        if (this.imagingObservationCharacteristicCollection.getImagingObservationCharacteristicList().size() > 0) {
-            imagingObservation.appendChild(this.imagingObservationCharacteristicCollection.getXMLNode(doc));
-        }
-        return imagingObservation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imagingObservation = doc.createElement("ImagingObservation");
+//        imagingObservation.setAttribute("cagridId", this.cagridId.toString());
+//        imagingObservation.setAttribute("codeValue", this.codeValue);
+//        imagingObservation.setAttribute("codeMeaning", this.codeMeaning);
+//        imagingObservation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            imagingObservation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.comment != null) {
+//            imagingObservation.setAttribute("comment", this.comment);
+//        }
+//        if (this.annotatorConfidence != null) {
+//            imagingObservation.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+//        }
+//        if (this.isPresent != null) {
+//            imagingObservation.setAttribute("isPresent", this.isPresent.toString());
+//        }
+//        imagingObservation.setAttribute("label", this.label);
+//
+//        Element referencedGeometricShape = doc.createElement("referencedGeometricShape");
+//        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+//            referencedGeometricShape.appendChild(this.listReferencedGeometricShape.get(i).getXMLNode(doc));
+//        }
+//        if (this.listReferencedGeometricShape.size() > 0) {
+//            imagingObservation.appendChild(referencedGeometricShape);
+//        }
+//        if (this.imagingObservationCharacteristicCollection.getImagingObservationCharacteristicList().size() > 0) {
+//            imagingObservation.appendChild(this.imagingObservationCharacteristicCollection.getXMLNode(doc));
+//        }
+//        return imagingObservation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

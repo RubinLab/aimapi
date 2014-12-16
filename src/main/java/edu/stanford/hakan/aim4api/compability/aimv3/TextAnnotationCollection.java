@@ -54,15 +54,15 @@ public class TextAnnotationCollection  implements IAimXMLOperations  {
         return this.listTextAnnotation;
     }
     
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {     
-        
-        Element textAnnotationCollection = doc.createElement("textAnnotationCollection"); 
-        for (int i = 0; i < this.listTextAnnotation.size(); i++) {
-            textAnnotationCollection.appendChild(this.listTextAnnotation.get(i).getXMLNode(doc));
-        }        
-        return textAnnotationCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {     
+//        
+//        Element textAnnotationCollection = doc.createElement("textAnnotationCollection"); 
+//        for (int i = 0; i < this.listTextAnnotation.size(); i++) {
+//            textAnnotationCollection.appendChild(this.listTextAnnotation.get(i).getXMLNode(doc));
+//        }        
+//        return textAnnotationCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {       

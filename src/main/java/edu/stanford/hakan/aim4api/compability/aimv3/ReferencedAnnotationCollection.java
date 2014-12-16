@@ -52,15 +52,15 @@ public class ReferencedAnnotationCollection  implements IAimXMLOperations  {
         return this.listReferencedAnnotation;
     }
     
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {     
-        
-        Element referencedAnnotationCollection = doc.createElement("referencedAnnotationCollection"); 
-        for (int i = 0; i < this.listReferencedAnnotation.size(); i++) {
-            referencedAnnotationCollection.appendChild(this.listReferencedAnnotation.get(i).getXMLNode(doc));
-        }        
-        return referencedAnnotationCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {     
+//        
+//        Element referencedAnnotationCollection = doc.createElement("referencedAnnotationCollection"); 
+//        for (int i = 0; i < this.listReferencedAnnotation.size(); i++) {
+//            referencedAnnotationCollection.appendChild(this.listReferencedAnnotation.get(i).getXMLNode(doc));
+//        }        
+//        return referencedAnnotationCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {        

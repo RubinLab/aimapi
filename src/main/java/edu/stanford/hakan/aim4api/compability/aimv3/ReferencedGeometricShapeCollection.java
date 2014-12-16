@@ -51,15 +51,15 @@ public class ReferencedGeometricShapeCollection implements IAimXMLOperations {
         return this.listReferencedGeometricShape;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element referencedGeometricShapeCollection = doc.createElement("referencedGeometricShapeCollection");
-        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
-            referencedGeometricShapeCollection.appendChild(this.listReferencedGeometricShape.get(i).getXMLNode(doc));
-        }
-        return referencedGeometricShapeCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element referencedGeometricShapeCollection = doc.createElement("referencedGeometricShapeCollection");
+//        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+//            referencedGeometricShapeCollection.appendChild(this.listReferencedGeometricShape.get(i).getXMLNode(doc));
+//        }
+//        return referencedGeometricShapeCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

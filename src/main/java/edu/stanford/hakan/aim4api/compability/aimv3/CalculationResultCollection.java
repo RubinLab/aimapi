@@ -54,15 +54,15 @@ public class CalculationResultCollection implements IAimXMLOperations {
         return this.listCalculationResult;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element calculationResultCollection = doc.createElement("calculationResultCollection");
-        for (int i = 0; i < this.listCalculationResult.size(); i++) {
-            calculationResultCollection.appendChild(this.listCalculationResult.get(i).getXMLNode(doc));
-        }
-        return calculationResultCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element calculationResultCollection = doc.createElement("calculationResultCollection");
+//        for (int i = 0; i < this.listCalculationResult.size(); i++) {
+//            calculationResultCollection.appendChild(this.listCalculationResult.get(i).getXMLNode(doc));
+//        }
+//        return calculationResultCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

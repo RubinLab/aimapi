@@ -1707,6 +1707,31 @@
 			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
 		</Properties>
 	</Class>
+	<Class name="TwoDimensionSpline" abstract="false" type="aim">
+		<Paths>
+			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionPolyline']/" />
+			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TextAnnotationEntity']/GeometricShapeEntity[@xsi:type='TwoDimensionPolyline']/" />
+		</Paths>
+		<Properties>
+			<Property name="imageReferenceUid" type="II" isa="isoClass" />
+			<Property name="referencedFrameNumber" type="Integer" isa="simpleElement" />
+			<Property name="uri" type="ST" isa="isoClass" />
+			<Property name="TwoDimensionSpatialCoordinate" type="TwoDimensionSpatialCoordinate" isa="aimClass" />
+			<Property name="questionTypeCode" type="CD" isa="isoClass" />
+			<Property name="shapeIdentifier" type="Integer" isa="simpleElement" />
+			<Property name="label" type="ST" isa="isoClass" />
+			<Property name="description" type="ST" isa="isoClass" />
+			<Property name="includeFlag" type="Boolean" isa="simpleElement" />
+			<Property name="comment" type="ST" isa="isoClass" />
+			<Property name="lineColor" type="ST" isa="isoClass" />
+			<Property name="lineOpacity" type="ST" isa="isoClass" />
+			<Property name="lineStyle" type="ST" isa="isoClass" />
+			<Property name="lineThickness" type="ST" isa="isoClass" />
+			<Property name="questionIndex" type="Integer" isa="simpleElement" />
+			<Property name="interpolationMethod" type="CD" isa="isoClass" />
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
+		</Properties>
+	</Class>
 	<Class name="TwoDimensionSpatialCoordinate" abstract="false" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionCircle']/twoDimensionSpatialCoordinateCollection/TwoDimensionSpatialCoordinate/" />

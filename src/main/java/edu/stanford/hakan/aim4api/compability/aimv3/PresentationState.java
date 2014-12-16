@@ -58,17 +58,17 @@ public class PresentationState implements IAimXMLOperations {
         this.sopInstanceUID = sopInstanceUID;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element presentationState = doc.createElement("PresentationState");
-        presentationState.setAttribute("cagridId", Integer.toString(this.cagridId));
-        presentationState.setAttribute("sopInstanceUID", this.sopInstanceUID);
-        return presentationState;
-
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element presentationState = doc.createElement("PresentationState");
+//        presentationState.setAttribute("cagridId", Integer.toString(this.cagridId));
+//        presentationState.setAttribute("sopInstanceUID", this.sopInstanceUID);
+//        return presentationState;
+//
+//    }
 
     @Override
     public void setXMLNode(Node node) {

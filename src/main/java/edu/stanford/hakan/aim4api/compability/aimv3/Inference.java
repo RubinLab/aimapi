@@ -117,26 +117,26 @@ public class Inference implements IAimXMLOperations {
         this.imageEvidence = imageEvidence;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element inference = doc.createElement("Inference");
-        inference.setAttribute("cagridId", this.cagridId.toString());
-        inference.setAttribute("codeValue", this.codeValue);
-        inference.setAttribute("codeMeaning", this.codeMeaning);
-        inference.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            inference.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.annotatorConfidence != null) {
-            inference.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-        }
-        inference.setAttribute("imageEvidence", this.imageEvidence.toString());
-        return inference;
-
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element inference = doc.createElement("Inference");
+//        inference.setAttribute("cagridId", this.cagridId.toString());
+//        inference.setAttribute("codeValue", this.codeValue);
+//        inference.setAttribute("codeMeaning", this.codeMeaning);
+//        inference.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            inference.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.annotatorConfidence != null) {
+//            inference.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+//        }
+//        inference.setAttribute("imageEvidence", this.imageEvidence.toString());
+//        return inference;
+//
+//    }
 
     @Override
     public void setXMLNode(Node node) {

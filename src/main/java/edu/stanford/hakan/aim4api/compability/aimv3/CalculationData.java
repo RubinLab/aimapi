@@ -82,20 +82,20 @@ public class CalculationData implements IAimXMLOperations {
         this.coordinateCollection.AddCoordinate(newCoordinate);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element calculationData = doc.createElement("CalculationData");
-        calculationData.setAttribute("cagridId", this.cagridId.toString());
-        calculationData.setAttribute("value", this.value.toString());
-        if (this.coordinateCollection.getCoordinateList().size() > 0) {
-            calculationData.appendChild(this.coordinateCollection.getXMLNode(doc));
-        }
-        return calculationData;
-
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element calculationData = doc.createElement("CalculationData");
+//        calculationData.setAttribute("cagridId", this.cagridId.toString());
+//        calculationData.setAttribute("value", this.value.toString());
+//        if (this.coordinateCollection.getCoordinateList().size() > 0) {
+//            calculationData.appendChild(this.coordinateCollection.getXMLNode(doc));
+//        }
+//        return calculationData;
+//
+//    }
 
     @Override
     public void setXMLNode(Node node) {

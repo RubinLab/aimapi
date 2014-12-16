@@ -51,15 +51,15 @@ public class ReferencedCalculationCollection implements IAimXMLOperations {
         return this.listReferencedCalculation;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element referencedCalculationCollection = doc.createElement("referencedCalculationCollection");
-        for (int i = 0; i < this.listReferencedCalculation.size(); i++) {
-            referencedCalculationCollection.appendChild(this.listReferencedCalculation.get(i).getXMLNode(doc));
-        }
-        return referencedCalculationCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element referencedCalculationCollection = doc.createElement("referencedCalculationCollection");
+//        for (int i = 0; i < this.listReferencedCalculation.size(); i++) {
+//            referencedCalculationCollection.appendChild(this.listReferencedCalculation.get(i).getXMLNode(doc));
+//        }
+//        return referencedCalculationCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

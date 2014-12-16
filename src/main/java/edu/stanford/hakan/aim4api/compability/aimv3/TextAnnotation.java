@@ -159,46 +159,46 @@ public class TextAnnotation implements IAimXMLOperations {
         this.listMultiPoint.add(newMultiPoint);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-        
-        Element textAnnotation = doc.createElement("TextAnnotation");
-        textAnnotation.setAttribute("cagridId", this.cagridId.toString());
-        if (this.font != null) {
-            textAnnotation.setAttribute("font", this.font);
-        }
-        if (this.fontColor != null) {
-            textAnnotation.setAttribute("fontColor", this.fontColor);
-        }
-        if (this.fontEffect != null) {
-            textAnnotation.setAttribute("fontEffect", this.fontEffect);
-        }
-        if (this.fontSize != null) {
-            textAnnotation.setAttribute("fontSize", this.fontSize);
-        }
-        if (this.fontStyle != null) {
-            textAnnotation.setAttribute("fontStyle", this.fontStyle);
-        }
-        textAnnotation.setAttribute("text", this.text);
-        if (this.textJustify != null) {
-            textAnnotation.setAttribute("textJustify", this.textJustify);
-        }
-        if (this.fontOpacity != null) {
-            textAnnotation.setAttribute("fontOpacity", this.fontOpacity);
-        }
-
-        Element multiPoint = doc.createElement("multiPoint");
-        for (int i = 0; i < this.listMultiPoint.size(); i++) {
-            multiPoint.appendChild(this.listMultiPoint.get(i).getXMLNode(doc));
-        }
-        if (this.listMultiPoint.size() > 0) {
-            textAnnotation.appendChild(multiPoint);
-        }
-
-        return textAnnotation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//        
+//        Element textAnnotation = doc.createElement("TextAnnotation");
+//        textAnnotation.setAttribute("cagridId", this.cagridId.toString());
+//        if (this.font != null) {
+//            textAnnotation.setAttribute("font", this.font);
+//        }
+//        if (this.fontColor != null) {
+//            textAnnotation.setAttribute("fontColor", this.fontColor);
+//        }
+//        if (this.fontEffect != null) {
+//            textAnnotation.setAttribute("fontEffect", this.fontEffect);
+//        }
+//        if (this.fontSize != null) {
+//            textAnnotation.setAttribute("fontSize", this.fontSize);
+//        }
+//        if (this.fontStyle != null) {
+//            textAnnotation.setAttribute("fontStyle", this.fontStyle);
+//        }
+//        textAnnotation.setAttribute("text", this.text);
+//        if (this.textJustify != null) {
+//            textAnnotation.setAttribute("textJustify", this.textJustify);
+//        }
+//        if (this.fontOpacity != null) {
+//            textAnnotation.setAttribute("fontOpacity", this.fontOpacity);
+//        }
+//
+//        Element multiPoint = doc.createElement("multiPoint");
+//        for (int i = 0; i < this.listMultiPoint.size(); i++) {
+//            multiPoint.appendChild(this.listMultiPoint.get(i).getXMLNode(doc));
+//        }
+//        if (this.listMultiPoint.size() > 0) {
+//            textAnnotation.appendChild(multiPoint);
+//        }
+//
+//        return textAnnotation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

@@ -62,15 +62,15 @@ public class Quantile extends CharacteristicQuantification implements IAimXMLOpe
         this.bin = bin;
     }
     
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        
-        this.Control();
-        
-        Element characteristicQuantification = (Element) super.getXMLNode(doc);
-        characteristicQuantification.setAttribute("bin", this.getBin().toString());
-        return characteristicQuantification;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        
+//        this.Control();
+//        
+//        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+//        characteristicQuantification.setAttribute("bin", this.getBin().toString());
+//        return characteristicQuantification;
+//    }
     
     @Override
     public void setXMLNode(Node node) {

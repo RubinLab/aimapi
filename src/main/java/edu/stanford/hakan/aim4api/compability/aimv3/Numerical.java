@@ -82,19 +82,19 @@ public class Numerical extends CharacteristicQuantification implements IAimXMLOp
         this.value = value;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element characteristicQuantification = (Element) super.getXMLNode(doc);
-        characteristicQuantification.setAttribute("ucumString", this.getUcumString());
-        characteristicQuantification.setAttribute("value", this.getValue().toString());
-        if (this.getComparisonOperators() != null) {
-            characteristicQuantification.setAttribute("operator", this.getComparisonOperators().toString());
-        }
-        return characteristicQuantification;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+//        characteristicQuantification.setAttribute("ucumString", this.getUcumString());
+//        characteristicQuantification.setAttribute("value", this.getValue().toString());
+//        if (this.getComparisonOperators() != null) {
+//            characteristicQuantification.setAttribute("operator", this.getComparisonOperators().toString());
+//        }
+//        return characteristicQuantification;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

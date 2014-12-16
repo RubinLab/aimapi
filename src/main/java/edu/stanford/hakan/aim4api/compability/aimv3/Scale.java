@@ -82,23 +82,23 @@ public class Scale extends CharacteristicQuantification implements IAimXMLOperat
         this.value = value;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element characteristicQuantification = (Element) super.getXMLNode(doc);
-
-        if (this.getComment() != null) {
-            characteristicQuantification.setAttribute("comment", this.getComment());
-        }
-        if (this.getDescription() != null) {
-            characteristicQuantification.setAttribute("description", this.getDescription());
-        }
-        characteristicQuantification.setAttribute("value", this.getValue());
-
-        return characteristicQuantification;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+//
+//        if (this.getComment() != null) {
+//            characteristicQuantification.setAttribute("comment", this.getComment());
+//        }
+//        if (this.getDescription() != null) {
+//            characteristicQuantification.setAttribute("description", this.getDescription());
+//        }
+//        characteristicQuantification.setAttribute("value", this.getValue());
+//
+//        return characteristicQuantification;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

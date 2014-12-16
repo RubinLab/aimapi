@@ -87,22 +87,22 @@ public class Equipment implements IAimXMLOperations {
         this.softwareVersion = softwareVersion;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element equipment = doc.createElement("Equipment");
-        equipment.setAttribute("cagridId", Integer.toString(getCagridId()));
-        equipment.setAttribute("manufacturerName", this.manufacturerName);
-        if (this.manufacturerModelName != null) {
-            equipment.setAttribute("manufacturerModelName", this.manufacturerModelName);
-        }
-        if (this.softwareVersion != null) {
-            equipment.setAttribute("softwareVersion", this.softwareVersion);
-        }
-        return equipment;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element equipment = doc.createElement("Equipment");
+//        equipment.setAttribute("cagridId", Integer.toString(getCagridId()));
+//        equipment.setAttribute("manufacturerName", this.manufacturerName);
+//        if (this.manufacturerModelName != null) {
+//            equipment.setAttribute("manufacturerModelName", this.manufacturerModelName);
+//        }
+//        if (this.softwareVersion != null) {
+//            equipment.setAttribute("softwareVersion", this.softwareVersion);
+//        }
+//        return equipment;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

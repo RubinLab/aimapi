@@ -266,7 +266,12 @@ public class ImageAnnotation extends AnnotationEntity {
         List<TwoDimensionGeometricShapeEntity> res = new ArrayList<TwoDimensionGeometricShapeEntity>();
         for (MarkupEntity markup : this.markupEntityCollection.getMarkupEntityList()) {
             if (markup.getXsiType().equals("TwoDimensionPolyline")) {
-                res.add((TwoDimensionPolyline) markup);
+                if (Utility.isSpline(markup)) {
+                    markup.setXsiType("TwoDimensionSpline");
+                    res.add((TwoDimensionSpline) markup);
+                } else {
+                    res.add((TwoDimensionPolyline) markup);
+                }
             } else if (markup.getXsiType().equals("TwoDimensionMultiPoint")) {
                 res.add((TwoDimensionMultiPoint) markup);
             } else if (markup.getXsiType().equals("TwoDimensionPoint")) {

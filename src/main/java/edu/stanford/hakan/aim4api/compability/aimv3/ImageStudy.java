@@ -97,25 +97,25 @@ public class ImageStudy implements IAimXMLOperations {
         this.startTime = startTime;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imageStudy = doc.createElement("ImageStudy");
-        imageStudy.setAttribute("cagridId", Integer.toString(getCagridId()));
-        imageStudy.setAttribute("instanceUID", this.instanceUID);
-        imageStudy.setAttribute("startDate", this.startDate);
-        imageStudy.setAttribute("startTime", this.startTime);
-
-        if (this.imageSeries != null) {
-            Element _imageSeries = doc.createElement("imageSeries");
-            _imageSeries.appendChild(this.imageSeries.getXMLNode(doc));
-            imageStudy.appendChild(_imageSeries);
-        }
-
-        return imageStudy;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imageStudy = doc.createElement("ImageStudy");
+//        imageStudy.setAttribute("cagridId", Integer.toString(getCagridId()));
+//        imageStudy.setAttribute("instanceUID", this.instanceUID);
+//        imageStudy.setAttribute("startDate", this.startDate);
+//        imageStudy.setAttribute("startTime", this.startTime);
+//
+//        if (this.imageSeries != null) {
+//            Element _imageSeries = doc.createElement("imageSeries");
+//            _imageSeries.appendChild(this.imageSeries.getXMLNode(doc));
+//            imageStudy.appendChild(_imageSeries);
+//        }
+//
+//        return imageStudy;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

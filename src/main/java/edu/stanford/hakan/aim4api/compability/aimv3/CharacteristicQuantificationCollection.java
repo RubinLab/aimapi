@@ -55,16 +55,16 @@ public class CharacteristicQuantificationCollection implements IAimXMLOperations
         return this.listCharacteristicQuantification;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element characteristicQuantificationCollection = doc.createElement("characteristicQuantificationCollection");
-        for (int i = 0; i < this.listCharacteristicQuantification.size(); i++) {
-            characteristicQuantificationCollection.appendChild(this.listCharacteristicQuantification.get(i).getXMLNode(doc));
-        }
-
-        return characteristicQuantificationCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element characteristicQuantificationCollection = doc.createElement("characteristicQuantificationCollection");
+//        for (int i = 0; i < this.listCharacteristicQuantification.size(); i++) {
+//            characteristicQuantificationCollection.appendChild(this.listCharacteristicQuantification.get(i).getXMLNode(doc));
+//        }
+//
+//        return characteristicQuantificationCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

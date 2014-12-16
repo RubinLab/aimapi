@@ -76,17 +76,17 @@ public class Coordinate implements IAimXMLOperations {
         this.position = position;
     }
     
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        
-        this.Control();
-        
-        Element coordinate = doc.createElement("Coordinate");
-        coordinate.setAttribute("cagridId", this.cagridId.toString());
-        coordinate.setAttribute("dimensionIndex", this.dimensionIndex.toString());
-        coordinate.setAttribute("position", this.position.toString());
-        return coordinate;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        
+//        this.Control();
+//        
+//        Element coordinate = doc.createElement("Coordinate");
+//        coordinate.setAttribute("cagridId", this.cagridId.toString());
+//        coordinate.setAttribute("dimensionIndex", this.dimensionIndex.toString());
+//        coordinate.setAttribute("position", this.position.toString());
+//        return coordinate;
+//    }
     
     @Override
     public void setXMLNode(Node node) {

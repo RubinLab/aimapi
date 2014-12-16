@@ -52,16 +52,16 @@ public class AnatomicEntityCharacteristicCollection implements IAimXMLOperations
         return this.listAnatomicEntityCharacteristic;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element anatomicEntityCharacteristicCollection = doc.createElement("anatomicEntityCharacteristicCollection");
-        for (int i = 0; i < this.listAnatomicEntityCharacteristic.size(); i++) {
-            anatomicEntityCharacteristicCollection.appendChild(this.listAnatomicEntityCharacteristic.get(i).getXMLNode(doc));
-        }
-
-        return anatomicEntityCharacteristicCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element anatomicEntityCharacteristicCollection = doc.createElement("anatomicEntityCharacteristicCollection");
+//        for (int i = 0; i < this.listAnatomicEntityCharacteristic.size(); i++) {
+//            anatomicEntityCharacteristicCollection.appendChild(this.listAnatomicEntityCharacteristic.get(i).getXMLNode(doc));
+//        }
+//
+//        return anatomicEntityCharacteristicCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

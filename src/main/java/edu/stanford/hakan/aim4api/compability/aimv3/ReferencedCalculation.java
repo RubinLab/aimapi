@@ -68,16 +68,16 @@ public class ReferencedCalculation implements IAimXMLOperations {
         this.uniqueIdentifier = uniqueIdentifier;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element referencedCalculation = doc.createElement("ReferencedCalculation");
-        referencedCalculation.setAttribute("cagridId", Integer.toString(this.cagridId));
-        referencedCalculation.setAttribute("uniqueIdentifier", this.uniqueIdentifier);
-        return referencedCalculation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element referencedCalculation = doc.createElement("ReferencedCalculation");
+//        referencedCalculation.setAttribute("cagridId", Integer.toString(this.cagridId));
+//        referencedCalculation.setAttribute("uniqueIdentifier", this.uniqueIdentifier);
+//        return referencedCalculation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

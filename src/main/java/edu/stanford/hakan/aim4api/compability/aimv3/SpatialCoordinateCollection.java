@@ -55,15 +55,15 @@ public class SpatialCoordinateCollection implements IAimXMLOperations {
         return this.listSpatialCoordinate;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element spatialCoordinateCollection = doc.createElement("spatialCoordinateCollection");
-        for (int i = 0; i < listSpatialCoordinate.size(); i++) {
-            spatialCoordinateCollection.appendChild(this.listSpatialCoordinate.get(i).getXMLNode(doc));
-        }
-        return spatialCoordinateCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element spatialCoordinateCollection = doc.createElement("spatialCoordinateCollection");
+//        for (int i = 0; i < listSpatialCoordinate.size(); i++) {
+//            spatialCoordinateCollection.appendChild(this.listSpatialCoordinate.get(i).getXMLNode(doc));
+//        }
+//        return spatialCoordinateCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

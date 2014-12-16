@@ -86,17 +86,17 @@ public class Image implements IAimXMLOperations {
         this.imageURL = imageURL;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element image = doc.createElement("Image");
-        image.setAttribute("cagridId", Integer.toString(getCagridId()));
-        image.setAttribute("sopClassUID", this.sopClassUID);
-        image.setAttribute("sopInstanceUID", this.sopInstanceUID);
-        return image;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element image = doc.createElement("Image");
+//        image.setAttribute("cagridId", Integer.toString(getCagridId()));
+//        image.setAttribute("sopClassUID", this.sopClassUID);
+//        image.setAttribute("sopInstanceUID", this.sopInstanceUID);
+//        return image;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

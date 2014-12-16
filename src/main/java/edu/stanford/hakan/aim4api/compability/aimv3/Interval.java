@@ -104,21 +104,21 @@ public class Interval extends CharacteristicQuantification implements IAimXMLOpe
         this.ucumString = ucumString;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element characteristicQuantification = (Element) super.getXMLNode(doc);
-
-        characteristicQuantification.setAttribute("minValue", this.getMinValue().toString());
-        characteristicQuantification.setAttribute("maxValue", this.getMaxValue().toString());
-        characteristicQuantification.setAttribute("minOperator", this.getMinOperator().toString());
-        characteristicQuantification.setAttribute("ucumString", this.getUcumString());
-        characteristicQuantification.setAttribute("maxOperator", this.getMaxOperator().toString());
-
-        return characteristicQuantification;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+//
+//        characteristicQuantification.setAttribute("minValue", this.getMinValue().toString());
+//        characteristicQuantification.setAttribute("maxValue", this.getMaxValue().toString());
+//        characteristicQuantification.setAttribute("minOperator", this.getMinOperator().toString());
+//        characteristicQuantification.setAttribute("ucumString", this.getUcumString());
+//        characteristicQuantification.setAttribute("maxOperator", this.getMaxOperator().toString());
+//
+//        return characteristicQuantification;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

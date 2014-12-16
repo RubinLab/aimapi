@@ -83,21 +83,21 @@ public class CharacteristicQuantification implements ICharacteristicQuantificati
         this.name = name;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element characteristicQuantification = doc.createElement("CharacteristicQuantification");
-        characteristicQuantification.setAttribute("cagridId", this.cagridId.toString());
-        characteristicQuantification.setAttribute("name", this.name);
-        if (this.annotatorConfidence != null) {
-            characteristicQuantification.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-        }
-        characteristicQuantification.setAttribute("xsi:type", this.xsiType);
-
-        return characteristicQuantification;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element characteristicQuantification = doc.createElement("CharacteristicQuantification");
+//        characteristicQuantification.setAttribute("cagridId", this.cagridId.toString());
+//        characteristicQuantification.setAttribute("name", this.name);
+//        if (this.annotatorConfidence != null) {
+//            characteristicQuantification.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+//        }
+//        characteristicQuantification.setAttribute("xsi:type", this.xsiType);
+//
+//        return characteristicQuantification;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

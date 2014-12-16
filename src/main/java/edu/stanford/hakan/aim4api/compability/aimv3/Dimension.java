@@ -87,18 +87,18 @@ public class Dimension implements IAimXMLOperations {
         this.size = size;
     }
     
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        
-        this.Control();
-        
-        Element dimension = doc.createElement("Dimension");
-        dimension.setAttribute("cagridId", this.cagridId.toString());
-        dimension.setAttribute("index", this.index.toString());
-        dimension.setAttribute("size", this.size.toString());
-        dimension.setAttribute("label", this.label);
-        return dimension;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        
+//        this.Control();
+//        
+//        Element dimension = doc.createElement("Dimension");
+//        dimension.setAttribute("cagridId", this.cagridId.toString());
+//        dimension.setAttribute("index", this.index.toString());
+//        dimension.setAttribute("size", this.size.toString());
+//        dimension.setAttribute("label", this.label);
+//        return dimension;
+//    }
     
     @Override
     public void setXMLNode(Node node) {
