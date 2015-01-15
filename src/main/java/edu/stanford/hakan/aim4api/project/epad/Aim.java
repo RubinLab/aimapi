@@ -35,7 +35,6 @@
 //
 //import edu.stanford.client.ClientFactory;
 //import edu.stanford.client.model.DicomSeries;
-//import edu.stanford.client.resource.Strings;
 //import edu.stanford.client.view.SeriesView;
 //import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 //import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
@@ -91,15 +90,7 @@
 //
 ///**
 // * 
-// * @author debra willrett
-// * 
-// *         Aim wraps ImageAnnotation and calls methods: addGeometricShape,
-// *         addImageReference, addPerson, addSegmentation, addTextAnnotation,
-// *         setName, setDateTime, setCagridId, setComment, addUser,createUser, ,
-// *         addEquipment, createEquipment, addImageReference,
-// *         createImageReference, addAnatomicEntity, createAnatomicEntity,
-// *         addCalculation, setCagridId, setCodingSchemeDesignator,
-// *         setCodeMeaning,setCodeValue(result.getCodeValue());
+// * @author Debra Willrett
 // * 
 // */
 //@SuppressWarnings("serial")
@@ -107,8 +98,11 @@
 //
 //	private static final Logger logger = Logger.getLogger("Aim");
 //
-//	private int caGridId = 0;
-//	String DSO_SOP_CLASSUID = "1.2.840.10008.5.1.4.1.1.66.4";
+//	private static final int caGridId = 0;
+//	private static final String LINE_LENGTH = "LineLength";
+//	private static final String PRIVATE_DESIGNATOR = "private";
+//	private static final String LINE_MEASURE = "linear";
+//	private static final String VERSION = "1.0";
 //
 //	public Aim() {
 //	}
@@ -171,8 +165,8 @@
 //		addEquipment(createEquipment(manufacturerName, model, version));
 //
 //		// don't add the image reference yet, we don't have any shapes or segs
-//		addImageReference(createImageReference(imageUid, seriesUid, studyUid,
-//				activeImage, studyDate, studyTime));
+//		addImageReference(createImageReference(studyUid, seriesUid, imageUid,
+//				studyDate, studyTime));
 //
 //		addAnatomicEntity(createAnatomicEntity());
 //
@@ -201,15 +195,15 @@
 //
 //		// add a reference pointing to the source dicom
 //		addAnatomicEntity(createAnatomicEntity());
-//		addImageReference(createImageReference(imageUid, seriesUid, studyUid,
-//				activeImage, studyDate, studyTime));
+//		addImageReference(createImageReference(studyUid, seriesUid, imageUid,
+//				studyDate, studyTime));
 //
 //		// add the segmentation and an image reference pointing to the
 //		// segmentation dso
 //		addSegmentation(new Segmentation(caGridId, sopInstanceUID, sopClassUID,
 //				referencedSopInstanceUID, segmentNumber));
-//		addImageReference(createImageReference(sopInstanceUID, dsoSeriesUID,
-//				studyUid, activeImage, studyDate, studyTime));
+//		addImageReference(createImageReference(studyUid, dsoSeriesUID,
+//				sopInstanceUID, studyDate, studyTime));
 //
 //	}
 //
@@ -218,7 +212,6 @@
 //			String studyTime) {
 //
 //		super();
-//		// logger.info("create Aim with just patient, study, and user");
 //		setName(name);
 //		setDateTime(todaysDate());
 //		setCagridId(caGridId);
@@ -226,26 +219,19 @@
 //		addPerson(createPerson(patientName, patientId, "unknown", todaysDate()));
 //		addImageReference(createImageReference(studyUid, studyDate, studyTime));
 //
-//		// logger.info("Aim= " + toString());
-//
 //	}
 //
 //	// add the shape to this aim
 //	// one shape can turn into multiple geometric shapes
 //	// also the line length calculation is added
 //	@Override
-//	public int addShapes(DicomSeries series, int activeImage,
+//	public int addShapes(String studyID, String seriesID, String imageID,
+//			int activeImage, String studyDate, String studyTime,
 //			ShapeType shapeType, List<TwoDCoordinate> coords,
 //			double pixelSpacingX, double pixelSpacingY) {
 //
-//		// logger.info("addShapes " + getUniqueIdentifier());
-//
-//		// get all the ids
-//		String imageID = series.getDicomImages().get(activeImage).getUid();
 //		int frameID = 1;
 //		int shapeID = getNextShapeID();
-//
-//		// logger.info("create the shapes " + shapeID);
 //
 //		List<GeometricShape> shapes = createShapes(imageID, frameID, shapeType,
 //				coords, pixelSpacingX, pixelSpacingY, shapeID);
@@ -253,9 +239,6 @@
 //		// could have created multiple shapes
 //		for (GeometricShape shape : shapes) {
 //
-//			// logger.info("adding shape " + shape.getXsiType());
-//
-//			// what does this do?
 //			shape.setIncludeFlag(true);
 //
 //			addCalculation(addlengthCalculation(
@@ -267,8 +250,8 @@
 //		}
 //
 //		if (!hasImage(imageID)) {
-//			// logger.info("does not have the image id " + imageID);
-//			updateImageID(series, activeImage);
+//			updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
+//					studyTime);
 //		}
 //
 //		return shapeID;
@@ -321,11 +304,6 @@
 //		return fmt.format(today);
 //	}
 //
-//	// create a comment field
-//	public String fillComment(String modality, String description, int image) {
-//		return modality + " / " + description + " / " + image;
-//	}
-//
 //	// create a person object for this aim
 //	public Person createPerson(String name, String id, String sex,
 //			String birthdate) {
@@ -348,36 +326,6 @@
 //		equipment.setManufacturerModelName(model);
 //		equipment.setSoftwareVersion(version);
 //		return equipment;
-//	}
-//
-//	// create the image reference
-//	private DICOMImageReference createImageReference(String imageUid,
-//			String seriesUid, String studyUid, int image, String studyDate,
-//			String studyTime) {
-//
-//		// series reference
-//		ImageSeries imageSeries = new ImageSeries();
-//		imageSeries.setCagridId(caGridId);
-//		imageSeries.setInstanceUID(seriesUid);
-//		Image img = new Image(caGridId, "", imageUid);
-//		// logger.info("img caGridId " + img.getCagridId());
-//		imageSeries.addImage(img);
-//
-//		// study reference
-//		ImageStudy study = new ImageStudy();
-//		study.setCagridId(caGridId);
-//		study.setStartDate(studyDate);
-//		study.setStartTime(studyTime);
-//		study.setImageSeries(imageSeries);
-//		study.setInstanceUID(studyUid);
-//
-//		// image reference
-//		DICOMImageReference imageReference = new DICOMImageReference();
-//		imageReference.setImageStudy(study);
-//		imageReference.setCagridId(caGridId);
-//
-//		return imageReference;
-//
 //	}
 //
 //	// create the image reference
@@ -411,15 +359,8 @@
 //	// update the image reference for the study and series to point to this
 //	// imageID
 //	// turn a study or series reference into the image reference if possible
-//	private void updateImageID(DicomSeries series, int activeImage) {
-//
-//		// get all the ids
-//		String imageID = series.getDicomImages().get(activeImage).getUid();
-//		String seriesID = series.getSeriesUID();
-//		String studyID = series.getStudyUID();
-//
-//		// logger.info("updateImageId " + studyID + " " + seriesID + " " +
-//		// imageID);
+//	private void updateImageID(String studyID, String seriesID, String imageID,
+//			int activeImage, String studyDate, String studyTime) {
 //
 //		for (ImageReference imageReference : getImageReferenceCollection()
 //				.getImageReferenceList()) {
@@ -435,6 +376,7 @@
 //
 //				// found the study
 //				if (seriesInstanceUID.isEmpty()) {
+//
 //					// turn a study reference into an image reference
 //					// logger.info("turn a study reference into an image reference");
 //					ImageSeries imageSeries = new ImageSeries();
@@ -445,8 +387,6 @@
 //
 //					dicomImageReference.getImageStudy().setImageSeries(
 //							imageSeries);
-//
-//					// logger.info("modified aim " + toString());
 //
 //					return;
 //
@@ -460,13 +400,9 @@
 //							.getImageList();
 //
 //					if (images.size() > 0) {
-//						// logger.info("Error: clearning out " + images.size()
-//						// + " existing image references");
 //						images.clear();
 //					}
 //
-//					// logger.info("adding image reference to image " +
-//					// imageID);
 //					images.add(image);
 //					return;
 //
@@ -474,10 +410,9 @@
 //			}
 //		}
 //
-//		// logger.info("Error didn't find the image reference, make a new one");
-//
 //		// didn't find it, so create a new one
-//		addImageReference(createImageReference(series, activeImage));
+//		addImageReference(createImageReference(studyID, seriesID, imageID,
+//				studyDate, studyTime));
 //
 //	}
 //
@@ -1394,7 +1329,6 @@
 //		return result;
 //	}
 //
-//	@Override
 //	public Aim cloneAim(SeriesView seriesView, DicomSeries activeSeries,
 //			int index) {
 //
@@ -1493,19 +1427,19 @@
 //		// Create a Calculation instance
 //		Calculation calculation = new Calculation();
 //		calculation.setCagridId(0);
-//		calculation.setAlgorithmVersion(Strings.VERSION);
-//		calculation.setAlgorithmName(Strings.LINE_LENGTH);
-//		calculation.setUid("0"); // TODO this is a problem
-//		calculation.setDescription(Strings.LINE_LENGTH);
-//		calculation.setCodeValue(Strings.LINE_LENGTH);
-//		calculation.setCodeMeaning(Strings.LINE_LENGTH);
-//		calculation.setCodingSchemeDesignator(Strings.PRIVATE_DESIGNATOR);
+//		calculation.setAlgorithmVersion(VERSION);
+//		calculation.setAlgorithmName(LINE_LENGTH);
+//		calculation.setUid("0");
+//		calculation.setDescription(LINE_LENGTH);
+//		calculation.setCodeValue(LINE_LENGTH);
+//		calculation.setCodeMeaning(LINE_LENGTH);
+//		calculation.setCodingSchemeDesignator(PRIVATE_DESIGNATOR);
 //
 //		// Create a CalculationResult instance
 //		CalculationResult calculationResult = new CalculationResult();
 //		calculationResult.setCagridId(0);
 //		calculationResult.setType(CalculationResultIdentifier.Scalar);
-//		calculationResult.setUnitOfMeasure(Strings.LINE_MEASURE);
+//		calculationResult.setUnitOfMeasure(LINE_MEASURE);
 //		calculationResult.setNumberOfDimensions(0);
 //
 //		// Create a CalculationData instance
@@ -1515,7 +1449,7 @@
 //		calculationData.addCoordinate(0, 0, 0); // TODO what goes here?
 //
 //		// Create a Dimension instance
-//		Dimension dimension = new Dimension(0, 0, 1, Strings.LINE_LENGTH);
+//		Dimension dimension = new Dimension(0, 0, 1, LINE_LENGTH);
 //
 //		// Add calculationData to calculationResult
 //		calculationResult.addCalculationData(calculationData);
@@ -1536,7 +1470,6 @@
 //		return calculation;
 //	}
 //
-//	@Override
 //	public ImageAnnotation cloneAim(ImageAnnotation fromAim, SeriesView view,
 //			DicomSeries series, int image) {
 //
@@ -1550,7 +1483,8 @@
 //			aim.setCodeMeaning(fromAim.getCodeMeaning());
 //			aim.setCodingSchemeDesignator(fromAim.getCodingSchemeDesignator());
 //			aim.setCodingSchemeVersion(fromAim.getCodingSchemeVersion());
-//			aim.setComment(fillComment(series, image));
+//			aim.setComment(fillComment(series.getModality(),
+//					series.getSeriesDescription(), image));
 //			aim.addUser(ClientFactory.impl.getLoggedInUser());
 //			aim.setDateTime(todaysDate());
 //
@@ -1559,7 +1493,8 @@
 //			}
 //			for (@SuppressWarnings("unused")
 //			Person p : fromAim.getListPerson()) {
-//				aim.addPerson(createPerson(series));
+//				aim.addPerson(createPerson(p.getName(), p.getId(), p.getSex(),
+//						p.getBirthDate()));
 //			}
 //
 //			// this points to the aim that it was created from
@@ -1648,21 +1583,35 @@
 //	}
 //
 //	// create a comment for an annotation
-//	private String fillComment(DicomSeries series, int image) {
-//		return series.getModality() + " / " + series.getSeriesDescription()
-//				+ " / " + image;
+//	public String fillComment(String modality, String description, int image) {
+//		return modality + " / " + description + " / " + image;
 //	}
 //
-//	// create a person(patient) for this aim
-//	private Person createPerson(DicomSeries series) {
+//	// create the image reference
+//	private DICOMImageReference createImageReference(String studyID,
+//			String seriesID, String imageID, String studyDate, String studyTime) {
 //
-//		Person person = new Person();
-//		person.setBirthDate(series.getPatientBirthDate());
-//		person.setCagridId(0);
-//		person.setName(series.getPatientName());
-//		person.setId(series.getPatientId());
-//		person.setSex(series.getPatientSex());
-//		return person;
+//		// series reference
+//		ImageSeries imageSeries = new ImageSeries();
+//		imageSeries.setCagridId(0);
+//		imageSeries.setInstanceUID(seriesID);
+//		imageSeries.addImage(new Image(caGridId, "", imageID));
+//
+//		// study reference
+//		ImageStudy study = new ImageStudy();
+//		study.setCagridId(0);
+//		study.setStartDate(studyDate);
+//		study.setStartTime(studyTime);
+//		study.setImageSeries(imageSeries);
+//		study.setInstanceUID(studyID);
+//
+//		// image reference
+//		DICOMImageReference imageReference = new DICOMImageReference();
+//		imageReference.setImageStudy(study);
+//		imageReference.setCagridId(caGridId);
+//
+//		return imageReference;
+//
 //	}
 //
 //	// create the image reference
@@ -2092,54 +2041,6 @@
 //
 //		// put this one user in the aim
 //		setListUser(users);
-//	}
-//
-//	// add or update the old segmentation uids to the new segmentation uids
-//	// update the image reference also from old to new numbers
-//	@Override
-//	public void updateSegmentation(String oldSopInstanceUID,
-//			String dsoImageUID, String referencedSopInstanceUID,
-//			String dsoSeriesUID, String dsoStudyUID, int frame,
-//			String studyDate, String studyTime) {
-//
-//		// for now just using one segment
-//		int segmentNumber = 1;
-//
-//		// clear the old segmentation entry
-//		SegmentationCollection segmentationCollectionx = getSegmentationCollection();
-//		List<Segmentation> segmentations = segmentationCollectionx
-//				.getSegmentationList();
-//		for (Segmentation segmentation : segmentations) {
-//			if (segmentation.getSopInstanceUID().equals(oldSopInstanceUID)) {
-//				segmentations.remove(segmentation);
-//			}
-//		}
-//
-//		// add the new entry
-//		addSegmentation(new Segmentation(caGridId, dsoImageUID,
-//				DSO_SOP_CLASSUID, referencedSopInstanceUID, segmentNumber));
-//
-//		// clear the old image reference for the old segmentation
-//		ImageReferenceCollection imageReferenceCollection = getImageReferenceCollection();
-//		List<ImageReference> references = imageReferenceCollection
-//				.getImageReferenceList();
-//		for (ImageReference imageReference : references) {
-//
-//			DICOMImageReference reference = (DICOMImageReference) imageReference;
-//			List<Image> images = reference.getImageStudy().getImageSeries()
-//					.getImageCollection().getImageList();
-//
-//			for (Image image : images) {
-//				if (image.getSopInstanceUID().equals(oldSopInstanceUID)) {
-//					references.remove(imageReference);
-//				}
-//
-//			}
-//		}
-//		// add the image reference for the new segmentation
-//		addImageReference(createImageReference(dsoImageUID, dsoSeriesUID,
-//				dsoStudyUID, frame, studyDate, studyTime));
-//
 //	}
 //
 //	@Override

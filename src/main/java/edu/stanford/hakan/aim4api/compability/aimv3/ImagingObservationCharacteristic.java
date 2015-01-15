@@ -145,7 +145,6 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         this.characteristicQuantificationCollection.AddCharacteristicQuantification(newCharacteristicQuantification);
     }
 
-<<<<<<< HEAD
     public void addAllowedTerm(AllowedTerm allowedTerm) {
         if (!this.listAllowedTerm.contains(allowedTerm)) {
             this.listAllowedTerm.add(allowedTerm);
@@ -158,33 +157,6 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
             this.listAllowedTerm.add(allowedTerm);
         }
     }
-=======
-//    @Override
-//    public Node getXMLNode(Document doc) throws AimException {
-//
-//        this.Control();
-//
-//        Element imagingObservationCharacteristic = doc.createElement("ImagingObservationCharacteristic");
-//        imagingObservationCharacteristic.setAttribute("cagridId", this.cagridId.toString());
-//        imagingObservationCharacteristic.setAttribute("codeValue", this.codeValue);
-//        imagingObservationCharacteristic.setAttribute("codeMeaning", this.codeMeaning);
-//        imagingObservationCharacteristic.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-//        if (this.codingSchemeVersion != null) {
-//            imagingObservationCharacteristic.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-//        }
-//        if (this.comment != null) {
-//            imagingObservationCharacteristic.setAttribute("comment", this.comment);
-//        }
-//        if (this.annotatorConfidence != null) {
-//            imagingObservationCharacteristic.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-//        }
-//        imagingObservationCharacteristic.setAttribute("label", this.label);
-//        if (this.characteristicQuantificationCollection.getCharacteristicQuantificationList().size() > 0) {
-//            imagingObservationCharacteristic.appendChild(this.characteristicQuantificationCollection.getXMLNode(doc));
-//        }
-//        return imagingObservationCharacteristic;
-//    }
->>>>>>> 6ad1d277cd154d6ce1a124630293e37d9bbc144b
 
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {

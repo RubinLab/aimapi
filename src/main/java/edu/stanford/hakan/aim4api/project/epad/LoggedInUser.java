@@ -30,7 +30,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.User;
 
 /**
  * 
- * @author debra willrett
+ * @author Debra Willrett
  * 
  */
 @SuppressWarnings("serial")

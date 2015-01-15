@@ -40,8 +40,7 @@
 //
 ///**
 // * 
-// * @author debra willrett
-// * 
+// * @author Debra Willrett
 // * 
 // */
 //@SuppressWarnings("serial")
@@ -613,18 +612,35 @@
 //		case anatomicEntityCharacteristic:
 //			if (term.hasCoordination()) {
 //				for (ValidTerm v : term.getValidTerms()) {
-//					// AllowedTerm term = new AllowedTerm();
-//					// term.setCodeValue(v.getCodeValue());
-//					// term.setCodeMeaning(v.getCodeMeaning());
-//					// term.setCodingSchemaDesignator(v.getCodingSchemaDesignator());
-//					// term.setCodingSchemeVersion(v.getCodingSchemeVersion());
-//					// anatomicEntityCharacteristic.addAllowedTerm(term);
+//
+//					edu.stanford.hakan.aim4api.addition.AllowedTerm at = new edu.stanford.hakan.aim4api.addition.AllowedTerm();
+//					at.setCodeMeaning(v.getCodeMeaning());
+//					at.setCodeValue(v.getCodeValue());
+//					at.setCodingSchemeDesignator(v.getCodingSchemeDesignator());
+//					at.setCodingSchemeVersion(v.getCodingSchemeVersion());
+//
+//					anatomicEntityCharacteristic.addAllowedTerm(at);
+//
 //				}
 //
 //			}
 //			break;
 //
 //		case imagingObservationCharacteristic:
+//			if (term.hasCoordination()) {
+//				for (ValidTerm v : term.getValidTerms()) {
+//
+//					edu.stanford.hakan.aim4api.addition.AllowedTerm at = new edu.stanford.hakan.aim4api.addition.AllowedTerm();
+//					at.setCodeMeaning(v.getCodeMeaning());
+//					at.setCodeValue(v.getCodeValue());
+//					at.setCodingSchemeDesignator(v.getCodingSchemeDesignator());
+//					at.setCodingSchemeVersion(v.getCodingSchemeVersion());
+//
+//					// imagingObservationCharacteristic.addAllowedTerm(at);
+//
+//				}
+//
+//			}
 //			break;
 //		}
 //	}

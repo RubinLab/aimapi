@@ -28,6 +28,11 @@ import java.io.Serializable;
 
 import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinate;
 
+/**
+ * 
+ * @author Debra Willrett
+ * 
+ */
 @SuppressWarnings("serial")
 public class TwoDCoordinate extends TwoDimensionSpatialCoordinate implements
 		Serializable {

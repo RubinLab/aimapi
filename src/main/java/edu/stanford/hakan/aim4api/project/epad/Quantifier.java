@@ -11,6 +11,11 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Quantile;
 import edu.stanford.hakan.aim4api.compability.aimv3.Scale;
 import edu.stanford.shared.aimapi.Enumerations.QuantifierType;
 
+/**
+ * 
+ * @author Debra Willrett
+ * 
+ */
 @SuppressWarnings("serial")
 public class Quantifier implements Serializable {
 

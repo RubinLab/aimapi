@@ -1,7 +1,5 @@
 package edu.stanford.shared.aimapi;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility;
-
 //Copyright (c) 2013 The Board of Trustees of the Leland Stanford Junior University
 //All rights reserved.
 //
@@ -26,10 +24,12 @@ import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility;
 //WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility;
+
 /**
  * Utils for aimapi.
  * 
- * @author debra willrett
+ * @author Debra Willrett
  * 
  */
 public class Utils {

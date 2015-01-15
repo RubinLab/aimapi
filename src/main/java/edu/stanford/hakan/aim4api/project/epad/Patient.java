@@ -1,7 +1,5 @@
 package edu.stanford.shared.aimapi;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.Person;
-
 //Copyright (c) 2013 The Board of Trustees of the Leland Stanford Junior University
 //All rights reserved.
 //
@@ -25,6 +23,8 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Person;
 //SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
 //WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import edu.stanford.hakan.aim4api.compability.aimv3.Person;
 
 @SuppressWarnings("serial")
 public class Patient extends Person {

@@ -26,7 +26,7 @@ package edu.stanford.shared.aimapi;
 
 /**
  * 
- * @author debra willrett
+ * @author Debra Willrett
  * 
  */
 public class Enumerations {
