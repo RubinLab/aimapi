@@ -27,6 +27,9 @@
  */
 package edu.stanford.hakan.aim4api.utility;
 
+import edu.stanford.hakan.aim4api.base.MarkupEntity;
+import edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
+import edu.stanford.hakan.aim4api.base.TwoDimensionSpline;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -54,5 +57,16 @@ public class Utility {
             }
         }
         return "http://" + res;
+    }
+
+    public static boolean isSpline(MarkupEntity markupEntity) {
+        if ("TwoDimensionSpline".equals(markupEntity.getXsiType()) || markupEntity.getUniqueIdentifier().getRoot().contains(Globals.getSplineFlag())) {
+            return true;
+        }
+        return false;
+    }
+    
+    public static TwoDimensionSpline toSpline(TwoDimensionPolyline twoDimensionPolyline) {
+        return new TwoDimensionSpline(twoDimensionPolyline);
     }
 }

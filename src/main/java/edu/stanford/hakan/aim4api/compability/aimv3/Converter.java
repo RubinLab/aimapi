@@ -6,7 +6,6 @@
 
  package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import edu.stanford.hakan.aim4api.compability.aimv3_old.*;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ST;

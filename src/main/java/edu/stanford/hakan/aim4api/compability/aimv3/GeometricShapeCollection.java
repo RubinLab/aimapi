@@ -54,14 +54,14 @@ public class GeometricShapeCollection implements IAimXMLOperations {
         return this.listGeometricShape;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        Element geometricShapeCollection = doc.createElement("geometricShapeCollection");
-        for (int i = 0; i < this.listGeometricShape.size(); i++) {
-            geometricShapeCollection.appendChild(this.listGeometricShape.get(i).getXMLNode(doc));
-        }
-        return geometricShapeCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        Element geometricShapeCollection = doc.createElement("geometricShapeCollection");
+//        for (int i = 0; i < this.listGeometricShape.size(); i++) {
+//            geometricShapeCollection.appendChild(this.listGeometricShape.get(i).getXMLNode(doc));
+//        }
+//        return geometricShapeCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {
@@ -113,6 +113,8 @@ public class GeometricShapeCollection implements IAimXMLOperations {
                 this.AddGeometricShape(new Point((edu.stanford.hakan.aim4api.base.TwoDimensionPoint) itemV4));
             } else if ("TwoDimensionPolyline".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Polyline((edu.stanford.hakan.aim4api.base.TwoDimensionPolyline) itemV4));
+            }else if ("TwoDimensionSpline".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new Spline((edu.stanford.hakan.aim4api.base.TwoDimensionSpline) itemV4));
             }
         }
     }

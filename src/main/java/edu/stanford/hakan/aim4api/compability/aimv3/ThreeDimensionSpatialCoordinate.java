@@ -91,18 +91,18 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
         this.z = z;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-       
-        this.Control();
-        
-        Element spatialCoordinate = (Element) super.getXMLNode(doc);
-        spatialCoordinate.setAttribute("x", this.getX().toString());
-        spatialCoordinate.setAttribute("y", this.getY().toString());
-        spatialCoordinate.setAttribute("z", this.getZ().toString());
-        spatialCoordinate.setAttribute("frameOfReferenceUID", this.getFrameOfReferenceUID());
-        return spatialCoordinate;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//       
+//        this.Control();
+//        
+//        Element spatialCoordinate = (Element) super.getXMLNode(doc);
+//        spatialCoordinate.setAttribute("x", this.getX().toString());
+//        spatialCoordinate.setAttribute("y", this.getY().toString());
+//        spatialCoordinate.setAttribute("z", this.getZ().toString());
+//        spatialCoordinate.setAttribute("frameOfReferenceUID", this.getFrameOfReferenceUID());
+//        return spatialCoordinate;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

@@ -54,16 +54,16 @@ public class ImageCollection implements IAimXMLOperations {
         return this.listImage;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element imageCollection = doc.createElement("imageCollection");
-        for (int i = 0; i < this.listImage.size(); i++) {
-            imageCollection.appendChild(this.listImage.get(i).getXMLNode(doc));
-        }
-
-        return imageCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element imageCollection = doc.createElement("imageCollection");
+//        for (int i = 0; i < this.listImage.size(); i++) {
+//            imageCollection.appendChild(this.listImage.get(i).getXMLNode(doc));
+//        }
+//
+//        return imageCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

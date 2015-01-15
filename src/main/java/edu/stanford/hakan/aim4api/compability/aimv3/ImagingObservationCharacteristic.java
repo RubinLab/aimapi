@@ -28,10 +28,11 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 
+import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.util.ArrayList;
+import java.util.List;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -52,6 +53,8 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
     private String label;
     private CharacteristicQuantificationCollection characteristicQuantificationCollection = new CharacteristicQuantificationCollection();
 
+    private List<AllowedTerm> listAllowedTerm = new ArrayList<AllowedTerm>();
+    
     public ImagingObservationCharacteristic() {
     }
 
@@ -142,31 +145,44 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         this.characteristicQuantificationCollection.AddCharacteristicQuantification(newCharacteristicQuantification);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imagingObservationCharacteristic = doc.createElement("ImagingObservationCharacteristic");
-        imagingObservationCharacteristic.setAttribute("cagridId", this.cagridId.toString());
-        imagingObservationCharacteristic.setAttribute("codeValue", this.codeValue);
-        imagingObservationCharacteristic.setAttribute("codeMeaning", this.codeMeaning);
-        imagingObservationCharacteristic.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            imagingObservationCharacteristic.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+    public void addAllowedTerm(AllowedTerm allowedTerm) {
+        if (!this.listAllowedTerm.contains(allowedTerm)) {
+            this.listAllowedTerm.add(allowedTerm);
         }
-        if (this.comment != null) {
-            imagingObservationCharacteristic.setAttribute("comment", this.comment);
-        }
-        if (this.annotatorConfidence != null) {
-            imagingObservationCharacteristic.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-        }
-        imagingObservationCharacteristic.setAttribute("label", this.label);
-        if (this.characteristicQuantificationCollection.getCharacteristicQuantificationList().size() > 0) {
-            imagingObservationCharacteristic.appendChild(this.characteristicQuantificationCollection.getXMLNode(doc));
-        }
-        return imagingObservationCharacteristic;
     }
+
+    public void addAllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
+        AllowedTerm allowedTerm = new AllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
+        if (!this.listAllowedTerm.contains(allowedTerm)) {
+            this.listAllowedTerm.add(allowedTerm);
+        }
+    }
+
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imagingObservationCharacteristic = doc.createElement("ImagingObservationCharacteristic");
+//        imagingObservationCharacteristic.setAttribute("cagridId", this.cagridId.toString());
+//        imagingObservationCharacteristic.setAttribute("codeValue", this.codeValue);
+//        imagingObservationCharacteristic.setAttribute("codeMeaning", this.codeMeaning);
+//        imagingObservationCharacteristic.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            imagingObservationCharacteristic.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.comment != null) {
+//            imagingObservationCharacteristic.setAttribute("comment", this.comment);
+//        }
+//        if (this.annotatorConfidence != null) {
+//            imagingObservationCharacteristic.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+//        }
+//        imagingObservationCharacteristic.setAttribute("label", this.label);
+//        if (this.characteristicQuantificationCollection.getCharacteristicQuantificationList().size() > 0) {
+//            imagingObservationCharacteristic.appendChild(this.characteristicQuantificationCollection.getXMLNode(doc));
+//        }
+//        return imagingObservationCharacteristic;
+//    }
 
     @Override
     public void setXMLNode(Node node) {
@@ -249,32 +265,62 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         res.setCharacteristicQuantificationCollection(this.getCharacteristicQuantificationCollection().toAimV4());//
         res.setComment(Converter.toST(this.getComment()));//
         res.setLabel(Converter.toST(this.getLabel()));//
-        CD typeCode = new CD();//
-        typeCode.setCode(this.getCodeValue());//
-        typeCode.setCodeSystem(this.getCodeMeaning());//
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
-        res.addTypeCode(typeCode);//
+
+        for (AllowedTerm allowedTerm : this.listAllowedTerm) {
+            res.addTypeCode(allowedTerm.toCD());
+        }
+
+        
+//        CD typeCode = new CD();//
+//        typeCode.setCode(this.getCodeValue());//
+//        typeCode.setCodeSystem(this.getCodeMeaning());//
+//        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+//        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+//        res.addTypeCode(typeCode);//
         return res;
     }
 
     public ImagingObservationCharacteristic(edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic v4) {
         this.setCagridId(0);
-        if (v4.getListTypeCode().size() > 0) {
-            CD typeCode = v4.getListTypeCode().get(0);
+        
+           for (CD typeCode : v4.getListQuestionTypeCode()) {
+            String code_Value = "";
+            String code_Meaning = "";
+            String coding_SchemeDesignator = "";
+            String coding_SchemeVersion = "";
+
             if (typeCode.getCode() != null) {
-                this.setCodeValue(typeCode.getCode());
+                code_Value = typeCode.getCode();
             }
             if (typeCode.getCodeSystem() != null) {
-                this.setCodeMeaning(typeCode.getCodeSystem());
+                code_Meaning = typeCode.getCodeSystem();
             }
             if (typeCode.getCodeSystemName() != null) {
-                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+                coding_SchemeDesignator = typeCode.getCodeSystemName();
             }
             if (typeCode.getCodeSystemVersion() != null) {
-                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+                coding_SchemeVersion = typeCode.getCodeSystemVersion();
+            }
+            if (!"".equals(code_Value) || !"".equals(code_Meaning) || !"".equals(coding_SchemeDesignator) || !"".equals(coding_SchemeVersion)) {
+                this.addAllowedTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
             }
         }
+        
+//        if (v4.getListTypeCode().size() > 0) {
+//            CD typeCode = v4.getListTypeCode().get(0);
+//            if (typeCode.getCode() != null) {
+//                this.setCodeValue(typeCode.getCode());
+//            }
+//            if (typeCode.getCodeSystem() != null) {
+//                this.setCodeMeaning(typeCode.getCodeSystem());
+//            }
+//            if (typeCode.getCodeSystemName() != null) {
+//                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+//            }
+//            if (typeCode.getCodeSystemVersion() != null) {
+//                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+//            }
+//        }
         this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
         if (v4.getCharacteristicQuantificationCollection().getCharacteristicQuantificationList().size() > 0) {
             this.setCharacteristicQuantificationCollection(new CharacteristicQuantificationCollection(v4.getCharacteristicQuantificationCollection()));

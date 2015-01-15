@@ -51,16 +51,16 @@ public class PresentationStateCollection implements IAimXMLOperations {
         return this.listPresentationState;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element presentationStateCollection = doc.createElement("presentationStateCollection");
-        for (int i = 0; i < listPresentationState.size(); i++) {
-            presentationStateCollection.appendChild(listPresentationState.get(i).getXMLNode(doc));
-        }
-
-        return presentationStateCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element presentationStateCollection = doc.createElement("presentationStateCollection");
+//        for (int i = 0; i < listPresentationState.size(); i++) {
+//            presentationStateCollection.appendChild(listPresentationState.get(i).getXMLNode(doc));
+//        }
+//
+//        return presentationStateCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

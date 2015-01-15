@@ -106,22 +106,22 @@ public class AnnotationRole implements IAimXMLOperations {
         this.roleSequenceNumber = roleSequenceNumber;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element annotationRole = doc.createElement("AnnotationRole");
-        annotationRole.setAttribute("cagridId", Integer.toString(this.cagridId));
-        annotationRole.setAttribute("codeValue", this.codeValue);
-        annotationRole.setAttribute("codeMeaning", this.codeMeaning);
-        annotationRole.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            annotationRole.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        annotationRole.setAttribute("roleSequenceNumber", Integer.toString(this.roleSequenceNumber));
-        return annotationRole;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element annotationRole = doc.createElement("AnnotationRole");
+//        annotationRole.setAttribute("cagridId", Integer.toString(this.cagridId));
+//        annotationRole.setAttribute("codeValue", this.codeValue);
+//        annotationRole.setAttribute("codeMeaning", this.codeMeaning);
+//        annotationRole.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            annotationRole.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        annotationRole.setAttribute("roleSequenceNumber", Integer.toString(this.roleSequenceNumber));
+//        return annotationRole;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

@@ -39,6 +39,6 @@ import org.w3c.dom.Node;
  * @author Hakan BULU
  */
 public interface IAimXMLOperations extends Serializable {    
-    public Node getXMLNode(Document doc) throws AimException;
+//    public Node getXMLNode(Document doc) throws AimException;
     public void setXMLNode(Node node);
 }

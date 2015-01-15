@@ -19,6 +19,11 @@ public class Globals {
 
     private static final String aimQLXmlFilePath = "";
     private static final String annotationListTxtFilePath = "";
+    private static final String splineFlag = "###.spline.###";
+
+    public static String getSplineFlag() {
+        return splineFlag;
+    }
 
     public static String getAimQLXmlFilePath() {
         try {

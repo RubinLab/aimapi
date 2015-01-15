@@ -54,15 +54,15 @@ public class SegmentationCollection implements IAimXMLOperations {
         return this.listSegmentation;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element segmentationCollection = doc.createElement("segmentationCollection");
-        for (int i = 0; i < this.listSegmentation.size(); i++) {
-            segmentationCollection.appendChild(this.listSegmentation.get(i).getXMLNode(doc));
-        }
-        return segmentationCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element segmentationCollection = doc.createElement("segmentationCollection");
+//        for (int i = 0; i < this.listSegmentation.size(); i++) {
+//            segmentationCollection.appendChild(this.listSegmentation.get(i).getXMLNode(doc));
+//        }
+//        return segmentationCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

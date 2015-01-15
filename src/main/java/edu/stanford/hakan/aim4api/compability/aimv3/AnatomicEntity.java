@@ -142,31 +142,31 @@ public class AnatomicEntity implements IAimXMLOperations {
         this.anatomicEntityCharacteristicCollection.AddAnatomicEntityCharacteristic(newAnatomicEntityCharacteristic);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element anatomicEntity = doc.createElement("AnatomicEntity");
-        anatomicEntity.setAttribute("cagridId", this.cagridId.toString());
-        anatomicEntity.setAttribute("codeValue", this.codeValue);
-        anatomicEntity.setAttribute("codeMeaning", this.codeMeaning);
-        anatomicEntity.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            anatomicEntity.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.annotatorConfidence != null) {
-            anatomicEntity.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
-        }
-        if (this.isPresent != null) {
-            anatomicEntity.setAttribute("isPresent", this.isPresent.toString());
-        }
-        anatomicEntity.setAttribute("label", this.label);
-        if (this.anatomicEntityCharacteristicCollection.getAnatomicEntityCharacteristicList().size() > 0) {
-            anatomicEntity.appendChild(this.anatomicEntityCharacteristicCollection.getXMLNode(doc));
-        }
-        return anatomicEntity;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element anatomicEntity = doc.createElement("AnatomicEntity");
+//        anatomicEntity.setAttribute("cagridId", this.cagridId.toString());
+//        anatomicEntity.setAttribute("codeValue", this.codeValue);
+//        anatomicEntity.setAttribute("codeMeaning", this.codeMeaning);
+//        anatomicEntity.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            anatomicEntity.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.annotatorConfidence != null) {
+//            anatomicEntity.setAttribute("annotatorConfidence", this.annotatorConfidence.toString());
+//        }
+//        if (this.isPresent != null) {
+//            anatomicEntity.setAttribute("isPresent", this.isPresent.toString());
+//        }
+//        anatomicEntity.setAttribute("label", this.label);
+//        if (this.anatomicEntityCharacteristicCollection.getAnatomicEntityCharacteristicList().size() > 0) {
+//            anatomicEntity.appendChild(this.anatomicEntityCharacteristicCollection.getXMLNode(doc));
+//        }
+//        return anatomicEntity;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

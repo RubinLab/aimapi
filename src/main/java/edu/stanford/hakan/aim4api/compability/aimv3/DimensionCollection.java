@@ -54,15 +54,15 @@ public class DimensionCollection implements IAimXMLOperations {
         return this.listDimension;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element dimensionCollection = doc.createElement("dimensionCollection");
-        for (int i = 0; i < this.listDimension.size(); i++) {
-            dimensionCollection.appendChild(this.listDimension.get(i).getXMLNode(doc));
-        }
-        return dimensionCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element dimensionCollection = doc.createElement("dimensionCollection");
+//        for (int i = 0; i < this.listDimension.size(); i++) {
+//            dimensionCollection.appendChild(this.listDimension.get(i).getXMLNode(doc));
+//        }
+//        return dimensionCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

@@ -49,7 +49,8 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
     private ImageReferenceCollection imageReferenceCollection = new ImageReferenceCollection();
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
-    private TextAnnotationCollection textAnnotationCollection= new TextAnnotationCollection();    
+    private TextAnnotationCollection textAnnotationCollection= new TextAnnotationCollection();
+    
 
     public ImageAnnotation() {
         super();
@@ -121,32 +122,32 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
         this.textAnnotationCollection.AddTextAnnotation(newTextAnnotation);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element annotation = (Element) super.getXMLNode(doc);
-
-        if (this.getSegmentationCollection().getSegmentationList().size() > 0) {
-            annotation.appendChild(this.getSegmentationCollection().getXMLNode(doc));
-        }
-        if (this.getImageReferenceCollection().getImageReferenceList().size() > 0) {
-            annotation.appendChild(this.getImageReferenceCollection().getXMLNode(doc));
-        }
-        if (this.getGeometricShapeCollection().getGeometricShapeList().size() > 0) {
-            annotation.appendChild(this.getGeometricShapeCollection().getXMLNode(doc));
-        }
-        Element person = doc.createElement("person");
-        for (int i = 0; i < this.getListPerson().size(); i++) {
-            person.appendChild(this.getListPerson().get(i).getXMLNode(doc));
-        }
-        if (this.getListPerson().size() > 0) {
-            annotation.appendChild(person);
-        }
-        if (this.getTextAnnotationCollection().getTextAnnotationList().size() > 0) {
-            annotation.appendChild(this.getTextAnnotationCollection().getXMLNode(doc));
-        }
-        return annotation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element annotation = (Element) super.getXMLNode(doc);
+//
+//        if (this.getSegmentationCollection().getSegmentationList().size() > 0) {
+//            annotation.appendChild(this.getSegmentationCollection().getXMLNode(doc));
+//        }
+//        if (this.getImageReferenceCollection().getImageReferenceList().size() > 0) {
+//            annotation.appendChild(this.getImageReferenceCollection().getXMLNode(doc));
+//        }
+//        if (this.getGeometricShapeCollection().getGeometricShapeList().size() > 0) {
+//            annotation.appendChild(this.getGeometricShapeCollection().getXMLNode(doc));
+//        }
+//        Element person = doc.createElement("person");
+//        for (int i = 0; i < this.getListPerson().size(); i++) {
+//            person.appendChild(this.getListPerson().get(i).getXMLNode(doc));
+//        }
+//        if (this.getListPerson().size() > 0) {
+//            annotation.appendChild(person);
+//        }
+//        if (this.getTextAnnotationCollection().getTextAnnotationList().size() > 0) {
+//            annotation.appendChild(this.getTextAnnotationCollection().getXMLNode(doc));
+//        }
+//        return annotation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

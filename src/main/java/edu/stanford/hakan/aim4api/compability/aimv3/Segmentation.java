@@ -113,28 +113,28 @@ public class Segmentation implements IAimXMLOperations {
         this.sopInstanceUID = sopInstanceUID;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element segmentation = doc.createElement("Segmentation");
-        segmentation.setAttribute("cagridId", this.cagridId.toString());
-        segmentation.setAttribute("sopInstanceUID", this.sopInstanceUID);
-        segmentation.setAttribute("sopClassUID", this.sopClassUID);
-        segmentation.setAttribute("referencedSopInstanceUID", this.referencedSopInstanceUID);
-        segmentation.setAttribute("segmentNumber", this.segmentNumber.toString());
-
-        Element imagingObservation = doc.createElement("imagingObservation");
-        for (int i = 0; i < this.listImagingObservation.size(); i++) {
-            imagingObservation.appendChild(this.listImagingObservation.get(i).getXMLNode(doc));
-        }
-        if (this.listImagingObservation.size() > 0) {
-            segmentation.appendChild(imagingObservation);
-        }
-
-        return segmentation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element segmentation = doc.createElement("Segmentation");
+//        segmentation.setAttribute("cagridId", this.cagridId.toString());
+//        segmentation.setAttribute("sopInstanceUID", this.sopInstanceUID);
+//        segmentation.setAttribute("sopClassUID", this.sopClassUID);
+//        segmentation.setAttribute("referencedSopInstanceUID", this.referencedSopInstanceUID);
+//        segmentation.setAttribute("segmentNumber", this.segmentNumber.toString());
+//
+//        Element imagingObservation = doc.createElement("imagingObservation");
+//        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+//            imagingObservation.appendChild(this.listImagingObservation.get(i).getXMLNode(doc));
+//        }
+//        if (this.listImagingObservation.size() > 0) {
+//            segmentation.appendChild(imagingObservation);
+//        }
+//
+//        return segmentation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

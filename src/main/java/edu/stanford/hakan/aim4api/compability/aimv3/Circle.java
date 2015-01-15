@@ -48,10 +48,10 @@ public class Circle extends GeometricShape implements IAimXMLOperations {
         setXsiType("Circle");
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        return super.getXMLNode(doc);
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        return super.getXMLNode(doc);
+//    }
 
     @Override
     public void setXMLNode(Node node) {

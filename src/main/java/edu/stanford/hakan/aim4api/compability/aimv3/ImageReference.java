@@ -87,17 +87,17 @@ public class ImageReference implements IImageReference, IAimXMLOperations {
         this.cagridId = cagridId;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imageReference = doc.createElement("ImageReference");
-        imageReference.setAttribute("cagridId", Integer.toString(getCagridId()));
-        imageReference.setAttribute("xsi:type", this.xsiType);
-
-        return imageReference;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imageReference = doc.createElement("ImageReference");
+//        imageReference.setAttribute("cagridId", Integer.toString(getCagridId()));
+//        imageReference.setAttribute("xsi:type", this.xsiType);
+//
+//        return imageReference;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

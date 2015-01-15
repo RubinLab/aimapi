@@ -48,10 +48,10 @@ public class Point extends GeometricShape implements IAimXMLOperations {
         setXsiType("Point");
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        return super.getXMLNode(doc);
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        return super.getXMLNode(doc);
+//    }
 
     @Override
     public void setXMLNode(Node node) {

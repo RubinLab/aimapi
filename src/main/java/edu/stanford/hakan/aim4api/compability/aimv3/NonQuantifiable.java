@@ -93,22 +93,22 @@ public class NonQuantifiable extends CharacteristicQuantification implements IAi
         this.codingSchemeVersion = codingSchemeVersion;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element characteristicQuantification = (Element) super.getXMLNode(doc);
-
-        characteristicQuantification.setAttribute("codeValue", this.getCodeValue());
-        characteristicQuantification.setAttribute("codeMeaning", this.getCodeMeaning());
-        characteristicQuantification.setAttribute("codingSchemeDesignator", this.getCodingSchemeDesignator());
-        if (this.getCodingSchemeVersion() != null) {
-            characteristicQuantification.setAttribute("codingSchemeVersion", this.getCodingSchemeVersion());
-        }
-
-        return characteristicQuantification;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element characteristicQuantification = (Element) super.getXMLNode(doc);
+//
+//        characteristicQuantification.setAttribute("codeValue", this.getCodeValue());
+//        characteristicQuantification.setAttribute("codeMeaning", this.getCodeMeaning());
+//        characteristicQuantification.setAttribute("codingSchemeDesignator", this.getCodingSchemeDesignator());
+//        if (this.getCodingSchemeVersion() != null) {
+//            characteristicQuantification.setAttribute("codingSchemeVersion", this.getCodingSchemeVersion());
+//        }
+//
+//        return characteristicQuantification;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

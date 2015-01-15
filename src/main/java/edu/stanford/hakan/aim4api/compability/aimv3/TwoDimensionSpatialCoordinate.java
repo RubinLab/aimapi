@@ -93,18 +93,18 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements 
         this.referencedFrameNumber = referencedFrameNumber;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-        
-        Element spatialCoordinate = (Element) super.getXMLNode(doc);
-        spatialCoordinate.setAttribute("imageReferenceUID", this.getImageReferenceUID());
-        spatialCoordinate.setAttribute("referencedFrameNumber", this.getReferencedFrameNumber().toString());
-        spatialCoordinate.setAttribute("x", this.getX().toString());
-        spatialCoordinate.setAttribute("y", this.getY().toString());
-        return spatialCoordinate;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//        
+//        Element spatialCoordinate = (Element) super.getXMLNode(doc);
+//        spatialCoordinate.setAttribute("imageReferenceUID", this.getImageReferenceUID());
+//        spatialCoordinate.setAttribute("referencedFrameNumber", this.getReferencedFrameNumber().toString());
+//        spatialCoordinate.setAttribute("x", this.getX().toString());
+//        spatialCoordinate.setAttribute("y", this.getY().toString());
+//        return spatialCoordinate;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

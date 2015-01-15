@@ -48,10 +48,10 @@ public class Ellipse extends GeometricShape implements IAimXMLOperations {
         setXsiType("Ellipse");
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-        return super.getXMLNode(doc);
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//        return super.getXMLNode(doc);
+//    }
 
     @Override
     public void setXMLNode(Node node) {

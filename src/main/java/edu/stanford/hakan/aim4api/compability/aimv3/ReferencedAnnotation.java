@@ -89,25 +89,25 @@ public class ReferencedAnnotation implements IAimXMLOperations {
         this.listAnnotationRole.add(newRole);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element referencedAnnotation = doc.createElement("ReferencedAnnotation");
-        referencedAnnotation.setAttribute("cagridId", Integer.toString(this.cagridId));
-        referencedAnnotation.setAttribute("referencedAnnotationUID", this.referencedAnnotationUID);
-
-        Element annotationRole = doc.createElement("annotationRole");
-        for (int i = 0; i < this.listAnnotationRole.size(); i++) {
-            annotationRole.appendChild(this.listAnnotationRole.get(i).getXMLNode(doc));
-        }
-        if (this.listAnnotationRole.size() > 0) {
-            referencedAnnotation.appendChild(annotationRole);
-        }
-
-        return referencedAnnotation;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element referencedAnnotation = doc.createElement("ReferencedAnnotation");
+//        referencedAnnotation.setAttribute("cagridId", Integer.toString(this.cagridId));
+//        referencedAnnotation.setAttribute("referencedAnnotationUID", this.referencedAnnotationUID);
+//
+//        Element annotationRole = doc.createElement("annotationRole");
+//        for (int i = 0; i < this.listAnnotationRole.size(); i++) {
+//            annotationRole.appendChild(this.listAnnotationRole.get(i).getXMLNode(doc));
+//        }
+//        if (this.listAnnotationRole.size() > 0) {
+//            referencedAnnotation.appendChild(annotationRole);
+//        }
+//
+//        return referencedAnnotation;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

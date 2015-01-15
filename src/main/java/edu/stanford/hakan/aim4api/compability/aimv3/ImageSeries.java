@@ -82,21 +82,21 @@ public class ImageSeries implements IAimXMLOperations {
         this.imageCollection.AddImage(image);
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element imageSeries = doc.createElement("ImageSeries");
-        imageSeries.setAttribute("cagridId", Integer.toString(getCagridId()));
-        imageSeries.setAttribute("instanceUID", this.instanceUID);
-
-        if (this.imageCollection.getImageList().size() > 0) {
-            imageSeries.appendChild(this.imageCollection.getXMLNode(doc));
-        }
-
-        return imageSeries;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element imageSeries = doc.createElement("ImageSeries");
+//        imageSeries.setAttribute("cagridId", Integer.toString(getCagridId()));
+//        imageSeries.setAttribute("instanceUID", this.instanceUID);
+//
+//        if (this.imageCollection.getImageList().size() > 0) {
+//            imageSeries.appendChild(this.imageCollection.getXMLNode(doc));
+//        }
+//
+//        return imageSeries;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

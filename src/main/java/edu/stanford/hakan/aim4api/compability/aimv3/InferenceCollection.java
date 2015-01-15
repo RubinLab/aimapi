@@ -54,16 +54,16 @@ public class InferenceCollection implements IAimXMLOperations {
         return this.listInference;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        Element inferenceCollection = doc.createElement("inferenceCollection");
-        for (int i = 0; i < this.listInference.size(); i++) {
-            inferenceCollection.appendChild(this.listInference.get(i).getXMLNode(doc));
-        }
-
-        return inferenceCollection;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        Element inferenceCollection = doc.createElement("inferenceCollection");
+//        for (int i = 0; i < this.listInference.size(); i++) {
+//            inferenceCollection.appendChild(this.listInference.get(i).getXMLNode(doc));
+//        }
+//
+//        return inferenceCollection;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

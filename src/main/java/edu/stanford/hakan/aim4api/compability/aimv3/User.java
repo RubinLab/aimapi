@@ -97,23 +97,23 @@ public class User implements IAimXMLOperations {
         this.roleInTrial = roleInTrial;
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element user = doc.createElement("User");
-        user.setAttribute("cagridId", this.cagridId.toString());
-        user.setAttribute("name", this.name);
-        user.setAttribute("loginName", this.loginName);
-        if (this.roleInTrial != null) {
-            user.setAttribute("roleInTrial", this.roleInTrial);
-        }
-        if (this.numberWithinRoleOfClinicalTrial != null) {
-            user.setAttribute("numberWithinRoleOfClinicalTrial", Integer.toString(this.numberWithinRoleOfClinicalTrial));
-        }
-        return user;
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element user = doc.createElement("User");
+//        user.setAttribute("cagridId", this.cagridId.toString());
+//        user.setAttribute("name", this.name);
+//        user.setAttribute("loginName", this.loginName);
+//        if (this.roleInTrial != null) {
+//            user.setAttribute("roleInTrial", this.roleInTrial);
+//        }
+//        if (this.numberWithinRoleOfClinicalTrial != null) {
+//            user.setAttribute("numberWithinRoleOfClinicalTrial", Integer.toString(this.numberWithinRoleOfClinicalTrial));
+//        }
+//        return user;
+//    }
 
     @Override
     public void setXMLNode(Node node) {

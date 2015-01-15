@@ -314,67 +314,67 @@ public class Annotation implements IAimXMLOperations, IAnnotation {
         this.uniqueIdentifier = GenerateId.getUUID();
     }
 
-    @Override
-    public Node getXMLNode(Document doc) throws AimException {
-
-        this.Control();
-
-        Element annotation = doc.createElement(this.xsiType);
-        annotation.setAttribute("cagridId", this.cagridId.toString());
-        annotation.setAttribute("aimVersion", this.aimVersion);
-        if (this.comment != null) {
-            annotation.setAttribute("comment", this.comment);
-        }
-        annotation.setAttribute("dateTime", this.dateTime);
-        annotation.setAttribute("name", this.name);
-        annotation.setAttribute("uniqueIdentifier", this.uniqueIdentifier);
-        annotation.setAttribute("codeValue", this.codeValue);
-        annotation.setAttribute("codeMeaning", this.codeMeaning);
-        annotation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
-        if (this.codingSchemeVersion != null) {
-            annotation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
-        }
-        if (this.precedentReferencedAnnotationUID != null) {
-            annotation.setAttribute("precedentReferencedAnnotationUID", this.precedentReferencedAnnotationUID);
-        }
-
-        if (this.calculationCollection.getCalculationList().size() > 0) {
-            annotation.appendChild(this.calculationCollection.getXMLNode(doc));
-        }
-        if (this.inferenceCollection.getInferenceList().size() > 0) {
-            annotation.appendChild(this.inferenceCollection.getXMLNode(doc));
-        }
-        Element user = doc.createElement("user");
-        for (int i = 0; i < this.listUser.size(); i++) {
-            user.appendChild(this.listUser.get(i).getXMLNode(doc));
-        }
-        if (this.listUser.size() > 0) {
-            annotation.appendChild(user);
-        }
-        Element equipment = doc.createElement("equipment");
-        for (int i = 0; i < this.listEquipment.size(); i++) {
-            equipment.appendChild(this.listEquipment.get(i).getXMLNode(doc));
-        }
-        if (this.listEquipment.size() > 0) {
-            annotation.appendChild(equipment);
-        }
-        if (this.anatomicEntityCollection.getAnatomicEntityList().size() > 0) {
-            annotation.appendChild(this.anatomicEntityCollection.getXMLNode(doc));
-        }
-        if (this.imagingObservationCollection.getImagingObservationList().size() > 0) {
-            annotation.appendChild(this.imagingObservationCollection.getXMLNode(doc));
-        }
-        Element aimStatus = doc.createElement("aimStatus");
-        for (int i = 0; i < this.listAimStatus.size(); i++) {
-            aimStatus.appendChild(this.listAimStatus.get(i).getXMLNode(doc));
-        }
-        if (this.listAimStatus.size() > 0) {
-            annotation.appendChild(aimStatus);
-        }
-
-        return annotation;
-
-    }
+//    @Override
+//    public Node getXMLNode(Document doc) throws AimException {
+//
+//        this.Control();
+//
+//        Element annotation = doc.createElement(this.xsiType);
+//        annotation.setAttribute("cagridId", this.cagridId.toString());
+//        annotation.setAttribute("aimVersion", this.aimVersion);
+//        if (this.comment != null) {
+//            annotation.setAttribute("comment", this.comment);
+//        }
+//        annotation.setAttribute("dateTime", this.dateTime);
+//        annotation.setAttribute("name", this.name);
+//        annotation.setAttribute("uniqueIdentifier", this.uniqueIdentifier);
+//        annotation.setAttribute("codeValue", this.codeValue);
+//        annotation.setAttribute("codeMeaning", this.codeMeaning);
+//        annotation.setAttribute("codingSchemeDesignator", this.codingSchemeDesignator);
+//        if (this.codingSchemeVersion != null) {
+//            annotation.setAttribute("codingSchemeVersion", this.codingSchemeVersion);
+//        }
+//        if (this.precedentReferencedAnnotationUID != null) {
+//            annotation.setAttribute("precedentReferencedAnnotationUID", this.precedentReferencedAnnotationUID);
+//        }
+//
+//        if (this.calculationCollection.getCalculationList().size() > 0) {
+//            annotation.appendChild(this.calculationCollection.getXMLNode(doc));
+//        }
+//        if (this.inferenceCollection.getInferenceList().size() > 0) {
+//            annotation.appendChild(this.inferenceCollection.getXMLNode(doc));
+//        }
+//        Element user = doc.createElement("user");
+//        for (int i = 0; i < this.listUser.size(); i++) {
+//            user.appendChild(this.listUser.get(i).getXMLNode(doc));
+//        }
+//        if (this.listUser.size() > 0) {
+//            annotation.appendChild(user);
+//        }
+//        Element equipment = doc.createElement("equipment");
+//        for (int i = 0; i < this.listEquipment.size(); i++) {
+//            equipment.appendChild(this.listEquipment.get(i).getXMLNode(doc));
+//        }
+//        if (this.listEquipment.size() > 0) {
+//            annotation.appendChild(equipment);
+//        }
+//        if (this.anatomicEntityCollection.getAnatomicEntityList().size() > 0) {
+//            annotation.appendChild(this.anatomicEntityCollection.getXMLNode(doc));
+//        }
+//        if (this.imagingObservationCollection.getImagingObservationList().size() > 0) {
+//            annotation.appendChild(this.imagingObservationCollection.getXMLNode(doc));
+//        }
+//        Element aimStatus = doc.createElement("aimStatus");
+//        for (int i = 0; i < this.listAimStatus.size(); i++) {
+//            aimStatus.appendChild(this.listAimStatus.get(i).getXMLNode(doc));
+//        }
+//        if (this.listAimStatus.size() > 0) {
+//            annotation.appendChild(aimStatus);
+//        }
+//
+//        return annotation;
+//
+//    }
 
     @Override
     public void setXMLNode(Node node) {
