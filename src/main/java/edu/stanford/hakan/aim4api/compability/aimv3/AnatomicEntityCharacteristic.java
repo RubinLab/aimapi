@@ -33,6 +33,11 @@ import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+>>>>>>> 6ad1d277cd154d6ce1a124630293e37d9bbc144b
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
