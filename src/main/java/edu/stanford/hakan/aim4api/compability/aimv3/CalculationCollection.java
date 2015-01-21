@@ -63,7 +63,6 @@ public class CalculationCollection implements IAimXMLOperations {
 //        }
 //        return calculationCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -77,7 +76,7 @@ public class CalculationCollection implements IAimXMLOperations {
                 this.AddCalculation(obj);
             }
         }
-    }    
+    }
 
     public boolean isEqualTo(Object other) {
         CalculationCollection oth = (CalculationCollection) other;
@@ -106,5 +105,15 @@ public class CalculationCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.CalculationEntity itemV4 : listV4) {
             this.AddCalculation(new Calculation(itemV4, ia));
         }
+    }
+
+    public CalculationCollection getClone() {
+        CalculationCollection res = new CalculationCollection();
+        for (int i = 0; i < this.listCalculation.size(); i++) {
+            if (this.listCalculation.get(i) != null) {
+                res.AddCalculation(this.listCalculation.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

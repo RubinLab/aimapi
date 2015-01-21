@@ -64,7 +64,6 @@ public class ImagingObservationCollection implements IAimXMLOperations {
 //
 //        return imagingObservationCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -80,7 +79,6 @@ public class ImagingObservationCollection implements IAimXMLOperations {
         }
     }
 
-   
     public boolean isEqualTo(Object other) {
         ImagingObservationCollection oth = (ImagingObservationCollection) other;
         if (this.listImagingObservation.size() != oth.listImagingObservation.size()) {
@@ -108,5 +106,15 @@ public class ImagingObservationCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.ImagingObservationEntity itemV4 : listV4) {
             this.AddImagingObservation(new ImagingObservation(itemV4));
         }
+    }
+
+    public ImagingObservationCollection getClone() {
+        ImagingObservationCollection res = new ImagingObservationCollection();
+        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+            if (this.listImagingObservation.get(i) != null) {
+                res.AddImagingObservation(this.listImagingObservation.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

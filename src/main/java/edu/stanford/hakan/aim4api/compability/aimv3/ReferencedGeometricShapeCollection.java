@@ -60,7 +60,6 @@ public class ReferencedGeometricShapeCollection implements IAimXMLOperations {
 //        }
 //        return referencedGeometricShapeCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -87,5 +86,15 @@ public class ReferencedGeometricShapeCollection implements IAimXMLOperations {
             }
         }
         return true;
+    }
+
+    public ReferencedGeometricShapeCollection getClone() {
+        ReferencedGeometricShapeCollection res = new ReferencedGeometricShapeCollection();
+        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+            if (this.listReferencedGeometricShape.get(i) != null) {
+                res.AddReferencedGeometricShape(this.listReferencedGeometricShape.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

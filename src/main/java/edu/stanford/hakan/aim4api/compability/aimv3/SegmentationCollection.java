@@ -63,7 +63,6 @@ public class SegmentationCollection implements IAimXMLOperations {
 //        }
 //        return segmentationCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -104,7 +103,17 @@ public class SegmentationCollection implements IAimXMLOperations {
     public SegmentationCollection(edu.stanford.hakan.aim4api.base.SegmentationEntityCollection v4) {
         List<edu.stanford.hakan.aim4api.base.SegmentationEntity> listV4 = v4.getSegmentationEntityList();
         for (edu.stanford.hakan.aim4api.base.SegmentationEntity itemV4 : listV4) {
-            this.AddSegmentation(new Segmentation((edu.stanford.hakan.aim4api.base.DicomSegmentationEntity)itemV4));
+            this.AddSegmentation(new Segmentation((edu.stanford.hakan.aim4api.base.DicomSegmentationEntity) itemV4));
         }
+    }
+
+    public SegmentationCollection getClone() {
+        SegmentationCollection res = new SegmentationCollection();
+        for (int i = 0; i < this.listSegmentation.size(); i++) {
+            if (this.listSegmentation.get(i) != null) {
+                res.AddSegmentation(this.listSegmentation.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

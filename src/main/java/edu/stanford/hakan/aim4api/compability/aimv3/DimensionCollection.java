@@ -63,7 +63,6 @@ public class DimensionCollection implements IAimXMLOperations {
 //        }
 //        return dimensionCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -78,7 +77,7 @@ public class DimensionCollection implements IAimXMLOperations {
             }
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         DimensionCollection oth = (DimensionCollection) other;
         if (this.listDimension.size() != oth.listDimension.size()) {
@@ -106,5 +105,15 @@ public class DimensionCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.Dimension itemV4 : listV4) {
             this.AddDimension(new Dimension(itemV4));
         }
+    }
+
+    public DimensionCollection getClone() {
+        DimensionCollection res = new DimensionCollection();
+        for (int i = 0; i < this.listDimension.size(); i++) {
+            if (this.listDimension.get(i) != null) {
+                res.AddDimension(this.listDimension.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

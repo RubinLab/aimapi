@@ -3,29 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package edu.stanford.hakan.aim4api.addition;
 
 import edu.stanford.hakan.aim4api.base.CD;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author Hakan
  */
-public class AllowedTerm {
-
+public class ValidTerm {
     private String codeValue;
     private String codeMeaning;
     private String codingSchemeDesignator;
     private String codingSchemeVersion;
-    private List<ValidTerm> listValidTerm = new ArrayList<ValidTerm>();
+    
+    
 
-    public AllowedTerm() {
+    public ValidTerm() {
 
     }
 
-    public AllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
+    public ValidTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
         this.codeValue = codeValue;
         this.codeMeaning = codeMeaning;
         this.codingSchemeDesignator = codingSchemeDesignator;
@@ -71,11 +69,11 @@ public class AllowedTerm {
         boolean csv = false;
         boolean csd = false;
 
-        if (object != null && object instanceof AllowedTerm) {
-            cv = this.codeValue.toLowerCase().trim().equals(((AllowedTerm) object).codeValue.toLowerCase().trim());
-            cm = this.codeMeaning.toLowerCase().trim().equals(((AllowedTerm) object).codeMeaning.toLowerCase().trim());
-            csv = this.codingSchemeVersion.toLowerCase().trim().equals(((AllowedTerm) object).codingSchemeVersion.toLowerCase().trim());
-            csd = this.codingSchemeDesignator.toLowerCase().trim().equals(((AllowedTerm) object).codingSchemeDesignator.toLowerCase().trim());
+        if (object != null && object instanceof ValidTerm) {
+            cv = this.codeValue.toLowerCase().trim().equals(((ValidTerm) object).codeValue.toLowerCase().trim());
+            cm = this.codeMeaning.toLowerCase().trim().equals(((ValidTerm) object).codeMeaning.toLowerCase().trim());
+            csv = this.codingSchemeVersion.toLowerCase().trim().equals(((ValidTerm) object).codingSchemeVersion.toLowerCase().trim());
+            csd = this.codingSchemeDesignator.toLowerCase().trim().equals(((ValidTerm) object).codingSchemeDesignator.toLowerCase().trim());
         }
         return cv && cm && csv && csd;
     }
@@ -84,8 +82,8 @@ public class AllowedTerm {
         return new CD(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
     }
 
-    public AllowedTerm getClone() {
-        AllowedTerm res = new AllowedTerm();
+    public ValidTerm getClone() {
+        ValidTerm res = new ValidTerm();
         if (this.codeValue != null) {
             res.codeValue = this.codeValue;
         }
@@ -98,34 +96,7 @@ public class AllowedTerm {
         if (this.codingSchemeVersion != null) {
             res.codingSchemeVersion = this.codingSchemeVersion;
         }
-        for (int i = 0; i < this.listValidTerm.size(); i++) {
-            if (this.listValidTerm.get(i) != null) {
-                res.addValidTerm(this.listValidTerm.get(i).getClone());
-            }
-        }
         return res;
     }
 
-    public void addValidTerm(ValidTerm validTerm) {
-        if (!this.listValidTerm.contains(validTerm)) {
-            this.listValidTerm.add(validTerm);
-        }
-    }
-
-    public void addValidTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
-        ValidTerm validTerm = new ValidTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
-        if (!this.listValidTerm.contains(validTerm)) {
-            this.listValidTerm.add(validTerm);
-        }
-    }
-
-    public List<ValidTerm> getListValidTerm() {
-        return listValidTerm;
-    }
-
-    public void setListValidTerm(List<ValidTerm> listValidTerm) {
-        this.listValidTerm = listValidTerm;
-    }
-    
-    
 }

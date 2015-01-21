@@ -61,7 +61,6 @@ public class PresentationStateCollection implements IAimXMLOperations {
 //
 //        return presentationStateCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -76,7 +75,7 @@ public class PresentationStateCollection implements IAimXMLOperations {
             }
         }
     }
-       
+
     public boolean isEqualTo(Object other) {
         PresentationStateCollection oth = (PresentationStateCollection) other;
         if (this.listPresentationState.size() != oth.listPresentationState.size()) {
@@ -88,5 +87,15 @@ public class PresentationStateCollection implements IAimXMLOperations {
             }
         }
         return true;
+    }
+
+    public PresentationStateCollection getClone() {
+        PresentationStateCollection res = new PresentationStateCollection();
+        for (int i = 0; i < this.listPresentationState.size(); i++) {
+            if (this.listPresentationState.get(i) != null) {
+                res.addPresentationState(this.listPresentationState.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -103,7 +102,6 @@ public class Equipment implements IAimXMLOperations {
 //        }
 //        return equipment;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -163,5 +161,22 @@ public class Equipment implements IAimXMLOperations {
         if (v4.getSoftwareVersion() != null) {
             this.setSoftwareVersion(v4.getSoftwareVersion().getValue());
         }
+    }
+
+    public Equipment getClone() {
+        Equipment res = new Equipment();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.manufacturerName != null) {
+            res.manufacturerName = this.manufacturerName;
+        }
+        if (this.manufacturerModelName != null) {
+            res.manufacturerModelName = this.manufacturerModelName;
+        }
+        if (this.softwareVersion != null) {
+            res.softwareVersion = this.softwareVersion;
+        }
+        return res;
     }
 }

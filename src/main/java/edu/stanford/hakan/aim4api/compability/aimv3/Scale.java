@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -99,7 +98,6 @@ public class Scale extends CharacteristicQuantification implements IAimXMLOperat
 //
 //        return characteristicQuantification;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -159,5 +157,32 @@ public class Scale extends CharacteristicQuantification implements IAimXMLOperat
         if (v4.getLabel() != null) {
             this.setDescription(v4.getLabel().getValue());
         }
+    }
+
+    @Override
+    public Scale getClone() {
+        Scale res = new Scale();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getName() != null) {
+            res.setName(this.getName());
+        }
+        if (this.getAnnotatorConfidence() != null) {
+            res.setAnnotatorConfidence(this.getAnnotatorConfidence());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.comment != null) {
+            res.comment = this.comment;
+        }
+        if (this.description != null) {
+            res.description = this.description;
+        }
+        if (this.value != null) {
+            res.value = this.value;
+        }
+        return res;
     }
 }

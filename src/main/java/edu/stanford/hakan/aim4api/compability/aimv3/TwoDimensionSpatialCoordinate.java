@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 import org.w3c.dom.Document;
@@ -105,7 +104,6 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements 
 //        spatialCoordinate.setAttribute("y", this.getY().toString());
 //        return spatialCoordinate;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -116,7 +114,6 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements 
         this.setY(Double.parseDouble(map.getNamedItem("y").getNodeValue()));
     }
 
-    
     private void Control() throws AimException {
         if (this.getImageReferenceUID() == null) {
             throw new AimException("AimException: TwoDimensionSpatialCoordinate's imageReferenceUID can not be null");
@@ -131,9 +128,7 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements 
             throw new AimException("AimException: TwoDimensionSpatialCoordinate's y can not be null");
         }
     }
-    
-        
-        
+
     @Override
     public boolean isEqualTo(Object other) {
         TwoDimensionSpatialCoordinate oth = (TwoDimensionSpatialCoordinate) other;
@@ -176,6 +171,33 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements 
         if (v4.getTwoDimensionGeometricShapeEntity() != null) {
             this.setReferencedFrameNumber(v4.getTwoDimensionGeometricShapeEntity().getReferencedFrameNumber());
         }
+    }
+
+    @Override
+    public TwoDimensionSpatialCoordinate getClone() {
+        TwoDimensionSpatialCoordinate res = new TwoDimensionSpatialCoordinate();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getCoordinateIndex() != null) {
+            res.setCoordinateIndex(this.getCoordinateIndex());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.imageReferenceUID != null) {
+            res.imageReferenceUID = this.imageReferenceUID;
+        }
+        if (this.referencedFrameNumber != null) {
+            res.referencedFrameNumber = this.referencedFrameNumber;
+        }
+        if (this.x != null) {
+            res.x = this.x;
+        }
+        if (this.y != null) {
+            res.y = this.y;
+        }
+        return res;
     }
 
 }

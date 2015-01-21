@@ -34,24 +34,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 /**
  *
  * @author Hakan BULU
  */
-public class ReferencedAnnotationCollection  implements IAimXMLOperations  {
-    
-     private List<ReferencedAnnotation> listReferencedAnnotation = new ArrayList<ReferencedAnnotation>();
-   
-    public void AddReferencedAnnotation(ReferencedAnnotation newReferencedAnnotation)
-    {
+public class ReferencedAnnotationCollection implements IAimXMLOperations {
+
+    private List<ReferencedAnnotation> listReferencedAnnotation = new ArrayList<ReferencedAnnotation>();
+
+    public void AddReferencedAnnotation(ReferencedAnnotation newReferencedAnnotation) {
         this.listReferencedAnnotation.add(newReferencedAnnotation);
     }
-    
-    public List<ReferencedAnnotation> getReferencedAnnotationList()
-    {
+
+    public List<ReferencedAnnotation> getReferencedAnnotationList() {
         return this.listReferencedAnnotation;
     }
-    
+
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {     
 //        
@@ -61,12 +60,11 @@ public class ReferencedAnnotationCollection  implements IAimXMLOperations  {
 //        }        
 //        return referencedAnnotationCollection;
 //    }
-
     @Override
-    public void setXMLNode(Node node) {        
-       
+    public void setXMLNode(Node node) {
+
         this.listReferencedAnnotation.clear();
-        
+
         NodeList tempList = node.getChildNodes();
         for (int j = 0; j < tempList.getLength(); j++) {
             if ("ReferencedAnnotation".equals(tempList.item(j).getNodeName())) {
@@ -76,7 +74,7 @@ public class ReferencedAnnotationCollection  implements IAimXMLOperations  {
             }
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         ReferencedAnnotationCollection oth = (ReferencedAnnotationCollection) other;
         if (this.listReferencedAnnotation.size() != oth.listReferencedAnnotation.size()) {
@@ -88,5 +86,15 @@ public class ReferencedAnnotationCollection  implements IAimXMLOperations  {
             }
         }
         return true;
+    }
+
+    public ReferencedAnnotationCollection getClone() {
+        ReferencedAnnotationCollection res = new ReferencedAnnotationCollection();
+        for (int i = 0; i < this.listReferencedAnnotation.size(); i++) {
+            if (this.listReferencedAnnotation.get(i) != null) {
+                res.AddReferencedAnnotation(this.listReferencedAnnotation.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

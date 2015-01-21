@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -114,7 +113,6 @@ public class User implements IAimXMLOperations {
 //        }
 //        return user;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -130,7 +128,6 @@ public class User implements IAimXMLOperations {
         }
     }
 
-    
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: User's cagridId can not be null");
@@ -184,5 +181,25 @@ public class User implements IAimXMLOperations {
         if (v4.getRoleInTrial() != null) {
             this.setRoleInTrial(v4.getRoleInTrial().getValue());
         }
+    }
+
+    public User getClone() {
+        User res = new User();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.name != null) {
+            res.name = this.name;
+        }
+        if (this.loginName != null) {
+            res.loginName = this.loginName;
+        }
+        if (this.roleInTrial != null) {
+            res.roleInTrial = this.roleInTrial;
+        }
+        if (this.numberWithinRoleOfClinicalTrial != null) {
+            res.numberWithinRoleOfClinicalTrial = this.numberWithinRoleOfClinicalTrial;
+        }
+        return res;
     }
 }

@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -98,7 +97,6 @@ public class CharacteristicQuantification implements ICharacteristicQuantificati
 //
 //        return characteristicQuantification;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -108,7 +106,7 @@ public class CharacteristicQuantification implements ICharacteristicQuantificati
         if (map.getNamedItem("annotatorConfidence") != null) {
             this.annotatorConfidence = Double.parseDouble(map.getNamedItem("annotatorConfidence").getNodeValue());
         }
-    }   
+    }
 
     private void Control() throws AimException {
         if (getCagridId() == null) {
@@ -170,5 +168,22 @@ public class CharacteristicQuantification implements ICharacteristicQuantificati
 
     public CharacteristicQuantification() {
 
+    }
+
+    public CharacteristicQuantification getClone() {
+        CharacteristicQuantification res = new CharacteristicQuantification();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.name != null) {
+            res.name = this.name;
+        }
+        if (this.annotatorConfidence != null) {
+            res.annotatorConfidence = this.annotatorConfidence;
+        }
+        if (this.xsiType != null) {
+            res.xsiType = this.xsiType;
+        }
+        return res;
     }
 }

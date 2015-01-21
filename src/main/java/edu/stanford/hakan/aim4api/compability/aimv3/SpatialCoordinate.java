@@ -82,7 +82,6 @@ public class SpatialCoordinate implements ISpatialCoordinate, IAimXMLOperations 
 //        spatialCoordinate.setAttribute("xsi:type", this.xsiType);
 //        return spatialCoordinate;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         NamedNodeMap map = node.getAttributes();
@@ -110,6 +109,18 @@ public class SpatialCoordinate implements ISpatialCoordinate, IAimXMLOperations 
         }
         return true;
     }
-    
 
+    public SpatialCoordinate getClone() {
+        SpatialCoordinate res = new SpatialCoordinate();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.coordinateIndex != null) {
+            res.coordinateIndex = this.coordinateIndex;
+        }
+        if (this.xsiType != null) {
+            res.xsiType = this.xsiType;
+        }
+        return res;
+    }
 }

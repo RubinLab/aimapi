@@ -62,7 +62,6 @@ public class GeometricShapeCollection implements IAimXMLOperations {
 //        }
 //        return geometricShapeCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -113,9 +112,19 @@ public class GeometricShapeCollection implements IAimXMLOperations {
                 this.AddGeometricShape(new Point((edu.stanford.hakan.aim4api.base.TwoDimensionPoint) itemV4));
             } else if ("TwoDimensionPolyline".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Polyline((edu.stanford.hakan.aim4api.base.TwoDimensionPolyline) itemV4));
-            }else if ("TwoDimensionSpline".equals(itemV4.getXsiType())) {
+            } else if ("TwoDimensionSpline".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Spline((edu.stanford.hakan.aim4api.base.TwoDimensionSpline) itemV4));
             }
         }
+    }
+
+    public GeometricShapeCollection getClone() {
+        GeometricShapeCollection res = new GeometricShapeCollection();
+        for (int i = 0; i < this.listGeometricShape.size(); i++) {
+            if (this.listGeometricShape.get(i) != null) {
+                res.AddGeometricShape(this.listGeometricShape.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

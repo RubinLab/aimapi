@@ -27,7 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
+import edu.stanford.hakan.aim4api.addition.AllowedTerm;
+import edu.stanford.hakan.aim4api.addition.ValidTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class ImagingObservation implements IAimXMLOperations {
     private String label;
     private ImagingObservationCharacteristicCollection imagingObservationCharacteristicCollection = new ImagingObservationCharacteristicCollection();
     private List<ReferencedGeometricShape> listReferencedGeometricShape = new ArrayList<ReferencedGeometricShape>();
+    private AllowedTerm allowedTerm;
 
     public ImagingObservation() {
     }
@@ -167,6 +169,18 @@ public class ImagingObservation implements IAimXMLOperations {
         this.listReferencedGeometricShape = listReferencedGeometricShape;
     }
 
+    public AllowedTerm getAllowedTerm() {
+        return allowedTerm;
+    }
+
+    public void setAllowedTerm(AllowedTerm allowedTerm) {
+        this.allowedTerm = allowedTerm;
+    }
+
+    public void setAllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
+        this.allowedTerm = new AllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
+    }
+
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //
@@ -203,7 +217,6 @@ public class ImagingObservation implements IAimXMLOperations {
 //        }
 //        return imagingObservation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -232,6 +245,7 @@ public class ImagingObservation implements IAimXMLOperations {
         if (map.getNamedItem("codingSchemeVersion") != null) {
             this.codingSchemeVersion = map.getNamedItem("codingSchemeVersion").getNodeValue();
         }
+        this.setAllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
         if (map.getNamedItem("comment") != null) {
             this.comment = map.getNamedItem("comment").getNodeValue();
         }
@@ -244,7 +258,6 @@ public class ImagingObservation implements IAimXMLOperations {
         this.label = map.getNamedItem("label").getNodeValue();
     }
 
-    
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: ImagingObservation's cagridId can not be null");
@@ -310,35 +323,68 @@ public class ImagingObservation implements IAimXMLOperations {
         edu.stanford.hakan.aim4api.base.ImagingObservationEntity res = new edu.stanford.hakan.aim4api.base.ImagingObservationEntity();
         res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
         res.setComment(Converter.toST(this.getComment()));//
-        CD typeCode = new CD();
-        typeCode.setCode(this.getCodeValue());//
-        typeCode.setCodeSystem(this.getCodeMeaning());//
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
-        res.addTypeCode(typeCode);//
+//        CD typeCode = new CD();
+//        typeCode.setCode(this.getCodeValue());//
+//        typeCode.setCodeSystem(this.getCodeMeaning());//
+//        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+//        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+//        res.addTypeCode(typeCode);//
         res.setImagingObservationCharacteristicCollection(this.getImagingObservationCharacteristicCollection().toAimV4());//
         res.setIsPresent(this.getIsPresent());
         res.setLabel(Converter.toST(this.getLabel()));
+
+        if (this.allowedTerm != null) {
+            res.addTypeCode(this.allowedTerm.toCD());
+            for (ValidTerm validTerm : this.allowedTerm.getListValidTerm()) {
+                res.addTypeCode(validTerm.toCD());
+            }
+        }
+
         return res;
     }
 
     public ImagingObservation(edu.stanford.hakan.aim4api.base.ImagingObservationEntity v4) {
         this.setCagridId(0);
-        if (v4.getListTypeCode().size() > 0) {
-            CD typeCode = v4.getListTypeCode().get(0);
+
+        if (v4.getListQuestionTypeCode().size() > 0) {
+            String code_Value = "";
+            String code_Meaning = "";
+            String coding_SchemeDesignator = "";
+            String coding_SchemeVersion = "";
+            CD typeCode = v4.getListQuestionTypeCode().get(0);
             if (typeCode.getCode() != null) {
-                this.setCodeValue(typeCode.getCode());
+                code_Value = typeCode.getCode();
             }
             if (typeCode.getCodeSystem() != null) {
-                this.setCodeMeaning(typeCode.getCodeSystem());
+                code_Meaning = typeCode.getCodeSystem();
             }
             if (typeCode.getCodeSystemName() != null) {
-                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+                coding_SchemeDesignator = typeCode.getCodeSystemName();
             }
             if (typeCode.getCodeSystemVersion() != null) {
-                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+                coding_SchemeVersion = typeCode.getCodeSystemVersion();
+            }
+            this.setAllowedTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
+
+            for (int i = 1; i < v4.getListQuestionTypeCode().size(); i++) {
+                typeCode = v4.getListQuestionTypeCode().get(i);
+
+                if (typeCode.getCode() != null) {
+                    code_Value = typeCode.getCode();
+                }
+                if (typeCode.getCodeSystem() != null) {
+                    code_Meaning = typeCode.getCodeSystem();
+                }
+                if (typeCode.getCodeSystemName() != null) {
+                    coding_SchemeDesignator = typeCode.getCodeSystemName();
+                }
+                if (typeCode.getCodeSystemVersion() != null) {
+                    coding_SchemeVersion = typeCode.getCodeSystemVersion();
+                }
+                this.allowedTerm.addValidTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
             }
         }
+
         this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
         if (v4.getComment() != null) {
             this.setComment(v4.getComment().getValue());
@@ -350,5 +396,49 @@ public class ImagingObservation implements IAimXMLOperations {
         if (v4.getLabel() != null) {
             this.setLabel(v4.getLabel().getValue());
         }
+    }
+
+    public ImagingObservation getClone() {
+        ImagingObservation res = new ImagingObservation();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.comment != null) {
+            res.comment = this.comment;
+        }
+        if (this.annotatorConfidence != null) {
+            res.annotatorConfidence = this.annotatorConfidence;
+        }
+        if (this.isPresent != null) {
+            res.isPresent = this.isPresent;
+        }
+        if (this.label != null) {
+            res.label = this.label;
+        }
+        if (this.imagingObservationCharacteristicCollection != null) {
+            res.imagingObservationCharacteristicCollection = this.imagingObservationCharacteristicCollection.getClone();
+        }
+        for (int i = 0; i < this.listReferencedGeometricShape.size(); i++) {
+            if (this.listReferencedGeometricShape.get(i) != null) {
+                res.addReferencedGeometricShape(this.listReferencedGeometricShape.get(i).getClone());
+            }
+        }
+
+        if (this.allowedTerm != null) {
+            res.allowedTerm = this.allowedTerm.getClone();
+        }
+        return res;
     }
 }

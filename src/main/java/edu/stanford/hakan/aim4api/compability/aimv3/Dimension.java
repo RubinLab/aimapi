@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,54 +38,54 @@ import org.w3c.dom.Node;
  * @author Hakan BULU
  */
 public class Dimension implements IAimXMLOperations {
-    
+
     private Integer cagridId;
     private Integer index;
     private Integer size;
     private String label;
-    
+
     public Dimension() {
     }
-    
+
     public Dimension(Integer cagridId, Integer index, Integer size, String label) {
         this.cagridId = cagridId;
         this.index = index;
         this.size = size;
         this.label = label;
     }
-    
+
     public Integer getCagridId() {
         return cagridId;
     }
-    
+
     public void setCagridId(Integer cagridId) {
         this.cagridId = cagridId;
     }
-    
+
     public Integer getIndex() {
         return index;
     }
-    
+
     public void setIndex(Integer index) {
         this.index = index;
     }
-    
+
     public String getLabel() {
         return label;
     }
-    
+
     public void setLabel(String label) {
         this.label = label;
     }
-    
+
     public Integer getSize() {
         return size;
     }
-    
+
     public void setSize(Integer size) {
         this.size = size;
     }
-    
+
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //        
@@ -99,7 +98,6 @@ public class Dimension implements IAimXMLOperations {
 //        dimension.setAttribute("label", this.label);
 //        return dimension;
 //    }
-    
     @Override
     public void setXMLNode(Node node) {
         NamedNodeMap map = node.getAttributes();
@@ -107,9 +105,8 @@ public class Dimension implements IAimXMLOperations {
         this.index = Integer.parseInt(map.getNamedItem("index").getNodeValue());
         this.size = Integer.parseInt(map.getNamedItem("size").getNodeValue());
         this.label = map.getNamedItem("label").getNodeValue();
-    }   
-    
-    
+    }
+
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: Dimension's cagridId can not be null");
@@ -124,7 +121,7 @@ public class Dimension implements IAimXMLOperations {
             throw new AimException("AimException: Dimension's label can not be null");
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         Dimension oth = (Dimension) other;
         if (this.cagridId != oth.cagridId) {
@@ -141,7 +138,7 @@ public class Dimension implements IAimXMLOperations {
         }
         return true;
     }
-    
+
     public edu.stanford.hakan.aim4api.base.Dimension toAimV4() {
         edu.stanford.hakan.aim4api.base.Dimension res = new edu.stanford.hakan.aim4api.base.Dimension();
         res.setIndex(this.getIndex());
@@ -149,7 +146,7 @@ public class Dimension implements IAimXMLOperations {
         res.setSize(this.getSize());
         return res;
     }
-    
+
     public Dimension(edu.stanford.hakan.aim4api.base.Dimension v4) {
         this.setCagridId(0);
         this.setIndex(v4.getIndex());
@@ -157,5 +154,22 @@ public class Dimension implements IAimXMLOperations {
             this.setLabel(v4.getLabel().getValue());
         }
         this.setSize(v4.getSize());
+    }
+
+    public Dimension getClone() {
+        Dimension res = new Dimension();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.index != null) {
+            res.index = this.index;
+        }
+        if (this.size != null) {
+            res.size = this.size;
+        }
+        if (this.label != null) {
+            res.label = this.label;
+        }
+        return res;
     }
 }

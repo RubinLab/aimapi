@@ -119,7 +119,6 @@ public class Interval extends CharacteristicQuantification implements IAimXMLOpe
 //
 //        return characteristicQuantification;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -132,7 +131,6 @@ public class Interval extends CharacteristicQuantification implements IAimXMLOpe
         this.maxOperator = AimUtility.ComparisonOperators.valueOf(map.getNamedItem("maxOperator").getNodeValue());
     }
 
-    
     private void Control() throws AimException {
 
         if (this.getMinValue() == null) {
@@ -200,5 +198,39 @@ public class Interval extends CharacteristicQuantification implements IAimXMLOpe
         if (v4.getComment() != null) {
             this.setName(v4.getComment().getValue());
         }
+    }
+
+    @Override
+    public Interval getClone() {
+        Interval res = new Interval();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getName() != null) {
+            res.setName(this.getName());
+        }
+        if (this.getAnnotatorConfidence() != null) {
+            res.setAnnotatorConfidence(this.getAnnotatorConfidence());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+
+        if (this.minValue != null) {
+            res.minValue = this.minValue;
+        }
+        if (this.maxValue != null) {
+            res.maxValue = this.maxValue;
+        }
+        if (this.minOperator != null) {
+            res.minOperator = this.minOperator;
+        }
+        if (this.ucumString != null) {
+            res.ucumString = this.ucumString;
+        }
+        if (this.maxOperator != null) {
+            res.maxOperator = this.maxOperator;
+        }
+        return res;
     }
 }

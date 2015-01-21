@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -95,7 +94,6 @@ public class Numerical extends CharacteristicQuantification implements IAimXMLOp
 //        }
 //        return characteristicQuantification;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -108,7 +106,6 @@ public class Numerical extends CharacteristicQuantification implements IAimXMLOp
         }
     }
 
-    
     private void Control() throws AimException {
         if (this.getUcumString() == null) {
             throw new AimException("AimException: Numerical's ucumString can not be null");
@@ -156,5 +153,33 @@ public class Numerical extends CharacteristicQuantification implements IAimXMLOp
         }
         this.setValue(v4.getValue());
         this.setComparisonOperators(Converter.toAimV3(v4.getOperator()));
+    }
+
+    @Override
+    public Numerical getClone() {
+        Numerical res = new Numerical();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getName() != null) {
+            res.setName(this.getName());
+        }
+        if (this.getAnnotatorConfidence() != null) {
+            res.setAnnotatorConfidence(this.getAnnotatorConfidence());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+
+        if (this.ucumString != null) {
+            res.ucumString = this.ucumString;
+        }
+        if (this.value != null) {
+            res.value = this.value;
+        }
+        if (this.operator != null) {
+            res.operator = this.operator;
+        }
+        return res;
     }
 }

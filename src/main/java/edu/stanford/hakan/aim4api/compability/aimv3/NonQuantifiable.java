@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
@@ -109,7 +108,6 @@ public class NonQuantifiable extends CharacteristicQuantification implements IAi
 //
 //        return characteristicQuantification;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -135,7 +133,7 @@ public class NonQuantifiable extends CharacteristicQuantification implements IAi
             throw new AimException("AimException: NonQuantifiable's codingSchemeDesignator can not be null");
         }
     }
-    
+
     @Override
     public boolean isEqualTo(Object other) {
         NonQuantifiable oth = (NonQuantifiable) other;
@@ -190,5 +188,36 @@ public class NonQuantifiable extends CharacteristicQuantification implements IAi
         if (v4.getComment() != null) {
             this.setName(v4.getComment().getValue());
         }
+    }
+
+    @Override
+    public NonQuantifiable getClone() {
+        NonQuantifiable res = new NonQuantifiable();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getName() != null) {
+            res.setName(this.getName());
+        }
+        if (this.getAnnotatorConfidence() != null) {
+            res.setAnnotatorConfidence(this.getAnnotatorConfidence());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        return res;
     }
 }

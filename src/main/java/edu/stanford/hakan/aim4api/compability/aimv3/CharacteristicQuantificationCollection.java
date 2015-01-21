@@ -65,7 +65,6 @@ public class CharacteristicQuantificationCollection implements IAimXMLOperations
 //
 //        return characteristicQuantificationCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         this.listCharacteristicQuantification.clear();
@@ -99,7 +98,7 @@ public class CharacteristicQuantificationCollection implements IAimXMLOperations
                 }
             }
         }
-    }    
+    }
 
     public boolean isEqualTo(Object other) {
         CharacteristicQuantificationCollection oth = (CharacteristicQuantificationCollection) other;
@@ -138,5 +137,15 @@ public class CharacteristicQuantificationCollection implements IAimXMLOperations
                 this.AddCharacteristicQuantification(new Scale((edu.stanford.hakan.aim4api.base.Scale) itemV4));
             }
         }
+    }
+
+    public CharacteristicQuantificationCollection getClone() {
+        CharacteristicQuantificationCollection res = new CharacteristicQuantificationCollection();
+        for (int i = 0; i < this.listCharacteristicQuantification.size(); i++) {
+            if (this.listCharacteristicQuantification.get(i) != null) {
+                res.AddCharacteristicQuantification(this.listCharacteristicQuantification.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

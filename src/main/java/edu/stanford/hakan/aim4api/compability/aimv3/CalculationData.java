@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -96,7 +95,6 @@ public class CalculationData implements IAimXMLOperations {
 //        return calculationData;
 //
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -110,7 +108,7 @@ public class CalculationData implements IAimXMLOperations {
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.value = Double.parseDouble(map.getNamedItem("value").getNodeValue());
-    }    
+    }
 
     private void Control() throws AimException {
 
@@ -148,5 +146,19 @@ public class CalculationData implements IAimXMLOperations {
         if (v4.getValue() != null) {
             this.setValue(Double.parseDouble(v4.getValue().getValue()));
         }
+    }
+
+    public CalculationData getClone() {
+        CalculationData res = new CalculationData();
+        if (this.coordinateCollection != null) {
+            res.coordinateCollection = this.coordinateCollection.getClone();
+        }
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.value != null) {
+            res.value = this.value;
+        }
+        return res;
     }
 }

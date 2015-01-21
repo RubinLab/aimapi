@@ -64,7 +64,6 @@ public class ImageCollection implements IAimXMLOperations {
 //
 //        return imageCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -79,7 +78,7 @@ public class ImageCollection implements IAimXMLOperations {
             }
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         ImageCollection oth = (ImageCollection) other;
         if (this.listImage.size() != oth.listImage.size()) {
@@ -107,5 +106,15 @@ public class ImageCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.Image itemV4 : listV4) {
             this.AddImage(new Image(itemV4));
         }
+    }
+
+    public ImageCollection getClone() {
+        ImageCollection res = new ImageCollection();
+        for (int i = 0; i < this.listImage.size(); i++) {
+            if (this.listImage.get(i) != null) {
+                res.AddImage(this.listImage.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

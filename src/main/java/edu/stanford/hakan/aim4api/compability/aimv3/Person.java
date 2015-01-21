@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -145,7 +144,6 @@ public class Person implements IAimXMLOperations {
 //        }
 //        return person;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -164,7 +162,6 @@ public class Person implements IAimXMLOperations {
         }
     }
 
-   
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: Person's cagridId can not be null");
@@ -225,5 +222,35 @@ public class Person implements IAimXMLOperations {
         if (v4.getSex() != null) {
             this.setSex(v4.getSex().getValue());
         }
+    }
+
+    public Person getClone() {
+        Person res = new Person();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.name != null) {
+            res.name = this.name;
+        }
+        if (this.id != null) {
+            res.id = this.id;
+        }
+        if (this.birthDate != null) {
+            res.birthDate = this.birthDate;
+        }
+        if (this.sex != null) {
+            res.sex = this.sex;
+        }
+        if (this.ethnicGroup != null) {
+            res.ethnicGroup = this.ethnicGroup;
+        }
+        if (this.rdfID != null) {
+            res.rdfID = this.rdfID;
+        }
+
+        res.dontCreateOwlIntance = this.dontCreateOwlIntance;
+        res.dontAddIndexAsPostFixToRdfInstanceName = this.dontAddIndexAsPostFixToRdfInstanceName;
+
+        return res;
     }
 }

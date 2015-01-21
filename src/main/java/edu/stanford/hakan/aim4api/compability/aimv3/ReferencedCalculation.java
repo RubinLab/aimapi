@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -78,7 +77,6 @@ public class ReferencedCalculation implements IAimXMLOperations {
 //        referencedCalculation.setAttribute("uniqueIdentifier", this.uniqueIdentifier);
 //        return referencedCalculation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -88,7 +86,6 @@ public class ReferencedCalculation implements IAimXMLOperations {
 
     }
 
-   
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: ReferencedCalculation's cagridId can not be null");
@@ -116,6 +113,14 @@ public class ReferencedCalculation implements IAimXMLOperations {
         return res;
     }
 
-//    public ReferencedCalculation(edu.stanford.hakan.aim4api.base.CalculationEntityReferencesCalculationEntityStatement v4) {
-//    }
+    public ReferencedCalculation getClone() {
+        ReferencedCalculation res = new ReferencedCalculation();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.uniqueIdentifier != null) {
+            res.uniqueIdentifier = this.uniqueIdentifier;
+        }
+        return res;
+    }
 }

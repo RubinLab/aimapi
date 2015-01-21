@@ -41,37 +41,12 @@ public class ImageReference implements IImageReference, IAimXMLOperations {
 
     private Integer cagridId;
     private String xsiType;
-    private String rdfID;
-    private boolean dontCreateOwlIntance = false;
-    private boolean dontAddIndexAsPostFixToRdfInstanceName = false;
-
-    public String getRdfID() {
-        return rdfID;
-    }
-
-    public void setRdfID(String rdfID) {
-        this.rdfID = rdfID;
-    }
-
-    public boolean isDontCreateOwlIntance() {
-        return dontCreateOwlIntance;
-    }
-
-    public boolean isDontAddIndexAsPostFixToRdfInstanceName() {
-        return dontAddIndexAsPostFixToRdfInstanceName;
-    }
-
-    public void setDontAddIndexAsPostFixToRdfInstanceName(boolean dontAddIndexAsPostFixToRdfInstanceName) {
-        this.dontAddIndexAsPostFixToRdfInstanceName = dontAddIndexAsPostFixToRdfInstanceName;
-    }
 
     public String getXsiType() {
         return xsiType;
     }
 
-    public void setDontCreateOwlIntance(boolean dontCreateOwlIntance) {
-        this.dontCreateOwlIntance = dontCreateOwlIntance;
-    }
+  
 
     protected void setXsiType(String xsiType) {
         this.xsiType = xsiType;
@@ -118,5 +93,17 @@ public class ImageReference implements IImageReference, IAimXMLOperations {
             return false;
         }
         return true;
+    }
+
+    public ImageReference getClone() {
+        ImageReference res = new ImageReference();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.xsiType != null) {
+            res.xsiType = this.xsiType;
+        }
+
+        return res;
     }
 }

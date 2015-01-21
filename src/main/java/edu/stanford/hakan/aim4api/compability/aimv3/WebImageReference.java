@@ -90,7 +90,22 @@ public class WebImageReference extends ImageReference implements IAimXMLOperatio
         WebImageReference oth = (WebImageReference) other;
         if (this.uri == null ? oth.uri != null : !this.uri.equals(oth.uri)) {
             return false;
-        }       
+        }
         return super.isEqualTo(other);
+    }
+
+    @Override
+    public WebImageReference getClone() {
+        WebImageReference res = new WebImageReference();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.uri != null) {
+            res.uri = this.uri;
+        }
+        return res;
     }
 }

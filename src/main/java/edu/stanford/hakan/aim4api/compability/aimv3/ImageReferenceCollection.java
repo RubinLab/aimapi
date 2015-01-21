@@ -64,7 +64,6 @@ public class ImageReferenceCollection implements IAimXMLOperations {
 //        }
 //        return imageReferenceCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -117,5 +116,15 @@ public class ImageReferenceCollection implements IAimXMLOperations {
                 this.AddImageReference(new DICOMImageReference((edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity) itemV4));
             }
         }
+    }
+
+    public ImageReferenceCollection getClone() {
+        ImageReferenceCollection res = new ImageReferenceCollection();
+        for (int i = 0; i < this.listImageReference.size(); i++) {
+            if (this.listImageReference.get(i) != null) {
+                res.AddImageReference(this.listImageReference.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

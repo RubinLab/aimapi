@@ -136,7 +136,6 @@ public class AimStatus implements IAimXMLOperations {
 //        }
 //        return aimStatus;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -152,7 +151,7 @@ public class AimStatus implements IAimXMLOperations {
         if (map.getNamedItem("authorizedBy") != null) {
             this.authorizedBy = map.getNamedItem("authorizedBy").getNodeValue();
         }
-    }    
+    }
 
     private void Control() throws AimException {
         if (getCagridId() == null) {
@@ -196,5 +195,31 @@ public class AimStatus implements IAimXMLOperations {
             return false;
         }
         return true;
+    }
+
+    public AimStatus getClone() {
+        AimStatus res = new AimStatus();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.annotationVersion != null) {
+            res.annotationVersion = this.annotationVersion;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.authorizedBy != null) {
+            res.authorizedBy = this.authorizedBy;
+        }
+        return res;
     }
 }

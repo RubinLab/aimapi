@@ -27,8 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.addition.AllowedTerm;
+import edu.stanford.hakan.aim4api.addition.ValidTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import java.util.ArrayList;
@@ -52,9 +52,9 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
     private Double annotatorConfidence;
     private String label;
     private CharacteristicQuantificationCollection characteristicQuantificationCollection = new CharacteristicQuantificationCollection();
+    //private List<AllowedTerm> listAllowedTerm = new ArrayList<AllowedTerm>();
+    private AllowedTerm allowedTerm;
 
-    private List<AllowedTerm> listAllowedTerm = new ArrayList<AllowedTerm>();
-    
     public ImagingObservationCharacteristic() {
     }
 
@@ -145,17 +145,28 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         this.characteristicQuantificationCollection.AddCharacteristicQuantification(newCharacteristicQuantification);
     }
 
-    public void addAllowedTerm(AllowedTerm allowedTerm) {
-        if (!this.listAllowedTerm.contains(allowedTerm)) {
-            this.listAllowedTerm.add(allowedTerm);
-        }
+//    public void addAllowedTerm(AllowedTerm allowedTerm) {
+//        if (!this.listAllowedTerm.contains(allowedTerm)) {
+//            this.listAllowedTerm.add(allowedTerm);
+//        }
+//    }
+//
+//    public void addAllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
+//        AllowedTerm allowedTerm = new AllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
+//        if (!this.listAllowedTerm.contains(allowedTerm)) {
+//            this.listAllowedTerm.add(allowedTerm);
+//        }
+//    }
+    public AllowedTerm getAllowedTerm() {
+        return allowedTerm;
     }
 
-    public void addAllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
-        AllowedTerm allowedTerm = new AllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
-        if (!this.listAllowedTerm.contains(allowedTerm)) {
-            this.listAllowedTerm.add(allowedTerm);
-        }
+    public void setAllowedTerm(AllowedTerm allowedTerm) {
+        this.allowedTerm = allowedTerm;
+    }
+
+    public void setAllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
+        this.allowedTerm = new AllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
     }
 
 //    @Override
@@ -183,7 +194,6 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
 //        }
 //        return imagingObservationCharacteristic;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -202,6 +212,7 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         if (map.getNamedItem("codingSchemeVersion") != null) {
             this.codingSchemeVersion = map.getNamedItem("codingSchemeVersion").getNodeValue();
         }
+        this.setAllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
         if (map.getNamedItem("comment") != null) {
             this.comment = map.getNamedItem("comment").getNodeValue();
         }
@@ -211,7 +222,6 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         this.label = map.getNamedItem("label").getNodeValue();
     }
 
-    
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: ImagingObservationCharacteristic's cagridId can not be null");
@@ -266,11 +276,16 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         res.setComment(Converter.toST(this.getComment()));//
         res.setLabel(Converter.toST(this.getLabel()));//
 
-        for (AllowedTerm allowedTerm : this.listAllowedTerm) {
-            res.addTypeCode(allowedTerm.toCD());
+        if (this.allowedTerm != null) {
+            res.addTypeCode(this.allowedTerm.toCD());
+            for (ValidTerm validTerm : this.allowedTerm.getListValidTerm()) {
+                res.addTypeCode(validTerm.toCD());
+            }
         }
 
-        
+//        for (AllowedTerm allowedTerm : this.listAllowedTerm) {
+//            res.addTypeCode(allowedTerm.toCD());
+//        }
 //        CD typeCode = new CD();//
 //        typeCode.setCode(this.getCodeValue());//
 //        typeCode.setCodeSystem(this.getCodeMeaning());//
@@ -282,13 +297,13 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
 
     public ImagingObservationCharacteristic(edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic v4) {
         this.setCagridId(0);
-        
-           for (CD typeCode : v4.getListQuestionTypeCode()) {
+
+        if (v4.getListQuestionTypeCode().size() > 0) {
             String code_Value = "";
             String code_Meaning = "";
             String coding_SchemeDesignator = "";
             String coding_SchemeVersion = "";
-
+            CD typeCode = v4.getListQuestionTypeCode().get(0);
             if (typeCode.getCode() != null) {
                 code_Value = typeCode.getCode();
             }
@@ -301,26 +316,26 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
             if (typeCode.getCodeSystemVersion() != null) {
                 coding_SchemeVersion = typeCode.getCodeSystemVersion();
             }
-            if (!"".equals(code_Value) || !"".equals(code_Meaning) || !"".equals(coding_SchemeDesignator) || !"".equals(coding_SchemeVersion)) {
-                this.addAllowedTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
+            this.setAllowedTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
+
+            for (int i = 1; i < v4.getListQuestionTypeCode().size(); i++) {
+                typeCode = v4.getListQuestionTypeCode().get(i);
+
+                if (typeCode.getCode() != null) {
+                    code_Value = typeCode.getCode();
+                }
+                if (typeCode.getCodeSystem() != null) {
+                    code_Meaning = typeCode.getCodeSystem();
+                }
+                if (typeCode.getCodeSystemName() != null) {
+                    coding_SchemeDesignator = typeCode.getCodeSystemName();
+                }
+                if (typeCode.getCodeSystemVersion() != null) {
+                    coding_SchemeVersion = typeCode.getCodeSystemVersion();
+                }
+                this.allowedTerm.addValidTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
             }
         }
-        
-//        if (v4.getListTypeCode().size() > 0) {
-//            CD typeCode = v4.getListTypeCode().get(0);
-//            if (typeCode.getCode() != null) {
-//                this.setCodeValue(typeCode.getCode());
-//            }
-//            if (typeCode.getCodeSystem() != null) {
-//                this.setCodeMeaning(typeCode.getCodeSystem());
-//            }
-//            if (typeCode.getCodeSystemName() != null) {
-//                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
-//            }
-//            if (typeCode.getCodeSystemVersion() != null) {
-//                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
-//            }
-//        }
         this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
         if (v4.getCharacteristicQuantificationCollection().getCharacteristicQuantificationList().size() > 0) {
             this.setCharacteristicQuantificationCollection(new CharacteristicQuantificationCollection(v4.getCharacteristicQuantificationCollection()));
@@ -331,5 +346,40 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
         if (v4.getLabel() != null) {
             this.setLabel(v4.getLabel().getValue());
         }
+    }
+
+    public ImagingObservationCharacteristic getClone() {
+        ImagingObservationCharacteristic res = new ImagingObservationCharacteristic();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.comment != null) {
+            res.comment = this.comment;
+        }
+        if (this.annotatorConfidence != null) {
+            res.annotatorConfidence = this.annotatorConfidence;
+        }
+        if (this.label != null) {
+            res.label = this.label;
+        }
+        if (this.characteristicQuantificationCollection != null) {
+            res.characteristicQuantificationCollection = this.characteristicQuantificationCollection.getClone();
+        }
+        if (this.allowedTerm != null) {
+            res.allowedTerm = this.allowedTerm.getClone();
+        }
+        return res;
     }
 }

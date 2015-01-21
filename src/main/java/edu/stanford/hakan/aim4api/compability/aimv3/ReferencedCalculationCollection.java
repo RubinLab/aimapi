@@ -60,7 +60,6 @@ public class ReferencedCalculationCollection implements IAimXMLOperations {
 //        }
 //        return referencedCalculationCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -75,7 +74,7 @@ public class ReferencedCalculationCollection implements IAimXMLOperations {
             }
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         ReferencedCalculationCollection oth = (ReferencedCalculationCollection) other;
         if (this.listReferencedCalculation.size() != oth.listReferencedCalculation.size()) {
@@ -87,5 +86,15 @@ public class ReferencedCalculationCollection implements IAimXMLOperations {
             }
         }
         return true;
+    }
+
+    public ReferencedCalculationCollection getClone() {
+        ReferencedCalculationCollection res = new ReferencedCalculationCollection();
+        for (int i = 0; i < this.listReferencedCalculation.size(); i++) {
+            if (this.listReferencedCalculation.get(i) != null) {
+                res.AddReferencedCalculation(this.listReferencedCalculation.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

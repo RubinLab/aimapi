@@ -62,7 +62,6 @@ public class AnatomicEntityCharacteristicCollection implements IAimXMLOperations
 //
 //        return anatomicEntityCharacteristicCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -76,8 +75,7 @@ public class AnatomicEntityCharacteristicCollection implements IAimXMLOperations
             }
         }
     }
-   
-    
+
     public boolean isEqualTo(Object other) {
         AnatomicEntityCharacteristicCollection oth = (AnatomicEntityCharacteristicCollection) other;
         if (this.listAnatomicEntityCharacteristic.size() != oth.listAnatomicEntityCharacteristic.size()) {
@@ -108,5 +106,15 @@ public class AnatomicEntityCharacteristicCollection implements IAimXMLOperations
     }
 
     public AnatomicEntityCharacteristicCollection() {
+    }
+
+    public AnatomicEntityCharacteristicCollection getClone() {
+        AnatomicEntityCharacteristicCollection res = new AnatomicEntityCharacteristicCollection();
+        for (int i = 0; i < this.listAnatomicEntityCharacteristic.size(); i++) {
+            if (this.listAnatomicEntityCharacteristic.get(i) != null) {
+                res.AddAnatomicEntityCharacteristic(this.listAnatomicEntityCharacteristic.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

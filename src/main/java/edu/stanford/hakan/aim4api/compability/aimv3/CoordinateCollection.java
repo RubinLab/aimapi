@@ -63,7 +63,6 @@ public class CoordinateCollection implements IAimXMLOperations {
 //        }
 //        return coordinateCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -77,8 +76,8 @@ public class CoordinateCollection implements IAimXMLOperations {
                 this.AddCoordinate(obj);
             }
         }
-    }    
-    
+    }
+
     public boolean isEqualTo(Object other) {
         CoordinateCollection oth = (CoordinateCollection) other;
         if (this.listCoordinate.size() != oth.listCoordinate.size()) {
@@ -106,5 +105,15 @@ public class CoordinateCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.Coordinate itemV4 : listV4) {
             this.AddCoordinate(new Coordinate(itemV4));
         }
+    }
+
+    public CoordinateCollection getClone() {
+        CoordinateCollection res = new CoordinateCollection();
+        for (int i = 0; i < this.listCoordinate.size(); i++) {
+            if (this.listCoordinate.get(i) != null) {
+                res.AddCoordinate(this.listCoordinate.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

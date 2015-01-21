@@ -133,7 +133,6 @@ public class CalculationResult implements IAimXMLOperations {
 //        }
 //        return calculationResult;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -152,7 +151,7 @@ public class CalculationResult implements IAimXMLOperations {
         this.numberOfDimensions = Integer.parseInt(map.getNamedItem("numberOfDimensions").getNodeValue());
         this.unitOfMeasure = map.getNamedItem("unitOfMeasure").getNodeValue();
     }
-   
+
     private void Control() throws AimException {
 
         if (getCagridId() == null) {
@@ -211,5 +210,28 @@ public class CalculationResult implements IAimXMLOperations {
         if (v4.getUnitOfMeasure() != null) {
             this.setUnitOfMeasure(v4.getUnitOfMeasure().getValue());
         }
+    }
+
+    public CalculationResult getClone() {
+        CalculationResult res = new CalculationResult();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.type != null) {
+            res.type = this.type;
+        }
+        if (this.numberOfDimensions != null) {
+            res.numberOfDimensions = this.numberOfDimensions;
+        }
+        if (this.unitOfMeasure != null) {
+            res.unitOfMeasure = this.unitOfMeasure;
+        }
+        if (this.calculationDataCollection != null) {
+            res.calculationDataCollection = this.calculationDataCollection.getClone();
+        }
+        if (this.dimensionCollection != null) {
+            res.dimensionCollection = this.dimensionCollection.getClone();
+        }
+        return res;
     }
 }

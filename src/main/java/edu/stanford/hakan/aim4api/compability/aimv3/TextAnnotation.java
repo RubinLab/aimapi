@@ -199,7 +199,6 @@ public class TextAnnotation implements IAimXMLOperations {
 //
 //        return textAnnotation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -252,7 +251,7 @@ public class TextAnnotation implements IAimXMLOperations {
             throw new AimException("AimException: TextAnnotation's text can not be null");
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         TextAnnotation oth = (TextAnnotation) other;
         if (this.cagridId != oth.cagridId) {
@@ -269,7 +268,7 @@ public class TextAnnotation implements IAimXMLOperations {
         }
         if (this.fontSize == null ? oth.fontSize != null : !this.fontSize.equals(oth.fontSize)) {
             return false;
-        }  
+        }
         if (this.fontStyle == null ? oth.fontStyle != null : !this.fontStyle.equals(oth.fontStyle)) {
             return false;
         }
@@ -281,7 +280,7 @@ public class TextAnnotation implements IAimXMLOperations {
         }
         if (this.fontOpacity == null ? oth.fontOpacity != null : !this.fontOpacity.equals(oth.fontOpacity)) {
             return false;
-        }        
+        }
         if (this.listMultiPoint.size() != oth.listMultiPoint.size()) {
             return false;
         }
@@ -291,5 +290,42 @@ public class TextAnnotation implements IAimXMLOperations {
             }
         }
         return true;
+    }
+
+    public TextAnnotation getClone() {
+        TextAnnotation res = new TextAnnotation();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.font != null) {
+            res.font = this.font;
+        }
+        if (this.fontColor != null) {
+            res.fontColor = this.fontColor;
+        }
+        if (this.fontEffect != null) {
+            res.fontEffect = this.fontEffect;
+        }
+        if (this.fontSize != null) {
+            res.fontSize = this.fontSize;
+        }
+        if (this.fontStyle != null) {
+            res.fontStyle = this.fontStyle;
+        }
+        if (this.text != null) {
+            res.text = this.text;
+        }
+        if (this.textJustify != null) {
+            res.textJustify = this.textJustify;
+        }
+        if (this.fontOpacity != null) {
+            res.fontOpacity = this.fontOpacity;
+        }
+        for (int i = 0; i < this.listMultiPoint.size(); i++) {
+            if (this.listMultiPoint.get(i) != null) {
+                res.addMultiPoint(this.listMultiPoint.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

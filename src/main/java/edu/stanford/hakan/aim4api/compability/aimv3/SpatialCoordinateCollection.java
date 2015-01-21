@@ -64,7 +64,6 @@ public class SpatialCoordinateCollection implements IAimXMLOperations {
 //        }
 //        return spatialCoordinateCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -118,6 +117,14 @@ public class SpatialCoordinateCollection implements IAimXMLOperations {
             this.AddSpatialCoordinate(new TwoDimensionSpatialCoordinate(itemV4));
         }
     }
-    
-    
+
+    public SpatialCoordinateCollection getClone() {
+        SpatialCoordinateCollection res = new SpatialCoordinateCollection();
+        for (int i = 0; i < this.listSpatialCoordinate.size(); i++) {
+            if (this.listSpatialCoordinate.get(i) != null) {
+                res.AddSpatialCoordinate(this.listSpatialCoordinate.get(i).getClone());
+            }
+        }
+        return res;
+    }
 }

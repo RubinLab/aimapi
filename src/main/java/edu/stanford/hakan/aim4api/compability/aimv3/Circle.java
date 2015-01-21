@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -52,12 +51,11 @@ public class Circle extends GeometricShape implements IAimXMLOperations {
 //    public Node getXMLNode(Document doc) throws AimException {
 //        return super.getXMLNode(doc);
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
     }
-    
+
     @Override
     public boolean isEqualTo(Object other) {
         return super.isEqualTo(other);
@@ -94,5 +92,38 @@ public class Circle extends GeometricShape implements IAimXMLOperations {
         }
         this.setShapeIdentifier(v4.getShapeIdentifier());
         this.setSpatialCoordinateCollection(new SpatialCoordinateCollection(v4.getTwoDimensionSpatialCoordinateCollection(), v4));
+    }
+
+    @Override
+    public Circle getClone() {
+        Circle res = new Circle();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getLineColor() != null) {
+            res.setLineColor(this.getLineColor());
+        }
+        if (this.getLineOpacity() != null) {
+            res.setLineOpacity(this.getLineOpacity());
+        }
+        if (this.getLineStyle() != null) {
+            res.setLineStyle(this.getLineStyle());
+        }
+        if (this.getLineThickness() != null) {
+            res.setLineThickness(this.getLineThickness());
+        }
+        if (this.getIncludeFlag() != null) {
+            res.setIncludeFlag(this.getIncludeFlag());
+        }
+        if (this.getShapeIdentifier() != null) {
+            res.setShapeIdentifier(this.getShapeIdentifier());
+        }
+        if (this.getSpatialCoordinateCollection() != null) {
+            res.setSpatialCoordinateCollection(this.getSpatialCoordinateCollection().getClone());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        return res;
     }
 }

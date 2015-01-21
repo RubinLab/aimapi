@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
@@ -97,7 +96,6 @@ public class ImageSeries implements IAimXMLOperations {
 //
 //        return imageSeries;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -113,7 +111,6 @@ public class ImageSeries implements IAimXMLOperations {
         this.instanceUID = map.getNamedItem("instanceUID").getNodeValue();
     }
 
-   
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: ImageSeries's cagridId can not be null");
@@ -150,5 +147,20 @@ public class ImageSeries implements IAimXMLOperations {
         if (v4.getInstanceUid() != null) {
             this.setInstanceUID(v4.getInstanceUid().getRoot());
         }
+    }
+
+
+    public ImageSeries getClone() {
+        ImageSeries res = new ImageSeries();
+        if (this.imageCollection != null) {
+            res.imageCollection = this.imageCollection.getClone();
+        }
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.instanceUID != null) {
+            res.instanceUID = this.instanceUID;
+        }
+        return res;
     }
 }

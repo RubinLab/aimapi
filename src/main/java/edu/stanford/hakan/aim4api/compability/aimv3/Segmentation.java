@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +134,6 @@ public class Segmentation implements IAimXMLOperations {
 //
 //        return segmentation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -229,5 +227,30 @@ public class Segmentation implements IAimXMLOperations {
         if (v4.getSopInstanceUid() != null) {
             this.setSopInstanceUID(v4.getSopInstanceUid().getRoot());
         }
+    }
+
+    public Segmentation getClone() {
+        Segmentation res = new Segmentation();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.sopInstanceUID != null) {
+            res.sopInstanceUID = this.sopInstanceUID;
+        }
+        if (this.sopClassUID != null) {
+            res.sopClassUID = this.sopClassUID;
+        }
+        if (this.referencedSopInstanceUID != null) {
+            res.referencedSopInstanceUID = this.referencedSopInstanceUID;
+        }
+        if (this.segmentNumber != null) {
+            res.segmentNumber = this.segmentNumber;
+        }
+        for (int i = 0; i < this.listImagingObservation.size(); i++) {
+            if (this.listImagingObservation.get(i) != null) {
+                res.addImagingObservation(this.listImagingObservation.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

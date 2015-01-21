@@ -1,4 +1,4 @@
-package edu.stanford.shared.aimapi;
+package edu.stanford.hakan.aim4api.project.epad;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.NonQuantifiable;
 import edu.stanford.hakan.aim4api.compability.aimv3.Numerical;
 import edu.stanford.hakan.aim4api.compability.aimv3.Quantile;
 import edu.stanford.hakan.aim4api.compability.aimv3.Scale;
-import edu.stanford.shared.aimapi.Enumerations.QuantifierType;
+import edu.stanford.hakan.aim4api.project.epad.Enumerations.QuantifierType;
 
 /**
  * 

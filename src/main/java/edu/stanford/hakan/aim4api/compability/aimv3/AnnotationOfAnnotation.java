@@ -77,7 +77,6 @@ public class AnnotationOfAnnotation extends Annotation implements IAimXMLOperati
 //        return annotation;
 //
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -91,11 +90,87 @@ public class AnnotationOfAnnotation extends Annotation implements IAimXMLOperati
 
     @Override
     public boolean isEqualTo(Object other) {
-        AnnotationOfAnnotation oth = (AnnotationOfAnnotation) other;  
-         if (!this.referencedAnnotationCollection.isEqualTo(oth.referencedAnnotationCollection)) {
+        AnnotationOfAnnotation oth = (AnnotationOfAnnotation) other;
+        if (!this.referencedAnnotationCollection.isEqualTo(oth.referencedAnnotationCollection)) {
             return false;
         }
         return super.isEqualTo(other);
+    }
+
+    @Override
+    public AnnotationOfAnnotation getClone() {
+        AnnotationOfAnnotation res = new AnnotationOfAnnotation();
+
+        if (this.getCalculationCollection() != null) {
+            res.setCalculationCollection(this.getCalculationCollection().getClone());
+        }
+        if (this.getInferenceCollection() != null) {
+           res.setInferenceCollection(this.getInferenceCollection().getClone());
+        }
+        if (this.getAnatomicEntityCollection() != null) {
+            res.setAnatomicEntityCollection(this.getAnatomicEntityCollection().getClone());
+        }
+        if (this.getImagingObservationCollection() != null) {
+            res.setImagingObservationCollection(this.getImagingObservationCollection().getClone());
+        }
+        for (int i = 0; i < this.getListUser().size(); i++) {
+            if (this.getListUser().get(i) != null) {
+                res.addUser(this.getListUser().get(i).getClone());
+            }
+        }
+        for (int i = 0; i < this.getListEquipment().size(); i++) {
+            if (this.getListEquipment().get(i) != null) {
+                res.addEquipment(this.getListEquipment().get(i).getClone());
+            }
+        }
+        for (int i = 0; i < this.getListAimStatus().size(); i++) {
+            if (this.getListAimStatus().get(i) != null) {
+                res.addAimStatus(this.getListAimStatus().get(i).getClone());
+            }
+        }
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getAimVersion() != null) {
+            res.setAimVersion(this.getAimVersion(), "al536anhb55555");
+        }
+        if (this.getComment() != null) {
+            res.setComment(this.getComment());
+        }
+        if (this.getDateTime() != null) {
+            res.setDateTime(this.getDateTime());
+        }
+        if (this.getName() != null) {
+            res.setName(this.getName());
+        }
+        if (this.getUniqueIdentifier() != null) {
+            res.setUniqueIdentifier(this.getUniqueIdentifier(), "al536anhb55555");
+        }
+        if (this.getCodeValue() != null) {
+            res.setCodeValue(this.getCodeValue());
+        }
+        if (this.getCodeMeaning() != null) {
+            res.setCodeMeaning(this.getCodeMeaning());
+        }
+        if (this.getCodingSchemeDesignator() != null) {
+            res.setCodingSchemeDesignator(this.getCodingSchemeDesignator());
+        }
+        if (this.getCodingSchemeVersion() != null) {
+            res.setCodingSchemeVersion( this.getCodingSchemeVersion());
+        }
+        if (this.getPrecedentReferencedAnnotationUID() != null) {
+            res.setPrecedentReferencedAnnotationUID(this.getPrecedentReferencedAnnotationUID());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.getOntologyPrefix() != null) {
+            res.setOntologyPrefix(this.getOntologyPrefix());
+        }
+        if (this.getReferencedAnnotationCollection() != null) {
+            res.setReferencedAnnotationCollection(this.getReferencedAnnotationCollection().getClone());
+        }
+        return res;
     }
 
 }

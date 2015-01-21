@@ -246,7 +246,6 @@ public class Calculation implements IAimXMLOperations {
 //        }
 //        return calculation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -282,7 +281,7 @@ public class Calculation implements IAimXMLOperations {
         if (map.getNamedItem("algorithmVersion") != null) {
             this.algorithmVersion = map.getNamedItem("algorithmVersion").getNodeValue();
         }
-    }    
+    }
 
     private void Control() throws AimException {
 
@@ -436,5 +435,55 @@ public class Calculation implements IAimXMLOperations {
         if (!"".equals(referencedShapeIdentifier)) {
             this.addReferencedGeometricShape(new ReferencedGeometricShape(0, Integer.parseInt(referencedShapeIdentifier)));
         }
+    }
+
+    public Calculation getClone() {
+        Calculation res = new Calculation();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.uid != null) {
+            res.uid = this.uid;
+        }
+        if (this.description != null) {
+            res.description = this.description;
+        }
+        if (this.mathML != null) {
+            res.mathML = this.mathML;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.algorithmName != null) {
+            res.algorithmName = this.algorithmName;
+        }
+        if (this.algorithmVersion != null) {
+            res.algorithmVersion = this.algorithmVersion;
+        }
+        if (this.calculationResultCollection != null) {
+            res.calculationResultCollection = this.calculationResultCollection.getClone();
+        }
+        if (this.referencedCalculationCollection != null) {
+            res.referencedCalculationCollection = this.referencedCalculationCollection.getClone();
+        }
+        if (this.referencedGeometricShapeCollection != null) {
+            res.referencedGeometricShapeCollection = this.referencedGeometricShapeCollection.getClone();
+        }
+        if (this.rdfID != null) {
+            res.rdfID = this.rdfID;
+        }
+
+        res.codeValueCanBeNull = this.codeValueCanBeNull;
+
+        return res;
     }
 }

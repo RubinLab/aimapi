@@ -103,7 +103,6 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
 //        spatialCoordinate.setAttribute("frameOfReferenceUID", this.getFrameOfReferenceUID());
 //        return spatialCoordinate;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -129,8 +128,7 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
             throw new AimException("AimException: ThreeDimensionSpatialCoordinate's frameOfReferenceUID can not be null");
         }
     }
-    
-        
+
     @Override
     public boolean isEqualTo(Object other) {
         ThreeDimensionSpatialCoordinate oth = (ThreeDimensionSpatialCoordinate) other;
@@ -145,7 +143,34 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
         }
         if (this.frameOfReferenceUID == null ? oth.frameOfReferenceUID != null : !this.frameOfReferenceUID.equals(oth.frameOfReferenceUID)) {
             return false;
-        }       
+        }
         return super.isEqualTo(other);
+    }
+
+    @Override
+    public ThreeDimensionSpatialCoordinate getClone() {
+        ThreeDimensionSpatialCoordinate res = new ThreeDimensionSpatialCoordinate();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getCoordinateIndex() != null) {
+            res.setCoordinateIndex(this.getCoordinateIndex());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.x != null) {
+            res.x = this.x;
+        }
+        if (this.y != null) {
+            res.y = this.y;
+        }
+        if (this.z != null) {
+            res.z = this.z;
+        }
+        if (this.frameOfReferenceUID != null) {
+            res.frameOfReferenceUID = this.frameOfReferenceUID;
+        }
+        return res;
     }
 }

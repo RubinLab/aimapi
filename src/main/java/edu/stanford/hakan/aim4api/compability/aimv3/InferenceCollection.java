@@ -64,7 +64,6 @@ public class InferenceCollection implements IAimXMLOperations {
 //
 //        return inferenceCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -80,7 +79,6 @@ public class InferenceCollection implements IAimXMLOperations {
         }
     }
 
-    
     public boolean isEqualTo(Object other) {
         InferenceCollection oth = (InferenceCollection) other;
         if (this.listInference.size() != oth.listInference.size()) {
@@ -108,5 +106,15 @@ public class InferenceCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.InferenceEntity itemV4 : listV4) {
             this.AddInference(new Inference(itemV4));
         }
+    }
+
+    public InferenceCollection getClone() {
+        InferenceCollection res = new InferenceCollection();
+        for (int i = 0; i < this.listInference.size(); i++) {
+            if (this.listInference.get(i) != null) {
+                res.AddInference(this.listInference.get(i).getClone());
+            }
+        }
+        return res;
     }
 }

@@ -1,4 +1,4 @@
-package edu.stanford.shared.aimapi;
+package edu.stanford.hakan.aim4api.project.epad;
 
 //Copyright (c) 2013 The Board of Trustees of the Leland Stanford Junior University
 //All rights reserved.

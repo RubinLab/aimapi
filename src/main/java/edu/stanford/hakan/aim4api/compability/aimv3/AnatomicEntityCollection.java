@@ -44,10 +44,9 @@ public class AnatomicEntityCollection implements IAimXMLOperations {
 
     private List<AnatomicEntity> listAnatomicEntity = new ArrayList<AnatomicEntity>();
 
-    public AnatomicEntityCollection()
-    {
+    public AnatomicEntityCollection() {
     }
-    
+
     public void AddAnatomicEntity(AnatomicEntity newAnatomicEntity) {
         this.listAnatomicEntity.add(newAnatomicEntity);
     }
@@ -66,7 +65,6 @@ public class AnatomicEntityCollection implements IAimXMLOperations {
 //
 //        return anatomicEntityCollection;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -81,7 +79,6 @@ public class AnatomicEntityCollection implements IAimXMLOperations {
             }
         }
     }
-
 
     public boolean isEqualTo(Object other) {
         AnatomicEntityCollection oth = (AnatomicEntityCollection) other;
@@ -110,6 +107,16 @@ public class AnatomicEntityCollection implements IAimXMLOperations {
         for (edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity itemV4 : listV4) {
             this.AddAnatomicEntity(new AnatomicEntity(itemV4));
         }
+    }
+
+    public AnatomicEntityCollection getClone() {
+        AnatomicEntityCollection res = new AnatomicEntityCollection();
+        for (int i = 0; i < this.listAnatomicEntity.size(); i++) {
+            if (this.listAnatomicEntity.get(i) != null) {
+                res.AddAnatomicEntity(this.listAnatomicEntity.get(i).getClone());
+            }
+        }
+        return res;
     }
 
 }

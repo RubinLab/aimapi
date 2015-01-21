@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityHasCalculationEntityStatement;
@@ -81,7 +80,6 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
 //        referencedGeometricShape.setAttribute("referencedShapeIdentifier", this.referencedShapeIdentifier.toString());
 //        return referencedGeometricShape;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         NamedNodeMap map = node.getAttributes();
@@ -122,7 +120,14 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
         imageAnnotation.addImageAnnotationStatement(connectCalculationWithImagingPhysicalEntity);
     }
 
-//    public ReferencedGeometricShape(ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement v4_1, ImagingPhysicalEntityHasCalculationEntityStatement v4_2) {
-//
-//    }
+    public ReferencedGeometricShape getClone() {
+        ReferencedGeometricShape res = new ReferencedGeometricShape();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.referencedShapeIdentifier != null) {
+            res.referencedShapeIdentifier = this.referencedShapeIdentifier;
+        }
+        return res;
+    }
 }

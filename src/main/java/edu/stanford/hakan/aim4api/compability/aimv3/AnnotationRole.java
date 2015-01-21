@@ -122,7 +122,6 @@ public class AnnotationRole implements IAimXMLOperations {
 //        annotationRole.setAttribute("roleSequenceNumber", Integer.toString(this.roleSequenceNumber));
 //        return annotationRole;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -136,7 +135,6 @@ public class AnnotationRole implements IAimXMLOperations {
         }
         this.roleSequenceNumber = Integer.parseInt(map.getNamedItem("roleSequenceNumber").getNodeValue());
     }
-    
 
     private void Control() throws AimException {
         if (getCagridId() == null) {
@@ -155,7 +153,7 @@ public class AnnotationRole implements IAimXMLOperations {
             throw new AimException("AimException: AnnotationRole's roleSequenceNumber can not be null");
         }
     }
-    
+
     public boolean isEqualTo(Object other) {
         AnnotationRole oth = (AnnotationRole) other;
         if (this.cagridId != oth.cagridId) {
@@ -177,5 +175,28 @@ public class AnnotationRole implements IAimXMLOperations {
             return false;
         }
         return true;
+    }
+
+    public AnnotationRole getClone() {
+        AnnotationRole res = new AnnotationRole();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.roleSequenceNumber != null) {
+            res.roleSequenceNumber = this.roleSequenceNumber;
+        }
+        return res;
     }
 }

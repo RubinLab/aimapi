@@ -88,7 +88,6 @@ public class DICOMImageReference extends ImageReference implements IAimXMLOperat
 //
 //        return imageReference;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -108,7 +107,7 @@ public class DICOMImageReference extends ImageReference implements IAimXMLOperat
                 }
             }
         }
-    }    
+    }
 
     private void Control() {
     }
@@ -138,5 +137,23 @@ public class DICOMImageReference extends ImageReference implements IAimXMLOperat
         if (dicomImageReferenceEntity.getImageStudy() != null) {
             this.setImageStudy(new ImageStudy(dicomImageReferenceEntity.getImageStudy()));
         }
+    }
+
+    @Override
+    public DICOMImageReference getClone() {
+        DICOMImageReference res = new DICOMImageReference();
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.ImageStudy != null) {
+            res.ImageStudy = this.ImageStudy.getClone();
+        }
+        if (this.presentationStateCollection != null) {
+            res.presentationStateCollection = this.presentationStateCollection.getClone();
+        }
+        return res;
     }
 }

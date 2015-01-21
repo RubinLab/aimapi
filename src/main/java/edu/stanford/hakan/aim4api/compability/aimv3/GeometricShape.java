@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -191,7 +190,6 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
 //        return geometricShape;
 //
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -221,7 +219,6 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
         this.xsiType = map.getNamedItem("xsi:type").getNodeValue();
 
     }
-
 
     private void Control() throws AimException {
         if (getCagridId() == null) {
@@ -288,6 +285,35 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
         return res;
     }
 
-//    public GeometricShape(edu.stanford.hakan.aim4api.base.MarkupEntity v4) {        
-//    }
+    public GeometricShape getClone() {
+        GeometricShape res = new GeometricShape();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.lineColor != null) {
+            res.lineColor = this.lineColor;
+        }
+        if (this.lineOpacity != null) {
+            res.lineOpacity = this.lineOpacity;
+        }
+        if (this.lineStyle != null) {
+            res.lineStyle = this.lineStyle;
+        }
+        if (this.lineThickness != null) {
+            res.lineThickness = this.lineThickness;
+        }
+        if (this.includeFlag != null) {
+            res.includeFlag = this.includeFlag;
+        }
+        if (this.shapeIdentifier != null) {
+            res.shapeIdentifier = this.shapeIdentifier;
+        }
+        if (this.spatialCoordinateCollection != null) {
+            res.spatialCoordinateCollection = this.spatialCoordinateCollection.getClone();
+        }
+        if (this.xsiType != null) {
+            res.xsiType = this.xsiType;
+        }
+        return res;
+    }
 }

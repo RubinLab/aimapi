@@ -375,7 +375,6 @@ public class Annotation implements IAimXMLOperations, IAnnotation {
 //        return annotation;
 //
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -449,7 +448,6 @@ public class Annotation implements IAimXMLOperations, IAnnotation {
             }
         }
     }
-   
 
     private void Control() throws AimException {
         if (getCagridId() == null) {
@@ -572,5 +570,76 @@ public class Annotation implements IAimXMLOperations, IAnnotation {
 
     public boolean isEdited() {
         return !this.isEqualTo(this.intitalState);
+    }
+
+    public Annotation getClone() {
+        Annotation res = new Annotation();
+        if (this.calculationCollection != null) {
+            res.calculationCollection = this.calculationCollection.getClone();
+        }
+        if (this.inferenceCollection != null) {
+            res.inferenceCollection = this.inferenceCollection.getClone();
+        }
+        if (this.anatomicEntityCollection != null) {
+            res.anatomicEntityCollection = this.anatomicEntityCollection.getClone();
+        }
+        if (this.imagingObservationCollection != null) {
+            res.imagingObservationCollection = this.imagingObservationCollection.getClone();
+        }
+        for (int i = 0; i < this.listUser.size(); i++) {
+            if (this.listUser.get(i) != null) {
+                res.addUser(this.listUser.get(i).getClone());
+            }
+        }
+        for (int i = 0; i < this.listEquipment.size(); i++) {
+            if (this.listEquipment.get(i) != null) {
+                res.addEquipment(this.listEquipment.get(i).getClone());
+            }
+        }
+        for (int i = 0; i < this.listAimStatus.size(); i++) {
+            if (this.listAimStatus.get(i) != null) {
+                res.addAimStatus(this.listAimStatus.get(i).getClone());
+            }
+        }
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.aimVersion != null) {
+            res.aimVersion = this.aimVersion;
+        }
+        if (this.comment != null) {
+            res.comment = this.comment;
+        }
+        if (this.dateTime != null) {
+            res.dateTime = this.dateTime;
+        }
+        if (this.name != null) {
+            res.name = this.name;
+        }
+        if (this.uniqueIdentifier != null) {
+            res.uniqueIdentifier = this.uniqueIdentifier;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.precedentReferencedAnnotationUID != null) {
+            res.precedentReferencedAnnotationUID = this.precedentReferencedAnnotationUID;
+        }
+        if (this.xsiType != null) {
+            res.xsiType = this.xsiType;
+        }
+        if (this.OntologyPrefix != null) {
+            res.OntologyPrefix = this.OntologyPrefix;
+        }
+        return res;
     }
 }

@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.addition.AllowedTerm;
+import edu.stanford.hakan.aim4api.addition.ValidTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import org.w3c.dom.Document;
@@ -47,6 +49,7 @@ public class Inference implements IAimXMLOperations {
     private String codingSchemeVersion;
     private Double annotatorConfidence;
     private Boolean imageEvidence;
+    private AllowedTerm allowedTerm;
 
     public Inference() {
     }
@@ -117,6 +120,18 @@ public class Inference implements IAimXMLOperations {
         this.imageEvidence = imageEvidence;
     }
 
+    public AllowedTerm getAllowedTerm() {
+        return allowedTerm;
+    }
+
+    public void setAllowedTerm(AllowedTerm allowedTerm) {
+        this.allowedTerm = allowedTerm;
+    }
+
+    public void setAllowedTerm(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {
+        this.allowedTerm = new AllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
+    }
+
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //
@@ -137,7 +152,6 @@ public class Inference implements IAimXMLOperations {
 //        return inference;
 //
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -149,13 +163,13 @@ public class Inference implements IAimXMLOperations {
         if (map.getNamedItem("codingSchemeVersion") != null) {
             this.codingSchemeVersion = map.getNamedItem("codingSchemeVersion").getNodeValue();
         }
+        this.setAllowedTerm(codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion);
         if (map.getNamedItem("annotatorConfidence") != null) {
             this.annotatorConfidence = Double.parseDouble(map.getNamedItem("annotatorConfidence").getNodeValue());
         }
         this.imageEvidence = Boolean.parseBoolean(map.getNamedItem("imageEvidence").getNodeValue());
     }
 
-    
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: Inference's cagridId can not be null");
@@ -203,12 +217,19 @@ public class Inference implements IAimXMLOperations {
     public edu.stanford.hakan.aim4api.base.InferenceEntity toAimV4() {
         edu.stanford.hakan.aim4api.base.InferenceEntity res = new edu.stanford.hakan.aim4api.base.InferenceEntity();
         res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
-        CD typeCode = new CD();//
-        typeCode.setCode(this.getCodeValue());//
-        typeCode.setCodeSystem(this.getCodeMeaning());//
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
-        res.addTypeCode(typeCode);//
+//        CD typeCode = new CD();//
+//        typeCode.setCode(this.getCodeValue());//
+//        typeCode.setCodeSystem(this.getCodeMeaning());//
+//        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+//        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+//        res.addTypeCode(typeCode);//
+
+        if (this.allowedTerm != null) {
+            res.addTypeCode(this.allowedTerm.toCD());
+            for (ValidTerm validTerm : this.allowedTerm.getListValidTerm()) {
+                res.addTypeCode(validTerm.toCD());
+            }
+        }
         res.setImageEvidence(this.getImageEvidence());//
         return res;
 
@@ -216,22 +237,91 @@ public class Inference implements IAimXMLOperations {
 
     public Inference(edu.stanford.hakan.aim4api.base.InferenceEntity v4) {
         this.setCagridId(0);
-        if (v4.getListTypeCode().size() > 0) {
-            CD typeCode = v4.getListTypeCode().get(0);
+//        if (v4.getListTypeCode().size() > 0) {
+//            CD typeCode = v4.getListTypeCode().get(0);
+//            if (typeCode.getCode() != null) {
+//                this.setCodeValue(typeCode.getCode());
+//            }
+//            if (typeCode.getCodeSystem() != null) {
+//                this.setCodeMeaning(typeCode.getCodeSystem());
+//            }
+//            if (typeCode.getCodeSystemName() != null) {
+//                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+//            }
+//            if (typeCode.getCodeSystemVersion() != null) {
+//                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+//            }
+//        }
+
+        if (v4.getListQuestionTypeCode().size() > 0) {
+            String code_Value = "";
+            String code_Meaning = "";
+            String coding_SchemeDesignator = "";
+            String coding_SchemeVersion = "";
+            CD typeCode = v4.getListQuestionTypeCode().get(0);
             if (typeCode.getCode() != null) {
-                this.setCodeValue(typeCode.getCode());
+                code_Value = typeCode.getCode();
             }
             if (typeCode.getCodeSystem() != null) {
-                this.setCodeMeaning(typeCode.getCodeSystem());
+                code_Meaning = typeCode.getCodeSystem();
             }
             if (typeCode.getCodeSystemName() != null) {
-                this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
+                coding_SchemeDesignator = typeCode.getCodeSystemName();
             }
             if (typeCode.getCodeSystemVersion() != null) {
-                this.setCodingSchemeVersion(typeCode.getCodeSystemVersion());
+                coding_SchemeVersion = typeCode.getCodeSystemVersion();
+            }
+            this.setAllowedTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
+
+            for (int i = 1; i < v4.getListQuestionTypeCode().size(); i++) {
+                typeCode = v4.getListQuestionTypeCode().get(i);
+
+                if (typeCode.getCode() != null) {
+                    code_Value = typeCode.getCode();
+                }
+                if (typeCode.getCodeSystem() != null) {
+                    code_Meaning = typeCode.getCodeSystem();
+                }
+                if (typeCode.getCodeSystemName() != null) {
+                    coding_SchemeDesignator = typeCode.getCodeSystemName();
+                }
+                if (typeCode.getCodeSystemVersion() != null) {
+                    coding_SchemeVersion = typeCode.getCodeSystemVersion();
+                }
+                this.allowedTerm.addValidTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
             }
         }
         this.setAnnotatorConfidence(v4.getAnnotatorConfidence());
         this.setImageEvidence(v4.getImageEvidence());
+    }
+
+    public Inference getClone() {
+        Inference res = new Inference();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.codeValue != null) {
+            res.codeValue = this.codeValue;
+        }
+        if (this.codeMeaning != null) {
+            res.codeMeaning = this.codeMeaning;
+        }
+        if (this.codingSchemeDesignator != null) {
+            res.codingSchemeDesignator = this.codingSchemeDesignator;
+        }
+        if (this.codingSchemeVersion != null) {
+            res.codingSchemeVersion = this.codingSchemeVersion;
+        }
+        if (this.annotatorConfidence != null) {
+            res.annotatorConfidence = this.annotatorConfidence;
+        }
+        if (this.imageEvidence != null) {
+            res.imageEvidence = this.imageEvidence;
+        }
+
+        if (this.allowedTerm != null) {
+            res.allowedTerm = this.allowedTerm.getClone();
+        }
+        return res;
     }
 }

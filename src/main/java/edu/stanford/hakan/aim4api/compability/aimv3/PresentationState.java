@@ -69,7 +69,6 @@ public class PresentationState implements IAimXMLOperations {
 //        return presentationState;
 //
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -78,7 +77,6 @@ public class PresentationState implements IAimXMLOperations {
         this.sopInstanceUID = map.getNamedItem("sopInstanceUID").getNodeValue();
     }
 
-   
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: PresentationState's cagridId can not be null");
@@ -87,8 +85,7 @@ public class PresentationState implements IAimXMLOperations {
             throw new AimException("AimException: PresentationState's sopInstanceUID can not be null");
         }
     }
-    
-    
+
     public boolean isEqualTo(Object other) {
         PresentationState oth = (PresentationState) other;
         if (this.cagridId != oth.cagridId) {
@@ -98,5 +95,16 @@ public class PresentationState implements IAimXMLOperations {
             return false;
         }
         return true;
+    }
+
+    public PresentationState getClone() {
+        PresentationState res = new PresentationState();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.sopInstanceUID != null) {
+            res.sopInstanceUID = this.sopInstanceUID;
+        }
+        return res;
     }
 }

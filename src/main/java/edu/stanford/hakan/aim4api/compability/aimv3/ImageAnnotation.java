@@ -27,7 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
@@ -49,8 +48,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
     private ImageReferenceCollection imageReferenceCollection = new ImageReferenceCollection();
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
-    private TextAnnotationCollection textAnnotationCollection= new TextAnnotationCollection();
-    
+    private TextAnnotationCollection textAnnotationCollection = new TextAnnotationCollection();
 
     public ImageAnnotation() {
         super();
@@ -148,7 +146,6 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
 //        }
 //        return annotation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
         super.setXMLNode(node);
@@ -174,13 +171,12 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
                     }
                 }
             }
-        }    
+        }
     }
 
-       
     @Override
     public boolean isEqualTo(Object other) {
-        ImageAnnotation oth = (ImageAnnotation) other;        
+        ImageAnnotation oth = (ImageAnnotation) other;
         if (this.listPerson.size() != oth.listPerson.size()) {
             return false;
         }
@@ -203,13 +199,12 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
         }
         return super.isEqualTo(other);
     }
-    
+
     public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4() throws AimException {
         edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotationCollection();
-        
+
         iacV4.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
         iacV4.setDateTime(this.getDateTime());//
-        
 
         if (this.getListEquipment().size() > 0) {//
             iacV4.setEquipment(this.getListEquipment().get(0).toAimV4());
@@ -313,6 +308,97 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
         if (iav4.getName() != null) {
             this.setName(iav4.getName().getValue());
         }
+    }
+
+    @Override
+    public ImageAnnotation getClone() {
+        ImageAnnotation res = new ImageAnnotation();
+
+        if (this.getCalculationCollection() != null) {
+            res.setCalculationCollection(this.getCalculationCollection().getClone());
+        }
+        if (this.getInferenceCollection() != null) {
+            res.setInferenceCollection(this.getInferenceCollection().getClone());
+        }
+        if (this.getAnatomicEntityCollection() != null) {
+            res.setAnatomicEntityCollection(this.getAnatomicEntityCollection().getClone());
+        }
+        if (this.getImagingObservationCollection() != null) {
+            res.setImagingObservationCollection(this.getImagingObservationCollection().getClone());
+        }
+        for (int i = 0; i < this.getListUser().size(); i++) {
+            if (this.getListUser().get(i) != null) {
+                res.addUser(this.getListUser().get(i).getClone());
+            }
+        }
+        for (int i = 0; i < this.getListEquipment().size(); i++) {
+            if (this.getListEquipment().get(i) != null) {
+                res.addEquipment(this.getListEquipment().get(i).getClone());
+            }
+        }
+        for (int i = 0; i < this.getListAimStatus().size(); i++) {
+            if (this.getListAimStatus().get(i) != null) {
+                res.addAimStatus(this.getListAimStatus().get(i).getClone());
+            }
+        }
+        if (this.getCagridId() != null) {
+            res.setCagridId(this.getCagridId());
+        }
+        if (this.getAimVersion() != null) {
+            res.setAimVersion(this.getAimVersion(), "al536anhb55555");
+        }
+        if (this.getComment() != null) {
+            res.setComment(this.getComment());
+        }
+        if (this.getDateTime() != null) {
+            res.setDateTime(this.getDateTime());
+        }
+        if (this.getName() != null) {
+            res.setName(this.getName());
+        }
+        if (this.getUniqueIdentifier() != null) {
+            res.setUniqueIdentifier(this.getUniqueIdentifier(), "al536anhb55555");
+        }
+        if (this.getCodeValue() != null) {
+            res.setCodeValue(this.getCodeValue());
+        }
+        if (this.getCodeMeaning() != null) {
+            res.setCodeMeaning(this.getCodeMeaning());
+        }
+        if (this.getCodingSchemeDesignator() != null) {
+            res.setCodingSchemeDesignator(this.getCodingSchemeDesignator());
+        }
+        if (this.getCodingSchemeVersion() != null) {
+            res.setCodingSchemeVersion(this.getCodingSchemeVersion());
+        }
+        if (this.getPrecedentReferencedAnnotationUID() != null) {
+            res.setPrecedentReferencedAnnotationUID(this.getPrecedentReferencedAnnotationUID());
+        }
+        if (this.getXsiType() != null) {
+            res.setXsiType(this.getXsiType());
+        }
+        if (this.getOntologyPrefix() != null) {
+            res.setOntologyPrefix(this.getOntologyPrefix());
+        }
+
+        if (this.segmentationCollection != null) {
+            res.segmentationCollection = this.segmentationCollection.getClone();
+        }
+        if (this.imageReferenceCollection != null) {
+            res.imageReferenceCollection = this.imageReferenceCollection.getClone();
+        }
+        if (this.geometricShapeCollection != null) {
+            res.geometricShapeCollection = this.geometricShapeCollection.getClone();
+        }
+        for (int i = 0; i < this.listPerson.size(); i++) {
+            if (this.listPerson.get(i) != null) {
+                res.addPerson(this.listPerson.get(i).getClone());
+            }
+        }
+        if (this.textAnnotationCollection != null) {
+            res.textAnnotationCollection = this.textAnnotationCollection.getClone();
+        }
+        return res;
     }
 
 }

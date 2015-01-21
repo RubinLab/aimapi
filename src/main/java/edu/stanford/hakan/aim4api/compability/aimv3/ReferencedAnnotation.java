@@ -108,7 +108,6 @@ public class ReferencedAnnotation implements IAimXMLOperations {
 //
 //        return referencedAnnotation;
 //    }
-
     @Override
     public void setXMLNode(Node node) {
 
@@ -132,7 +131,6 @@ public class ReferencedAnnotation implements IAimXMLOperations {
         this.referencedAnnotationUID = map.getNamedItem("referencedAnnotationUID").getNodeValue();
     }
 
-    
     private void Control() throws AimException {
         if (getCagridId() == null) {
             throw new AimException("AimException: ReferencedAnnotation's cagridId can not be null");
@@ -141,8 +139,7 @@ public class ReferencedAnnotation implements IAimXMLOperations {
             throw new AimException("AimException: ReferencedAnnotation's referencedAnnotationUID can not be null");
         }
     }
-    
-    
+
     public boolean isEqualTo(Object other) {
         ReferencedAnnotation oth = (ReferencedAnnotation) other;
         if (this.cagridId != oth.cagridId) {
@@ -160,5 +157,21 @@ public class ReferencedAnnotation implements IAimXMLOperations {
             }
         }
         return true;
+    }
+
+    public ReferencedAnnotation getClone() {
+        ReferencedAnnotation res = new ReferencedAnnotation();
+        if (this.cagridId != null) {
+            res.cagridId = this.cagridId;
+        }
+        if (this.referencedAnnotationUID != null) {
+            res.referencedAnnotationUID = this.referencedAnnotationUID;
+        }
+        for (int i = 0; i < this.listAnnotationRole.size(); i++) {
+            if (this.listAnnotationRole.get(i) != null) {
+                res.addAnnotationRole(this.listAnnotationRole.get(i).getClone());
+            }
+        }
+        return res;
     }
 }
