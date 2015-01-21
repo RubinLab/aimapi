@@ -44,14 +44,14 @@ public class AnnotationConverter {
     public static Node annotationV3ToV4(Node node) throws AimException {
         edu.stanford.hakan.aim4api.compability.aimv3.ImageAnnotation iaV3 = new edu.stanford.hakan.aim4api.compability.aimv3.ImageAnnotation();
         iaV3.setXMLNode(node);
-        System.out.println(iaV3.getListPerson().get(0).getName());
+        //System.out.println(iaV3.getListPerson().get(0).getName());
         Document doc = XML.createDocument();
         ImageAnnotationCollection iac = iaV3.toAimV4();
-        System.out.println(iac.getPerson().getName().getValue());
+        //System.out.println(iac.getPerson().getName().getValue());
        
         ImageAnnotationCollection iac2 = new ImageAnnotationCollection();
         iac2.setXMLNode(iac.getXMLNode(doc));
-        System.out.println(iac2.getPerson().getName().getValue());
+        //System.out.println(iac2.getPerson().getName().getValue());
         return iac.getXMLNode(doc);
     }
 

@@ -23,16 +23,7 @@ package edu.stanford.hakan.aim4api.project.epad;
 //SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
 //WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Logger;
-
-//import edu.stanford.client.ClientFactory;
-//import edu.stanford.client.model.DicomSeries;
-//import edu.stanford.client.view.SeriesView;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
@@ -84,7 +75,13 @@ import edu.stanford.hakan.aim4api.project.epad.Aimapi;
 //import edu.stanford.shared.Preferences;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -298,9 +295,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     // create a default name for an annotation
     private String todaysDate() {
         Date today = new Date();
-        //DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        return sdf.format(today);
+        
+        DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        return fmt.format(today);
     }
 
     // create a person object for this aim
@@ -770,10 +768,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
             ImageStudy study = dicomImageReference.getImageStudy();
 
-            //DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
+            //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
-            date = sdf.parse(study.getStartDate().substring(0, 10));
+            date = fmt.parse(study.getStartDate().substring(0, 10));
 
             return date;
 
