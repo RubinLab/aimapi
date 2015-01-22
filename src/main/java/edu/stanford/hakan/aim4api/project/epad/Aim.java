@@ -290,7 +290,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 //        
 //        DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
 //        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        return Utility.getFormatedDateTime();
+        return getFormatedDateTime();
     }
 
     // create a person object for this aim
