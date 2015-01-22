@@ -69,7 +69,7 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
+//import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -767,9 +767,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 int month = Integer.parseInt(strStartDate.substring(5, 2));
                 int day = Integer.parseInt(strStartDate.substring(8, 2));
 
-                Calendar cal = Calendar.getInstance();
-                cal.set(year, month, day);
-                return cal.getTime();
+                Date date = new Date(year, month, day);
+                return date;
             } catch (NumberFormatException ex) {
                 throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
             }
