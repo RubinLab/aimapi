@@ -23,7 +23,8 @@ package edu.stanford.hakan.aim4api.project.epad;
 //SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
 //WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-import com.google.gwt.i18n.client.DateTimeFormat;
+//import com.google.gwt.i18n.client.DateTimeFormat;
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
@@ -34,9 +35,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.CalculationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.CalculationData;
 import edu.stanford.hakan.aim4api.compability.aimv3.CalculationDataCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.CalculationResult;
-import edu.stanford.hakan.aim4api.compability.aimv3.CharacteristicQuantification;
 import edu.stanford.hakan.aim4api.compability.aimv3.Circle;
-import edu.stanford.hakan.aim4api.compability.aimv3.Coordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.DICOMImageReference;
 import edu.stanford.hakan.aim4api.compability.aimv3.Dimension;
 import edu.stanford.hakan.aim4api.compability.aimv3.Equipment;
@@ -54,30 +53,23 @@ import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservationCharacteri
 import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.Inference;
 import edu.stanford.hakan.aim4api.compability.aimv3.InferenceCollection;
-import edu.stanford.hakan.aim4api.compability.aimv3.Interval;
 import edu.stanford.hakan.aim4api.compability.aimv3.MultiPoint;
-import edu.stanford.hakan.aim4api.compability.aimv3.NonQuantifiable;
-import edu.stanford.hakan.aim4api.compability.aimv3.Numerical;
 import edu.stanford.hakan.aim4api.compability.aimv3.Person;
 import edu.stanford.hakan.aim4api.compability.aimv3.Point;
 import edu.stanford.hakan.aim4api.compability.aimv3.Polyline;
-import edu.stanford.hakan.aim4api.compability.aimv3.Quantile;
-import edu.stanford.hakan.aim4api.compability.aimv3.ReferencedCalculation;
 import edu.stanford.hakan.aim4api.compability.aimv3.ReferencedGeometricShape;
-import edu.stanford.hakan.aim4api.compability.aimv3.Scale;
 import edu.stanford.hakan.aim4api.compability.aimv3.Segmentation;
 import edu.stanford.hakan.aim4api.compability.aimv3.SegmentationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinateCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.User;
-import edu.stanford.hakan.aim4api.project.epad.Aimapi;
-//import edu.stanford.shared.Preferences;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
+import edu.stanford.hakan.aim4api.utility.Utility;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -294,11 +286,12 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     // create a default name for an annotation
     private String todaysDate() {
-        Date today = new Date();
-        
-        DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        return fmt.format(today);
+//        Date today = new Date();
+//        
+//        
+//        DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        return Utility.getFormatedDateTime();
     }
 
     // create a person object for this aim
@@ -767,13 +760,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             ImageReference imageReference = imageList.get(0);
             DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
             ImageStudy study = dicomImageReference.getImageStudy();
+            String strStartDate = study.getStartDate();
 
-            DateTimeFormat fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
-            //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = new Date();
-            date = fmt.parse(study.getStartDate().substring(0, 10));
+            try {
+                int year = Integer.parseInt(strStartDate.substring(0, 4));
+                int month = Integer.parseInt(strStartDate.substring(5, 2));
+                int day = Integer.parseInt(strStartDate.substring(8, 2));
 
-            return date;
+                Calendar cal = Calendar.getInstance();
+                cal.set(year, month, day);
+                return cal.getTime();
+            } catch (NumberFormatException ex) {
+                throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
+            }
 
         } catch (Exception e) {
 

@@ -31,6 +31,7 @@ import edu.stanford.hakan.aim4api.base.MarkupEntity;
 import edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
 import edu.stanford.hakan.aim4api.base.TwoDimensionSpline;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -65,8 +66,70 @@ public class Utility {
         }
         return false;
     }
-    
+
     public static TwoDimensionSpline toSpline(TwoDimensionPolyline twoDimensionPolyline) {
         return new TwoDimensionSpline(twoDimensionPolyline);
+    }
+
+    //2015-01-21T15:07:13
+    public static String getFormatedDateTime() {
+        Date date = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        String strHour = Integer.toString(hour);
+        if (hour < 10) {
+            strHour = "0" + strHour;
+        }
+        String strMinute = Integer.toString(minute);
+        if (minute < 10) {
+            strMinute = "0" + strMinute;
+        }
+        String strSecond = Integer.toString(second);
+        if (second < 10) {
+            strSecond = "0" + strSecond;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        return builder.toString();
+    }
+    
+    
+    public static String getFormatedDate() {
+        Date date = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay);
+        return builder.toString();
     }
 }
