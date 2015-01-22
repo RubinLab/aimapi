@@ -66,7 +66,6 @@ import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinat
 import edu.stanford.hakan.aim4api.compability.aimv3.User;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
-import edu.stanford.hakan.aim4api.utility.Utility;
 import java.io.Serializable;
 import java.util.ArrayList;
 //import java.util.Calendar;
@@ -2236,6 +2235,63 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         this.getPatient().setBirthDate(patientBirthDate);
         this.getPatient().setSex(patientSex);
 
+    }
+    
+        public static String getFormatedDateTime() {
+        Date date = new Date();
+
+        int year = date.getYear();
+        int month = date.getMonth() +1;
+        int day = date.getDate();
+        int hour = date.getHours();
+        int minute = date.getMinutes();
+        int second = date.getSeconds();
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        String strHour = Integer.toString(hour);
+        if (hour < 10) {
+            strHour = "0" + strHour;
+        }
+        String strMinute = Integer.toString(minute);
+        if (minute < 10) {
+            strMinute = "0" + strMinute;
+        }
+        String strSecond = Integer.toString(second);
+        if (second < 10) {
+            strSecond = "0" + strSecond;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        return builder.toString();
+    }
+    
+    
+    public static String getFormatedDate() {
+        Date date = new Date();
+
+            int year = date.getYear();
+        int month = date.getMonth() +1;
+        int day = date.getDate();
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay);
+        return builder.toString();
     }
 
 }

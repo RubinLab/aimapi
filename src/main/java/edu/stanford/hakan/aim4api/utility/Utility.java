@@ -75,14 +75,14 @@ public class Utility {
     public static String getFormatedDateTime() {
         Date date = new Date();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        int second = cal.get(Calendar.SECOND);
+        //Calendar cal = Calendar.getInstance();
+        //cal.setTime(date);
+        int year = date.getYear();// cal.get(Calendar.YEAR);
+        int month = date.getMonth() +1;// cal.get(Calendar.MONTH) + 1;
+        int day = date.getDate();// cal.get(Calendar.DAY_OF_MONTH);
+        int hour = date.getHours();// cal.get(Calendar.HOUR_OF_DAY);
+        int minute = date.getMinutes();// cal.get(Calendar.MINUTE);
+        int second = date.getSeconds();//cal.get(Calendar.SECOND);
 
         String strMount = Integer.toString(month);
         if (month < 10) {
@@ -114,11 +114,11 @@ public class Utility {
     public static String getFormatedDate() {
         Date date = new Date();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(date);
+            int year = date.getYear();// cal.get(Calendar.YEAR);
+        int month = date.getMonth() +1;// cal.get(Calendar.MONTH) + 1;
+        int day = date.getDate();// cal.get(Calendar.DAY_OF_MONTH);
 
         String strMount = Integer.toString(month);
         if (month < 10) {
