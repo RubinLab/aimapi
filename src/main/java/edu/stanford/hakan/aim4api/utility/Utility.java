@@ -77,7 +77,7 @@ public class Utility {
 
         //Calendar cal = Calendar.getInstance();
         //cal.setTime(date);
-        int year = date.getYear();// cal.get(Calendar.YEAR);
+        int year = date.getYear()+1900;// cal.get(Calendar.YEAR);
         int month = date.getMonth() +1;// cal.get(Calendar.MONTH) + 1;
         int day = date.getDate();// cal.get(Calendar.DAY_OF_MONTH);
         int hour = date.getHours();// cal.get(Calendar.HOUR_OF_DAY);
@@ -116,7 +116,7 @@ public class Utility {
 
 //        Calendar cal = Calendar.getInstance();
 //        cal.setTime(date);
-            int year = date.getYear();// cal.get(Calendar.YEAR);
+            int year = date.getYear()+1900;// cal.get(Calendar.YEAR);
         int month = date.getMonth() +1;// cal.get(Calendar.MONTH) + 1;
         int day = date.getDate();// cal.get(Calendar.DAY_OF_MONTH);
 

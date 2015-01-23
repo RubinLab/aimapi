@@ -101,7 +101,7 @@ public class ExistManager {
             reader.close();
 
             // Output the response
-            return (answer.toString());
+            return correctTheServerRespond(answer.toString());
         } catch (Exception ex) {
             throw new AimException("AimException: " + ex.getMessage());
         }
@@ -167,7 +167,7 @@ public class ExistManager {
             reader.close();
 
             // Output the response
-            return (answer.toString());
+            return correctTheServerRespond(answer.toString());
         } catch (Exception ex) {
             throw new AimException("AimException: " + ex.getMessage());
         }
@@ -228,7 +228,7 @@ public class ExistManager {
             reader.close();
 
             // Output the response
-            return (answer.toString());
+            return correctTheServerRespond(answer.toString());
         } catch (Exception ex) {
             throw new AimException("AimException: " + ex.getMessage());
         }
@@ -417,5 +417,14 @@ public class ExistManager {
         return res;
     }
 
+       private static String correctTheServerRespond(String serverRespond){
+          serverRespond = serverRespond.replaceAll("\"", "~**~");
+        String xmlHeader = "<?xml version=~**~1.0~**~ encoding=~**~UTF-8~**~ standalone=~**~no~**~?>";
+        String xmlTag = "<imageAnnotations xmlns=~**~gme://caCORE.caCORE/3.2/edu.northwestern.radiology.AIM~**~/>";
+        int indexStart = serverRespond.indexOf(xmlTag);
+        if(indexStart >=0)
+            serverRespond = (xmlHeader + serverRespond.replace(xmlTag, "").replace(xmlHeader, "")).replace( "~**~","\"");
+        return serverRespond;
+    }
    
 }
