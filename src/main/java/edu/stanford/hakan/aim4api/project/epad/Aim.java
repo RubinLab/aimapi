@@ -763,8 +763,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
             try {
                 int year = Integer.parseInt(strStartDate.substring(0, 4));
-                int month = Integer.parseInt(strStartDate.substring(5, 2));
-                int day = Integer.parseInt(strStartDate.substring(8, 2));
+                int month = Integer.parseInt(strStartDate.substring(5, 7));
+                int day = Integer.parseInt(strStartDate.substring(8, 10));
 
                 Date date = new Date(year, month, day);
                 return date;
@@ -2240,7 +2240,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         public static String getFormatedDateTime() {
         Date date = new Date();
 
-        int year = date.getYear();
+        int year = date.getYear()+1900;
         int month = date.getMonth() +1;
         int day = date.getDate();
         int hour = date.getHours();
@@ -2277,7 +2277,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public static String getFormatedDate() {
         Date date = new Date();
 
-            int year = date.getYear();
+            int year = date.getYear()+1900;
         int month = date.getMonth() +1;
         int day = date.getDate();
 
