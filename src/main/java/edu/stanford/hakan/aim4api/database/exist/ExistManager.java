@@ -424,7 +424,7 @@ public class ExistManager {
         int indexStart = serverRespond.indexOf(xmlTag);
         if(indexStart >=0)
             serverRespond = (xmlHeader + serverRespond.replace(xmlTag, "").replace(xmlHeader, "")).replace( "~**~","\"");
-        return serverRespond;
+        return serverRespond.replace( "~**~","\"");
     }
    
 }
