@@ -89,8 +89,6 @@ public class AnnotationGetter {
             String dbUserName, String dbUserPassword, String PathXSD, int startIndex, int maxRecords) throws AimException {
         try {
             String serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(Url, XQuery, dbUserName, dbUserPassword, 1, maxRecords);
-            
-            
             Document serverDoc = XML.getDocumentFromString(serverResponse);
             List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
             return res;

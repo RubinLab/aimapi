@@ -235,7 +235,11 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
         if (this.getImagingObservationCollection().getImagingObservationList().size() > 0) {//
             iaV4.setImagingObservationEntityCollection(this.getImagingObservationCollection().toAimV4());
         }
+        if (this.getInferenceCollection().getInferenceList().size() > 0) {//
+            iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
+        }
 
+        
         iaV4.setComment(Converter.toST(this.getComment()));//
         iaV4.setName(Converter.toST(this.getName()));//
         CD typeCode = new CD();//
