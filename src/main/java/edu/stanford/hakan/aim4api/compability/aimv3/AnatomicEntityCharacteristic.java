@@ -264,12 +264,12 @@ public class AnatomicEntityCharacteristic implements IAimXMLOperations {
     AnatomicEntityCharacteristic(ImagingPhysicalEntityCharacteristic v4) {
 
         this.setCagridId(0);
-        if (v4.getListQuestionTypeCode().size() > 0) {
+        if (v4.getListTypeCode().size() > 0) {
             String code_Value = "";
             String code_Meaning = "";
             String coding_SchemeDesignator = "";
             String coding_SchemeVersion = "";
-            CD typeCode = v4.getListQuestionTypeCode().get(0);
+            CD typeCode = v4.getListTypeCode().get(0);
             if (typeCode.getCode() != null) {
                 code_Value = typeCode.getCode();
             }
@@ -284,8 +284,8 @@ public class AnatomicEntityCharacteristic implements IAimXMLOperations {
             }
             this.setAllowedTerm(code_Value, code_Meaning, coding_SchemeDesignator, coding_SchemeVersion);
 
-            for (int i = 1; i < v4.getListQuestionTypeCode().size(); i++) {
-                typeCode = v4.getListQuestionTypeCode().get(i);
+            for (int i = 1; i < v4.getListTypeCode().size(); i++) {
+                typeCode = v4.getListTypeCode().get(i);
 
                 if (typeCode.getCode() != null) {
                     code_Value = typeCode.getCode();

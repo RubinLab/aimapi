@@ -6,6 +6,7 @@
 package edu.stanford.hakan.aim4api.addition;
 
 import edu.stanford.hakan.aim4api.base.CD;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
  *
  * @author Hakan
  */
-public class AllowedTerm {
+@SuppressWarnings("serial")
+public class AllowedTerm implements Serializable {
 
     private String codeValue;
     private String codeMeaning;

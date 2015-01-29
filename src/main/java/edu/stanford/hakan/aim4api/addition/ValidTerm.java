@@ -7,11 +7,13 @@
 package edu.stanford.hakan.aim4api.addition;
 
 import edu.stanford.hakan.aim4api.base.CD;
+import java.io.Serializable;
 /**
  *
  * @author Hakan
  */
-public class ValidTerm {
+@SuppressWarnings("serial")
+public class ValidTerm implements Serializable {
     private String codeValue;
     private String codeMeaning;
     private String codingSchemeDesignator;
