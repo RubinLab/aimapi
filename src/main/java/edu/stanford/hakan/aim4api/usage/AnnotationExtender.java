@@ -14,6 +14,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.CalculationData;
 import edu.stanford.hakan.aim4api.compability.aimv3.CalculationResult;
 import edu.stanford.hakan.aim4api.compability.aimv3.Dimension;
 import edu.stanford.hakan.aim4api.compability.aimv3.ImageAnnotation;
+import java.io.IOException;
 
 /**
  *

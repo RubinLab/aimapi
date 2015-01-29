@@ -30,8 +30,14 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.utility.EPADConfig;
+import edu.stanford.hakan.aim4api.utility.dotnet.StreamWriter;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -42,7 +48,7 @@ import org.w3c.dom.NodeList;
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class ImageAnnotation extends Annotation implements IAimXMLOperations {
+public class ImageAnnotation extends Annotation implements IAimXMLOperations,Serializable  {
 
     private SegmentationCollection segmentationCollection = new SegmentationCollection();
     private ImageReferenceCollection imageReferenceCollection = new ImageReferenceCollection();
@@ -239,7 +245,6 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
             iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
         }
 
-        
         iaV4.setComment(Converter.toST(this.getComment()));//
         iaV4.setName(Converter.toST(this.getName()));//
         CD typeCode = new CD();//
@@ -251,6 +256,106 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
         iaV4.setDateTime(this.getDateTime());//
 
         iacV4.addImageAnnotation(iaV4);
+        return iacV4;
+    }
+
+    private String logMessage = "";
+
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    public void setLogMessage(String logMessage) {
+        logMessage = logMessage;
+    }
+
+    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(boolean withLog) throws AimException {
+        edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotationCollection();
+
+        setLogMessage("======== toAimV4-1");
+        iacV4.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
+        setLogMessage("======== toAimV4-2");
+        iacV4.setDateTime(this.getDateTime());//
+        setLogMessage("======== toAimV4-3");
+
+        if (this.getListEquipment().size() > 0) {//
+            setLogMessage("======== toAimV4-4");
+            iacV4.setEquipment(this.getListEquipment().get(0).toAimV4());
+            setLogMessage("======== toAimV4-5");
+        }
+        if (this.getListPerson().size() > 0) {//
+            setLogMessage("======== toAimV4-6");
+            iacV4.setPerson(this.getListPerson().get(0).toAimV4());
+            setLogMessage("======== toAimV4-7");
+        }
+        if (this.getListUser().size() > 0) {//
+            setLogMessage("======== toAimV4-8");
+            iacV4.setUser(this.getListUser().get(0).toAimV4());
+            setLogMessage("======== toAimV4-9");
+        }
+
+        setLogMessage("======== toAimV4-10");
+        edu.stanford.hakan.aim4api.base.ImageAnnotation iaV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotation();
+        setLogMessage("======== toAimV4-11");
+        if (this.getSegmentationCollection().getSegmentationList().size() > 0) {//
+            setLogMessage("======== toAimV4-12");
+            iaV4.setSegmentationEntityCollection(this.getSegmentationCollection().toAimV4());
+            setLogMessage("======== toAimV4-13");
+        }
+        if (this.getImageReferenceCollection().getImageReferenceList().size() > 0) {//
+            setLogMessage("======== toAimV4-14");
+            iaV4.setImageReferenceEntityCollection(this.getImageReferenceCollection().toAimV4());
+            setLogMessage("======== toAimV4-15");
+        }
+        if (this.getGeometricShapeCollection().getGeometricShapeList().size() > 0) {//
+            setLogMessage("======== toAimV4-16");
+            iaV4.setMarkupEntityCollection(this.getGeometricShapeCollection().toAimV4());
+            setLogMessage("======== toAimV4-17");
+        }
+        if (this.getCalculationCollection().getCalculationList().size() > 0) {//
+            setLogMessage("======== toAimV4-18");
+            iaV4.setCalculationEntityCollection(this.getCalculationCollection().toAimV4(iaV4));
+            setLogMessage("======== toAimV4-19");
+        }
+        if (this.getAnatomicEntityCollection().getAnatomicEntityList().size() > 0) {//
+            setLogMessage("======== toAimV4-20");
+            iaV4.setImagingPhysicalEntityCollection(this.getAnatomicEntityCollection().toAimV4());
+            setLogMessage("======== toAimV4-21");
+        }
+        if (this.getImagingObservationCollection().getImagingObservationList().size() > 0) {//
+            setLogMessage("======== toAimV4-22");
+            iaV4.setImagingObservationEntityCollection(this.getImagingObservationCollection().toAimV4());
+            setLogMessage("======== toAimV4-23");
+        }
+        if (this.getInferenceCollection().getInferenceList().size() > 0) {//
+            setLogMessage("======== toAimV4-24");
+            iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
+            setLogMessage("======== toAimV4-25");
+        }
+
+        setLogMessage("======== toAimV4-26");
+        iaV4.setComment(Converter.toST(this.getComment()));//
+        setLogMessage("======== toAimV4-27");
+        iaV4.setName(Converter.toST(this.getName()));//
+        setLogMessage("======== toAimV4-28");
+        CD typeCode = new CD();//
+        setLogMessage("======== toAimV4-29");
+        typeCode.setCode(this.getCodeValue());//
+        setLogMessage("======== toAimV4-30");
+        typeCode.setCodeSystem(this.getCodeMeaning());//
+        setLogMessage("======== toAimV4-31");
+        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+        setLogMessage("======== toAimV4-32");
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        setLogMessage("======== toAimV4-33");
+        iaV4.addTypeCode(typeCode);//
+        setLogMessage("======== toAimV4-34");
+        iaV4.setDateTime(this.getDateTime());//
+        setLogMessage("======== toAimV4-35");
+
+        iacV4.addImageAnnotation(iaV4);
+        setLogMessage("======== toAimV4-36");
+
         return iacV4;
     }
 
@@ -288,6 +393,9 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations {
         }
         if (iav4.getImagingObservationEntityCollection() != null && iav4.getImagingObservationEntityCollection().getImagingObservationEntityList().size() > 0) {
             this.setImagingObservationCollection(new ImagingObservationCollection(iav4.getImagingObservationEntityCollection()));
+        }
+        if (iav4.getInferenceEntityCollection() != null && iav4.getInferenceEntityCollection().getInferenceEntityList().size() > 0) {
+            this.setInferenceCollection(new InferenceCollection(iav4.getInferenceEntityCollection()));
         }
 
         if (iav4.getListTypeCode().size() > 0) {

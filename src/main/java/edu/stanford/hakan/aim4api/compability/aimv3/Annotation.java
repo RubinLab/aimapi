@@ -31,6 +31,7 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 //import edu.stanford.hakan.aim3api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -44,7 +45,7 @@ import org.w3c.dom.NodeList;
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class Annotation implements IAimXMLOperations, IAnnotation {
+public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  {
 
     private CalculationCollection calculationCollection = new CalculationCollection();
     private InferenceCollection inferenceCollection = new InferenceCollection();
