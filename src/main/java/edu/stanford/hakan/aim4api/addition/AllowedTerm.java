@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author Hakan
+ * @author Hakan - BULU
  */
 @SuppressWarnings("serial")
 public class AllowedTerm implements Serializable {
