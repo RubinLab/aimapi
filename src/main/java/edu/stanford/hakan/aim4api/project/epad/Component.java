@@ -62,10 +62,14 @@ public class Component implements Serializable {
                 .getAnatomicEntityCharacteristicCollection());
         anatomicEntity.setAnnotatorConfidence(ae.getAnnotatorConfidence());
         anatomicEntity.setCagridId(ae.getCagridId());
-        anatomicEntity.setCodeMeaning(ae.getCodeMeaning());
-        anatomicEntity.setCodeValue(ae.getCodeValue());
-        anatomicEntity.setCodingSchemeDesignator(ae.getCodingSchemeVersion());
-        anatomicEntity.setCodingSchemeVersion(ae.getCodingSchemeVersion());
+    
+        if (ae.getAllowedTerm() != null) {
+            anatomicEntity.setCodeMeaning(ae.getAllowedTerm().getCodeMeaning());
+            anatomicEntity.setCodeValue(ae.getAllowedTerm().getCodeValue());
+            anatomicEntity.setCodingSchemeDesignator(ae.getAllowedTerm().getCodingSchemeVersion());
+            anatomicEntity.setCodingSchemeVersion(ae.getAllowedTerm().getCodingSchemeVersion());
+        }
+
         anatomicEntity.setIsPresent(ae.getIsPresent());
         anatomicEntity.setLabel(ae.getLabel());
     }
@@ -92,11 +96,12 @@ public class Component implements Serializable {
                 .getImagingObservationCharacteristicCollection());
         imagingObservation.setAnnotatorConfidence(io.getAnnotatorConfidence());
         imagingObservation.setCagridId(io.getCagridId());
-        imagingObservation.setCodeMeaning(io.getCodeMeaning());
-        imagingObservation.setCodeValue(io.getCodeValue());
-        imagingObservation.setCodingSchemeDesignator(io
-                .getCodingSchemeVersion());
-        imagingObservation.setCodingSchemeVersion(io.getCodingSchemeVersion());
+        if (io.getAllowedTerm() != null) {
+            imagingObservation.setCodeMeaning(io.getAllowedTerm().getCodeMeaning());
+            imagingObservation.setCodeValue(io.getAllowedTerm().getCodeValue());
+            imagingObservation.setCodingSchemeDesignator(io.getAllowedTerm().getCodingSchemeVersion());
+            imagingObservation.setCodingSchemeVersion(io.getAllowedTerm().getCodingSchemeVersion());
+        }
         imagingObservation.setIsPresent(io.getIsPresent());
         imagingObservation.setLabel(io.getLabel());
         imagingObservation.setListReferencedGeometricShape(io
@@ -137,10 +142,12 @@ public class Component implements Serializable {
 
         inference.setAnnotatorConfidence(inf.getAnnotatorConfidence());
         inference.setCagridId(inf.getCagridId());
-        inference.setCodeMeaning(inf.getCodeMeaning());
-        inference.setCodeValue(inf.getCodeValue());
-        inference.setCodingSchemeDesignator(inf.getCodingSchemeVersion());
-        inference.setCodingSchemeVersion(inf.getCodingSchemeVersion());
+        if (inf.getAllowedTerm() != null) {
+            inference.setCodeMeaning(inf.getAllowedTerm().getCodeMeaning());
+            inference.setCodeValue(inf.getAllowedTerm().getCodeValue());
+            inference.setCodingSchemeDesignator(inf.getAllowedTerm().getCodingSchemeVersion());
+            inference.setCodingSchemeVersion(inf.getAllowedTerm().getCodingSchemeVersion());
+        }
         inference.setImageEvidence(inf.getImageEvidence());
     }
 
@@ -155,12 +162,13 @@ public class Component implements Serializable {
         anatomicEntityCharacteristic.setAnnotatorConfidence(aec
                 .getAnnotatorConfidence());
         anatomicEntityCharacteristic.setCagridId(aec.getCagridId());
-        anatomicEntityCharacteristic.setCodeMeaning(aec.getCodeMeaning());
-        anatomicEntityCharacteristic.setCodeValue(aec.getCodeValue());
-        anatomicEntityCharacteristic.setCodingSchemeDesignator(aec
-                .getCodingSchemeVersion());
-        anatomicEntityCharacteristic.setCodingSchemeVersion(aec
-                .getCodingSchemeVersion());
+        if (aec.getAllowedTerm() != null) {
+            anatomicEntityCharacteristic.setCodeMeaning(aec.getAllowedTerm().getCodeMeaning());
+            anatomicEntityCharacteristic.setCodeValue(aec.getAllowedTerm().getCodeValue());
+            anatomicEntityCharacteristic.setCodingSchemeDesignator(aec.getAllowedTerm().getCodingSchemeVersion());
+            anatomicEntityCharacteristic.setCodingSchemeVersion(aec.getAllowedTerm().getCodingSchemeVersion());
+        }
+
         anatomicEntityCharacteristic.setLabel(aec.getLabel());
 
     }
@@ -176,12 +184,12 @@ public class Component implements Serializable {
         imagingObservationCharacteristic.setAnnotatorConfidence(ioc
                 .getAnnotatorConfidence());
         imagingObservationCharacteristic.setCagridId(ioc.getCagridId());
-        imagingObservationCharacteristic.setCodeMeaning(ioc.getCodeMeaning());
-        imagingObservationCharacteristic.setCodeValue(ioc.getCodeValue());
-        imagingObservationCharacteristic.setCodingSchemeDesignator(ioc
-                .getCodingSchemeVersion());
-        imagingObservationCharacteristic.setCodingSchemeVersion(ioc
-                .getCodingSchemeVersion());
+        if (ioc.getAllowedTerm() != null) {
+            imagingObservationCharacteristic.setCodeMeaning(ioc.getAllowedTerm().getCodeMeaning());
+            imagingObservationCharacteristic.setCodeValue(ioc.getAllowedTerm().getCodeValue());
+            imagingObservationCharacteristic.setCodingSchemeDesignator(ioc.getAllowedTerm().getCodingSchemeVersion());
+            imagingObservationCharacteristic.setCodingSchemeVersion(ioc.getAllowedTerm().getCodingSchemeVersion());
+        }
         imagingObservationCharacteristic.setLabel(ioc.getLabel());
         imagingObservationCharacteristic.setComment(ioc.getComment());
         imagingObservationCharacteristic
