@@ -62,6 +62,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Segmentation;
 import edu.stanford.hakan.aim4api.compability.aimv3.SegmentationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinateCollection;
+import edu.stanford.hakan.aim4api.compability.aimv3.Spline;
 import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.User;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
@@ -448,13 +449,18 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
                     break;
                 case POLY:
-                case SPLINE:
-                case OPENSPLINE:
                 case RECTANGLE:
                     Polyline polyline = new Polyline();
                     polyline.setShapeIdentifier(shapeID);
                     polyline.setCagridId(caGridId);
                     shapes.add(createShape(polyline, coords, imageID, frameID));
+                    break;
+                case SPLINE:
+//                case OPENSPLINE:
+                    Spline spline = new Spline();
+                    spline.setShapeIdentifier(shapeID);
+                    spline.setCagridId(caGridId);
+                    shapes.add(createShape(spline, coords, imageID, frameID));
                     break;
                 case CIRCLE:
                     Circle circle = new Circle();
