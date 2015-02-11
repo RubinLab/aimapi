@@ -772,7 +772,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 int day = Integer.parseInt(strStartDate.substring(8, 10));
 
                 System.out.println(year + " " + month + " " + day);
-                Date date = new Date(year, month-1, day);
+                Date date = new Date(year, month - 1, day);
                 return date;
             } catch (NumberFormatException ex) {
                 throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
@@ -2037,22 +2037,23 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         List<Component> result = new ArrayList<Component>();
         switch (componentType) {
             case anatomicEntity:
-                for (AnatomicEntity anatomicEntity : getAnatomicEntityCollection()
-                        .getAnatomicEntityList()) {
+                for (AnatomicEntity anatomicEntity : getAnatomicEntityCollection().getAnatomicEntityList()) {
                     result.add(new Component(anatomicEntity));
+                    for (AnatomicEntityCharacteristic anatomicEntityCharacteristic : anatomicEntity.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList()) {
+                        result.add(new Component(anatomicEntityCharacteristic));
+                    }
                 }
                 break;
-
             case imagingObservation:
-                for (ImagingObservation imagingObservation : getImagingObservationCollection()
-                        .getImagingObservationList()) {
-                    result.add(new Component(imagingObservation));
+                for (ImagingObservation imagingObservation : getImagingObservationCollection().getImagingObservationList()) {
+                    result.add(new Component(imagingObservation));      
+                    for (ImagingObservationCharacteristic imagingObservationCharacteristic : imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList()) {
+                        result.add(new Component(imagingObservationCharacteristic));
+                    }
                 }
                 break;
-
             case inference:
-                for (Inference infernce : getInferenceCollection()
-                        .getInferenceList()) {
+                for (Inference infernce : getInferenceCollection().getInferenceList()) {
                     result.add(new Component(infernce));
                 }
                 break;
@@ -2064,6 +2065,26 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         // + " components of type " + componentType);
         return result;
     }
+
+//    @Override
+//    public List<Component> getComponents(ImagingObservation imagingObservation) {
+//        List<Component> result = new ArrayList<Component>();
+//        return result;
+//    }
+//
+//    @Override
+//    public List<Component> getComponents(AnatomicEntity anatomicEntity) {
+//
+//        List<Component> result = new ArrayList<Component>();
+//        return result;
+//    }
+//
+//    @Override
+//    public List<Component> getComponents(Inference inference) {
+//
+//        List<Component> result = new ArrayList<Component>();
+//        return result;
+//    }
 
     @Override
     public String toString() {

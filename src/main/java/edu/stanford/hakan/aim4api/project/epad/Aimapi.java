@@ -1,7 +1,8 @@
 package edu.stanford.hakan.aim4api.project.epad;
 
-import java.util.Date;
-import java.util.List;
+import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
+import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservation;
+import edu.stanford.hakan.aim4api.compability.aimv3.Inference;
 
 import edu.stanford.hakan.aim4api.project.epad.Aim;
 import edu.stanford.hakan.aim4api.project.epad.Component;
@@ -11,6 +12,8 @@ import edu.stanford.hakan.aim4api.project.epad.LoggedInUser;
 import edu.stanford.hakan.aim4api.project.epad.Patient;
 import edu.stanford.hakan.aim4api.project.epad.Shape;
 import edu.stanford.hakan.aim4api.project.epad.TwoDCoordinate;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Interface for aimapi which will be implemented in aim3 and aim4.
@@ -124,6 +127,10 @@ public interface Aimapi {
 	void addComponents(List<Component> components);
 
 	List<Component> getComponents(ComponentType componentType);
+        
+//	List<Component> getComponents(ImagingObservation imagingObservation);
+//	List<Component> getComponents(AnatomicEntity anatomicEntity);
+//	List<Component> getComponents(Inference inference);
 
 	//
 	// looking at particular labels and code values
