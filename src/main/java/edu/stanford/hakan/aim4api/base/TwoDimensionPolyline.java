@@ -47,6 +47,7 @@ public class TwoDimensionPolyline extends TwoDimensionGeometricShapeEntity {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("TwoDimensionPolyline");
         }
+        
         Element res = (Element) super.getXMLNode(doc);
         return res;
     }

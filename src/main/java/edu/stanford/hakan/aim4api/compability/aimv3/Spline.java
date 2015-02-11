@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import java.io.Serializable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

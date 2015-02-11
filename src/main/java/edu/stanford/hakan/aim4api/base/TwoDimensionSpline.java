@@ -102,16 +102,22 @@ public class TwoDimensionSpline extends TwoDimensionGeometricShapeEntity {
             this.setTagName(twoDimensionPolyline.getTagName());
         }
         this.setXsiType("TwoDimensionSpline");
-
     }
 
     @Override
     public Node getXMLNode(Document doc) throws AimException {
+        if (super.getUniqueIdentifier() == null || super.getUniqueIdentifier().getRoot() == null) {
+            super.setUniqueIdentifier();
+        }
         String uid = super.getUniqueIdentifier().getRoot();
         if (!uid.contains(Globals.getSplineFlag())) {
             super.setUniqueIdentifier(new II(uid + Globals.getSplineFlag()));
         }
-        setTagName("TwoDimensionPolyline");
+        
+        if (getTagName() == null || "".equals(getTagName())) {
+            setTagName("TwoDimensionPolyline");
+        }
+        setXsiType("TwoDimensionPolyline");
         Element res = (Element) super.getXMLNode(doc);
         return res;
     }

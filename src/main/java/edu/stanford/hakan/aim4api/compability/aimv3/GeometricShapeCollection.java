@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.utility.Utility;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -111,7 +112,11 @@ public class GeometricShapeCollection implements IAimXMLOperations {
             } else if ("TwoDimensionPoint".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Point((edu.stanford.hakan.aim4api.base.TwoDimensionPoint) itemV4));
             } else if ("TwoDimensionPolyline".equals(itemV4.getXsiType())) {
-                this.AddGeometricShape(new Polyline((edu.stanford.hakan.aim4api.base.TwoDimensionPolyline) itemV4));
+                if (Utility.isSpline(itemV4)) {
+                    this.AddGeometricShape(new Spline((edu.stanford.hakan.aim4api.base.TwoDimensionSpline) itemV4));
+                } else {
+                    this.AddGeometricShape(new Polyline((edu.stanford.hakan.aim4api.base.TwoDimensionPolyline) itemV4));
+                }
             } else if ("TwoDimensionSpline".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Spline((edu.stanford.hakan.aim4api.base.TwoDimensionSpline) itemV4));
             }
