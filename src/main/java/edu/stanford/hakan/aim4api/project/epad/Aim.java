@@ -1349,25 +1349,32 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     @Override
     public void addComponents(List<Component> components) {
-
         for (Component component : components) {
             switch (component.componentType) {
-                case anatomicEntity:
-                    getAnatomicEntityCollection().getAnatomicEntityList().add(
-                            component.anatomicEntity);
+                case anatomicEntity:                
+                    getAnatomicEntityCollection().getAnatomicEntityList().add(component.anatomicEntity);
                     break;
-                case imagingObservation:
-                    getImagingObservationCollection().getImagingObservationList()
-                            .add(component.imagingObservation);
+                case imagingObservation:    
+                {
+                    getImagingObservationCollection().getImagingObservationList().add(component.imagingObservation);
+        logger.info("===== SIZE: "+ component.imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size());
                     break;
+                }
                 case inference:
-                    getInferenceCollection().getInferenceList().add(
-                            component.inference);
+                    getInferenceCollection().getInferenceList().add(component.inference);
                     break;
                 default:
+        logger.info("===== DEFAULT: " + component.getComponentType());
                     break;
             }
         }
+
+        logger.info("============== START ===================");
+        for (Component component : components) {
+            logger.info("====== " + component.getCoordinatedCodeMeaning() + " ("+component.getComponentType() );
+        }
+        logger.info("============== END ===================");
+
     }
 
     // private int addIOs(List<IO> ios) {
@@ -2061,30 +2068,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 break;
 
         }
-        // logger.info("getComponents found " + result.size()
-        // + " components of type " + componentType);
         return result;
     }
 
-//    @Override
-//    public List<Component> getComponents(ImagingObservation imagingObservation) {
-//        List<Component> result = new ArrayList<Component>();
-//        return result;
-//    }
-//
-//    @Override
-//    public List<Component> getComponents(AnatomicEntity anatomicEntity) {
-//
-//        List<Component> result = new ArrayList<Component>();
-//        return result;
-//    }
-//
-//    @Override
-//    public List<Component> getComponents(Inference inference) {
-//
-//        List<Component> result = new ArrayList<Component>();
-//        return result;
-//    }
 
     @Override
     public String toString() {

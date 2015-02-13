@@ -581,19 +581,14 @@ public class Component implements Serializable {
         return result;
     }
 
-    public void addCharacteristic(
-            edu.stanford.hakan.aim4api.project.epad.Component characteristic) {
+    public void addCharacteristic(edu.stanford.hakan.aim4api.project.epad.Component characteristic) {
         switch (componentType) {
             case anatomicEntity:
-                anatomicEntity.getAnatomicEntityCharacteristicCollection()
-                        .AddAnatomicEntityCharacteristic(
+                anatomicEntity.getAnatomicEntityCharacteristicCollection().AddAnatomicEntityCharacteristic(
                                 characteristic.anatomicEntityCharacteristic);
-
                 break;
-
             case imagingObservation:
-                imagingObservation.getImagingObservationCharacteristicCollection()
-                        .AddImagingObservationCharacteristic(
+                imagingObservation.getImagingObservationCharacteristicCollection().AddImagingObservationCharacteristic(
                                 characteristic.imagingObservationCharacteristic);
                 break;
             default:
