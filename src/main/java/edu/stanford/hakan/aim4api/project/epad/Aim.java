@@ -772,7 +772,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 int day = Integer.parseInt(strStartDate.substring(8, 10));
 
                 System.out.println(year + " " + month + " " + day);
-                Date date = new Date(year, month - 1, day);
+                Date date = new Date(year, month-1, day);
                 return date;
             } catch (NumberFormatException ex) {
                 throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
@@ -1349,32 +1349,25 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     @Override
     public void addComponents(List<Component> components) {
+
         for (Component component : components) {
             switch (component.componentType) {
-                case anatomicEntity:                
-                    getAnatomicEntityCollection().getAnatomicEntityList().add(component.anatomicEntity);
+                case anatomicEntity:
+                    getAnatomicEntityCollection().getAnatomicEntityList().add(
+                            component.anatomicEntity);
                     break;
-                case imagingObservation:    
-                {
-                    getImagingObservationCollection().getImagingObservationList().add(component.imagingObservation);
-        logger.info("===== SIZE: "+ component.imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size());
+                case imagingObservation:
+                    getImagingObservationCollection().getImagingObservationList()
+                            .add(component.imagingObservation);
                     break;
-                }
                 case inference:
-                    getInferenceCollection().getInferenceList().add(component.inference);
+                    getInferenceCollection().getInferenceList().add(
+                            component.inference);
                     break;
                 default:
-        logger.info("===== DEFAULT: " + component.getComponentType());
                     break;
             }
         }
-
-        logger.info("============== START ===================");
-        for (Component component : components) {
-            logger.info("====== " + component.getCoordinatedCodeMeaning() + " ("+component.getComponentType() );
-        }
-        logger.info("============== END ===================");
-
     }
 
     // private int addIOs(List<IO> ios) {
@@ -2070,7 +2063,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
         return result;
     }
-
 
     @Override
     public String toString() {
