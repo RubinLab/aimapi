@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.usage.AnnotationConverter;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.utility.Utility;
 
