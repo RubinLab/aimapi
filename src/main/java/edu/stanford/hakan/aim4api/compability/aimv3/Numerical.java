@@ -138,6 +138,7 @@ public class Numerical extends CharacteristicQuantification implements IAimXMLOp
         res.setUcumString(Converter.toST(this.getUcumString()));//
         res.setOperator(Converter.toAimV4(this.getComparisonOperators()));//
         res.setComment(Converter.toST(this.getName()));//
+        res.setLabel(Converter.toST(this.getName())); //
         return res;
     }
 

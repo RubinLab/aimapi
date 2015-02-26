@@ -73,11 +73,6 @@ public class AnnotationBuilder {
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
             XML.setBaseAttributes(root);
-//            root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
-//            root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-//            root.setAttribute("xsi:schemaLocation",
-//                    "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
-//            root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
             doc.appendChild(root);
             boolean valRes = true;
             if (PathXSD != null) {

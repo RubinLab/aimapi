@@ -163,6 +163,7 @@ public class NonQuantifiable extends CharacteristicQuantification implements IAi
         typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
         typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         res.setTypeCode(typeCode);//
+        res.setLabel(Converter.toST(this.getName())); //
         return res;
     }
 

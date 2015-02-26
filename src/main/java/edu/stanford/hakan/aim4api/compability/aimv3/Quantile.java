@@ -99,6 +99,7 @@ public class Quantile extends CharacteristicQuantification implements IAimXMLOpe
         res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
         res.setBins(this.getBin());
         res.setComment(Converter.toST(this.getName()));//
+        res.setLabel(Converter.toST(this.getName())); //
         return res;
     }
 

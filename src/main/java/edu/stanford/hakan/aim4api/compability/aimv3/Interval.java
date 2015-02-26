@@ -181,6 +181,7 @@ public class Interval extends CharacteristicQuantification implements IAimXMLOpe
         res.setMinValue(this.getMinValue());//
         res.setUcumString(Converter.toST(this.getUcumString()));//
         res.setComment(Converter.toST(this.getName()));//
+        res.setLabel(Converter.toST(this.getName())); //
         return res;
     }
 
