@@ -27,10 +27,12 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.usage.AnnotationBuilder;
 import edu.stanford.hakan.aim4api.usage.AnnotationConverter;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.utility.Utility;
 
+import edu.stanford.hakan.aim4api.utility.XML;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -219,4 +221,16 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         }
         return res;
     }
+    
+    public String getXMLString() throws AimException
+    {
+      return AnnotationBuilder.convertToString(this);
+    }
+    
+    public String toStringXML() throws AimException
+    {
+      return getXMLString();
+    }
+    
+    
 }

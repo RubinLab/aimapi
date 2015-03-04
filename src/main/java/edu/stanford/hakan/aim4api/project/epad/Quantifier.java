@@ -10,6 +10,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Numerical;
 import edu.stanford.hakan.aim4api.compability.aimv3.Quantile;
 import edu.stanford.hakan.aim4api.compability.aimv3.Scale;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.QuantifierType;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -19,6 +20,8 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.QuantifierType;
 @SuppressWarnings("serial")
 public class Quantifier implements Serializable {
 
+	private static final Logger logger = Logger.getLogger("Quantifier");
+        
 	public QuantifierType quantifierType;
 	public Numerical numerical;
 	public Quantile quantile;
@@ -148,9 +151,14 @@ public class Quantifier implements Serializable {
 		case numerical:
 			numerical.setUcumString(ucumString);
 			break;
+		case interval:
+                    
+		logger.info("==========  setUcumString : " + ucumString);
+			interval.setUcumString(ucumString);
+                        
+			break;
 		default:
 			break;
-
 		}
 
 	}
@@ -326,16 +334,20 @@ public class Quantifier implements Serializable {
 		return result;
 	}
 
-	public Object getUcumString() {
+	public String getUcumString() {
 		String result = "";
 		switch (quantifierType) {
 		case numerical:
 			result = numerical.getUcumString();
 			break;
+		case interval:
+			result = interval.getUcumString();
+			break;
 		default:
 			break;
-
 		}
+                
+		logger.info("==========  getUcumString : " + result);
 		return result;
 	}
 
@@ -352,7 +364,7 @@ public class Quantifier implements Serializable {
 		return result;
 	}
 
-	public Object getMaxValue() {
+	public Double getMaxValue() {
 		Double result = 0.0;
 		switch (quantifierType) {
 		case interval:
@@ -376,7 +388,7 @@ public class Quantifier implements Serializable {
 		return result;
 	}
 
-	public Object getMaxOperator() {
+	public ComparisonOperators getMaxOperator() {
 		ComparisonOperators result = null;
 		switch (quantifierType) {
 		case interval:

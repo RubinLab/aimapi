@@ -27,16 +27,6 @@
  */
 package edu.stanford.hakan.aim4api.usage;
 
-import java.io.StringWriter;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -93,7 +83,7 @@ public class AnnotationBuilder {
                 throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): "
                         + getAimXMLsaveResult());
             }
-        } catch (AimException | DOMException ex) {
+        } catch (AimException  ex) {
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
         }
@@ -104,26 +94,8 @@ public class AnnotationBuilder {
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
             XML.setBaseAttributes(root);
-//            root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
-//            root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-//            root.setAttribute("xsi:schemaLocation",
-//                    "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
-//            root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
             doc.appendChild(root);
-
-            // set up a transformer
-            TransformerFactory transfac = TransformerFactory.newInstance();
-            Transformer trans = transfac.newTransformer();
-            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            trans.setOutputProperty(OutputKeys.INDENT, "yes");
-
-            // create string from xml tree
-            StringWriter sw = new StringWriter();
-            StreamResult result = new StreamResult(sw);
-            DOMSource source = new DOMSource(doc);
-            trans.transform(source, result);
-            String xmlString = sw.toString();
-            return xmlString;
+            return doc.toString();
         } catch (Exception ex) {
             setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
             throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
