@@ -152,8 +152,6 @@ public class Quantifier implements Serializable {
 			numerical.setUcumString(ucumString);
 			break;
 		case interval:
-                    
-		logger.info("==========  setUcumString : " + ucumString);
 			interval.setUcumString(ucumString);
                         
 			break;
@@ -346,8 +344,6 @@ public class Quantifier implements Serializable {
 		default:
 			break;
 		}
-                
-		logger.info("==========  getUcumString : " + result);
 		return result;
 	}
 
