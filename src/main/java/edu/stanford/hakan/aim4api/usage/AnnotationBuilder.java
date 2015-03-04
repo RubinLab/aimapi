@@ -27,14 +27,19 @@
  */
 package edu.stanford.hakan.aim4api.usage;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.utility.XML;
+import java.io.StringWriter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  *
