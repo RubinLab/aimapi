@@ -90,12 +90,24 @@ public class AnnotationBuilder {
     }
 
     public static String convertToString(ImageAnnotationCollection Anno) throws AimException {
-        try {
-            Document doc = XML.createDocument();
+        try {           Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
             XML.setBaseAttributes(root);
             doc.appendChild(root);
-            return doc.toString();
+
+            // set up a transformer
+            TransformerFactory transfac = TransformerFactory.newInstance();
+            Transformer trans = transfac.newTransformer();
+            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            // create string from xml tree
+            StringWriter sw = new StringWriter();
+            StreamResult result = new StreamResult(sw);
+            DOMSource source = new DOMSource(doc);
+            trans.transform(source, result);
+            String xmlString = sw.toString();
+            return xmlString;
         } catch (Exception ex) {
             setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
             throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
