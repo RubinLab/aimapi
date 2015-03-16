@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.usage;
 
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -46,104 +47,97 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ *
  * @author Hakan BULU
  */
-public class AnnotationValidator
-{
+public class AnnotationValidator {
 
-	private static String validationResult;
+    private static String validationResult;
 
-	public static String getValidationResult()
-	{
-		return validationResult;
-	}
+    public static String getValidationResult() {
+        return validationResult;
+    }
 
-	private static void setValidationResult(String valResult)
-	{
-		validationResult = valResult;
-	}
+    private static void setValidationResult(String valResult) {
+        validationResult = valResult;
+    }
 
-	public static boolean ValidateXML(String PathXML, String PathXSD)
-	{
-		Source source = new StreamSource(PathXML);
-		return isValid(source, PathXSD);
-	}
+    public static boolean ValidateXML(String PathXML, String PathXSD) {
+        Source source = new StreamSource(PathXML);
+        return isValid(source, PathXSD);
+    }
 
-	public static boolean ValidateXML(Document doc, String PathXSD)
-	{
-		String tempXmlPath = "temp" + Calendar.getInstance().getTimeInMillis() + ".xml";
-		Source source = documentToSource(doc, tempXmlPath);
-		if (source == null) {
-			return false;
-		}
-		try {
-			boolean res = isValid(source, PathXSD);
-			File tempFile = new File(tempXmlPath);
-			tempFile.delete();
-			return res;
-		} catch (Exception ex) {
-			setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
-			return false;
-		}
-	}
+    public static boolean ValidateXML(Document doc, String PathXSD) {
+        String tempXmlPath = "temp" + GenerateId.getUUID() + ".xml";
+        Source source = documentToSource(doc, tempXmlPath);
+        if (source == null) {
+            return false;
+        }
+        try {
+            boolean res = isValid(source, PathXSD);
+            File tempFile = new File(tempXmlPath);
+            tempFile.delete();
+            return res;
+        } catch (Exception ex) {
+            setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
+            return false;
+        }
+    }
+    
+    
+    public static boolean ValidateXML(Node node, String PathXSD) {
+        try {
+            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+            Document doc = docBuilder.newDocument();
+            doc.appendChild(node);
+            return ValidateXML(doc, PathXSD);
+        } catch (ParserConfigurationException ex) {
+            setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
+            return false;
+        } catch (DOMException ex) {
+            setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
+            return false;
+        }
+    }
 
-	private static boolean isValid(Source source, String PathXSD)
-	{
-		try {
-			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = schemaFactory.newSchema(new File(PathXSD));
-			Validator validator = schema.newValidator();
-			validator.validate(source);
-			setValidationResult("XML Validation is Successful." + "\r\n");
-			return true;
-		} catch (SAXException ex) {
-			setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
-			return false;
-		} catch (IOException ex) {
-			setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
-			return false;
-		}
-	}
+    private static boolean isValid(Source source, String PathXSD) {
+        try {
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(new File(PathXSD));
+            Validator validator = schema.newValidator();
+            validator.validate(source);
+            setValidationResult("XML Validation is Successful." + "\r\n");
+            return true;
+        } catch (SAXException ex) {
+            setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
+            return false;
+        } catch (IOException ex) {
+            setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
+            return false;
+        }
+    }
 
-	public static boolean ValidateXML(Node node, String PathXSD)
-	{
-		try {
-			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-			Document doc = docBuilder.newDocument();
-			doc.appendChild(node);
-			return ValidateXML(doc, PathXSD);
-		} catch (ParserConfigurationException ex) {
-			setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
-			return false;
-		} catch (DOMException ex) {
-			setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
-			return false;
-		}
-	}
 
-	private static Source documentToSource(Document doc, String tempXmlPath)
-	{
-		try {
-			Source source = new DOMSource(doc);
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			StreamResult result = new StreamResult(new File(tempXmlPath));
-			transformer.transform(source, result);
-			Source res = new StreamSource(tempXmlPath);
-			return res;
-		} catch (TransformerException ex) {
-			setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
-			return null;
-		}
-	}
+    private static Source documentToSource(Document doc, String tempXmlPath) {
+        try {
+            Source source = new DOMSource(doc);
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            StreamResult result = new StreamResult(new File(tempXmlPath));
+            transformer.transform(source, result);
+            Source res = new StreamSource(tempXmlPath);
+            return res;
+        } catch (TransformerException ex) {
+            setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
+            return null;
+        }
+    }
 }

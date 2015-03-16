@@ -635,6 +635,33 @@ public class AnnotationGetter {
                 "");
         return getImageAnnotationsFromImageAnnotationCollectionList(listAnno);
     }
+    
+    // *** ImageAnnotation.typeCode.code Equal
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageAnnotationCodeEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String Code)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (Code == null || "".equals(Code.trim())) {
+            throw new AimException("AimException: Code must be defined");
+        }
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotation.typeCode.code = '" + Code + "'";
+        return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+    }
+
+    
+    // *** ImageAnnotation.typeCode.code Like
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageAnnotationCodeLike(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String Code)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (Code == null || "".equals(Code.trim())) {
+            throw new AimException("AimException: Code must be defined");
+        }
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotation.typeCode.code LIKE '%" + Code + "%'";
+        return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+    }
 
     // *** count ImageAnnotationCollection by userName
     public static int getCountImageAnnotationCollectionByUserNameEqual(String serverURL,
