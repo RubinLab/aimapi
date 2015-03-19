@@ -64,8 +64,8 @@ import org.xml.sax.SAXException;
  */
 public class AnnotationGetter {
 
-	private static final int MAX_RECORDS = 10000;
-	
+    private static final int MAX_RECORDS = 10000;
+
     private static String validationResult;
 
     public static String getValidationResult() {
@@ -154,15 +154,26 @@ public class AnnotationGetter {
             throw new AimException("AimException: " + ex.getMessage());
         }
     }
+    
+    public static ImageAnnotationCollection getImageAnnotationCollectionFromString(String text, String PathXSD)
+            throws AimException {
+        try {
+            Document serverDoc = XML.getDocumentFromString(text);
+            List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
+            return res.get(0);
+        } catch (AimException ex) {
+            throw new AimException("AimException: " + ex.getMessage());
+        }
+    }
 
     public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
             String dbUserPassword, String aimQuery, String PathXSD) throws AimException {
-    	return getWithAimQuery(serverURL, namespace, dbUserName,
+        return getWithAimQuery(serverURL, namespace, dbUserName,
                 dbUserPassword, aimQuery, PathXSD, 1, MAX_RECORDS);
     }
-    
+
     public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
-                String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
+            String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
         if (namespace == null || "".equals(namespace.trim())) {
             throw new AimException("AimException: Namespace must be defined");
         }
@@ -173,9 +184,8 @@ public class AnnotationGetter {
             throw new AimException("AimException: AimQuery must be defined");
         }
         String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
+        //XQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/aimV4.dbxml/napel_nsclc')/ImageAnnotationCollection where  $x/person/name[contains(lower-case(@value),lower-case('274'))]  return $x";
         return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, startIndex, maxRecords);// getDocumentFromServer(serverURL,
-        // namespace,
-        // XQuery);
     }
 
     public static boolean isExistInTheServer(String serverURL, String namespace, String collection, String dbUserName,
@@ -210,10 +220,10 @@ public class AnnotationGetter {
         }
         return listAnno.get(0);
     }
-    
+
     //*** ImageAnnotationCollection.uniqueIdentifier list Equals
-    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUniqueIdentifierList(String serverURL, String namespace, String collection, 
-    		String dbUserName, String dbUserPassword, String[] uniqueIdentifiers) throws AimException {
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByUniqueIdentifierList(String serverURL, String namespace, String collection,
+            String dbUserName, String dbUserPassword, String[] uniqueIdentifiers) throws AimException {
         serverURL = Utility.correctToUrl(serverURL);
         control(serverURL, namespace, collection);
         if (uniqueIdentifiers == null || "".equals(uniqueIdentifiers.length == 0)) {
@@ -222,10 +232,9 @@ public class AnnotationGetter {
 
         String aimQL = "SELECT FROM " + collection + " WHERE ";
         String operator = "";
-        for (String uniqueIdentifier : uniqueIdentifiers)
-        {
-        	aimQL = aimQL + operator + "ImageAnnotationCollection.uniqueIdentifier.root = '" + uniqueIdentifier + "'";
-        	operator = " OR ";
+        for (String uniqueIdentifier : uniqueIdentifiers) {
+            aimQL = aimQL + operator + "ImageAnnotationCollection.uniqueIdentifier.root = '" + uniqueIdentifier + "'";
+            operator = " OR ";
         }
         return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
     }
@@ -635,7 +644,7 @@ public class AnnotationGetter {
                 "");
         return getImageAnnotationsFromImageAnnotationCollectionList(listAnno);
     }
-    
+
     // *** ImageAnnotation.typeCode.code Equal
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageAnnotationCodeEqual(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String Code)
@@ -649,7 +658,6 @@ public class AnnotationGetter {
         return getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
     }
 
-    
     // *** ImageAnnotation.typeCode.code Like
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageAnnotationCodeLike(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String Code)
@@ -845,10 +853,10 @@ public class AnnotationGetter {
     public static List<ImageAnnotationCollection> getAllImageAnnotationCollections(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword)
             throws AimException {
-    	return getAllImageAnnotationCollections(serverURL,
+        return getAllImageAnnotationCollections(serverURL,
                 namespace, collection, dbUserName, dbUserPassword, 1, MAX_RECORDS);
     }
-    
+
     public static List<ImageAnnotationCollection> getAllImageAnnotationCollections(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, int startIndex, int maxRecords)
             throws AimException {
@@ -929,11 +937,10 @@ public class AnnotationGetter {
         String query = " declare default element namespace '" + nameSpace + "'; ";
         query += " for $iac in collection('" + collectionName + "')/ImageAnnotationCollection ";
         query += " return ($iac/uniqueIdentifier, $iac/person/id, $iac/imageAnnotations/ImageAnnotation/markupEntityCollection, $iac/imageAnnotations/ImageAnnotation/imageReferenceEntityCollection) ";
-        
+
 //        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //        Calendar cal = Calendar.getInstance();
 //        System.out.println(dateFormat.format(cal.getTime()));
-
         Document doc = null;
         int totalCount = 0;
         int totalRetrieved = 0;
@@ -946,19 +953,20 @@ public class AnnotationGetter {
         doc = XML.getDocumentFromString(serverResponse);
         totalCount = ExistManager.getHitsCountFromDocument(doc);
 
-        if(totalCount > pageCount)
-            pageCount = totalCount /3;
-        
+        if (totalCount > pageCount) {
+            pageCount = totalCount / 3;
+        }
+
         List<ExistResponderThread> listThreads = new ArrayList<>();
         while (true) {
-            listThreads.add(new ExistResponderThread(serverURL+"~"+query+"~"+ dbUserName+"~"+ dbUserPassword+"~"+ startIndex+"~"+ pageCount));
+            listThreads.add(new ExistResponderThread(serverURL + "~" + query + "~" + dbUserName + "~" + dbUserPassword + "~" + startIndex + "~" + pageCount));
             totalRetrieved = startIndex + pageCount - 1;
             if (totalRetrieved >= totalCount) {
                 break;
             }
             startIndex = startIndex + pageCount;
         }
-        
+
         for (ExistResponderThread thread : listThreads) {
             thread.start();
         }
@@ -972,10 +980,9 @@ public class AnnotationGetter {
                 }
             }
         }
-        
+
 //        cal = Calendar.getInstance();
 //        System.out.println("=== Replaced started " + dateFormat.format(cal.getTime()));
-        
         for (ExistResponderThread thread : listThreads) {
             serverResponse = thread.getRespond();
             serverResponse = serverResponse.replace(serverResponse.substring(0, serverResponse.indexOf(">") + 1), "");
@@ -992,7 +999,6 @@ public class AnnotationGetter {
 
 //        cal = Calendar.getInstance();
 //        System.out.println(dateFormat.format(cal.getTime()));
-
         Node node = doc.getFirstChild();
         boolean uidOK = false;
         boolean markupOK = false;
@@ -1068,7 +1074,7 @@ public class AnnotationGetter {
                 markupOK = false;
                 irefOK = false;
                 patOK = false;
-                
+
                 String line = patientID + "~" + seriesID + "~" + studyID + "~" + imageID + "~" + frameID + "~" + annotationID;
                 sw.WriteLine(line);
 
@@ -1081,9 +1087,6 @@ public class AnnotationGetter {
             }
         }
         sw.Close();
-//        cal = Calendar.getInstance();
-//        System.out.println(dateFormat.format(cal.getTime()));
-//        System.out.println("done");
     }
 
     public static List<String> getAnnotationsTableRows() throws IOException {

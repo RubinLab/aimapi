@@ -119,6 +119,20 @@ public class AnnotationBuilder {
                     + ex.getMessage());
         }
     }
+    
+     public static String convertToStringGWT(ImageAnnotationCollection Anno) throws AimException {
+        try {           
+            Document doc = XML.createDocument();
+            Element root = (Element) Anno.getXMLNode(doc);
+            XML.setBaseAttributes(root);
+            doc.appendChild(root);
+            return doc.toString();
+        } catch (Exception ex) {
+            setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
+            throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
+                    + ex.getMessage());
+        }
+    }
 
     public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {

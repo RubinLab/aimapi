@@ -222,6 +222,7 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         return res;
     }
     
+    
     public String getXMLString() throws AimException
     {
       return AnnotationBuilder.convertToString(this);
@@ -230,6 +231,16 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     public String toStringXML() throws AimException
     {
       return getXMLString();
+    }
+    
+    public String getXMLStringGWT() throws AimException
+    {
+      return AnnotationBuilder.convertToStringGWT(this);
+    }
+    
+    public String toStringXMLGWT() throws AimException
+    {
+      return getXMLStringGWT();
     }
     
     
