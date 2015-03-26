@@ -28,6 +28,8 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.ThreeDimensionGeometricShapeEntity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -43,6 +45,7 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
     private Double y;
     private Double z;
     private String frameOfReferenceUID;
+    private String  fiducialUid; //*** extened property
 
     public ThreeDimensionSpatialCoordinate() {
         setXsiType("ThreeDimensionSpatialCoordinate");
@@ -89,6 +92,14 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
 
     public void setZ(Double z) {
         this.z = z;
+    }
+
+    public String getFiducialUid() {
+        return fiducialUid;
+    }
+
+    public void setFiducialUid(String fiducialUid) {
+        this.fiducialUid = fiducialUid;
     }
 
 //    @Override
@@ -146,6 +157,36 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
         }
         return super.isEqualTo(other);
     }
+    
+    
+    public edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinate toAimV4(ThreeDimensionGeometricShapeEntity threeDimensionGeometricShapeEntity) {
+        edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinate res = new edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinate();
+        res.setCoordinateIndex(this.getCoordinateIndex());
+        res.setX(this.getX());
+        res.setY(this.getY());
+        res.setZ(this.getZ());
+        res.setThreeDimensionGeometricShapeEntity(threeDimensionGeometricShapeEntity);
+        res.getThreeDimensionGeometricShapeEntity().setFrameOfReferenceUid(new II(this.getFrameOfReferenceUID()));
+        if (this.getFiducialUid() != null) {
+            res.getThreeDimensionGeometricShapeEntity().setFiducialUid(new II(this.getFiducialUid()));
+        }
+        return res;
+    }
+
+    public ThreeDimensionSpatialCoordinate(edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinate v4) {
+        setXsiType("ThreeDimensionSpatialCoordinate");
+        this.setCagridId(0);
+        this.setCoordinateIndex(v4.getCoordinateIndex());
+        this.setX(v4.getX());
+        this.setY(v4.getY());
+        this.setZ(v4.getZ());
+        if (v4.getThreeDimensionGeometricShapeEntity() != null && v4.getThreeDimensionGeometricShapeEntity().getFrameOfReferenceUid() != null) {
+            this.setFrameOfReferenceUID(v4.getThreeDimensionGeometricShapeEntity().getFrameOfReferenceUid().getRoot());
+        }
+        if (v4.getThreeDimensionGeometricShapeEntity() != null && v4.getThreeDimensionGeometricShapeEntity().getFiducialUid() != null) {
+            this.setFiducialUid(v4.getThreeDimensionGeometricShapeEntity().getFiducialUid().getRoot());
+        }
+    }
 
     @Override
     public ThreeDimensionSpatialCoordinate getClone() {
@@ -172,5 +213,10 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
             res.frameOfReferenceUID = this.frameOfReferenceUID;
         }
         return res;
+    }
+    
+    @Override
+     public SpatialCoordinateDimension getSpatialCoordinateDimension() {
+        return SpatialCoordinateDimension.ThreeD;
     }
 }

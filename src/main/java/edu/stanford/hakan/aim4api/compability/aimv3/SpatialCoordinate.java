@@ -123,4 +123,12 @@ public class SpatialCoordinate implements ISpatialCoordinate, IAimXMLOperations 
         }
         return res;
     }
+
+    public enum SpatialCoordinateDimension {
+        None, TwoD, ThreeD
+    };
+
+    public SpatialCoordinateDimension getSpatialCoordinateDimension() {
+        return SpatialCoordinateDimension.None;
+    }
 }

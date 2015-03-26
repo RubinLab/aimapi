@@ -51,6 +51,7 @@ public class AnnotationConverter {
         ImageAnnotationCollection iac = iaV3.toAimV4();
         //System.out.println(iac.getPerson().getName().getValue());
        
+        // HAKAN
         ImageAnnotationCollection iac2 = new ImageAnnotationCollection();
         iac2.setXMLNode(iac.getXMLNode(doc));
         //System.out.println(iac2.getPerson().getName().getValue());

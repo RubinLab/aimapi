@@ -199,5 +199,10 @@ public class TwoDimensionSpatialCoordinate extends SpatialCoordinate implements 
         }
         return res;
     }
+    
+    @Override
+     public SpatialCoordinateDimension getSpatialCoordinateDimension() {
+        return SpatialCoordinateDimension.TwoD;
+    }
 
 }

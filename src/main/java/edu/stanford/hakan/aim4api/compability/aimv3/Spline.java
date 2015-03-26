@@ -71,7 +71,7 @@ public class Spline extends GeometricShape implements IAimXMLOperations {
         res.setLineStyle(Converter.toST(this.getLineStyle()));
         res.setLineThickness(Converter.toST(this.getLineThickness()));
         res.setShapeIdentifier(this.getShapeIdentifier());
-        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
+        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
         return res;
     }
 

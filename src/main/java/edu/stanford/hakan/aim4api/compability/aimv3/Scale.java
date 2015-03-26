@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.Enumerations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -141,6 +142,7 @@ public class Scale extends CharacteristicQuantification implements IAimXMLOperat
         res.setComment(Converter.toST(this.getComment()));//
         res.setValue(Converter.toST(this.getValue()));//
         res.setLabel(Converter.toST(this.getDescription())); //*** label-description
+        res.setType(Enumerations.ScaleType.Nominal);
         return res;
     }
 

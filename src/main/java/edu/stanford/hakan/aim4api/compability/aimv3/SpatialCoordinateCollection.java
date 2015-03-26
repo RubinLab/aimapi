@@ -28,6 +28,8 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.GeometricShapeEntity;
+import edu.stanford.hakan.aim4api.base.ThreeDimensionGeometricShapeEntity;
 import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,12 +102,35 @@ public class SpatialCoordinateCollection implements IAimXMLOperations {
         return true;
     }
 
-    public edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection toAimV4(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
+//    public edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection toAimV4(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
+//        edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection();
+//        List<SpatialCoordinate> list = this.getSpatialCoordinateList();
+//        for (SpatialCoordinate itemV3 : list) {
+//            TwoDimensionSpatialCoordinate itemV3Plus = (TwoDimensionSpatialCoordinate) itemV3;
+//            res.addTwoDimensionSpatialCoordinate(itemV3Plus.toAimV4(twoDimensionGeometricShapeEntity));
+//        }
+//        return res;
+//    }
+    
+    
+
+    
+    public edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection toAimV4_2D(TwoDimensionGeometricShapeEntity twoDimensionGeometricShapeEntity) {
         edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinateCollection();
         List<SpatialCoordinate> list = this.getSpatialCoordinateList();
         for (SpatialCoordinate itemV3 : list) {
             TwoDimensionSpatialCoordinate itemV3Plus = (TwoDimensionSpatialCoordinate) itemV3;
             res.addTwoDimensionSpatialCoordinate(itemV3Plus.toAimV4(twoDimensionGeometricShapeEntity));
+        }
+        return res;
+    }
+
+    public edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinateCollection toAimV4_3D(ThreeDimensionGeometricShapeEntity threeDimensionGeometricShapeEntity) {
+        edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinateCollection res = new edu.stanford.hakan.aim4api.base.ThreeDimensionSpatialCoordinateCollection();
+        List<SpatialCoordinate> list = this.getSpatialCoordinateList();
+        for (SpatialCoordinate itemV3 : list) {
+            ThreeDimensionSpatialCoordinate itemV3Plus = (ThreeDimensionSpatialCoordinate) itemV3;
+            res.addThreeDimensionSpatialCoordinate(itemV3Plus.toAimV4(threeDimensionGeometricShapeEntity));
         }
         return res;
     }

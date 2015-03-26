@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.TwoDimensionEllipse;
 import java.io.Serializable;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -260,30 +261,53 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
     }
 
     public edu.stanford.hakan.aim4api.base.MarkupEntity toAimV4() {
-        edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity res = null;
+        
+        if (this.getShapeDimension() == ShapeDimension.TwoD) {
+            edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity res = null;
+            if ("Circle".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionCircle();
+            } else if ("Ellipse".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
+            } else if ("MultiPoint".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint();
+            } else if ("Point".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionPoint();
+            } else if ("Polyline".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionPolyline();
+            } else if ("Spline".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpline();
+            }
 
-        if ("Circle".equals(this.getXsiType())) {
-            res = new edu.stanford.hakan.aim4api.base.TwoDimensionCircle();
-        } else if ("Ellipse".equals(this.getXsiType())) {
-            res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
-        } else if ("MultiPoint".equals(this.getXsiType())) {
-            res = new edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint();
-        } else if ("Point".equals(this.getXsiType())) {
-            res = new edu.stanford.hakan.aim4api.base.TwoDimensionPoint();
-        } else if ("Polyline".equals(this.getXsiType())) {
-            res = new edu.stanford.hakan.aim4api.base.TwoDimensionPolyline();
-        } else if ("Spline".equals(this.getXsiType())) {
-            res = new edu.stanford.hakan.aim4api.base.TwoDimensionSpline();
+            res.setIncludeFlag(this.getIncludeFlag());
+            res.setLineColor(Converter.toST(this.getLineColor()));
+            res.setLineOpacity(Converter.toST(this.getLineOpacity()));
+            res.setLineStyle(Converter.toST(this.getLineStyle()));
+            res.setLineThickness(Converter.toST(this.getLineThickness()));
+            res.setShapeIdentifier(this.getShapeIdentifier());
+            res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+            return res;
+        } else if (this.getShapeDimension() == ShapeDimension.ThreeD) {
+            edu.stanford.hakan.aim4api.base.ThreeDimensionGeometricShapeEntity res = null;
+            if ("Ellipse".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.ThreeDimensionEllipse();
+            } else if ("MultiPoint".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.ThreeDimensionMultiPoint();
+            } else if ("Point".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.ThreeDimensionPoint();
+            } else if ("Polyline".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.ThreeDimensionPolyline();
+            } 
+
+            res.setIncludeFlag(this.getIncludeFlag());
+            res.setLineColor(Converter.toST(this.getLineColor()));
+            res.setLineOpacity(Converter.toST(this.getLineOpacity()));
+            res.setLineStyle(Converter.toST(this.getLineStyle()));
+            res.setLineThickness(Converter.toST(this.getLineThickness()));
+            res.setShapeIdentifier(this.getShapeIdentifier());
+            res.setThreeDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_3D(res));
+            return res;
         }
-
-        res.setIncludeFlag(this.getIncludeFlag());
-        res.setLineColor(Converter.toST(this.getLineColor()));
-        res.setLineOpacity(Converter.toST(this.getLineOpacity()));
-        res.setLineStyle(Converter.toST(this.getLineStyle()));
-        res.setLineThickness(Converter.toST(this.getLineThickness()));
-        res.setShapeIdentifier(this.getShapeIdentifier());
-        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
-        return res;
+        return null;
     }
 
     public GeometricShape getClone() {
@@ -317,4 +341,21 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
         }
         return res;
     }
+
+    public enum ShapeDimension {
+        None, TwoD, ThreeD
+    };
+    
+    public ShapeDimension getShapeDimension() {
+        if (this.getSpatialCoordinateList().size() > 0) {
+            SpatialCoordinate coordinate = this.getSpatialCoordinateList().get(0);
+            if (coordinate.getSpatialCoordinateDimension() == SpatialCoordinate.SpatialCoordinateDimension.TwoD) {
+                return ShapeDimension.TwoD;
+            } else if (coordinate.getSpatialCoordinateDimension() == SpatialCoordinate.SpatialCoordinateDimension.ThreeD) {
+                return ShapeDimension.ThreeD;
+            }
+        }
+        return ShapeDimension.None;
+    }
+    
 }

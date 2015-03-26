@@ -61,19 +61,18 @@ public class Ellipse extends GeometricShape implements IAimXMLOperations {
         return super.isEqualTo(other);
     }
 
-    @Override
-    public edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity toAimV4() {
-        edu.stanford.hakan.aim4api.base.TwoDimensionEllipse res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
-        res.setIncludeFlag(this.getIncludeFlag());
-        res.setLineColor(Converter.toST(this.getLineColor()));
-        res.setLineOpacity(Converter.toST(this.getLineOpacity()));
-        res.setLineStyle(Converter.toST(this.getLineStyle()));
-        res.setLineThickness(Converter.toST(this.getLineThickness()));
-        res.setShapeIdentifier(this.getShapeIdentifier());
-        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
-        return res;
-    }
-
+//    @Override
+//    public edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity toAimV4() {
+//        edu.stanford.hakan.aim4api.base.TwoDimensionEllipse res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
+//        res.setIncludeFlag(this.getIncludeFlag());
+//        res.setLineColor(Converter.toST(this.getLineColor()));
+//        res.setLineOpacity(Converter.toST(this.getLineOpacity()));
+//        res.setLineStyle(Converter.toST(this.getLineStyle()));
+//        res.setLineThickness(Converter.toST(this.getLineThickness()));
+//        res.setShapeIdentifier(this.getShapeIdentifier());
+//        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
+//        return res;
+//    }
     public Ellipse(edu.stanford.hakan.aim4api.base.TwoDimensionEllipse v4) {
         setXsiType("Ellipse");
         this.setCagridId(0);
@@ -125,5 +124,28 @@ public class Ellipse extends GeometricShape implements IAimXMLOperations {
             res.setXsiType(this.getXsiType());
         }
         return res;
+    }
+
+    private void setBaseProperties(edu.stanford.hakan.aim4api.base.GeometricShapeEntity geometricShapeEntity) {
+        geometricShapeEntity.setIncludeFlag(this.getIncludeFlag());
+        geometricShapeEntity.setLineColor(Converter.toST(this.getLineColor()));
+        geometricShapeEntity.setLineOpacity(Converter.toST(this.getLineOpacity()));
+        geometricShapeEntity.setLineStyle(Converter.toST(this.getLineStyle()));
+        geometricShapeEntity.setLineThickness(Converter.toST(this.getLineThickness()));
+        geometricShapeEntity.setShapeIdentifier(this.getShapeIdentifier());
+    }
+
+    @Override
+    public edu.stanford.hakan.aim4api.base.GeometricShapeEntity toAimV4() {
+        if (this.getShapeDimension() == ShapeDimension.TwoD) {
+            edu.stanford.hakan.aim4api.base.TwoDimensionEllipse res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
+            setBaseProperties(res);
+            res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+        } else if (this.getShapeDimension() == ShapeDimension.ThreeD) {
+            edu.stanford.hakan.aim4api.base.ThreeDimensionEllipse res = new edu.stanford.hakan.aim4api.base.ThreeDimensionEllipse();
+            setBaseProperties(res);
+            res.setThreeDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_3D(res));
+        }
+        return null;
     }
 }
