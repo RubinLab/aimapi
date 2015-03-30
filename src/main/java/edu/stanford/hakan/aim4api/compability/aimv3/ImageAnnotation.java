@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
@@ -34,6 +35,10 @@ import edu.stanford.hakan.aim4api.utility.EPADConfig;
 import edu.stanford.hakan.aim4api.utility.dotnet.StreamWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -257,104 +262,224 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         iacV4.addImageAnnotation(iaV4);
         return iacV4;
     }
-
-    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(String temp) throws AimException {
-
-        line = "===== 1";
-        edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotationCollection();
-        line = "===== 2";
-
-        iacV4.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
-        line = "===== 3";
-        iacV4.setDateTime(this.getDateTime());//
-        line = "===== 4";
-
-        if (this.getListEquipment().size() > 0) {//
-            line = "===== 5";
-            iacV4.setEquipment(this.getListEquipment().get(0).toAimV4());
-            line = "===== 6";
-        }
-        if (this.getListPerson().size() > 0) {//
-            line = "===== 7";
-            iacV4.setPerson(this.getListPerson().get(0).toAimV4());
-            line = "===== 8";
-        }
-        if (this.getListUser().size() > 0) {//
-            line = "===== 9";
-            iacV4.setUser(this.getListUser().get(0).toAimV4());
-            line = "===== 10";
-        }
-
-        line = "===== 11";
-        edu.stanford.hakan.aim4api.base.ImageAnnotation iaV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotation();
-        line = "===== 12";
-        if (this.getSegmentationCollection().getSegmentationList().size() > 0) {//
-            line = "===== 13";
-            iaV4.setSegmentationEntityCollection(this.getSegmentationCollection().toAimV4());
-            line = "===== 14";
-        }
-        line = "===== 15";
-        if (this.getImageReferenceCollection().getImageReferenceList().size() > 0) {//
-            line = "===== 16";
-            iaV4.setImageReferenceEntityCollection(this.getImageReferenceCollection().toAimV4());
-            line = "===== 17";
-        }
-        line = "===== 18";
-        if (this.getGeometricShapeCollection().getGeometricShapeList().size() > 0) {//
-            line = "===== 19";
-            iaV4.setMarkupEntityCollection(this.getGeometricShapeCollection().toAimV4());
-            line = "===== 20";
-        }
-        line = "===== 21";
-        if (this.getCalculationCollection().getCalculationList().size() > 0) {//
-            line = "===== 22";
-            iaV4.setCalculationEntityCollection(this.getCalculationCollection().toAimV4(iaV4));
-            line = "===== 23";
-        }
-        line = "===== 24";
-        if (this.getAnatomicEntityCollection().getAnatomicEntityList().size() > 0) {//
-            line = "===== 25";
-            iaV4.setImagingPhysicalEntityCollection(this.getAnatomicEntityCollection().toAimV4());
-            line = "===== 26";
-        }
-        line = "===== 27";
-        if (this.getImagingObservationCollection().getImagingObservationList().size() > 0) {//
-            line = "===== 28";
-            iaV4.setImagingObservationEntityCollection(this.getImagingObservationCollection().toAimV4());
-            line = "===== 29";
-        }
-        line = "===== 30";
-        if (this.getInferenceCollection().getInferenceList().size() > 0) {//
-            line = "===== 31";
-            iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
-            line = "===== 32";
-        }
-        line = "===== 33";
-
-        iaV4.setComment(Converter.toST(this.getComment()));//
-        line = "===== 34";
-        iaV4.setName(Converter.toST(this.getName()));//
-        line = "===== 35";
-        CD typeCode = new CD();//
-        line = "===== 36";
-        typeCode.setCode(this.getCodeValue());//
-        line = "===== 37";
-        typeCode.setCodeSystem(this.getCodeMeaning());//
-        line = "===== 38";
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
-        line = "===== 39";
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
-        line = "===== 40";
-        iaV4.addTypeCode(typeCode);//
-        line = "===== 41";
-        iaV4.setDateTime(this.getDateTime());//
-        line = "===== 42";
-
-        iacV4.addImageAnnotation(iaV4);
-        line = "===== 43";
-        return iacV4;
+    
+    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(Connection mySqlConnection) throws AimException, SQLException {
+        correctTheCoordinations(mySqlConnection);
+        return toAimV4();
     }
 
+    public void correctTheCoordinations(Connection mySqlConnection) throws SQLException {
+        //*** AnatomicEntity
+        for (int i = 0; i < this.getAnatomicEntityCollection().getAnatomicEntityList().size(); i++) {
+            AnatomicEntity ae = this.getAnatomicEntityCollection().getAnatomicEntityList().get(i);
+            if (!"".equals(ae.getCodeValue()) && ae.getAllowedTerm() == null) {
+                ae.setAllowedTerm(new AllowedTerm(ae.getCodeValue(), ae.getCodeMeaning(), ae.getCodingSchemeDesignator(), ae.getCodingSchemeVersion()));
+            }
+            if (ae.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(ae.getAllowedTerm().getCodeValue(), mySqlConnection);
+                if (correctedAllowedTerm != null) {
+                    ae.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+
+            //*** AnatomicEntityCharacteristic
+            for (int j = 0; j < ae.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().size(); j++) {
+                AnatomicEntityCharacteristic aec = ae.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().get(j);
+                if (!"".equals(aec.getCodeValue()) && aec.getAllowedTerm() == null) {
+                    aec.setAllowedTerm(new AllowedTerm(aec.getCodeValue(), aec.getCodeMeaning(), aec.getCodingSchemeDesignator(), aec.getCodingSchemeVersion()));
+                }
+                if (aec.getAllowedTerm() != null) {
+                    AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(aec.getAllowedTerm().getCodeValue(), mySqlConnection);
+                    if (correctedAllowedTerm != null) {
+                        aec.setAllowedTerm(correctedAllowedTerm);
+                    }
+                }
+            }
+        }
+
+        //*** ImagingObservation
+        for (int i = 0; i < this.getImagingObservationCollection().getImagingObservationList().size(); i++) {
+            ImagingObservation io = this.getImagingObservationCollection().getImagingObservationList().get(i);
+            if (!"".equals(io.getCodeValue()) && io.getAllowedTerm() == null) {
+                io.setAllowedTerm(new AllowedTerm(io.getCodeValue(), io.getCodeMeaning(), io.getCodingSchemeDesignator(), io.getCodingSchemeVersion()));
+            }
+            if (io.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(io.getAllowedTerm().getCodeValue(), mySqlConnection);
+                if (correctedAllowedTerm != null) {
+                    io.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+
+            //*** ImagingObservationCharacteristic
+            for (int j = 0; j < io.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size(); j++) {
+                ImagingObservationCharacteristic ioc = io.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().get(j);
+                if (!"".equals(ioc.getCodeValue()) && ioc.getAllowedTerm() == null) {
+                    ioc.setAllowedTerm(new AllowedTerm(ioc.getCodeValue(), ioc.getCodeMeaning(), ioc.getCodingSchemeDesignator(), ioc.getCodingSchemeVersion()));
+                }
+                if (ioc.getAllowedTerm() != null) {
+                    AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(ioc.getAllowedTerm().getCodeValue(), mySqlConnection);
+                    if (correctedAllowedTerm != null) {
+                        ioc.setAllowedTerm(correctedAllowedTerm);
+                    }
+                }
+            }
+        }
+
+        //*** ImagingObservation
+        for (int i = 0; i < this.getImagingObservationCollection().getImagingObservationList().size(); i++) {
+            ImagingObservation io = this.getImagingObservationCollection().getImagingObservationList().get(i);
+            if (!"".equals(io.getCodeValue()) && io.getAllowedTerm() == null) {
+                io.setAllowedTerm(new AllowedTerm(io.getCodeValue(), io.getCodeMeaning(), io.getCodingSchemeDesignator(), io.getCodingSchemeVersion()));
+            }
+            if (io.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(io.getAllowedTerm().getCodeValue(), mySqlConnection);
+                if (correctedAllowedTerm != null) {
+                    io.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+        }
+
+        //*** Inference
+        for (int i = 0; i < this.getInferenceCollection().getInferenceList().size(); i++) {
+            Inference in = this.getInferenceCollection().getInferenceList().get(i);
+            if (!"".equals(in.getCodeValue()) && in.getAllowedTerm() == null) {
+                in.setAllowedTerm(new AllowedTerm(in.getCodeValue(), in.getCodeMeaning(), in.getCodingSchemeDesignator(), in.getCodingSchemeVersion()));
+            }
+            if (in.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(in.getAllowedTerm().getCodeValue(), mySqlConnection);
+                if (correctedAllowedTerm != null) {
+                    in.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+        }
+    }
+
+    private AllowedTerm getCorrectAllowedTerm(String codeValueCurrent, Connection mySqlConnection) throws SQLException {
+        String query = "SELECT coordination_id,t.term_id,t.schema_name,t.description "
+                + "FROM terms t,coordination2term c2,coordinations c "
+                + "WHERE c.coordination_key=c2.coordination_key AND t.term_key=c2.term_key AND "
+                + "coordination_id = '" + codeValueCurrent + "' ORDER BY coordination_id,position";
+        Statement st = mySqlConnection.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        boolean isFirst = true;
+        AllowedTerm res = new AllowedTerm();
+        while (rs.next()) {
+            String codeValue = rs.getString("term_id"); //code
+            String codeMeaning = rs.getString("description"); //codeSystem
+            String codingSchemeDesignator = rs.getString("schema_name"); //codeSystemName
+            if (isFirst) {
+                res.setCodeValue(codeValue);
+                res.setCodeMeaning(codeMeaning);
+                res.setCodingSchemeDesignator(codingSchemeDesignator);
+                isFirst = false;
+            } else {
+                res.addValidTerm(codeValue, codeMeaning, codingSchemeDesignator, "");
+            }
+        }
+        st.close();
+
+        if ("".equals(res.getCodeValue())) {
+            return null;
+        }
+        return res;
+    }
+
+//    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(String temp) throws AimException {
+//
+//        line = "===== 1";
+//        edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotationCollection();
+//        line = "===== 2";
+//
+//        iacV4.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
+//        line = "===== 3";
+//        iacV4.setDateTime(this.getDateTime());//
+//        line = "===== 4";
+//
+//        if (this.getListEquipment().size() > 0) {//
+//            line = "===== 5";
+//            iacV4.setEquipment(this.getListEquipment().get(0).toAimV4());
+//            line = "===== 6";
+//        }
+//        if (this.getListPerson().size() > 0) {//
+//            line = "===== 7";
+//            iacV4.setPerson(this.getListPerson().get(0).toAimV4());
+//            line = "===== 8";
+//        }
+//        if (this.getListUser().size() > 0) {//
+//            line = "===== 9";
+//            iacV4.setUser(this.getListUser().get(0).toAimV4());
+//            line = "===== 10";
+//        }
+//
+//        line = "===== 11";
+//        edu.stanford.hakan.aim4api.base.ImageAnnotation iaV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotation();
+//        line = "===== 12";
+//        if (this.getSegmentationCollection().getSegmentationList().size() > 0) {//
+//            line = "===== 13";
+//            iaV4.setSegmentationEntityCollection(this.getSegmentationCollection().toAimV4());
+//            line = "===== 14";
+//        }
+//        line = "===== 15";
+//        if (this.getImageReferenceCollection().getImageReferenceList().size() > 0) {//
+//            line = "===== 16";
+//            iaV4.setImageReferenceEntityCollection(this.getImageReferenceCollection().toAimV4());
+//            line = "===== 17";
+//        }
+//        line = "===== 18";
+//        if (this.getGeometricShapeCollection().getGeometricShapeList().size() > 0) {//
+//            line = "===== 19";
+//            iaV4.setMarkupEntityCollection(this.getGeometricShapeCollection().toAimV4());
+//            line = "===== 20";
+//        }
+//        line = "===== 21";
+//        if (this.getCalculationCollection().getCalculationList().size() > 0) {//
+//            line = "===== 22";
+//            iaV4.setCalculationEntityCollection(this.getCalculationCollection().toAimV4(iaV4));
+//            line = "===== 23";
+//        }
+//        line = "===== 24";
+//        if (this.getAnatomicEntityCollection().getAnatomicEntityList().size() > 0) {//
+//            line = "===== 25";
+//            iaV4.setImagingPhysicalEntityCollection(this.getAnatomicEntityCollection().toAimV4());
+//            line = "===== 26";
+//        }
+//        line = "===== 27";
+//        if (this.getImagingObservationCollection().getImagingObservationList().size() > 0) {//
+//            line = "===== 28";
+//            iaV4.setImagingObservationEntityCollection(this.getImagingObservationCollection().toAimV4());
+//            line = "===== 29";
+//        }
+//        line = "===== 30";
+//        if (this.getInferenceCollection().getInferenceList().size() > 0) {//
+//            line = "===== 31";
+//            iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
+//            line = "===== 32";
+//        }
+//        line = "===== 33";
+//
+//        iaV4.setComment(Converter.toST(this.getComment()));//
+//        line = "===== 34";
+//        iaV4.setName(Converter.toST(this.getName()));//
+//        line = "===== 35";
+//        CD typeCode = new CD();//
+//        line = "===== 36";
+//        typeCode.setCode(this.getCodeValue());//
+//        line = "===== 37";
+//        typeCode.setCodeSystem(this.getCodeMeaning());//
+//        line = "===== 38";
+//        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+//        line = "===== 39";
+//        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+//        line = "===== 40";
+//        iaV4.addTypeCode(typeCode);//
+//        line = "===== 41";
+//        iaV4.setDateTime(this.getDateTime());//
+//        line = "===== 42";
+//
+//        iacV4.addImageAnnotation(iaV4);
+//        line = "===== 43";
+//        return iacV4;
+//    }
     public ImageAnnotation(edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacv4) {
         edu.stanford.hakan.aim4api.base.ImageAnnotation iav4 = iacv4.getImageAnnotations().get(0);
         setXsiType("ImageAnnotation");
