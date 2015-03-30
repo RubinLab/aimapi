@@ -141,10 +141,12 @@ public class Ellipse extends GeometricShape implements IAimXMLOperations {
             edu.stanford.hakan.aim4api.base.TwoDimensionEllipse res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
             setBaseProperties(res);
             res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+            return res;
         } else if (this.getShapeDimension() == ShapeDimension.ThreeD) {
             edu.stanford.hakan.aim4api.base.ThreeDimensionEllipse res = new edu.stanford.hakan.aim4api.base.ThreeDimensionEllipse();
             setBaseProperties(res);
             res.setThreeDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_3D(res));
+            return res;
         }
         return null;
     }

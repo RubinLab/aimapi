@@ -142,10 +142,12 @@ public class Polyline extends GeometricShape implements IAimXMLOperations {
             edu.stanford.hakan.aim4api.base.TwoDimensionPolyline res = new edu.stanford.hakan.aim4api.base.TwoDimensionPolyline();
             setBaseProperties(res);
             res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+            return res;
         } else if (this.getShapeDimension() == ShapeDimension.ThreeD) {
             edu.stanford.hakan.aim4api.base.ThreeDimensionPolyline res = new edu.stanford.hakan.aim4api.base.ThreeDimensionPolyline();
             setBaseProperties(res);
             res.setThreeDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_3D(res));
+            return res;
         }
         return null;
     }

@@ -36,8 +36,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -48,13 +46,14 @@ import org.w3c.dom.NodeList;
  * @author Hakan BULU
  */
 @SuppressWarnings("serial")
-public class ImageAnnotation extends Annotation implements IAimXMLOperations,Serializable  {
+public class ImageAnnotation extends Annotation implements IAimXMLOperations, Serializable {
 
     private SegmentationCollection segmentationCollection = new SegmentationCollection();
     private ImageReferenceCollection imageReferenceCollection = new ImageReferenceCollection();
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
     private TextAnnotationCollection textAnnotationCollection = new TextAnnotationCollection();
+    public static String line = "";
 
     public ImageAnnotation() {
         super();
@@ -256,6 +255,103 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations,Ser
         iaV4.setDateTime(this.getDateTime());//
 
         iacV4.addImageAnnotation(iaV4);
+        return iacV4;
+    }
+
+    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(String temp) throws AimException {
+
+        line = "===== 1";
+        edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotationCollection();
+        line = "===== 2";
+
+        iacV4.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
+        line = "===== 3";
+        iacV4.setDateTime(this.getDateTime());//
+        line = "===== 4";
+
+        if (this.getListEquipment().size() > 0) {//
+            line = "===== 5";
+            iacV4.setEquipment(this.getListEquipment().get(0).toAimV4());
+            line = "===== 6";
+        }
+        if (this.getListPerson().size() > 0) {//
+            line = "===== 7";
+            iacV4.setPerson(this.getListPerson().get(0).toAimV4());
+            line = "===== 8";
+        }
+        if (this.getListUser().size() > 0) {//
+            line = "===== 9";
+            iacV4.setUser(this.getListUser().get(0).toAimV4());
+            line = "===== 10";
+        }
+
+        line = "===== 11";
+        edu.stanford.hakan.aim4api.base.ImageAnnotation iaV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotation();
+        line = "===== 12";
+        if (this.getSegmentationCollection().getSegmentationList().size() > 0) {//
+            line = "===== 13";
+            iaV4.setSegmentationEntityCollection(this.getSegmentationCollection().toAimV4());
+            line = "===== 14";
+        }
+        line = "===== 15";
+        if (this.getImageReferenceCollection().getImageReferenceList().size() > 0) {//
+            line = "===== 16";
+            iaV4.setImageReferenceEntityCollection(this.getImageReferenceCollection().toAimV4());
+            line = "===== 17";
+        }
+        line = "===== 18";
+        if (this.getGeometricShapeCollection().getGeometricShapeList().size() > 0) {//
+            line = "===== 19";
+            iaV4.setMarkupEntityCollection(this.getGeometricShapeCollection().toAimV4());
+            line = "===== 20";
+        }
+        line = "===== 21";
+        if (this.getCalculationCollection().getCalculationList().size() > 0) {//
+            line = "===== 22";
+            iaV4.setCalculationEntityCollection(this.getCalculationCollection().toAimV4(iaV4));
+            line = "===== 23";
+        }
+        line = "===== 24";
+        if (this.getAnatomicEntityCollection().getAnatomicEntityList().size() > 0) {//
+            line = "===== 25";
+            iaV4.setImagingPhysicalEntityCollection(this.getAnatomicEntityCollection().toAimV4());
+            line = "===== 26";
+        }
+        line = "===== 27";
+        if (this.getImagingObservationCollection().getImagingObservationList().size() > 0) {//
+            line = "===== 28";
+            iaV4.setImagingObservationEntityCollection(this.getImagingObservationCollection().toAimV4());
+            line = "===== 29";
+        }
+        line = "===== 30";
+        if (this.getInferenceCollection().getInferenceList().size() > 0) {//
+            line = "===== 31";
+            iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
+            line = "===== 32";
+        }
+        line = "===== 33";
+
+        iaV4.setComment(Converter.toST(this.getComment()));//
+        line = "===== 34";
+        iaV4.setName(Converter.toST(this.getName()));//
+        line = "===== 35";
+        CD typeCode = new CD();//
+        line = "===== 36";
+        typeCode.setCode(this.getCodeValue());//
+        line = "===== 37";
+        typeCode.setCodeSystem(this.getCodeMeaning());//
+        line = "===== 38";
+        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+        line = "===== 39";
+        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        line = "===== 40";
+        iaV4.addTypeCode(typeCode);//
+        line = "===== 41";
+        iaV4.setDateTime(this.getDateTime());//
+        line = "===== 42";
+
+        iacV4.addImageAnnotation(iaV4);
+        line = "===== 43";
         return iacV4;
     }
 

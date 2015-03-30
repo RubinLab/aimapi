@@ -143,10 +143,12 @@ public class MultiPoint extends GeometricShape implements IAimXMLOperations {
             edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint res = new edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint();
             setBaseProperties(res);
             res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+            return res;
         } else if (this.getShapeDimension() == ShapeDimension.ThreeD) {
             edu.stanford.hakan.aim4api.base.ThreeDimensionMultiPoint res = new edu.stanford.hakan.aim4api.base.ThreeDimensionMultiPoint();
             setBaseProperties(res);
             res.setThreeDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_3D(res));
+            return res;
         }
         return null;
     }

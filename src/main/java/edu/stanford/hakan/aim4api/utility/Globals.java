@@ -24,9 +24,8 @@ public class Globals {
     public static String getSplineFlag() {
         return splineFlag;
     }
-
+    
     public static String getAimQLXmlFilePath() {
-
         try {
             URL xmlPath = Globals.class.getResource("../files/AimXPath.xml");
             String fileName = xmlPath.getFile();
@@ -34,37 +33,33 @@ public class Globals {
             if (f.exists() && !f.isDirectory()) {
                 return fileName;
             }
-        } catch (Exception ex) {
-
+        } catch (Exception ex1) {
             try {
-                String fileName = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
+                String fileNameServer = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
                         + EPADConfig.getInstance().getStringPropertyValue("aimQLXml");
-                File f = new File(fileName);
+                File f = new File(fileNameServer);
                 if (f.exists() && !f.isDirectory()) {
-                    return fileName;
+                    return fileNameServer;
                 }
-            } catch (Exception ex1) {
-
+            } catch (Exception ex2) {
                 String fileName = "AimXPath.xml";
                 File f = new File(fileName);
-                if (f.exists() && !f.isDirectory()) {
-                    return fileName;
+                if (!f.exists()) {
+                    try {
+                        f.createNewFile();
+                        return fileName;
+                    } catch (Exception ex3) {
+                        return "";
+                    }
                 }
-
-                fileName = "C:\\Temp\\AimXPath.xml";
-                f = new File(fileName);
-                if (f.exists() && !f.isDirectory()) {
-                    return fileName;
-                }
+                return fileName;
             }
         }
-
         return "";
+    }
 
-
-                
-        
-        
+//    public static String getAimQLXmlFilePath() {
+//
 //        try {
 //            URL xmlPath = Globals.class.getResource("../files/AimXPath.xml");
 //            String fileName = xmlPath.getFile();
@@ -72,29 +67,33 @@ public class Globals {
 //            if (f.exists() && !f.isDirectory()) {
 //                return fileName;
 //            }
-//        } catch (Exception ex1) {
+//        } catch (Exception ex) {
+//
 //            try {
-//                String fileNameServer = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
+//                String fileName = EPADConfig.getInstance().getStringPropertyValue("baseSchemaDir")
 //                        + EPADConfig.getInstance().getStringPropertyValue("aimQLXml");
-//                File f = new File(fileNameServer);
+//                File f = new File(fileName);
 //                if (f.exists() && !f.isDirectory()) {
-//                    return fileNameServer;
+//                    return fileName;
 //                }
-//            } catch (Exception ex2) {
+//            } catch (Exception ex1) {
+//
 //                String fileName = "AimXPath.xml";
 //                File f = new File(fileName);
-//                if (!f.exists()) {
-//                    try {
-//                        f.createNewFile();
-//                        return fileName;
-//                    } catch (Exception ex3) {
-//                        return "";
-//                    }
+//                if (f.exists() && !f.isDirectory()) {
+//                    return fileName;
 //                }
-//                return fileName;
+//
+//                fileName = "C:\\Temp\\AimXPath.xml";
+//                f = new File(fileName);
+//                if (f.exists() && !f.isDirectory()) {
+//                    return fileName;
+//                }
 //            }
 //        }
-    }
+//
+//        return "";
+//    }
 
     public static String getAnnotationListTxtFilePath() {
         try {

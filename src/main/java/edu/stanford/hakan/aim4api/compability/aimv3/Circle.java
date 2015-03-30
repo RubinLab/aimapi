@@ -142,6 +142,7 @@ public class Circle extends GeometricShape implements IAimXMLOperations {
             edu.stanford.hakan.aim4api.base.TwoDimensionCircle res = new edu.stanford.hakan.aim4api.base.TwoDimensionCircle();
             setBaseProperties(res);
             res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+            return res;
         } 
         return null;
     }
