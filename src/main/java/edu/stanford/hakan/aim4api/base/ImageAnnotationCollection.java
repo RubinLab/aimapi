@@ -113,7 +113,10 @@ public class ImageAnnotationCollection extends AnnotationCollection {
 
         NamedNodeMap map = node.getAttributes();
         if (map.getNamedItem("aimVersion") != null) {
-            super.setAimVersion(Enumerations.AimVersion.valueOf(map.getNamedItem("aimVersion").getNodeValue().replace('.', '_')));
+            String tempVersion = map.getNamedItem("aimVersion").getNodeValue().replace('.', '_');
+            if(tempVersion.indexOf("^") > 0)
+                tempVersion = tempVersion.split("\\^")[0];
+            super.setAimVersion(Enumerations.AimVersion.valueOf(tempVersion));
         }
 
         if (Enumerations.AimVersion.AIMv4_0 != super.getAimVersion()) {

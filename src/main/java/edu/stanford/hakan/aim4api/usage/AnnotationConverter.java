@@ -103,8 +103,6 @@ public class AnnotationConverter {
             }
         }
         return res;
-        
-        
     }
 
     private static Node userTCGA2V3(Node node) {
