@@ -27,21 +27,18 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
-import edu.stanford.hakan.aim4api.utility.EPADConfig;
-import edu.stanford.hakan.aim4api.utility.dotnet.StreamWriter;
-import java.io.IOException;
-import java.io.Serializable;
-//import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -260,136 +257,126 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         return iacV4;
     }
     
-//    public static boolean corrected = false;
-//    
-//    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(Connection mySqlConnection) throws AimException, SQLException {
-//        corrected = false;
-//        correctTheCoordinations(mySqlConnection);
-//        return toAimV4();
-//    }
+    /*
+     * Each entry in the coordinationTerms list contains the keys:
+     * 		coordinationID, termID, termSchema, description
+     */
+    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(List<Map<String, String>> coordinationTerms) throws AimException {
+        correctTheCoordinations(coordinationTerms);
+        return toAimV4();
+    }
 
-//    public void correctTheCoordinations(Connection mySqlConnection) throws SQLException {
-//        if("0dr966vmg2ij2hpqsir50l7khg5c61e8p9d3iygj".equals(this.getUniqueIdentifier()))
-//            this.setUniqueIdentifier("0dr966vmg2ij2hpqsir50l7khg5c61e8p9d3iygj", "al536anhb55555");
-//        //*** AnatomicEntity
-//        for (int i = 0; i < this.getAnatomicEntityCollection().getAnatomicEntityList().size(); i++) {
-//            AnatomicEntity ae = this.getAnatomicEntityCollection().getAnatomicEntityList().get(i);
-//            if (!"".equals(ae.getCodeValue()) && ae.getCodeValue() != null && ae.getAllowedTerm() == null) {
-//                ae.setAllowedTerm(new AllowedTerm(ae.getCodeValue(), ae.getCodeMeaning(), ae.getCodingSchemeDesignator(), ae.getCodingSchemeVersion()));
-//            }
-//            if (ae.getAllowedTerm() != null) {
-//                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(ae.getAllowedTerm().getCodeValue(), mySqlConnection);
-//                if (correctedAllowedTerm != null) {
-//                    ae.setAllowedTerm(correctedAllowedTerm);
-//                }
-//            }
-//
-//            //*** AnatomicEntityCharacteristic
-//            for (int j = 0; j < ae.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().size(); j++) {
-//                AnatomicEntityCharacteristic aec = ae.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().get(j);
-//                if (!"".equals(aec.getCodeValue()) && aec.getAllowedTerm() == null) {
-//                    aec.setAllowedTerm(new AllowedTerm(aec.getCodeValue(), aec.getCodeMeaning(), aec.getCodingSchemeDesignator(), aec.getCodingSchemeVersion()));
-//                }
-//                if (aec.getAllowedTerm() != null) {
-//                    AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(aec.getAllowedTerm().getCodeValue(), mySqlConnection);
-//                    if (correctedAllowedTerm != null) {
-//                        aec.setAllowedTerm(correctedAllowedTerm);
-//                    }
-//                }
-//            }
-//        }
-//
-//        //*** ImagingObservation
-//        for (int i = 0; i < this.getImagingObservationCollection().getImagingObservationList().size(); i++) {
-//            ImagingObservation io = this.getImagingObservationCollection().getImagingObservationList().get(i);
-//            
-//            if("Lung Nodule".equals(io.getLabel()))
-//                io.setLabel("Lung Nodule");
-//            
-//            if (!"".equals(io.getCodeValue()) && io.getAllowedTerm() == null) {
-//                io.setAllowedTerm(new AllowedTerm(io.getCodeValue(), io.getCodeMeaning(), io.getCodingSchemeDesignator(), io.getCodingSchemeVersion()));
-//            }
-//            if (io.getAllowedTerm() != null) {
-//                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(io.getAllowedTerm().getCodeValue(), mySqlConnection);
-//                if (correctedAllowedTerm != null) {
-//                    io.setAllowedTerm(correctedAllowedTerm);
-//                }
-//            }
-//
-//            //*** ImagingObservationCharacteristic
-//            for (int j = 0; j < io.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size(); j++) {
-//                ImagingObservationCharacteristic ioc = io.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().get(j);
-//                if (!"".equals(ioc.getCodeValue()) && ioc.getAllowedTerm() == null) {
-//                    ioc.setAllowedTerm(new AllowedTerm(ioc.getCodeValue(), ioc.getCodeMeaning(), ioc.getCodingSchemeDesignator(), ioc.getCodingSchemeVersion()));
-//                }
-//                if (ioc.getAllowedTerm() != null) {
-//                    AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(ioc.getAllowedTerm().getCodeValue(), mySqlConnection);
-//                    if (correctedAllowedTerm != null) {
-//                        ioc.setAllowedTerm(correctedAllowedTerm);
-//                    }
-//                }
-//            }
-//        }
-//
-//        //*** ImagingObservation
-//        for (int i = 0; i < this.getImagingObservationCollection().getImagingObservationList().size(); i++) {
-//            ImagingObservation io = this.getImagingObservationCollection().getImagingObservationList().get(i);
-//            if (!"".equals(io.getCodeValue()) && io.getAllowedTerm() == null) {
-//                io.setAllowedTerm(new AllowedTerm(io.getCodeValue(), io.getCodeMeaning(), io.getCodingSchemeDesignator(), io.getCodingSchemeVersion()));
-//            }
-//            if (io.getAllowedTerm() != null) {
-//                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(io.getAllowedTerm().getCodeValue(), mySqlConnection);
-//                if (correctedAllowedTerm != null) {
-//                    io.setAllowedTerm(correctedAllowedTerm);
-//                }
-//            }
-//        }
-//
-//        //*** Inference
-//        for (int i = 0; i < this.getInferenceCollection().getInferenceList().size(); i++) {
-//            Inference in = this.getInferenceCollection().getInferenceList().get(i);
-//            if (!"".equals(in.getCodeValue()) && in.getAllowedTerm() == null) {
-//                in.setAllowedTerm(new AllowedTerm(in.getCodeValue(), in.getCodeMeaning(), in.getCodingSchemeDesignator(), in.getCodingSchemeVersion()));
-//            }
-//            if (in.getAllowedTerm() != null) {
-//                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(in.getAllowedTerm().getCodeValue(), mySqlConnection);
-//                if (correctedAllowedTerm != null) {
-//                    in.setAllowedTerm(correctedAllowedTerm);
-//                }
-//            }
-//        }
-//    }
+    public void correctTheCoordinations(List<Map<String, String>> coordinationTerms) {
+        //*** AnatomicEntity
+        for (int i = 0; i < this.getAnatomicEntityCollection().getAnatomicEntityList().size(); i++) {
+            AnatomicEntity ae = this.getAnatomicEntityCollection().getAnatomicEntityList().get(i);
+            if (!"".equals(ae.getCodeValue()) && ae.getAllowedTerm() == null) {
+                ae.setAllowedTerm(new AllowedTerm(ae.getCodeValue(), ae.getCodeMeaning(), ae.getCodingSchemeDesignator(), ae.getCodingSchemeVersion()));
+            }
+            if (ae.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(ae.getAllowedTerm().getCodeValue(), coordinationTerms);
+                if (correctedAllowedTerm != null) {
+                    ae.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
 
-//    private AllowedTerm getCorrectAllowedTerm(String codeValueCurrent, Connection mySqlConnection) throws SQLException {
-//        String query = "SELECT coordination_id,t.term_id,t.schema_name,t.description "
-//                + "FROM terms t,coordination2term c2,coordinations c "
-//                + "WHERE c.coordination_key=c2.coordination_key AND t.term_key=c2.term_key AND "
-//                + "coordination_id = '" + codeValueCurrent + "' ORDER BY coordination_id,position";
-//        Statement st = mySqlConnection.createStatement();
-//        ResultSet rs = st.executeQuery(query);
-//        boolean isFirst = true;
-//        AllowedTerm res = new AllowedTerm();
-//        while (rs.next()) {
-//            String codeValue = rs.getString("term_id"); //code
-//            String codeMeaning = rs.getString("description"); //codeSystem
-//            String codingSchemeDesignator = rs.getString("schema_name"); //codeSystemName
-//            if (isFirst) {
-//                res.setCodeValue(codeValue);
-//                res.setCodeMeaning(codeMeaning);
-//                res.setCodingSchemeDesignator(codingSchemeDesignator);
-//                isFirst = false;
-//            } else {
-//                res.addValidTerm(codeValue, codeMeaning, codingSchemeDesignator, "");
-//            }
-//        }
-//        st.close();
-//
-//        if (res.getCodeValue() == null || "".equals(res.getCodeValue())) {
-//            return null;
-//        }
-//        corrected = true;
-//        return res;
-//    }
+            //*** AnatomicEntityCharacteristic
+            for (int j = 0; j < ae.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().size(); j++) {
+                AnatomicEntityCharacteristic aec = ae.getAnatomicEntityCharacteristicCollection().getAnatomicEntityCharacteristicList().get(j);
+                if (!"".equals(aec.getCodeValue()) && aec.getAllowedTerm() == null) {
+                    aec.setAllowedTerm(new AllowedTerm(aec.getCodeValue(), aec.getCodeMeaning(), aec.getCodingSchemeDesignator(), aec.getCodingSchemeVersion()));
+                }
+                if (aec.getAllowedTerm() != null) {
+                    AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(aec.getAllowedTerm().getCodeValue(), coordinationTerms);
+                    if (correctedAllowedTerm != null) {
+                        aec.setAllowedTerm(correctedAllowedTerm);
+                    }
+                }
+            }
+        }
+
+        //*** ImagingObservation
+        for (int i = 0; i < this.getImagingObservationCollection().getImagingObservationList().size(); i++) {
+            ImagingObservation io = this.getImagingObservationCollection().getImagingObservationList().get(i);
+            if (!"".equals(io.getCodeValue()) && io.getAllowedTerm() == null) {
+                io.setAllowedTerm(new AllowedTerm(io.getCodeValue(), io.getCodeMeaning(), io.getCodingSchemeDesignator(), io.getCodingSchemeVersion()));
+            }
+            if (io.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(io.getAllowedTerm().getCodeValue(), coordinationTerms);
+                if (correctedAllowedTerm != null) {
+                    io.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+
+            //*** ImagingObservationCharacteristic
+            for (int j = 0; j < io.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().size(); j++) {
+                ImagingObservationCharacteristic ioc = io.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList().get(j);
+                if (!"".equals(ioc.getCodeValue()) && ioc.getAllowedTerm() == null) {
+                    ioc.setAllowedTerm(new AllowedTerm(ioc.getCodeValue(), ioc.getCodeMeaning(), ioc.getCodingSchemeDesignator(), ioc.getCodingSchemeVersion()));
+                }
+                if (ioc.getAllowedTerm() != null) {
+                    AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(ioc.getAllowedTerm().getCodeValue(), coordinationTerms);
+                    if (correctedAllowedTerm != null) {
+                        ioc.setAllowedTerm(correctedAllowedTerm);
+                    }
+                }
+            }
+        }
+
+        //*** ImagingObservation
+        for (int i = 0; i < this.getImagingObservationCollection().getImagingObservationList().size(); i++) {
+            ImagingObservation io = this.getImagingObservationCollection().getImagingObservationList().get(i);
+            if (!"".equals(io.getCodeValue()) && io.getAllowedTerm() == null) {
+                io.setAllowedTerm(new AllowedTerm(io.getCodeValue(), io.getCodeMeaning(), io.getCodingSchemeDesignator(), io.getCodingSchemeVersion()));
+            }
+            if (io.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(io.getAllowedTerm().getCodeValue(), coordinationTerms);
+                if (correctedAllowedTerm != null) {
+                    io.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+        }
+
+        //*** Inference
+        for (int i = 0; i < this.getInferenceCollection().getInferenceList().size(); i++) {
+            Inference in = this.getInferenceCollection().getInferenceList().get(i);
+            if (!"".equals(in.getCodeValue()) && in.getAllowedTerm() == null) {
+                in.setAllowedTerm(new AllowedTerm(in.getCodeValue(), in.getCodeMeaning(), in.getCodingSchemeDesignator(), in.getCodingSchemeVersion()));
+            }
+            if (in.getAllowedTerm() != null) {
+                AllowedTerm correctedAllowedTerm = getCorrectAllowedTerm(in.getAllowedTerm().getCodeValue(), coordinationTerms);
+                if (correctedAllowedTerm != null) {
+                    in.setAllowedTerm(correctedAllowedTerm);
+                }
+            }
+        }
+    }
+
+    /*
+     * Each entry in the coordinationTerms list contains the keys:
+     * 		coordinationID, termID, termSchema, description
+     */
+    private AllowedTerm getCorrectAllowedTerm(String codeValueCurrent, List<Map<String, String>> coordinationTerms) {
+        boolean isFirst = true;
+        AllowedTerm res = new AllowedTerm();
+        for (Map<String, String> coordinationTerm: coordinationTerms)
+        {
+        	if (coordinationTerm.get("coordinationID").equals(codeValueCurrent)) {
+                String codeValue = coordinationTerm.get("termID"); //code
+                String codeMeaning = coordinationTerm.get("description"); //codeSystem
+                String codingSchemeDesignator = coordinationTerm.get("termSchema"); //codeSystemName
+                if (isFirst) {
+                    res.setCodeValue(codeValue);
+                    res.setCodeMeaning(codeMeaning);
+                    res.setCodingSchemeDesignator(codingSchemeDesignator);
+                    isFirst = false;
+                } else {
+                    res.addValidTerm(codeValue, codeMeaning, codingSchemeDesignator, "");
+                }
+      		}
+        }
+        return res;
+    }
 
 //    public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4(String temp) throws AimException {
 //

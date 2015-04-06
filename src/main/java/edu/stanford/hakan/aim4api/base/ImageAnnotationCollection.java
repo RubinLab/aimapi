@@ -245,6 +245,4 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     {
       return getXMLStringGWT();
     }
-    
-    
 }
