@@ -256,7 +256,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         iacV4.addImageAnnotation(iaV4);
         return iacV4;
     }
-    
+
     /*
      * Each entry in the coordinationTerms list contains the keys:
      * 		coordinationID, termID, termSchema, description
@@ -358,10 +358,10 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
      */
     private AllowedTerm getCorrectAllowedTerm(String codeValueCurrent, List<Map<String, String>> coordinationTerms) {
         boolean isFirst = true;
-        AllowedTerm res = new AllowedTerm();
-        for (Map<String, String> coordinationTerm: coordinationTerms)
-        {
-        	if (coordinationTerm.get("coordinationID").equals(codeValueCurrent)) {
+        AllowedTerm res = null;
+        for (Map<String, String> coordinationTerm : coordinationTerms) {
+            if (coordinationTerm.get("coordinationID").equals(codeValueCurrent)) {
+                res = new AllowedTerm();
                 String codeValue = coordinationTerm.get("termID"); //code
                 String codeMeaning = coordinationTerm.get("description"); //codeSystem
                 String codingSchemeDesignator = coordinationTerm.get("termSchema"); //codeSystemName
@@ -373,7 +373,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
                 } else {
                     res.addValidTerm(codeValue, codeMeaning, codingSchemeDesignator, "");
                 }
-      		}
+            }
         }
         return res;
     }
