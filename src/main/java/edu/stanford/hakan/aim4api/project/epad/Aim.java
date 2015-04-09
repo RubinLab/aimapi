@@ -862,16 +862,28 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     @Override
     public String getIOCodeValue(String label) {
-
         try {
-            Iterator<ImagingObservation> it = getImagingObservationCollection()
-                    .getImagingObservationList().iterator();
-            while (it.hasNext()) {
-                ImagingObservation entity = it.next();
-                if (entity.getLabel().equalsIgnoreCase(label)) {
-                    return entity.getCodeValue();
+            List<ImagingObservation> listImagingObservation = getImagingObservationCollection().getImagingObservationList();
+            for (ImagingObservation imagingObservation : listImagingObservation) {
+                if (imagingObservation.getLabel().equalsIgnoreCase(label)) {
+                    if (imagingObservation.getAllowedTerm() != null) {
+                        return imagingObservation.getAllowedTerm().getCodeValue();
+                    } else if (imagingObservation.getCodeValue() != null && !"".equals(imagingObservation.getCodeValue())) {
+                        return imagingObservation.getCodeValue();
+                    }
+
                 }
             }
+            
+//            Iterator<ImagingObservation> it = getImagingObservationCollection()
+//                    .getImagingObservationList().iterator();
+//            while (it.hasNext()) {
+//                ImagingObservation entity = it.next();
+//                if (entity.getLabel().equalsIgnoreCase(label)) {
+//                    
+//                    return entity.getCodeValue();
+//                }
+//            }
         } catch (Exception e) {
             logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
         }
@@ -883,14 +895,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean hasIOLabel(String label) {
 
         try {
-            Iterator<ImagingObservation> it = getImagingObservationCollection()
-                    .getImagingObservationList().iterator();
-            while (it.hasNext()) {
-                ImagingObservation entity = it.next();
-                if (entity.getLabel().equalsIgnoreCase(label)) {
-                    return true;
-                }
+          
+            if (!"".equals(getIOCodeValue(label))) {
+                return true;
             }
+            return false;
+//            Iterator<ImagingObservation> it = getImagingObservationCollection()
+//                    .getImagingObservationList().iterator();
+//            while (it.hasNext()) {
+//                ImagingObservation entity = it.next();
+//                if (entity.getLabel().equalsIgnoreCase(label)) {
+//                    return true;
+//                }
+//            }
         } catch (Exception e) {
             logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
         }
@@ -900,30 +917,45 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     @Override
     public String getIOCCodeValue(String IOlabel, String IOClabel) {
-
-        try {
-            Iterator<ImagingObservation> it = getImagingObservationCollection()
-                    .getImagingObservationList().iterator();
-            while (it.hasNext()) {
-                ImagingObservation entity = it.next();
-                if (entity.getLabel().equalsIgnoreCase(IOlabel)) {
-
-                    // find the ioc with the right label in this io
-                    Iterator<ImagingObservationCharacteristic> itIOC = entity
-                            .getImagingObservationCharacteristicCollection()
-                            .getImagingObservationCharacteristicList()
-                            .iterator();
-                    while (itIOC.hasNext()) {
-                        ImagingObservationCharacteristic IOCentity = itIOC
-                                .next();
-                        if (IOCentity.getLabel().equalsIgnoreCase(IOClabel)) {
-
-                            return IOCentity.getCodeValue();
+        try {  
+            List<ImagingObservation> listImagingObservation = getImagingObservationCollection().getImagingObservationList();
+            for (ImagingObservation imagingObservation : listImagingObservation) {
+                if (imagingObservation.getLabel().equalsIgnoreCase(IOlabel)) {
+                    List<ImagingObservationCharacteristic> listImagingObservationCharacteristic = imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList();
+                    for (ImagingObservationCharacteristic imagingObservationCharacteristic : listImagingObservationCharacteristic) {
+                        if (imagingObservationCharacteristic.getLabel().equalsIgnoreCase(IOClabel)) {
+                            if(imagingObservationCharacteristic.getAllowedTerm() != null)
+                                return imagingObservationCharacteristic.getAllowedTerm().getCodeValue();
+                            else if(imagingObservationCharacteristic.getCodeValue() != null && !"".equals(imagingObservationCharacteristic.getCodeValue()))          
+                                return imagingObservationCharacteristic.getCodeValue();
+                                
                         }
                     }
-
                 }
             }
+
+            
+//            Iterator<ImagingObservation> it = getImagingObservationCollection()
+//                    .getImagingObservationList().iterator();
+//            while (it.hasNext()) {
+//                ImagingObservation entity = it.next();
+//                if (entity.getLabel().equalsIgnoreCase(IOlabel)) {
+//
+//                    // find the ioc with the right label in this io
+//                    Iterator<ImagingObservationCharacteristic> itIOC = entity
+//                            .getImagingObservationCharacteristicCollection()
+//                            .getImagingObservationCharacteristicList()
+//                            .iterator();
+//                    while (itIOC.hasNext()) {
+//                        ImagingObservationCharacteristic IOCentity = itIOC
+//                                .next();
+//                        if (IOCentity.getLabel().equalsIgnoreCase(IOClabel)) {
+//
+//                            return IOCentity.getCodeValue();
+//                        }
+//                    }
+//                }
+//            }
         } catch (Exception e) {
             logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
         }
@@ -935,28 +967,33 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean hasIOCLabel(String IOlabel, String IOClabel) {
 
         try {
-            Iterator<ImagingObservation> it = getImagingObservationCollection()
-                    .getImagingObservationList().iterator();
-            while (it.hasNext()) {
-                ImagingObservation entity = it.next();
-                if (entity.getLabel().equalsIgnoreCase(IOlabel)) {
-
-                    // find the ioc with the right label in this io
-                    Iterator<ImagingObservationCharacteristic> itIOC = entity
-                            .getImagingObservationCharacteristicCollection()
-                            .getImagingObservationCharacteristicList()
-                            .iterator();
-                    while (itIOC.hasNext()) {
-                        ImagingObservationCharacteristic IOCentity = itIOC
-                                .next();
-                        if (IOCentity.getLabel().equalsIgnoreCase(IOClabel)) {
-
-                            return true;
-                        }
-                    }
-
-                }
-            }
+            
+            if(!"".equals(getIOCCodeValue(IOlabel,IOClabel)))
+                return true;
+            return false;
+            
+//            Iterator<ImagingObservation> it = getImagingObservationCollection()
+//                    .getImagingObservationList().iterator();
+//            while (it.hasNext()) {
+//                ImagingObservation entity = it.next();
+//                if (entity.getLabel().equalsIgnoreCase(IOlabel)) {
+//
+//                    // find the ioc with the right label in this io
+//                    Iterator<ImagingObservationCharacteristic> itIOC = entity
+//                            .getImagingObservationCharacteristicCollection()
+//                            .getImagingObservationCharacteristicList()
+//                            .iterator();
+//                    while (itIOC.hasNext()) {
+//                        ImagingObservationCharacteristic IOCentity = itIOC
+//                                .next();
+//                        if (IOCentity.getLabel().equalsIgnoreCase(IOClabel)) {
+//
+//                            return true;
+//                        }
+//                    }
+//
+//                }
+//            }
         } catch (Exception e) {
             logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
         }
@@ -968,14 +1005,28 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public String getAECodeMeaning(String label) {
 
         try {
-            Iterator<AnatomicEntity> it = getAnatomicEntityCollection()
-                    .getAnatomicEntityList().iterator();
-            while (it.hasNext()) {
-                AnatomicEntity entity = it.next();
-                if (entity.getLabel().equalsIgnoreCase(label)) {
-                    return entity.getCodeMeaning();
+            
+            List<AnatomicEntity> listAnatomicEntity = getAnatomicEntityCollection().getAnatomicEntityList();
+            for (AnatomicEntity anatomicEntity : listAnatomicEntity) {
+                if (anatomicEntity.getLabel().equalsIgnoreCase(label)) {
+                    if (anatomicEntity.getAllowedTerm() != null) {
+                        return anatomicEntity.getAllowedTerm().getCodeMeaning();
+                    } else if (anatomicEntity.getCodeMeaning() != null && !"".equals(anatomicEntity.getCodeMeaning())) {
+                        return anatomicEntity.getCodeMeaning();
+                    }
+
                 }
             }
+            
+            
+//            Iterator<AnatomicEntity> it = getAnatomicEntityCollection()
+//                    .getAnatomicEntityList().iterator();
+//            while (it.hasNext()) {
+//                AnatomicEntity entity = it.next();
+//                if (entity.getLabel().equalsIgnoreCase(label)) {
+//                    return entity.getCodeMeaning();
+//                }
+//            }
         } catch (Exception e) {
             logger.info("Error: Aim getAECodeMeaning " + e.getMessage());
         }
@@ -987,14 +1038,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean hasAELabel(String label) {
 
         try {
-            Iterator<AnatomicEntity> it = getAnatomicEntityCollection()
-                    .getAnatomicEntityList().iterator();
-            while (it.hasNext()) {
-                AnatomicEntity entity = it.next();
-                if (entity.getLabel().equalsIgnoreCase(label)) {
-                    return true;
-                }
+            
+              if (!"".equals(getAECodeMeaning(label))) {
+                return true;
             }
+            return false;
+//            Iterator<AnatomicEntity> it = getAnatomicEntityCollection()
+//                    .getAnatomicEntityList().iterator();
+//            while (it.hasNext()) {
+//                AnatomicEntity entity = it.next();
+//                if (entity.getLabel().equalsIgnoreCase(label)) {
+//                    return true;
+//                }
+//            }
         } catch (Exception e) {
             // logger.info("Error: Aim hasAELabel " + e.getMessage());
         }
