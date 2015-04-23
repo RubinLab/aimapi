@@ -228,23 +228,35 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     }
     
     
-//    public String getXMLString() throws AimException
-//    {
-//      return AnnotationBuilder.convertToString(this);
-//    }
-    
-//    public String toStringXML() throws AimException
-//    {
-//      return getXMLString();
-//    }
-    
-    public String getXMLStringGWT() throws AimException
+    public String getXMLString() throws AimException
     {
-      return AnnotationBuilder.convertToStringGWT(this);
+      return AnnotationBuilder.convertToString(this);
     }
     
-    public String toStringXMLGWT() throws AimException
+    public String toStringXML() throws AimException
     {
-      return getXMLStringGWT();
+      return getXMLString();
+    }
+    
+    public String getXMLStringGWT() throws AimException {
+
+        return convertToStringGWT(this);
+    }
+
+    public static String convertToStringGWT(ImageAnnotationCollection Anno) throws AimException {
+        try {
+            Document doc = XML.createDocument();
+            Element root = (Element) Anno.getXMLNode(doc);
+            XML.setBaseAttributes(root);
+            doc.appendChild(root);
+            return doc.toString();
+        } catch (Exception ex) {
+            throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
+                    + ex.getMessage());
+        }
+    }
+
+    public String toStringXMLGWT() throws AimException {
+        return getXMLStringGWT();
     }
 }
