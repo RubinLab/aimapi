@@ -772,7 +772,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 int day = Integer.parseInt(strStartDate.substring(8, 10));
 
                 System.out.println(year + " " + month + " " + day);
-                Date date = new Date(year, month-1, day);
+                Date date = new Date(year, month - 1, day);
                 return date;
             } catch (NumberFormatException ex) {
                 throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
@@ -874,7 +874,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
                 }
             }
-            
+
 //            Iterator<ImagingObservation> it = getImagingObservationCollection()
 //                    .getImagingObservationList().iterator();
 //            while (it.hasNext()) {
@@ -895,7 +895,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean hasIOLabel(String label) {
 
         try {
-          
+
             if (!"".equals(getIOCodeValue(label))) {
                 return true;
             }
@@ -917,24 +917,24 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     @Override
     public String getIOCCodeValue(String IOlabel, String IOClabel) {
-        try {  
+        try {
             List<ImagingObservation> listImagingObservation = getImagingObservationCollection().getImagingObservationList();
             for (ImagingObservation imagingObservation : listImagingObservation) {
                 if (imagingObservation.getLabel().equalsIgnoreCase(IOlabel)) {
                     List<ImagingObservationCharacteristic> listImagingObservationCharacteristic = imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList();
                     for (ImagingObservationCharacteristic imagingObservationCharacteristic : listImagingObservationCharacteristic) {
                         if (imagingObservationCharacteristic.getLabel().equalsIgnoreCase(IOClabel)) {
-                            if(imagingObservationCharacteristic.getAllowedTerm() != null)
+                            if (imagingObservationCharacteristic.getAllowedTerm() != null) {
                                 return imagingObservationCharacteristic.getAllowedTerm().getCodeValue();
-                            else if(imagingObservationCharacteristic.getCodeValue() != null && !"".equals(imagingObservationCharacteristic.getCodeValue()))          
+                            } else if (imagingObservationCharacteristic.getCodeValue() != null && !"".equals(imagingObservationCharacteristic.getCodeValue())) {
                                 return imagingObservationCharacteristic.getCodeValue();
-                                
+                            }
+
                         }
                     }
                 }
             }
 
-            
 //            Iterator<ImagingObservation> it = getImagingObservationCollection()
 //                    .getImagingObservationList().iterator();
 //            while (it.hasNext()) {
@@ -967,11 +967,12 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean hasIOCLabel(String IOlabel, String IOClabel) {
 
         try {
-            
-            if(!"".equals(getIOCCodeValue(IOlabel,IOClabel)))
+
+            if (!"".equals(getIOCCodeValue(IOlabel, IOClabel))) {
                 return true;
+            }
             return false;
-            
+
 //            Iterator<ImagingObservation> it = getImagingObservationCollection()
 //                    .getImagingObservationList().iterator();
 //            while (it.hasNext()) {
@@ -1005,7 +1006,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public String getAECodeMeaning(String label) {
 
         try {
-            
+
             List<AnatomicEntity> listAnatomicEntity = getAnatomicEntityCollection().getAnatomicEntityList();
             for (AnatomicEntity anatomicEntity : listAnatomicEntity) {
                 if (anatomicEntity.getLabel().equalsIgnoreCase(label)) {
@@ -1017,8 +1018,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
                 }
             }
-            
-            
+
 //            Iterator<AnatomicEntity> it = getAnatomicEntityCollection()
 //                    .getAnatomicEntityList().iterator();
 //            while (it.hasNext()) {
@@ -1038,8 +1038,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean hasAELabel(String label) {
 
         try {
-            
-              if (!"".equals(getAECodeMeaning(label))) {
+
+            if (!"".equals(getAECodeMeaning(label))) {
                 return true;
             }
             return false;
@@ -2102,7 +2102,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 break;
             case imagingObservation:
                 for (ImagingObservation imagingObservation : getImagingObservationCollection().getImagingObservationList()) {
-                    result.add(new Component(imagingObservation));      
+                    result.add(new Component(imagingObservation));
                     for (ImagingObservationCharacteristic imagingObservationCharacteristic : imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList()) {
                         result.add(new Component(imagingObservationCharacteristic));
                     }
@@ -2351,5 +2351,40 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay);
         return builder.toString();
+    }
+
+    public void updateDateAndTime() {
+        Date date = new Date();
+        int year = date.getYear() + 1900;// cal.get(Calendar.YEAR);
+        int month = date.getMonth() + 1;// cal.get(Calendar.MONTH) + 1;
+        int day = date.getDate();// cal.get(Calendar.DAY_OF_MONTH);
+        int hour = date.getHours();// cal.get(Calendar.HOUR_OF_DAY);
+        int minute = date.getMinutes();// cal.get(Calendar.MINUTE);
+        int second = date.getSeconds();//cal.get(Calendar.SECOND);
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        String strHour = Integer.toString(hour);
+        if (hour < 10) {
+            strHour = "0" + strHour;
+        }
+        String strMinute = Integer.toString(minute);
+        if (minute < 10) {
+            strMinute = "0" + strMinute;
+        }
+        String strSecond = Integer.toString(second);
+        if (second < 10) {
+            strSecond = "0" + strSecond;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        this.setDateTime(builder.toString());
     }
 }
