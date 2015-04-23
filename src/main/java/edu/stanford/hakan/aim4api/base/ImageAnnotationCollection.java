@@ -228,15 +228,15 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     }
     
     
-    public String getXMLString() throws AimException
-    {
-      return AnnotationBuilder.convertToString(this);
-    }
+//    public String getXMLString() throws AimException
+//    {
+//      return AnnotationBuilder.convertToString(this);
+//    }
     
-    public String toStringXML() throws AimException
-    {
-      return getXMLString();
-    }
+//    public String toStringXML() throws AimException
+//    {
+//      return getXMLString();
+//    }
     
     public String getXMLStringGWT() throws AimException
     {
