@@ -28,12 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.base.TwoDimensionEllipse;
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -358,10 +353,12 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
         }
         return ShapeDimension.None;
     }
-    
+
     @Override
     public boolean equals(Object other) {
-        return Objects.equals(shapeIdentifier, ((GeometricShape)other).getShapeIdentifier());
+        if (shapeIdentifier == ((GeometricShape) other).getShapeIdentifier())
+        return true;
+        return false;
     }
     
 }
