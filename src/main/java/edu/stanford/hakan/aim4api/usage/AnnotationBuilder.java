@@ -27,11 +27,13 @@
  */
 package edu.stanford.hakan.aim4api.usage;
 
+import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.StringWriter;
+import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -119,8 +121,6 @@ public class AnnotationBuilder {
                     + ex.getMessage());
         }
     }
-    
-
 
     public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
@@ -128,8 +128,33 @@ public class AnnotationBuilder {
         boolean checkTheServer = true;
         String operation = "Saving";
         try {
-            performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-                    dbUserName, dbUserPassword);
+            //*** Audit Trail
+            AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
+
+            List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
+            for(ImageAnnotationCollection iac:resAuditTrail)
+            {
+                performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+                        dbUserName, dbUserPassword);
+                
+            }
+//            if (resAuditTrail.size() == 2) {
+//                performUploadExist(resAuditTrail.get(0), serverUrl, collection, "AIM_" + resAuditTrail.get(0).getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+//                        dbUserName, dbUserPassword);
+//                performUploadExist(resAuditTrail.get(1), serverUrl, collection, "AIM_" + resAuditTrail.get(1).getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+//                        dbUserName, dbUserPassword);
+//            }
+            
+//            ImageAnnotationCollection versionHandler = auditTrailManager.perform(Anno);
+//            if (versionHandler != null) {
+//                performUploadExist(versionHandler, serverUrl, collection, "AIM_" + versionHandler.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+//                        dbUserName, dbUserPassword);
+//            }
+            
+//            performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+//                    dbUserName, dbUserPassword);
+
+         
             if (checkTheServer) {
                 if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {
@@ -145,6 +170,8 @@ public class AnnotationBuilder {
             throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
                     + ex.getMessage());
         }
+        
+        
     }
 
     public static void saveNode(Node node, String Path) throws AimException {

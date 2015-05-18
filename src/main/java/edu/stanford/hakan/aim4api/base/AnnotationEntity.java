@@ -106,6 +106,7 @@ public class AnnotationEntity extends Entity {
     }
 
     public void setPrecedentReferencedAnnotationUid(II precedentReferencedAnnotationUid) {
+        if(precedentReferencedAnnotationUid != null)
         precedentReferencedAnnotationUid.setTagName("precedentReferencedAnnotationUid");
         this.precedentReferencedAnnotationUid = precedentReferencedAnnotationUid;
     }
@@ -359,9 +360,9 @@ public class AnnotationEntity extends Entity {
         if (this.comment == null ? oth.comment != null : !this.comment.isEqualTo(oth.comment)) {
             return false;
         }
-        if (this.precedentReferencedAnnotationUid == null ? oth.precedentReferencedAnnotationUid != null : !this.precedentReferencedAnnotationUid.isEqualTo(oth.precedentReferencedAnnotationUid)) {
-            return false;
-        }
+//        if (this.precedentReferencedAnnotationUid == null ? oth.precedentReferencedAnnotationUid != null : !this.precedentReferencedAnnotationUid.isEqualTo(oth.precedentReferencedAnnotationUid)) {
+//            return false;
+//        }
         if (this.templateUid == null ? oth.templateUid != null : !this.templateUid.isEqualTo(oth.templateUid)) {
             return false;
         }

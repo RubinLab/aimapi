@@ -84,7 +84,6 @@ public class AuditTrailCollection implements IAimXMLOperations {
                 NamedNodeMap map = currentNode.getAttributes();
                 if (map.getNamedItem("xsi:type") != null) {
                     String xsiType = map.getNamedItem("xsi:type").getNodeValue();
-
                 } else {
                     AuditTrail obj = new AuditTrail();
                     obj.setXMLNode(tempList.item(j));

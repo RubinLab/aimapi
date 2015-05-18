@@ -44,7 +44,7 @@ public class Person implements IAimXMLOperations {
     private ST sex;
     private ST ethnicGroup;
     private String tagName;
-    private Person initialState = null;
+    //private Person initialState = null;
 
     public ST getName() {
         return name;
@@ -154,19 +154,19 @@ public class Person implements IAimXMLOperations {
             }
         }
         //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
-        this.initialState = this.getClone();
+        //this.initialState = this.getClone();
     }
+//
+//    public boolean getIsEdited() {
+//        if (this.initialState == null) {
+//            return false;
+//        }
+//        return !this.isEqualTo(this.initialState);
+//    }
 
-    public boolean getIsEdited() {
-        if (this.initialState == null) {
-            return false;
-        }
-        return !this.isEqualTo(this.initialState);
-    }
-
-    public Person getInitialState() {
-        return this.initialState;
-    }
+//    public Person getInitialState() {
+//        return this.initialState;
+//    }
 
     @Override
     public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {

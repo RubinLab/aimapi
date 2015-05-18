@@ -69,6 +69,12 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     public List<ImageAnnotation> getImageAnnotations() {
         return listImageAnnotations;
     }
+    
+    public ImageAnnotation getImageAnnotation() {
+        if(this.listImageAnnotations.size() > 0)
+            return this.listImageAnnotations.get(0);
+        return null;
+    }
 
     public void setImageAnnotations(List<ImageAnnotation> listImageAnnotations) {
         this.listImageAnnotations = listImageAnnotations;
@@ -107,6 +113,14 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         return res;
     }
 
+    public int getVersion() {
+        return this.getImageAnnotations().get(0).getVersion();
+    }
+
+    public void setVersion(int version) {
+        this.getImageAnnotations().get(0).setVersion(version);
+    }
+    
     @Override
     public void setXMLNode(Node node) {
         this.listImageAnnotations.clear();
@@ -151,19 +165,32 @@ public class ImageAnnotationCollection extends AnnotationCollection {
                 this.setPerson(obj);
             }
         }
-        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
-        this.initialState = this.getClone();
-    }
-
-    public boolean getIsEdited() {
-        if (this.initialState == null) {
-            return false;
+//        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
+//        this.initialState = this.getClone();
+        
+        if(this.getImageAnnotation() != null && this.getImageAnnotation().getAuditTrailCollection() != null &&this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().size() > 0 )
+        {
+        AuditTrail auditTrail = this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().get(0);
+        this.setVersion(Integer.parseInt(auditTrail.getComment().getValue()));
         }
-        return !this.isEqualTo(this.initialState);
     }
 
-    public ImageAnnotationCollection getInitialState() {
-        return (ImageAnnotationCollection) this.initialState;
+//    public boolean getIsEdited() {
+//        if (this.initialState == null) {
+//            return false;
+//        }
+//        return !this.isEqualTo(this.initialState);
+//    }
+//
+//    public ImageAnnotationCollection getInitialState() {
+//        return (ImageAnnotationCollection) this.initialState;
+//    }
+    
+    public boolean getIsEdited() {
+        for(ImageAnnotation ia:this.getImageAnnotations())
+            if(ia.getIsEdited())
+                return true;
+        return false;
     }
 
     @Override

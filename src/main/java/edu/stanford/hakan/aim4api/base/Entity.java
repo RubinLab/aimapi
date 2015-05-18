@@ -43,7 +43,7 @@ public class Entity implements IAimXMLOperations {
     private II uniqueIdentifier;
     private String tagName;
     private String xsiType;
-    protected Entity initialState = null;
+    //protected Entity initialState = null;
 
     public II getUniqueIdentifier() {
         return uniqueIdentifier;

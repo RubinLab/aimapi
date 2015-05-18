@@ -42,15 +42,22 @@ import org.w3c.dom.NodeList;
  */
 public class ImageAnnotation extends AnnotationEntity {
 
-    public ImageAnnotation() {
-        setXsiType("ImageAnnotation");
-    }
     private SegmentationEntityCollection segmentationEntityCollection = new SegmentationEntityCollection();
     private MarkupEntityCollection markupEntityCollection = new MarkupEntityCollection();
     private ImageAnnotationStatementCollection imageAnnotationStatementCollection = new ImageAnnotationStatementCollection();
     private ImageReferenceEntityCollection imageReferenceEntityCollection = new ImageReferenceEntityCollection();
     private ImageAnnotationCollection imageAnnotationCollection;
+    
+    private ImageAnnotation initialState = null;
+    private int version = -1;
+    
+    
 
+    public ImageAnnotation() {
+        this.version = -1;
+        setXsiType("ImageAnnotation");
+    }
+    
     public SegmentationEntityCollection getSegmentationEntityCollection() {
         return segmentationEntityCollection;
     }
@@ -107,6 +114,19 @@ public class ImageAnnotation extends AnnotationEntity {
         this.imageAnnotationCollection = imageAnnotationCollection;
     }
 
+    public String refreshUniqueIdentifier() {
+        this.setUniqueIdentifier(new II(GenerateId.getUUID()));
+        return this.getUniqueIdentifier().getRoot();
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     @Override
     public Node getXMLNode(Document doc) throws AimException {
         if (getTagName() == null || "".equals(getTagName())) {
@@ -153,7 +173,10 @@ public class ImageAnnotation extends AnnotationEntity {
             }
         }
         //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
-        this.initialState = this.getClone();
+        this.setInitialState();
+        
+        if(this.getAuditTrailCollection() != null && this.getAuditTrailCollection().size() > 0)
+            this.setVersion(Integer.parseInt(this.getAuditTrailCollection().get(0).getComment().getValue()));
     }
 
     public boolean getIsEdited() {
@@ -164,7 +187,13 @@ public class ImageAnnotation extends AnnotationEntity {
     }
 
     public ImageAnnotation getInitialState() {
-        return (ImageAnnotation) this.initialState;
+        return this.initialState;
+    }
+    
+    public void setInitialState()
+    {
+        this.initialState = this.getClone();
+        
     }
 
     @Override
@@ -259,6 +288,8 @@ public class ImageAnnotation extends AnnotationEntity {
         if (this.getXsiType() != null) {
             res.setXsiType(this.getXsiType());
         }
+        
+        res.setVersion(this.getVersion());
         return res;
     }
 
@@ -283,5 +314,18 @@ public class ImageAnnotation extends AnnotationEntity {
             }
         }
         return res;
+    }
+
+    public boolean isEdited() {
+        return this.isEqualTo(this.initialState);
+    }
+       @Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof ImageAnnotation))
+            return false;
+       
+       if(this.getUniqueIdentifier().getRoot().equals(((ImageAnnotation)obj).getUniqueIdentifier().getRoot()))
+           return true;
+       return false;
     }
 }

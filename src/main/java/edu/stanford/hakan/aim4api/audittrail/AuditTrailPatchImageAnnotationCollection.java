@@ -29,7 +29,7 @@ public class AuditTrailPatchImageAnnotationCollection extends AuditTrailPatch {
 
     public void setImageAnnotationCollection(ImageAnnotationCollection imageAnnotationCollection) {
         this.imageAnnotationCollection = imageAnnotationCollection;
-        this.initialStateImageAnnotationCollection = imageAnnotationCollection.getInitialState();
+        //this.initialStateImageAnnotationCollection = imageAnnotationCollection.getInitialState();
     }
 
     @Override
@@ -55,18 +55,18 @@ public class AuditTrailPatchImageAnnotationCollection extends AuditTrailPatch {
             el_dateTime.setAttribute("value", this.initialStateImageAnnotationCollection.getDateTime());
             res.appendChild(el_dateTime);
         }
-        //*** user
-        if (this.imageAnnotationCollection.getUser().getIsEdited()) {
-            res.appendChild(this.initialStateImageAnnotationCollection.getUser().getXMLNode(doc));
-        }
-        //*** equipment
-        if (this.imageAnnotationCollection.getEquipment().getIsEdited()) {
-            res.appendChild(this.initialStateImageAnnotationCollection.getEquipment().getXMLNode(doc));
-        }
-        //*** person
-        if (this.imageAnnotationCollection.getPerson().getIsEdited()) {
-            res.appendChild(this.initialStateImageAnnotationCollection.getDescription().getXMLNode(doc));
-        }
+//        //*** user
+//        if (this.imageAnnotationCollection.getUser().getIsEdited()) {
+//            res.appendChild(this.initialStateImageAnnotationCollection.getUser().getXMLNode(doc));
+//        }
+//        //*** equipment
+//        if (this.imageAnnotationCollection.getEquipment().getIsEdited()) {
+//            res.appendChild(this.initialStateImageAnnotationCollection.getEquipment().getXMLNode(doc));
+//        }
+//        //*** person
+//        if (this.imageAnnotationCollection.getPerson().getIsEdited()) {
+//            res.appendChild(this.initialStateImageAnnotationCollection.getDescription().getXMLNode(doc));
+//        }
         return res;
     }
     

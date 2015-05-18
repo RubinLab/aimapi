@@ -50,7 +50,6 @@ public class AnnotationCollection implements IAimXMLOperations {
     private Enumerations.AimVersion aimVersion;
     private String tagName;
     private String xsiType;
-    protected AnnotationCollection initialState = null;
 
     public AnnotationCollection() {
         this.setUniqueIdentifier(new II(GenerateId.getUUID()));
@@ -63,8 +62,7 @@ public class AnnotationCollection implements IAimXMLOperations {
     public void setUniqueIdentifier(II uniqueIdentifier) {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
-    }
-    
+    }    
     
     public String  refreshUniqueIdentifier() {
         this.setUniqueIdentifier(new II(GenerateId.getUUID()));
@@ -76,6 +74,7 @@ public class AnnotationCollection implements IAimXMLOperations {
     }
 
     public void setDescription(ST description) {
+        if(description != null)
         description.setTagName("description");
         this.description = description;
     }

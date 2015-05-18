@@ -552,17 +552,17 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     @Override
     public boolean isSpline(int shapeID) {
-        return getShape(shapeID).equals(ShapeType.SPLINE);
+        return getShapeType(shapeID).equals(ShapeType.SPLINE);
     }
 
     @Override
     public boolean isNormal(int shapeID) {
-        return getShape(shapeID).equals(ShapeType.NORMAL);
+        return getShapeType(shapeID).equals(ShapeType.NORMAL);
     }
 
     @Override
     public boolean isPoint(int shapeID) {
-        return getShape(shapeID).equals(ShapeType.POINT);
+        return getShapeType(shapeID).equals(ShapeType.POINT);
     }
 
     @Override

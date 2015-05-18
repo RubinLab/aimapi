@@ -43,7 +43,7 @@ public class Equipment implements IAimXMLOperations {
     private ST deviceSerialNumber;
     private ST softwareVersion;
     private String tagName;
-    private Equipment initialState = null;
+    //private Equipment initialState = null;
 
     public ST getManufacturerName() {
         return manufacturerName;
@@ -137,19 +137,19 @@ public class Equipment implements IAimXMLOperations {
             }
         }
         //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
-        this.initialState = this.getClone();
+        //this.initialState = this.getClone();
     }
 
-    public boolean getIsEdited() {
-        if (this.initialState == null) {
-            return false;
-        }
-        return !this.isEqualTo(this.initialState);
-    }
+//    public boolean getIsEdited() {
+//        if (this.initialState == null) {
+//            return false;
+//        }
+//        return !this.isEqualTo(this.initialState);
+//    }
 
-    public Equipment getInitialState() {
-        return this.initialState;
-    }
+//    public Equipment getInitialState() {
+//        return this.initialState;
+//    }
 
     @Override
     public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
