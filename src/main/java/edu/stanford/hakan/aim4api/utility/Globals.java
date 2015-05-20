@@ -5,6 +5,7 @@
  */
 package edu.stanford.hakan.aim4api.utility;
 
+import edu.stanford.hakan.aim4api.resources.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +28,7 @@ public class Globals {
     
     public static String getAimQLXmlFilePath() {
         try {
-            URL xmlPath = Globals.class.getResource("../files/AimXPath.xml");
+            URL xmlPath = Resource.class.getResource("AimXPath.xml");
             String fileName = xmlPath.getFile();
             File f = new File(fileName);
             if (f.exists() && !f.isDirectory()) {
@@ -61,7 +62,7 @@ public class Globals {
 //    public static String getAimQLXmlFilePath() {
 //
 //        try {
-//            URL xmlPath = Globals.class.getResource("../files/AimXPath.xml");
+//            URL xmlPath = Globals.class.getResource("../resources/AimXPath.xml");
 //            String fileName = xmlPath.getFile();
 //            File f = new File(fileName);
 //            if (f.exists() && !f.isDirectory()) {
@@ -97,7 +98,7 @@ public class Globals {
 
     public static String getAnnotationListTxtFilePath() {
         try {
-            URL xmlPath = Globals.class.getResource("../files/AnnotationsList.txt");
+            URL xmlPath = Resource.class.getResource("AnnotationsList.txt");
             String fileName = xmlPath.getFile();
             File f = new File(fileName);
             if (f.exists() && !f.isDirectory()) {
@@ -128,4 +129,15 @@ public class Globals {
         return "";
     }
 
+    public static String getXSDPath() {
+        URL xsdPath = Resource.class.getResource("AIM_v4.xsd");
+        if (xsdPath != null) {
+            File f = new File(xsdPath.getFile());
+            if (f.exists() && !f.isDirectory()) {
+                return xsdPath.getFile();
+            }
+
+        }
+        return "";
+    }
 }

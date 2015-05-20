@@ -111,7 +111,7 @@ public class AnnotationGetter {
 
     public static ImageAnnotationCollection getImageAnnotationCollectionFromFile(String PathXML, String PathXSD)
             throws AimException {
-        try {
+        try {      
             if (!"".equals(PathXSD.trim())) {
                 // *** Validation
                 boolean valRes = AnnotationValidator.ValidateXML(PathXML, PathXSD);
@@ -174,6 +174,11 @@ public class AnnotationGetter {
 
     public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
             String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
+        
+            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+                PathXSD = Globals.getXSDPath();
+            }
+            
         if (namespace == null || "".equals(namespace.trim())) {
             throw new AimException("AimException: Namespace must be defined");
         }

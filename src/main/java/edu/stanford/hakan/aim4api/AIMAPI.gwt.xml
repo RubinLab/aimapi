@@ -16,7 +16,7 @@
   <source path='compability/aimv3'/> 
   <source path='database/exist'/> 
   <source path='database/mysql'/> 
-  <source path='files'/> 
+  <source path='resources'/> 
   <source path='usage'/> 
   <source path='utility'/> 
   <source path='utility/dotnet'/> 

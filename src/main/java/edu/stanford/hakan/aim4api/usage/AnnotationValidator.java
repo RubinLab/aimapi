@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.usage;
 
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import edu.stanford.hakan.aim4api.utility.Globals;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -109,6 +110,9 @@ public class AnnotationValidator {
 
     private static boolean isValid(Source source, String PathXSD) {
         try {
+            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+                PathXSD = Globals.getXSDPath();
+            }
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(new File(PathXSD));
             Validator validator = schema.newValidator();

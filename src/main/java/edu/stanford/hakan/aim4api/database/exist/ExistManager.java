@@ -11,6 +11,7 @@ import edu.stanford.hakan.aim4api.usage.AnnotationGetter;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationResult;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
 import edu.stanford.hakan.aim4api.usage.AnnotationValidator;
+import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.BufferedInputStream;
@@ -344,6 +345,11 @@ public class ExistManager {
     
         public static List<ImageAnnotationCollection> getImageAnnotationCollectionListFromDocument(Document doc,
             String PathXSD) throws AimException {
+            
+            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+                PathXSD = Globals.getXSDPath();
+            }
+            
         List<ImageAnnotationCollection> res = new ArrayList<ImageAnnotationCollection>();
         try {
             Node firstNode = doc.getFirstChild();
