@@ -110,9 +110,10 @@ public class AnnotationValidator {
 
     private static boolean isValid(Source source, String PathXSD) {
         try {
-            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-                PathXSD = Globals.getXSDPath();
-            }
+//            //*** undo
+//            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+//                PathXSD = Globals.getXSDPath();
+//            }
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(new File(PathXSD));
             Validator validator = schema.newValidator();

@@ -131,13 +131,27 @@ public class Globals {
 
     public static String getXSDPath() {
         URL xsdPath = Resource.class.getResource("AIM_v4.xsd");
+        
+        //return Resource.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         if (xsdPath != null) {
             File f = new File(xsdPath.getFile());
             if (f.exists() && !f.isDirectory()) {
                 return xsdPath.getFile();
             }
-
         }
-        return "";
+        else
+        {
+//            try {
+//                String res = System.getProperty("user.home") + "/epad/DicomProxy/resources/schema/" + EPADConfig.getInstance().getStringPropertyValue("xsdFileV4");
+//                File f = new File(res);
+//                if (f.exists() && !f.isDirectory()) {
+//                    return res;
+//                }
+//            } catch (Exception ex) {
+//                return ex.getMessage();
+//            }
+        }
+        
+        return "=======+++: " + System.getProperty("user.home");
     }
 }

@@ -69,9 +69,10 @@ public class AnnotationBuilder {
 
     public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException {
         try {
-            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-                PathXSD = Globals.getXSDPath();
-            }
+//            //*** undo
+//            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+//                PathXSD = Globals.getXSDPath();
+//            }
 
             clearAimXMLsaveResult();
             Document doc = XML.createDocument();
@@ -132,9 +133,10 @@ public class AnnotationBuilder {
     public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
         
-        if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-            PathXSD = Globals.getXSDPath();
-        }
+  //            //*** undo
+//            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+//                PathXSD = Globals.getXSDPath();
+//            }
 
         boolean checkTheServer = true;
         String operation = "Saving";
@@ -206,9 +208,10 @@ public class AnnotationBuilder {
     private static void performUploadExist(ImageAnnotationCollection Anno, String Url, String Collection,
             String FileName, String PathXSD, String userName, String password) throws AimException {
 
-        if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-            PathXSD = Globals.getXSDPath();
-        }
+//            //*** undo
+//            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+//                PathXSD = Globals.getXSDPath();
+//            }
 
         Document doc = XML.createDocument();
         Element root = (Element) Anno.getXMLNode(doc);
