@@ -89,8 +89,7 @@ public class AnnotationValidator {
             setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
             return false;
         }
-    }
-    
+    }    
     
     public static boolean ValidateXML(Node node, String PathXSD) {
         try {
@@ -110,10 +109,9 @@ public class AnnotationValidator {
 
     private static boolean isValid(Source source, String PathXSD) {
         try {
-//            //*** undo
-//            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-//                PathXSD = Globals.getXSDPath();
-//            }
+            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+                PathXSD = Globals.getXSDPath();
+            }
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(new File(PathXSD));
             Validator validator = schema.newValidator();
@@ -128,7 +126,6 @@ public class AnnotationValidator {
             return false;
         }
     }
-
 
     private static Source documentToSource(Document doc, String tempXmlPath) {
         try {

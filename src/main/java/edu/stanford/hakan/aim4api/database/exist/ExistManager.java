@@ -346,10 +346,9 @@ public class ExistManager {
         public static List<ImageAnnotationCollection> getImageAnnotationCollectionListFromDocument(Document doc,
             String PathXSD) throws AimException {
             
-//            //*** undo
-//            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-//                PathXSD = Globals.getXSDPath();
-//            }
+            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+                PathXSD = Globals.getXSDPath();
+            }
             
         List<ImageAnnotationCollection> res = new ArrayList<ImageAnnotationCollection>();
         try {

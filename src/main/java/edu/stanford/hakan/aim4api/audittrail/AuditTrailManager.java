@@ -278,6 +278,26 @@ public class AuditTrailManager {
         ImageAnnotationCollection iacVersionHandler = null;
             ImageAnnotationCollection lastVersion = this.getMaxVersionNumber(iac);
             List<ImageAnnotationCollection> listAllVersions = this.getListAllVersions(iac);
+            
+        for (ImageAnnotationCollection temp : listAllVersions) {
+            try {
+                String uid = temp.getImageAnnotation().getUniqueIdentifier().getRoot();
+                String commentA = temp.getImageAnnotation().getComment().getValue();
+                String preUid = temp.getImageAnnotation().getPrecedentReferencedAnnotationUid().getRoot();
+                if (preUid != null && !"".equals(preUid.trim())) {
+                    for (ImageAnnotationCollection temp2 : listAllVersions) {
+                        if (temp2.getImageAnnotation().getUniqueIdentifier().getRoot().equals(preUid)) {
+
+                            String commentB = temp2.getImageAnnotation().getComment().getValue();
+                            String abc = "abc";
+                        }
+                    }
+                }
+            } catch (Throwable th) {
+
+            }
+        }
+
         //*** iac is the current state of the IAC
         if (iac.getVersion() == -1) {
             //*** it will be the first version of the iac
@@ -289,7 +309,8 @@ public class AuditTrailManager {
             }//*** I will append its initial state as the new version.
             else {
                 //*** just its initial state will be the next version
-                this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, lastVersion.getImageAnnotation().getUniqueIdentifier().getRoot());
+                //this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, lastVersion.getImageAnnotation().getUniqueIdentifier().getRoot());
+                this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, getPreviousUID(iac));
                 this.setPreviousUID(iac, iacCloneInitialState.getImageAnnotation().getUniqueIdentifier().getRoot());
                 listAllVersions.add(iacCloneInitialState);
             }
@@ -425,6 +446,47 @@ public class AuditTrailManager {
     {
         return AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
     }
+    
+    public ImageAnnotationCollection getPreviousVersion(ImageAnnotationCollection iac) throws AimException
+    {
+//        if("comment 0".equals(iac.getImageAnnotation().getComment().getValue()))
+//            iac= iac;
+        ImageAnnotationCollection iacCurrent = null;
+        if(iac.getVersion() != -1)
+            iacCurrent = this.getCurrentVersion(iac);
+        else
+            iacCurrent = iac;
+        List<ImageAnnotationCollection> listVersions = this.getListAllVersions(iacCurrent);
+        String preUID = "";
+        if( iac.getImageAnnotation().getPrecedentReferencedAnnotationUid() != null && iac.getImageAnnotation().getPrecedentReferencedAnnotationUid().getRoot() != null)
+        preUID = iac.getImageAnnotation().getPrecedentReferencedAnnotationUid().getRoot();
+        else 
+            return null;
+        for(ImageAnnotationCollection temp:listVersions)
+        {
+            if(temp.getImageAnnotation().getUniqueIdentifier().getRoot() == null ? preUID == null : temp.getImageAnnotation().getUniqueIdentifier().getRoot().equals(preUID))
+            {
+                ImageAnnotationCollection iacCurrentClone = iacCurrent.getClone();
+                iacCurrentClone.getImageAnnotations().clear();
+                iacCurrentClone.addImageAnnotation(temp.getImageAnnotation());
+                return iacCurrentClone; 
+            }
+        }
+        return null;
+    }
+    
+    public List<ImageAnnotationCollection> getPreviousVersions(ImageAnnotationCollection iac) throws AimException
+    {
+        List<ImageAnnotationCollection> res = new ArrayList<>();
+        ImageAnnotationCollection preVersion = this.getPreviousVersion(iac);
+        while(preVersion != null)
+        {
+            res.add(preVersion);
+            preVersion = this.getPreviousVersion(preVersion);
+        }
+        return res;
+    }
+    
 }
 
 

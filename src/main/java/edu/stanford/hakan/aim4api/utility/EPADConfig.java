@@ -12,6 +12,8 @@ package edu.stanford.hakan.aim4api.utility;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -33,7 +35,7 @@ public class EPADConfig
 		return ourInstance;
 	}
 
-	private EPADConfig()
+	private EPADConfig()  
 	{
 		try {
 			properties = new Properties();
@@ -47,7 +49,7 @@ public class EPADConfig
 			} finally {
 				IOUtils.closeQuietly(fis);
 			}
-		} catch (Exception e) {
+		} catch (IOException | IllegalStateException e) {
 		}
 	}
 
