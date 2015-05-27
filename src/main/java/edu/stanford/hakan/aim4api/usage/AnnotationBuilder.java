@@ -104,7 +104,8 @@ public class AnnotationBuilder {
     }
 
     public static String convertToString(ImageAnnotationCollection Anno) throws AimException {
-        try {           Document doc = XML.createDocument();
+        try {           
+            Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
             XML.setBaseAttributes(root);
             doc.appendChild(root);
