@@ -141,7 +141,7 @@ public class AnnotationBuilder {
         try {
             //*** Audit Trail
             AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-
+//
             List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
             for(ImageAnnotationCollection iac:resAuditTrail)
             {
@@ -149,6 +149,14 @@ public class AnnotationBuilder {
                         dbUserName, dbUserPassword);
                 
             }
+            
+            
+            
+//            
+//            performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+//                        dbUserName, dbUserPassword);
+            
+            
 //            if (resAuditTrail.size() == 2) {
 //                performUploadExist(resAuditTrail.get(0), serverUrl, collection, "AIM_" + resAuditTrail.get(0).getUniqueIdentifier().getRoot() + ".xml", PathXSD,
 //                        dbUserName, dbUserPassword);
