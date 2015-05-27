@@ -1022,7 +1022,7 @@ public class AnnotationGetter {
         String studyID = "";
         String seriesID = "";
 
-        StreamWriter sw = new StreamWriter(Globals.getAnnotationListTxtFilePath());
+        StreamWriter sw = new StreamWriter(Globals.getAnnotationListTxtFilePath(),false);
         NodeList listChilds = node.getChildNodes();
         for (int i = 0; i < listChilds.getLength(); i++) {
             Node currentNode = listChilds.item(i);

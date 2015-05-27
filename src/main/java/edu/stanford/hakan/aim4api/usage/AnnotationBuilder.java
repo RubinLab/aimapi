@@ -33,6 +33,7 @@ import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.resources.Resource;
 import edu.stanford.hakan.aim4api.utility.Globals;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.StringWriter;
 import java.net.URL;
@@ -144,30 +145,18 @@ public class AnnotationBuilder {
                     .getUniqueIdentifier().getRoot())) {
                 performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                         dbUserName, dbUserPassword);
+                Logger.write("saveToServer: first case");
             } else {
-//                *** Audit Trail
+                Logger.write("saveToServer: second case");
+                //*** Audit Trail
                 AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-
                 List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
                 for (ImageAnnotationCollection iac : resAuditTrail) {
                     performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                             dbUserName, dbUserPassword);
                 }
             }
-
-//            if (resAuditTrail.size() == 2) {
-//                performUploadExist(resAuditTrail.get(0), serverUrl, collection, "AIM_" + resAuditTrail.get(0).getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                        dbUserName, dbUserPassword);
-//                performUploadExist(resAuditTrail.get(1), serverUrl, collection, "AIM_" + resAuditTrail.get(1).getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                        dbUserName, dbUserPassword);
-//            }
-//            ImageAnnotationCollection versionHandler = auditTrailManager.perform(Anno);
-//            if (versionHandler != null) {
-//                performUploadExist(versionHandler, serverUrl, collection, "AIM_" + versionHandler.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                        dbUserName, dbUserPassword);
-//            }
-//            performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                    dbUserName, dbUserPassword);
+            
             if (checkTheServer) {
                 if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {

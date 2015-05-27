@@ -200,4 +200,12 @@ public class Globals {
         }
         return res;
     }
+    
+    
+     public static String getAimLogPath() {
+        List<String> listResources = new ArrayList<>();
+        List<String> listConfigVariables = new ArrayList<>();
+        listResources.add("AIMAPI.log");
+        return getFile(listResources, listConfigVariables, 1);
+    }
 }
