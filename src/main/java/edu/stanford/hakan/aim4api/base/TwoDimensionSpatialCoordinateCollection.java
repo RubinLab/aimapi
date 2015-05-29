@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.utility.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,15 +116,18 @@ public class TwoDimensionSpatialCoordinateCollection implements IAimXMLOperation
 
     @Override
     public boolean isEqualTo(Object other) {
+        Logger.write("Geldi TwoDimensionSpatialCoordinateCollection isEqualTo");
         TwoDimensionSpatialCoordinateCollection oth = (TwoDimensionSpatialCoordinateCollection) other;
         if (this.listTwoDimensionSpatialCoordinate.size() != oth.listTwoDimensionSpatialCoordinate.size()) {
             return false;
         }
+        Logger.write("this.listTwoDimensionSpatialCoordinate.size(): " + this.listTwoDimensionSpatialCoordinate.size());
         for (int i = 0; i < this.listTwoDimensionSpatialCoordinate.size(); i++) {
             if (this.listTwoDimensionSpatialCoordinate.get(i) == null ? oth.listTwoDimensionSpatialCoordinate.get(i) != null : !this.listTwoDimensionSpatialCoordinate.get(i).isEqualTo(oth.listTwoDimensionSpatialCoordinate.get(i))) {
                 return false;
             }
         }
+        Logger.write("Geldi TwoDimensionSpatialCoordinateCollection returning true");
         return true;
     }
 

@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import java.util.ArrayList;
 import java.util.List;
@@ -177,13 +178,11 @@ public class MarkupEntityCollection implements IAimXMLOperations {
                 }
             }
         }
-
     }
 
     @Override
     public Node getRDFNode(Document doc, String unquieID, String Prefix) throws AimException {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools
-// | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -192,11 +191,139 @@ public class MarkupEntityCollection implements IAimXMLOperations {
         if (this.listMarkupEntity.size() != oth.listMarkupEntity.size()) {
             return false;
         }
+
+//        for (int i = 0; i < this.listMarkupEntity.size(); i++) {
+//            String xsiType = this.listMarkupEntity.get(i).getXsiType();
+//                Logger.write("xsiType: " + xsiType);
+//            String xsiTypeOther = oth.get(i).getXsiType();
+//            if (!xsiType.equals(xsiTypeOther)) {
+//                return false;
+//            }
+//
+//            if ("TextAnnotationEntity".equals(xsiType)) {
+//            
+//                TextAnnotationEntity obj = (TextAnnotationEntity) this.listMarkupEntity.get(i);
+//                TextAnnotationEntity objOther = (TextAnnotationEntity) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("GeometricShapeEntity".equals(xsiType)) {
+//                GeometricShapeEntity obj = (GeometricShapeEntity) this.listMarkupEntity.get(i);
+//                GeometricShapeEntity objOther = (GeometricShapeEntity) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionGeometricShapeEntity".equals(xsiType)) {
+//                ThreeDimensionGeometricShapeEntity obj = (ThreeDimensionGeometricShapeEntity) this.listMarkupEntity.get(i);
+//                ThreeDimensionGeometricShapeEntity objOther = (ThreeDimensionGeometricShapeEntity) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionPoint".equals(xsiType)) {
+//                ThreeDimensionPoint obj = (ThreeDimensionPoint) this.listMarkupEntity.get(i);
+//                ThreeDimensionPoint objOther = (ThreeDimensionPoint) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionPolygon".equals(xsiType)) {
+//                ThreeDimensionPolygon obj = (ThreeDimensionPolygon) this.listMarkupEntity.get(i);
+//                ThreeDimensionPolygon objOther = (ThreeDimensionPolygon) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionPolyline".equals(xsiType)) {
+//                ThreeDimensionPolyline obj = (ThreeDimensionPolyline) this.listMarkupEntity.get(i);
+//                ThreeDimensionPolyline objOther = (ThreeDimensionPolyline) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionEllipse".equals(xsiType)) {
+//                ThreeDimensionEllipse obj = (ThreeDimensionEllipse) this.listMarkupEntity.get(i);
+//                ThreeDimensionEllipse objOther = (ThreeDimensionEllipse) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionEllipsoid".equals(xsiType)) {
+//                ThreeDimensionEllipsoid obj = (ThreeDimensionEllipsoid) this.listMarkupEntity.get(i);
+//                ThreeDimensionEllipsoid objOther = (ThreeDimensionEllipsoid) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("ThreeDimensionMultiPoint".equals(xsiType)) {
+//                ThreeDimensionMultiPoint obj = (ThreeDimensionMultiPoint) this.listMarkupEntity.get(i);
+//                ThreeDimensionMultiPoint objOther = (ThreeDimensionMultiPoint) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionGeometricShapeEntity".equals(xsiType)) {
+//                TwoDimensionGeometricShapeEntity obj = (TwoDimensionGeometricShapeEntity) this.listMarkupEntity.get(i);
+//                TwoDimensionGeometricShapeEntity objOther = (TwoDimensionGeometricShapeEntity) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionMultiPoint".equals(xsiType)) {
+//        Logger.write("Geldim TwoDimensionMultiPoint");
+//                TwoDimensionMultiPoint obj = (TwoDimensionMultiPoint) this.listMarkupEntity.get(i);
+//                TwoDimensionMultiPoint objOther = (TwoDimensionMultiPoint) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionPoint".equals(xsiType)) {
+//                TwoDimensionPoint obj = (TwoDimensionPoint) this.listMarkupEntity.get(i);
+//                TwoDimensionPoint objOther = (TwoDimensionPoint) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionCircle".equals(xsiType)) {
+//                TwoDimensionCircle obj = (TwoDimensionCircle) this.listMarkupEntity.get(i);
+//                TwoDimensionCircle objOther = (TwoDimensionCircle) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionEllipse".equals(xsiType)) {
+//                TwoDimensionEllipse obj = (TwoDimensionEllipse) this.listMarkupEntity.get(i);
+//                TwoDimensionEllipse objOther = (TwoDimensionEllipse) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionPolyline".equals(xsiType)) {
+//
+//                TwoDimensionPolyline obj = (TwoDimensionPolyline) this.listMarkupEntity.get(i);
+//                TwoDimensionPolyline objOther = (TwoDimensionPolyline) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//            if ("TwoDimensionSpline".equals(xsiType)) {
+//                TwoDimensionSpline obj = (TwoDimensionSpline) this.listMarkupEntity.get(i);
+//                TwoDimensionSpline objOther = (TwoDimensionSpline) oth.listMarkupEntity.get(i);
+//                if (!obj.isEqualTo(objOther)) {
+//                    return false;
+//                }
+//            }
+//        }
+
         for (int i = 0; i < this.listMarkupEntity.size(); i++) {
             if (this.listMarkupEntity.get(i) == null ? oth.listMarkupEntity.get(i) != null : !this.listMarkupEntity.get(i).isEqualTo(oth.listMarkupEntity.get(i))) {
                 return false;
             }
         }
+        
+        Logger.write("returning TRUE");
         return true;
     }
 

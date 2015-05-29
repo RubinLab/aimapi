@@ -30,6 +30,7 @@ package edu.stanford.hakan.aim4api.usage;
 import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.resources.Resource;
 import edu.stanford.hakan.aim4api.utility.Globals;
@@ -137,26 +138,34 @@ public class AnnotationBuilder {
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
         }
-
+        Logger.write("============================");
+        Logger.write("============================");
+        Double me = ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX();
+        Double init = ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getInitialState().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX();
+        Logger.write("==== saveToServer: GeoShape X: " + ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX());
+        Logger.write("==== saveToServer: GeoShape X Initial: " + ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getInitialState().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX());
+        Logger.write("============================");
+        Logger.write("============================");
         boolean checkTheServer = true;
         String operation = "Saving";
         try {
-            if (!AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
-                    .getUniqueIdentifier().getRoot())) {
+//            if (!AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+//                    .getUniqueIdentifier().getRoot())) {
                 performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                         dbUserName, dbUserPassword);
                 Logger.write("saveToServer: first case");
-            } else {
-                Logger.write("saveToServer: second case");
-                //*** Audit Trail
-                AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-                List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
-                for (ImageAnnotationCollection iac : resAuditTrail) {
-                    performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-                            dbUserName, dbUserPassword);
-                }
-            }
-            
+//            } else {
+//                Logger.write("saveToServer: second case");
+//                //*** Audit Trail
+//                AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
+//                List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
+//                Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
+//                for (ImageAnnotationCollection iac : resAuditTrail) {
+//                    performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+//                            dbUserName, dbUserPassword);
+//                }
+//            }
+
             if (checkTheServer) {
                 if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {

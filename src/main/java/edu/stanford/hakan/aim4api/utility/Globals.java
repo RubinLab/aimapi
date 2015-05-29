@@ -206,6 +206,8 @@ public class Globals {
         List<String> listResources = new ArrayList<>();
         List<String> listConfigVariables = new ArrayList<>();
         listResources.add("AIMAPI.log");
+        listConfigVariables.add("baseSchemaDir");
+        listConfigVariables.add("aimApiLog");
         return getFile(listResources, listConfigVariables, 1);
     }
 }
