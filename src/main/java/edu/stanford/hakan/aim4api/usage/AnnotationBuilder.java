@@ -149,22 +149,22 @@ public class AnnotationBuilder {
         boolean checkTheServer = true;
         String operation = "Saving";
         try {
-//            if (!AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
-//                    .getUniqueIdentifier().getRoot())) {
+            if (!AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+                    .getUniqueIdentifier().getRoot())) {
                 performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                         dbUserName, dbUserPassword);
                 Logger.write("saveToServer: first case");
-//            } else {
-//                Logger.write("saveToServer: second case");
-//                //*** Audit Trail
-//                AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-//                List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
-//                Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
-//                for (ImageAnnotationCollection iac : resAuditTrail) {
-//                    performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                            dbUserName, dbUserPassword);
-//                }
-//            }
+            } else {
+                Logger.write("saveToServer: second case");
+                //*** Audit Trail
+                AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
+                List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
+                Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
+                for (ImageAnnotationCollection iac : resAuditTrail) {
+                    performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
+                            dbUserName, dbUserPassword);
+                }
+            }
 
             if (checkTheServer) {
                 if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno

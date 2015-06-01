@@ -263,7 +263,8 @@ public class AuditTrailManager {
         
         
         Logger.write("0");
-        if (!iac.getIsEdited()) {
+        //if (!iac.getIsEdited()) {
+        if(!isEdited(iac)){
             
         Logger.write("0.1");
             return res;
@@ -357,6 +358,29 @@ public class AuditTrailManager {
         List<ImageAnnotationCollection> temp = new ArrayList<>();
         temp.add(listIACVersion);
         return buildIACVersionHandler(temp, iacCurrent);
+    }
+    
+    private boolean isEdited(ImageAnnotationCollection iac) throws AimException
+    {
+        if(iac.getImageAnnotation().getVersion() > 0)
+        {
+           List<ImageAnnotationCollection> listVersions = this.getListAllVersions(iac);
+           for(ImageAnnotationCollection other:listVersions)
+           {
+               if(other.getImageAnnotation().getVersion() ==iac.getImageAnnotation().getVersion())
+               {
+                   return !iac.isEqualTo(other);
+               }
+           }
+        }
+        else
+        {
+            ImageAnnotationCollection other = this.getCurrentVersion(iac);
+            return !iac.isEqualTo(other);
+        }
+        
+        
+        return false;
     }
 
 //    public List<ImageAnnotationCollection> getListOfVersions(ImageAnnotationCollection iacCurrent) throws AimException
