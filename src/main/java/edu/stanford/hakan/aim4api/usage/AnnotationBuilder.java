@@ -132,20 +132,16 @@ public class AnnotationBuilder {
         }
     }
 
-    public static void saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
+    public static ImageAnnotationCollection saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
+
+        Logger.write("**************** API VERSION 5 *****************");
+        Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());
+        Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
 
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
         }
-        Logger.write("============================");
-        Logger.write("============================");
-        Double me = ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX();
-        Double init = ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getInitialState().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX();
-        Logger.write("==== saveToServer: GeoShape X: " + ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX());
-        Logger.write("==== saveToServer: GeoShape X Initial: " + ((TwoDimensionMultiPoint) Anno.getImageAnnotation().getInitialState().getMarkupEntityCollection().get(0)).getTwoDimensionSpatialCoordinateList().get(0).getX());
-        Logger.write("============================");
-        Logger.write("============================");
         boolean checkTheServer = true;
         String operation = "Saving";
         try {
@@ -153,14 +149,17 @@ public class AnnotationBuilder {
                     .getUniqueIdentifier().getRoot())) {
                 performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                         dbUserName, dbUserPassword);
-                Logger.write("saveToServer: first case");
             } else {
-                Logger.write("saveToServer: second case");
                 //*** Audit Trail
                 AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-                List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV2(Anno);
-                Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
+                List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV3(Anno);
+                //Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
                 for (ImageAnnotationCollection iac : resAuditTrail) {
+                    if (iac.getUniqueIdentifier().getRoot().equals(Anno.getUniqueIdentifier().getRoot())) {
+                        Anno = iac.getClone();
+                    }
+
+//                    Logger.write("UID iac in the loop: " + iac.getImageAnnotation().getUniqueIdentifier().getRoot());
                     performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
                             dbUserName, dbUserPassword);
                 }
@@ -182,6 +181,8 @@ public class AnnotationBuilder {
                     + ex.getMessage());
         }
 
+        Logger.write("UID IA after AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
+   return Anno;
     }
 
     public static void saveNode(Node node, String Path) throws AimException {

@@ -323,7 +323,7 @@ public class MarkupEntityCollection implements IAimXMLOperations {
             }
         }
         
-        Logger.write("returning TRUE");
+        //Logger.write("returning TRUE");
         return true;
     }
 

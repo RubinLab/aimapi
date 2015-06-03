@@ -160,13 +160,13 @@ public class TwoDimensionSpatialCoordinate implements IAimXMLOperations {
     public boolean isEqualTo(Object other) {
         TwoDimensionSpatialCoordinate oth = (TwoDimensionSpatialCoordinate) other;
         
-        Logger.write("Geldi TwoDimensionSpatialCoordinate isEqualTo");
+        //Logger.write("Geldi TwoDimensionSpatialCoordinate isEqualTo");
         if (this.coordinateIndex == null ? oth.coordinateIndex != null : !this.coordinateIndex.equals(oth.coordinateIndex)) {
             return false;
         }
         
-        Logger.write("this.x: " + this.x);
-        Logger.write("oth.x: " + oth.x);
+        //Logger.write("this.x: " + this.x);
+        //Logger.write("oth.x: " + oth.x);
         if (this.x == null ? oth.x != null : !this.x.equals(oth.x)) {
             return false;
         }
@@ -177,7 +177,7 @@ public class TwoDimensionSpatialCoordinate implements IAimXMLOperations {
     }
 
     public TwoDimensionSpatialCoordinate getClone() {
-        Logger.write("TwoDimensionSpatialCoordinate.getClone");
+        //Logger.write("TwoDimensionSpatialCoordinate.getClone");
         TwoDimensionSpatialCoordinate res = new TwoDimensionSpatialCoordinate();
         if (this.getCoordinateIndex() != null) {
             res.setCoordinateIndex(this.getCoordinateIndex());

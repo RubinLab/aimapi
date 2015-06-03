@@ -262,11 +262,11 @@ public class AuditTrailManager {
         List<ImageAnnotationCollection> res = new ArrayList<>();
         
         
-        Logger.write("0");
+        //Logger.write("0");
         //if (!iac.getIsEdited()) {
         if(!isEdited(iac)){
             
-        Logger.write("0.1");
+        //Logger.write("0.1");
             return res;
         }
         ImageAnnotationCollection iacCloneInitialState = iac.getClone();
@@ -297,20 +297,20 @@ public class AuditTrailManager {
 //            }
 //        }
 
-        Logger.write("1");
+        //Logger.write("1");
         //*** iac is the current state of the IAC
         if (iac.getVersion() == -1) {
-        Logger.write("2");
+        //Logger.write("2");
             //*** it will be the first version of the iac
             if ("".equals(getPreviousUID(iac)) || lastVersion == null) {
-        Logger.write("3");
+        //Logger.write("3");
                 this.convertToVersion(iacCloneInitialState, 1, "");
                 this.setPreviousUID(iacCloneInitialState, null);
                 this.setPreviousUID(iac, iacCloneInitialState.getImageAnnotation().getUniqueIdentifier().getRoot());
                 listAllVersions.add(iacCloneInitialState);
             }//*** I will append its initial state as the new version.
             else {
-        Logger.write("4");
+        //Logger.write("4");
                 //*** just its initial state will be the next version
                 //this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, lastVersion.getImageAnnotation().getUniqueIdentifier().getRoot());
                 this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, getPreviousUID(iac));
@@ -319,7 +319,7 @@ public class AuditTrailManager {
             }
         }//*** iac is one of the version of IAC
         else {
-        Logger.write("5");
+        //Logger.write("5");
             ImageAnnotationCollection iacCurrent = this.getCurrentVersion(iac);// AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
             String originalUID_IAC = iacCurrent.getUniqueIdentifier().getRoot();
             String originalUID_IA = iacCurrent.getImageAnnotation().getUniqueIdentifier().getRoot();
@@ -502,6 +502,77 @@ public class AuditTrailManager {
             res.add(preVersion);
             preVersion = this.getPreviousVersion(preVersion);
         }
+        return res;
+    }
+    
+     public List<ImageAnnotationCollection> performV3(ImageAnnotationCollection iac) throws AimException {
+            //Logger.write("=== performV3 = starting");
+        List<ImageAnnotationCollection> res = new ArrayList<>();
+        ImageAnnotation iaComming = iac.getImageAnnotation();
+        //***  setting required variables
+        ImageAnnotationCollection iacCurrentDB = AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
+        ImageAnnotationCollection iacVersionHandlerDB = null;
+        String description = iac.getUniqueIdentifier().getRoot() + key;
+        List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+        if (listTemp.size() > 0) {
+            iacVersionHandlerDB = listTemp.get(0);
+        }
+        //*** ia from current iac in the db
+        ImageAnnotation iaCurrentDB = null;
+        //*** ia from version handler iac in the db
+        ImageAnnotation iaVersionDB = null;
+        if (iacCurrentDB != null) {
+            //Logger.write("=== iacCurrentDB is not null");
+            if (iacCurrentDB.getImageAnnotation().getUniqueIdentifier().getRoot().equals(iaComming.getUniqueIdentifier().getRoot())) {
+                iaCurrentDB = iacCurrentDB.getImageAnnotation();
+            }
+                
+        }
+            else
+            //Logger.write("=== iacCurrentDB is null ???");
+        //*** I couldn't fing the comming ia as the current ia, so I will shearch it in the version handler
+        if (iaCurrentDB == null && iacVersionHandlerDB != null) {
+            for (ImageAnnotation temp : iacVersionHandlerDB.getImageAnnotations()) {
+                if (temp.getUniqueIdentifier().getRoot().equals(iaComming.getUniqueIdentifier().getRoot())) {
+                    iaVersionDB = temp;
+                }
+            }
+        }
+
+        //Logger.write("=== iacVersionHandlerDB " + iacVersionHandlerDB);
+        
+        //*** I found or not found the comming ia in the db.
+        //*** the comming iac is not exist in the db. 
+        //*** which means that, it is a new iac and we just save it.
+        if (iacCurrentDB == null) {
+            res.add(iac);
+        } //*** which means that, the iac exist in the db but it has no version before.
+        else if (iacCurrentDB != null && iacVersionHandlerDB == null) {
+            //Logger.write("=== performV3 = 1");
+            //*** so, i should see the comming ia in the iacCurrentDB.
+            //*** I assume that, user won't update any UID.
+            if (iaCurrentDB != null) {
+           // Logger.write("=== performV3 = 2");
+                if (!iaComming.isEqualTo(iaCurrentDB)) {
+            //Logger.write("=== performV3 = 3");
+                    //*** firt, I should create a version handler for the iac
+                    //*** so, at this point. i already pushed the ia-db to version handler.
+                    ImageAnnotationCollection iacVersionHandler = iac.getClone();
+                    iacVersionHandler.refreshUniqueIdentifier();
+                    iacVersionHandler.setDescription(new ST(iac.getUniqueIdentifier().getRoot() + this.key));
+                    res.add(iacVersionHandler);
+                    iaComming.setPrecedentReferencedAnnotationUid(new II(iaCurrentDB.getUniqueIdentifier().getRoot()));
+                    iaComming.refreshUniqueIdentifier();
+                    res.add(iac);
+                } else {
+                    //*** the comming ia is not edited (same as ia in db)
+                    //*** so, we don't need to make anything.
+                }
+            } else {
+                //*** we have a problem...
+            }
+        }
+
         return res;
     }
 
