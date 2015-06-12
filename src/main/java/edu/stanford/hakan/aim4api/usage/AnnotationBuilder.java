@@ -138,11 +138,11 @@ public class AnnotationBuilder {
         Logger.write(" ");
         Logger.write(" ");
         Logger.write("**************** API VERSION 7 *****************");
-        if ("".equals(Anno.getImageAnnotation().getUniqueIdentifier().getRoot())) {
+        if (Anno.getImageAnnotation().getUniqueIdentifier() == null || "".equals(Anno.getImageAnnotation().getUniqueIdentifier().getRoot())) {
             Anno.getImageAnnotation().refreshUniqueIdentifier();
         }
         Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());        
-	if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
+        if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
         	Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
 
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
