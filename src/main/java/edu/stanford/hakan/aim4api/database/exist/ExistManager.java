@@ -4,6 +4,7 @@
  */
 package edu.stanford.hakan.aim4api.database.exist;
 
+import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
@@ -12,6 +13,7 @@ import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationRes
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
 import edu.stanford.hakan.aim4api.usage.AnnotationValidator;
 import edu.stanford.hakan.aim4api.utility.Globals;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.BufferedInputStream;
@@ -244,6 +246,7 @@ public class ExistManager {
                         "AimException: The Image Annotation which you want to remove is not exist. Please check your parameters.");
             }
 
+            
             String requestURL = Utility.correctToUrl(Url) + "rest/" + collection + "/AIM_" + uniqueIdentifier + ".xml";
 
             URL url = new URL(requestURL);
@@ -273,8 +276,22 @@ public class ExistManager {
             }
             reader.close();
 
+            Logger.write("==== auditTrailManager removing");
+            AuditTrailManager auditTrailManager = new AuditTrailManager(Url, nameSpace, collection, dbUserName, dbUserPassword, null);
+            ImageAnnotationCollection iacVersion = auditTrailManager.getIACVersionHandler(uniqueIdentifier);
+            if (iacVersion != null) {
+            Logger.write("==== iacVersion NOT NULL");
+                removeImageAnnotationCollectionFromServer(Url, nameSpace, collection,
+                        dbUserName, dbUserPassword, iacVersion.getUniqueIdentifier().getRoot());
+            }
+            else
+            {
+            
+            Logger.write("==== iacVersion NULL");
+            }
+            
             // Output the response
-            return "XML Saving operation is Successful.";
+            return "XML removing operation is Successful.";
         } catch (AimException ex) {
             throw new AimException("AimException: " + ex.getMessage());
         } catch (IOException ex) {

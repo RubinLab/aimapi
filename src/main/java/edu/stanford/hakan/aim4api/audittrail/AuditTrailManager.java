@@ -101,7 +101,18 @@ public class AuditTrailManager {
 
     private ImageAnnotationCollection getIACVersionHandler(ImageAnnotationCollection iac) throws AimException {
         String description = iac.getUniqueIdentifier().getRoot() + key;
-        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot() + key);
+        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+        ImageAnnotationCollection iacVersion = null;
+        if (listRes.size() > 0) {
+            iacVersion = listRes.get(0);
+        }
+        return iacVersion;
+    }
+    
+    public ImageAnnotationCollection getIACVersionHandler(String UIDofOriginal) throws AimException {
+        String description = UIDofOriginal+ key;
+        Logger.write("==== IAC description: " + description);
+        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         ImageAnnotationCollection iacVersion = null;
         if (listRes.size() > 0) {
             iacVersion = listRes.get(0);
