@@ -142,7 +142,8 @@ public class AnnotationBuilder {
             Anno.getImageAnnotation().refreshUniqueIdentifier();
         }
         Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());
-        Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
+        if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
+        	Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
 
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
