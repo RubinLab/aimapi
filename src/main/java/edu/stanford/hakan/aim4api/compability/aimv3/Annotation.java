@@ -67,10 +67,14 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
     private String precedentReferencedAnnotationUID;
     private String xsiType;
     private String OntologyPrefix;
+    
+    
 
     public Annotation intitalState = null;
     private String accessKey = "al536anhb55555";
 
+    
+    
     public Annotation() {
         this.uniqueIdentifier = GenerateId.getUUID();
         this.aimVersion = "AIM.3.0";

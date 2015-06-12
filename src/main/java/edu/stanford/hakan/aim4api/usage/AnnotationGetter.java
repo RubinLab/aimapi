@@ -254,8 +254,7 @@ public class AnnotationGetter {
             throw new AimException("AimException: Name must be defined");
         }
         String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.description.value = '" + description + "'";
-        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL,
-                "");
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
         return listAnno;
     }
 

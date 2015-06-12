@@ -39,6 +39,7 @@ import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 
 /**
  *
@@ -52,16 +53,19 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
     private TextAnnotationCollection textAnnotationCollection = new TextAnnotationCollection();
-    public static String line = "";
-    private static String iaV3UID = "";
+    //public static String line = "";
+
+    private String iaV3UID ="";
 
     public ImageAnnotation() {
         super();
+        this.setIAv3UID(GenerateId.getUUID());
         setXsiType("ImageAnnotation");
     }
 
     public ImageAnnotation(Integer cagridId, String comment, String dateTime, String name, String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion, String precedentReferencedAnnotationUID) {
         super(cagridId, comment, dateTime, name, codeValue, codeMeaning, codingSchemeDesignator, codingSchemeVersion, precedentReferencedAnnotationUID);
+        this.setIAv3UID(GenerateId.getUUID());
         setXsiType("ImageAnnotation");
     }
 
@@ -130,7 +134,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     }
 
     private void setIAv3UID(String iaV3UID) {
-        ImageAnnotation.iaV3UID = iaV3UID;
+        this.iaV3UID = iaV3UID;
     }
 
 //    @Override
@@ -261,6 +265,9 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         iaV4.addTypeCode(typeCode);//
         iaV4.setDateTime(this.getDateTime());//
+        if ("".equals(this.iaV3UID)) {
+            this.setIAv3UID(GenerateId.getUUID());
+        }
         iaV4.setUniqueIdentifier(new II(this.getIAv3UID()));
 
         iacV4.addImageAnnotation(iaV4);

@@ -90,6 +90,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private static final String PRIVATE_DESIGNATOR = "private";
     private static final String LINE_MEASURE = "linear";
     private static final String VERSION = "1.0";
+    
 
     public Aim() {
     }
@@ -127,7 +128,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         setGeometricShapeCollection(ia.getGeometricShapeCollection());
         setTextAnnotationCollection(ia.getTextAnnotationCollection());
         setListPerson(ia.getListPerson());
-
     }
 
     // build the new imageAnnotation
