@@ -108,9 +108,9 @@ public class AuditTrailManager {
         }
         return iacVersion;
     }
-    
+
     public ImageAnnotationCollection getIACVersionHandler(String UIDofOriginal) throws AimException {
-        String description = UIDofOriginal+ key;
+        String description = UIDofOriginal + key;
         Logger.write("==== IAC description: " + description);
         List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         ImageAnnotationCollection iacVersion = null;
@@ -171,7 +171,6 @@ public class AuditTrailManager {
 //        this.convertToVersion(iac.getImageAnnotation(), versionNumber, PrecedentReferencedAnnotationUid);
 //        iac.setVersion(versionNumber);
 //    }
-
 //    public ImageAnnotationCollection perform(ImageAnnotationCollection iac) throws AimException {
 //        
 ////        //*** Kontrol
@@ -349,7 +348,6 @@ public class AuditTrailManager {
 //        res.add(iacVersionHandler);
 //        return res;
 //    }
-
 //    private ImageAnnotationCollection buildIACVersionHandler(List<ImageAnnotationCollection> listIACVersions, ImageAnnotationCollection iacCurrent) throws AimException {
 //        ImageAnnotationCollection res = this.getIACVersionHandler(iacCurrent);
 //        if (res == null) {
@@ -363,13 +361,11 @@ public class AuditTrailManager {
 //        }
 //        return res;
 //    }
-
 //    private ImageAnnotationCollection buildIACVersionHandler(ImageAnnotationCollection listIACVersion, ImageAnnotationCollection iacCurrent) throws AimException {
 //        List<ImageAnnotationCollection> temp = new ArrayList<>();
 //        temp.add(listIACVersion);
 //        return buildIACVersionHandler(temp, iacCurrent);
 //    }
-
 //    private boolean isEdited(ImageAnnotationCollection iac) throws AimException {
 //        if (iac.getImageAnnotation().getVersion() > 0) {
 //            List<ImageAnnotationCollection> listVersions = this.getListAllVersions(iac);
@@ -385,7 +381,6 @@ public class AuditTrailManager {
 //
 //        return false;
 //    }
-
 //    public List<ImageAnnotationCollection> getListOfVersions(ImageAnnotationCollection iacCurrent) throws AimException
 //    {
 //        List<ImageAnnotationCollection> res = new ArrayList<>();
@@ -408,7 +403,7 @@ public class AuditTrailManager {
         if (iacVersionHandler == null) {
             return temp;
         }
-        
+
         for (ImageAnnotation iaVersion : iacVersionHandler.getImageAnnotations()) {
             ImageAnnotationCollection iacClone = iacCurrent.getClone();
             iacClone.getImageAnnotations().clear();
@@ -445,7 +440,6 @@ public class AuditTrailManager {
 //        }
 //        return ia.getPrecedentReferencedAnnotationUid().getRoot();
 //    }
-
 //    private void setPreviousUID(ImageAnnotationCollection iac, String UID) {
 //        if (iac.getImageAnnotations() == null || iac.getImageAnnotations().size() <= 0) {
 //            return;
@@ -457,7 +451,6 @@ public class AuditTrailManager {
 //            ia.setPrecedentReferencedAnnotationUid(new II(UID));
 //        }
 //    }
-
 //    private ImageAnnotationCollection getMaxVersionNumber(ImageAnnotationCollection iacCurrent) throws AimException {
 //        int maxVersion = -1;
 //        ImageAnnotationCollection res = null;
@@ -467,11 +460,9 @@ public class AuditTrailManager {
 //        }
 //        return res;
 //    }
-
 //    public ImageAnnotationCollection getCurrentVersion(ImageAnnotationCollection iac) throws AimException {
 //        return AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
 //    }
-
 //    public ImageAnnotationCollection getPreviousVersion(ImageAnnotationCollection iac) throws AimException {
 ////        if("comment 0".equals(iac.getImageAnnotation().getComment().getValue()))
 ////            iac= iac;
@@ -508,7 +499,6 @@ public class AuditTrailManager {
 //        }
 //        return res;
 //    }
-
 //    public List<ImageAnnotationCollection> performV3(ImageAnnotationCollection iac) throws AimException {
 //        //Logger.write("=== performV3 = starting");
 //        List<ImageAnnotationCollection> res = new ArrayList<>();
@@ -576,7 +566,6 @@ public class AuditTrailManager {
 //
 //        return res;
 //    }
-
     public ImageAnnotationCollection performV4(ImageAnnotationCollection iac) throws AimException {
         ImageAnnotationCollection iaC_comming = null;
         ImageAnnotation ia_comming = null;
@@ -605,38 +594,57 @@ public class AuditTrailManager {
                 }
             }
         }
+        
+        String uid_ia_comming = "";
+        String comment_ia_comming = "";
+        String uid_ia_db = "";
+        String comment_ia_db = "";
+        String uid_ia_version= "";
+        String comment_ia_version = "";
+        
+        if(ia_comming != null){
+            uid_ia_comming = ia_comming.getUniqueIdentifier().getRoot();
+            comment_ia_comming = ia_comming.getComment().getValue();
+        }
+        if(ia_db != null){
+            uid_ia_db = ia_db.getUniqueIdentifier().getRoot();
+            comment_ia_db = ia_db.getComment().getValue();
+        }
+        if(ia_version != null){
+            uid_ia_version = ia_version.getUniqueIdentifier().getRoot();
+            comment_ia_version = ia_version.getComment().getValue();
+        }
 
         //*** decision
         if (iaC_db == null) {
             res.add(iaC_comming);
-        }
-        else if(ia_version != null)
-        {
+        } else if (ia_version != null) {
+            String uidBeforeRefresh = ia_db.getUniqueIdentifier().getRoot();
             ia_db.refreshUniqueIdentifier();
             iaC_version.addImageAnnotation(ia_db.getClone());
-            String uidBeforeRefresh = ia_version.getUniqueIdentifier().getRoot();
-            ia_version.refreshUniqueIdentifier();
-            String uidAfterRefresh = ia_version.getUniqueIdentifier().getRoot();
+            
+            
+//            ia_version.refreshUniqueIdentifier();
+//            String uidAfterRefresh = ia_version.getUniqueIdentifier().getRoot();
+            
+            ia_comming.setUniqueIdentifier(new II(uidBeforeRefresh));
             ia_comming.setPrecedentReferencedAnnotationUid(ia_version.getUniqueIdentifier().getClone());
             iaC_db.getImageAnnotations().clear();
             iaC_db.addImageAnnotation(ia_comming);
-            
-            for(ImageAnnotation ia:iaC_version.getImageAnnotations())
-            {
-                if(ia.getPrecedentReferencedAnnotationUid() != null && ia.getPrecedentReferencedAnnotationUid().getRoot().equals(uidBeforeRefresh))
-                {
-                    ia.setPrecedentReferencedAnnotationUid(new II(uidAfterRefresh));
-                }
-            }
-           
+
+//            for (ImageAnnotation ia : iaC_version.getImageAnnotations()) {
+//                if (ia.getPrecedentReferencedAnnotationUid() != null && ia.getPrecedentReferencedAnnotationUid().getRoot().equals(uidBeforeRefresh)) {
+//                    ia.setPrecedentReferencedAnnotationUid(new II(uidAfterRefresh));
+//                }
+//            }
+
             res.add(iaC_version);
             res.add(iaC_db);
-        
+
         } else if (iaC_db != null && iaC_version == null) {
             if (ia_db.isEqualTo(ia_comming)) {
                 return iaC_comming;
             }
-            
 
             iaC_version = iaC_comming.getClone();
             iaC_version.refreshUniqueIdentifier();
@@ -656,6 +664,7 @@ public class AuditTrailManager {
 
             res.add(iaC_version);
             res.add(iaC_db);
+            iaC_comming = iaC_db.getClone();
         } else if (iaC_db != null && iaC_version != null) {
             if (ia_db.isEqualTo(ia_comming)) {
                 return iaC_comming;
@@ -672,7 +681,7 @@ public class AuditTrailManager {
             res.add(iaC_version);
             res.add(iaC_db);
         }
-        
+
         if (iaC_version != null) {
             this.setVersionNumbers(iaC_db, iaC_version);
         }
@@ -680,22 +689,21 @@ public class AuditTrailManager {
         Logger.write("==== performV4-1");
         for (ImageAnnotationCollection temp : res) {
             II uid = temp.getImageAnnotation().getUniqueIdentifier();
-        Logger.write("==== performV4-2: version:" + temp.getVersion());
-        Logger.write(temp.getUniqueIdentifier().getRoot());
-        
+            Logger.write("==== performV4-2: version:" + temp.getVersion());
+            Logger.write(temp.getUniqueIdentifier().getRoot());
+
             AnnotationBuilder.performUploadExist(temp, serverURL, collection, "AIM_" + temp.getUniqueIdentifier().getRoot() + ".xml", Globals.getXSDPath(),
                     dbUserName, dbUserPassword);
-        Logger.write("==== performV4-3");
+            Logger.write("==== performV4-3");
             temp.getImageAnnotation().setUniqueIdentifier(uid);
-        Logger.write("==== performV4-4");
+            Logger.write("==== performV4-4");
         }
 
         Logger.write("==== performV4-5");
         return iaC_comming;
     }
-    
-    private void setVersionNumbers(ImageAnnotationCollection iaC_db, ImageAnnotationCollection iaC_version)
-    {
+
+    private void setVersionNumbers(ImageAnnotationCollection iaC_db, ImageAnnotationCollection iaC_version) {
         Logger.write("==== setVersionNumbers-1");
         iaC_db.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().clear();
         Logger.write("==== setVersionNumbers-2");
@@ -705,7 +713,7 @@ public class AuditTrailManager {
         int maxVersion = 0;
         for (ImageAnnotation ia_version : iaC_version.getImageAnnotations()) {
             if (ia_version.getVersion() > maxVersion) {
-        Logger.write("==== setVersionNumbers-4");
+                Logger.write("==== setVersionNumbers-4");
                 maxVersion = ia_version.getVersion();
             }
         }
@@ -733,12 +741,21 @@ public class AuditTrailManager {
         ia_2_Clone.setPrecedentReferencedAnnotationUid(null);
         ia_1_Clone.setAuditTrailCollection(null);
         ia_2_Clone.setAuditTrailCollection(null);
-        
+        ia_1_Clone.setDateTime("");
+        ia_2_Clone.setDateTime("");
+
         return ia_1_Clone.isEqualTo(ia_2_Clone);
     }
 
-    public ImageAnnotationCollection getUndo(ImageAnnotationCollection iac) throws AimException {
-        String comment = iac.getImageAnnotation().getComment().getValue();
+    private ImageAnnotationCollection getUndoReal(ImageAnnotationCollection iac) throws AimException {
+       
+        String uid_ia_Comming = "";
+        String comment_ia_Comming = "";
+        uid_ia_Comming = iac.getImageAnnotation().getUniqueIdentifier().getRoot();
+        comment_ia_Comming = iac.getImageAnnotation().getComment().getValue();
+            
+            
+        //String comment = iac.getImageAnnotation().getComment().getValue();
         ImageAnnotationCollection iaC_version = null;
         ImageAnnotation ia_Comming = iac.getImageAnnotation();
         String description = iac.getUniqueIdentifier().getRoot() + key;
@@ -746,7 +763,7 @@ public class AuditTrailManager {
         if (listTemp.size() > 0) {
             iaC_version = listTemp.get(0);
         }
-        
+
         if (iaC_version == null || iaC_version.getImageAnnotations().size() <= 0) {
             return null;
         }
@@ -757,17 +774,43 @@ public class AuditTrailManager {
 
         for (ImageAnnotation ia : iaC_version.getImageAnnotations()) {
             if (ia.getUniqueIdentifier().getRoot().equals(ia_Comming.getPrecedentReferencedAnnotationUid().getRoot())) {
-                if (!this.areTheyEqualExceptUID(ia, ia_Comming)) {
+//                if (!this.areTheyEqualExceptUID(ia, ia_Comming)) {
+                iac.getImageAnnotations().clear();
+                iac.addImageAnnotation(ia);
+                return iac;
+//                } else {
+//                    iac.getImageAnnotations().clear();
+//                    iac.addImageAnnotation(ia);
+//                    return getUndo(iac);
+//                }
+            }
+        }
+        return null;
+    }
+
+    public ImageAnnotationCollection getUndo(ImageAnnotationCollection iac) throws AimException {
+        if (iac == null) {
+            return null;
+        }
+        ImageAnnotation ia_Comming = iac.getImageAnnotation();
+        ImageAnnotationCollection undoIAC = getUndoReal(iac);
+
+        if (undoIAC != null) {
+            ImageAnnotation undoIA = undoIAC.getImageAnnotation();
+
+            if (undoIA.getUniqueIdentifier().getRoot().equals(ia_Comming.getPrecedentReferencedAnnotationUid().getRoot())) {
+                if (!this.areTheyEqualExceptUID(undoIA, ia_Comming)) {
                     iac.getImageAnnotations().clear();
-                    iac.addImageAnnotation(ia);
+                    iac.addImageAnnotation(undoIA);
                     return iac;
                 } else {
                     iac.getImageAnnotations().clear();
-                    iac.addImageAnnotation(ia);
+                    iac.addImageAnnotation(undoIA);
                     return getUndo(iac);
                 }
             }
         }
+
         return null;
     }
 
@@ -780,9 +823,31 @@ public class AuditTrailManager {
         }
         return res;
     }
-    
-    
+
     public ImageAnnotationCollection getRedo(ImageAnnotationCollection iac) throws AimException {
+        if (iac == null) {
+            return null;
+        }
+        
+        ImageAnnotationCollection iacUndoReal = getUndoReal(iac.getClone());
+        
+        
+        String uid_ia_UndoReal= "";
+        String comment_ia_UndoReal = "";
+        String uid_ia_Comming= "";
+        String comment_ia_Comming = "";
+        if (iacUndoReal != null) {
+            uid_ia_UndoReal = iacUndoReal.getImageAnnotation().getUniqueIdentifier().getRoot();
+            comment_ia_UndoReal = iacUndoReal.getImageAnnotation().getComment().getValue();
+        }
+        uid_ia_Comming = iac.getImageAnnotation().getUniqueIdentifier().getRoot();
+        comment_ia_Comming = iac.getImageAnnotation().getComment().getValue();
+        
+        if(iacUndoReal != null && this.areTheyEqualExceptUID(iac.getImageAnnotation(), iacUndoReal.getImageAnnotation()))
+        {
+             return getRedo(iacUndoReal);
+        }
+        
         ImageAnnotationCollection iaC_version = null;
         ImageAnnotation ia_Comming = iac.getImageAnnotation();
         String description = iac.getUniqueIdentifier().getRoot() + key;
@@ -807,13 +872,13 @@ public class AuditTrailManager {
                 } else {
                     iac.getImageAnnotations().clear();
                     iac.addImageAnnotation(ia);
-                    return getUndo(iac);
+                    return getRedo(iac);
                 }
             }
         }
         return null;
     }
-    
+
     public List<ImageAnnotationCollection> getRedoList(ImageAnnotationCollection iac) throws AimException {
         List<ImageAnnotationCollection> res = new ArrayList<>();
         ImageAnnotationCollection preVersion = this.getRedo(iac);
@@ -823,10 +888,9 @@ public class AuditTrailManager {
         }
         return res;
     }
-    
-    public ImageAnnotationCollection makeCurrent(ImageAnnotationCollection iac) throws AimException
-    {
-       return  this.performV4(iac);
+
+    public ImageAnnotationCollection makeCurrent(ImageAnnotationCollection iac) throws AimException {
+        return this.performV4(iac);
     }
 }
 
