@@ -1211,4 +1211,20 @@ public class AnnotationGetter {
         }
         return listAnno;
     }
+    
+    // *** All Deleteds
+    public static List<ImageAnnotationCollection> getDeletedImageAnnotationCollectionALL(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        for (int i = 0 ; i < listAnno.size() ; i++){
+            listAnno.get(i).setDescription(new ST(listAnno.get(i).getDescription().getValue().replaceAll(Globals.flagDeleted, "")));
+        }
+        return listAnno;
+    }
+    
 }
