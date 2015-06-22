@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.aimquery;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import java.util.List;
 
 /**
@@ -46,10 +47,30 @@ public class AimQuery {
             String expression = exp.getExpression();
             List<String> listXQuery = exp.getListXQuery();
             for (int j = 0; j < listXQuery.size(); j++) {
-                whereClause = whereClause.replace(expression, listXQuery.get(j));
+                String item = listXQuery.get(j);
+                if ("!=".equals(exp.getFunction().trim()) || "not like".equals(exp.getFunction().toLowerCase().trim()) ) {
+                    int indexOfSquareBracket = item.indexOf("[");
+                    String tempStr = item.substring(0, indexOfSquareBracket);
+                    int indexOfAt = item.indexOf("[@");
+                    if (indexOfAt >= 0) {
+                        int indexOfAt_2 = item.indexOf("]", indexOfAt);
+                        int attributeLenght = indexOfAt_2 - indexOfAt - 1;
+                        tempStr = tempStr + "[@" + item.substring(indexOfAt + 2, attributeLenght) + "]";
+                    }
+                    if (indexOfAt < 0) {
+                        indexOfAt = item.indexOf("(@");
+                        if (indexOfAt >= 0) {
+                            int indexOfAt_2 = item.indexOf(")", indexOfAt);
+                            int attributeLenght = indexOfAt_2 - indexOfAt - 1;
+                            tempStr = tempStr + "[@" + item.substring(indexOfAt + 2, indexOfAt_2) + "]";
+                        }
+                    }
+                    item = "(not(exists(" + tempStr + ")) OR " + item + ")";
+                }
+                whereClause = whereClause.replace(expression, item);
             }
         }
-
+        
         if (!"/".equals(collectionName.substring(0, 1))) {
             collectionName = "/" + collectionName.trim();
         }

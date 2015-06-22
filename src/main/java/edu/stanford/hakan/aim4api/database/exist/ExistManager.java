@@ -8,7 +8,10 @@ import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.usage.AnnotationBuilder;
 import edu.stanford.hakan.aim4api.usage.AnnotationGetter;
+import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getValidationResult;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.setValidationResult;
 import edu.stanford.hakan.aim4api.usage.AnnotationValidator;
@@ -51,8 +54,8 @@ import org.w3c.dom.Node;
  * @author localadmin
  */
 public class ExistManager {
-    
-     public static String getXMLStringFromExist(String Url, String XQuery, String dbUserName, String dbUserPassword)
+
+    public static String getXMLStringFromExist(String Url, String XQuery, String dbUserName, String dbUserPassword)
             throws AimException {
         try {
             Url = Utility.correctToUrl(Url);
@@ -109,9 +112,8 @@ public class ExistManager {
             throw new AimException("AimException: " + ex.getMessage());
         }
     }
-     
-     
-     public static String getXMLStringFromExistWithStartIndexEndIndex(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int endIndex)
+
+    public static String getXMLStringFromExistWithStartIndexEndIndex(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int endIndex)
             throws AimException {
         try {
             Url = Utility.correctToUrl(Url);
@@ -175,8 +177,8 @@ public class ExistManager {
             throw new AimException("AimException: " + ex.getMessage());
         }
     }
-     
-     public static String getXMLStringFromExistWithStartIndexCount(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int count)
+
+    public static String getXMLStringFromExistWithStartIndexCount(String Url, String XQuery, String dbUserName, String dbUserPassword, int startIndex, int count)
             throws AimException {
         try {
             Url = Utility.correctToUrl(Url);
@@ -237,7 +239,7 @@ public class ExistManager {
         }
     }
 
-    public static String removeImageAnnotationCollectionFromServer(String Url, String nameSpace, String collection,
+    private static String removeImageAnnotationCollectionFromServerReal(String Url, String nameSpace, String collection,
             String dbUserName, String dbUserPassword, String uniqueIdentifier) throws AimException {
         try {
             if (!AnnotationGetter
@@ -246,7 +248,6 @@ public class ExistManager {
                         "AimException: The Image Annotation which you want to remove is not exist. Please check your parameters.");
             }
 
-            
             String requestURL = Utility.correctToUrl(Url) + "rest/" + collection + "/AIM_" + uniqueIdentifier + ".xml";
 
             URL url = new URL(requestURL);
@@ -280,16 +281,13 @@ public class ExistManager {
             AuditTrailManager auditTrailManager = new AuditTrailManager(Url, nameSpace, collection, dbUserName, dbUserPassword, null);
             ImageAnnotationCollection iacVersion = auditTrailManager.getIACVersionHandler(uniqueIdentifier);
             if (iacVersion != null) {
-            Logger.write("==== iacVersion NOT NULL");
-                removeImageAnnotationCollectionFromServer(Url, nameSpace, collection,
+                Logger.write("==== iacVersion NOT NULL");
+                removeImageAnnotationCollectionFromServerReal(Url, nameSpace, collection,
                         dbUserName, dbUserPassword, iacVersion.getUniqueIdentifier().getRoot());
+            } else {
+                Logger.write("==== iacVersion NULL");
             }
-            else
-            {
-            
-            Logger.write("==== iacVersion NULL");
-            }
-            
+
             // Output the response
             return "XML removing operation is Successful.";
         } catch (AimException ex) {
@@ -298,7 +296,40 @@ public class ExistManager {
             throw new AimException("AimException: " + ex.getMessage());
         }
     }
-    
+
+    public static String removeImageAnnotationCollectionFromServer(String Url, String nameSpace, String collection,
+            String dbUserName, String dbUserPassword, String uniqueIdentifier) throws AimException {
+        try {
+            Logger.write("************ Removing-1 " + uniqueIdentifier);
+
+            ImageAnnotationCollection iac = getImageAnnotationCollectionByUniqueIdentifier(Url, nameSpace, collection,
+                    dbUserName, dbUserPassword, uniqueIdentifier);
+            if (iac == null) {
+            Logger.write("************ Removing-2");
+                throw new AimException(
+                        "AimException: The Image Annotation which you want to remove is not exist. Please check your parameters.");
+            }
+
+            if (iac.getDescription() != null) {
+            Logger.write("************ Removing-3");
+                iac.setDescription(new ST(iac.getDescription().getValue() + Globals.flagDeleted));
+            } else {
+            Logger.write("************ Removing-4");
+                iac.setDescription(new ST(Globals.flagDeleted));
+            }
+            
+            Logger.write("************ Removing-5 " + iac.getDescription().getValue());
+
+            AnnotationBuilder.saveToServer(iac, Url, nameSpace, collection, "", dbUserName, dbUserPassword);
+            Logger.write("************ Removing-6");
+
+            // Output the response
+            return "XML removing operation is Successful.";
+        } catch (AimException ex) {
+            throw new AimException("AimException: " + ex.getMessage());
+        }
+    }
+
     public static String performUploadExist(Document doc, String Url, String Collection,
             String FileName, String userName, String password) {
         try {
@@ -353,20 +384,19 @@ public class ExistManager {
             return ex.getMessage();
         }
     }
-    
+
     public static void deleteImageAnnotationFromServer(String serverURL, String namespace, String collection,
             String PathXSD, String dbUserName, String dbUserPassword, String uniqueIdentifier) throws AimException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    
-        public static List<ImageAnnotationCollection> getImageAnnotationCollectionListFromDocument(Document doc,
+
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionListFromDocument(Document doc,
             String PathXSD) throws AimException {
-            
-            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-                PathXSD = Globals.getXSDPath();
-            }
-            
+
+        if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+            PathXSD = Globals.getXSDPath();
+        }
+
         List<ImageAnnotationCollection> res = new ArrayList<ImageAnnotationCollection>();
         try {
             Node firstNode = doc.getFirstChild();
@@ -427,8 +457,8 @@ public class ExistManager {
         return -1;
     }
 
-    public static  List<String> getExistResultValueListFromDocument(Document doc) {
-         List<String> res = new ArrayList<String>();
+    public static List<String> getExistResultValueListFromDocument(Document doc) {
+        List<String> res = new ArrayList<String>();
         Node firstNode = doc.getFirstChild();
         List<Node> listResult = XML.getNodesFromNodeByName(firstNode, "exist:value");
         for (int i = 0; i < listResult.size(); i++) {
@@ -440,14 +470,15 @@ public class ExistManager {
         return res;
     }
 
-       private static String correctTheServerRespond(String serverRespond){
-          serverRespond = serverRespond.replaceAll("\"", "~**~");
+    private static String correctTheServerRespond(String serverRespond) {
+        serverRespond = serverRespond.replaceAll("\"", "~**~");
         String xmlHeader = "<?xml version=~**~1.0~**~ encoding=~**~UTF-8~**~ standalone=~**~no~**~?>";
         String xmlTag = "<imageAnnotations xmlns=~**~gme://caCORE.caCORE/3.2/edu.northwestern.radiology.AIM~**~/>";
         int indexStart = serverRespond.indexOf(xmlTag);
-        if(indexStart >=0)
-            serverRespond = (xmlHeader + serverRespond.replace(xmlTag, "").replace(xmlHeader, "")).replace( "~**~","\"");
-        return serverRespond.replace( "~**~","\"");
+        if (indexStart >= 0) {
+            serverRespond = (xmlHeader + serverRespond.replace(xmlTag, "").replace(xmlHeader, "")).replace("~**~", "\"");
+        }
+        return serverRespond.replace("~**~", "\"");
     }
-   
+
 }

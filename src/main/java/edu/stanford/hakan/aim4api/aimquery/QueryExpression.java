@@ -60,10 +60,12 @@ public class QueryExpression {
     private String value = "";
     private String function = "";
     private List<String> listXQuery;
+//    private List<String> listXQueryPure;
     private List<AimClass> listAimClass;
 
     public QueryExpression(String expression, String leftSide, String function, String value) throws AimException {
         this.listXQuery = new ArrayList<String>();
+//        this.listXQueryPure = new ArrayList<String>();
         this.listAimClass = new ArrayList<AimClass>();
         this.expression = expression;
         this.leftSide = leftSide;
@@ -151,7 +153,6 @@ public class QueryExpression {
                 if (aimProperty.getIsa().equals("aimClass")) {
                     currentAimClass = getAimClassByName(aimProperty.getType());
                     this.listXQuery = currentAimClass.getListXPaths();
-
                 } else if (aimProperty.getIsa().equals("isoClass")) {
                     for (int j = 0; j < this.listXQuery.size(); j++) {
                         String xPath = this.listXQuery.get(j);
@@ -160,8 +161,7 @@ public class QueryExpression {
                     currentAimClass = getAimClassByName(aimProperty.getType());
                 } else if (aimProperty.getIsa().equals("simpleElement")) {
                     if (i != arrayLeftSide.length - 1) {
-                        throw new AimException(
-                                "AimException: Each expression in an AimQuery must end with a simple element or attribute.");
+                        throw new AimException("AimException: Each expression in an AimQuery must end with a simple element or attribute.");
                     }
                     for (int j = 0; j < this.listXQuery.size(); j++) {
                         String xPath = this.listXQuery.get(j);
@@ -172,14 +172,21 @@ public class QueryExpression {
                     }
                 } else if (aimProperty.getIsa().equals("simpleAttribute")) {
                     if (i != arrayLeftSide.length - 1) {
-                        throw new AimException(
-                                "AimException: Each expression in an AimQuery must end with a simple element or attribute.");
+                        throw new AimException("AimException: Each expression in an AimQuery must end with a simple element or attribute.");
                     }
                     for (int j = 0; j < this.listXQuery.size(); j++) {
                         String xPath = this.listXQuery.get(j);
                         if (xPath.endsWith("/")) {
                             xPath = xPath.substring(0, xPath.length() - 1);
                         }
+//                        String temp = xPath + getXpathAttribute(aimProperty.getName());
+//                        
+////                        if("<>".equals(function) || function.toLowerCase().indexOf("not")>=0)
+////                        {
+////                            
+////                        this.listXQuery.set(j, xPath + getXpathAttribute(aimProperty.getName()) + "/");
+////                        }
+////                        else
                         this.listXQuery.set(j, xPath + getXpathAttribute(aimProperty.getName()) + "/");
                     }
                 }
@@ -264,6 +271,17 @@ public class QueryExpression {
                 return "[ends-with(lower-case(@" + attributeName + "),lower-case(" + value + "))]".replace("%", "");
             } else {
                 return "[contains(lower-case(@" + attributeName + "),lower-case(" + value + "))]".replace("%", "");
+            }
+        }
+        else if ("not like".equals(function.toLowerCase(new Locale("\\u0131")).trim())) {
+            if ((value.indexOf("%") < 0) || (value.indexOf("'%") >= 0 && value.indexOf("%'") >= 0)) {
+                return "[not(contains(lower-case(@" + attributeName + "),lower-case(" + value + ")))]".replace("%", "");
+            } else if (value.indexOf("'%") >= 0) {
+                return "[not(starts-with(lower-case(@" + attributeName + "),lower-case(" + value + ")))]".replace("%", "");
+            } else if (value.indexOf("%'") >= 0) {
+                return "[not(ends-with(lower-case(@" + attributeName + "),lower-case(" + value + ")))]".replace("%", "");
+            } else {
+                return "[not(contains(lower-case(@" + attributeName + "),lower-case(" + value + ")))]".replace("%", "");
             }
         } else if (value.trim().startsWith("'")) {
             return "[lower-case(@" + attributeName + ") " + function + " lower-case(" + value + ")]".replace("%", "");

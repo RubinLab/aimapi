@@ -35,7 +35,6 @@ public class AuditTrailManager {
     private String dbUserName = "";
     private String dbUserPassword = "";
     private String pathXSD = "";
-    private String key = "~#*version*#~";
 
     public AuditTrailManager(String serverURL, String namespace, String collection, String dbUserName, String dbUserPassword, String pathXSD) {
         this.setCollection(collection);
@@ -95,13 +94,10 @@ public class AuditTrailManager {
         this.pathXSD = pathXSD;
     }
 
-    public String getKey() {
-        return key;
-    }
 
     private ImageAnnotationCollection getIACVersionHandler(ImageAnnotationCollection iac) throws AimException {
-        String description = iac.getUniqueIdentifier().getRoot() + key;
-        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+        String description = iac.getUniqueIdentifier().getRoot() + Globals.flagVersion;
+        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionVersionHandler(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         ImageAnnotationCollection iacVersion = null;
         if (listRes.size() > 0) {
             iacVersion = listRes.get(0);
@@ -110,9 +106,9 @@ public class AuditTrailManager {
     }
 
     public ImageAnnotationCollection getIACVersionHandler(String UIDofOriginal) throws AimException {
-        String description = UIDofOriginal + key;
+        String description = UIDofOriginal + Globals.flagVersion;
         Logger.write("==== IAC description: " + description);
-        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+        List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionVersionHandler(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         ImageAnnotationCollection iacVersion = null;
         if (listRes.size() > 0) {
             iacVersion = listRes.get(0);
@@ -573,7 +569,7 @@ public class AuditTrailManager {
         ImageAnnotation ia_db = null;
         ImageAnnotationCollection iaC_version = null;
         ImageAnnotation ia_version = null;
-        String description = iac.getUniqueIdentifier().getRoot() + key;
+        String description = iac.getUniqueIdentifier().getRoot() + Globals.flagVersion;
 
         List<ImageAnnotationCollection> res = new ArrayList<>();
 
@@ -583,7 +579,7 @@ public class AuditTrailManager {
         iaC_db = AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
         if (iaC_db != null) {
             ia_db = iaC_db.getImageAnnotation();
-            List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+            List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionVersionHandler(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
             if (listTemp.size() > 0) {
                 iaC_version = listTemp.get(0);
                 for (ImageAnnotation iaTemp : iaC_version.getImageAnnotations()) {
@@ -758,8 +754,8 @@ public class AuditTrailManager {
         //String comment = iac.getImageAnnotation().getComment().getValue();
         ImageAnnotationCollection iaC_version = null;
         ImageAnnotation ia_Comming = iac.getImageAnnotation();
-        String description = iac.getUniqueIdentifier().getRoot() + key;
-        List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+        String description = iac.getUniqueIdentifier().getRoot() + Globals.flagVersion;
+        List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionVersionHandler(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         if (listTemp.size() > 0) {
             iaC_version = listTemp.get(0);
         }
@@ -843,15 +839,14 @@ public class AuditTrailManager {
         uid_ia_Comming = iac.getImageAnnotation().getUniqueIdentifier().getRoot();
         comment_ia_Comming = iac.getImageAnnotation().getComment().getValue();
         
-        if(iacUndoReal != null && this.areTheyEqualExceptUID(iac.getImageAnnotation(), iacUndoReal.getImageAnnotation()))
-        {
-             return getRedo(iacUndoReal);
+        if (iacUndoReal != null && this.areTheyEqualExceptUID(iac.getImageAnnotation(), iacUndoReal.getImageAnnotation())) {
+            return getRedo(iacUndoReal);
         }
-        
+
         ImageAnnotationCollection iaC_version = null;
         ImageAnnotation ia_Comming = iac.getImageAnnotation();
-        String description = iac.getUniqueIdentifier().getRoot() + key;
-        List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
+        String description = iac.getUniqueIdentifier().getRoot() + Globals.flagVersion;
+        List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionVersionHandler(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         if (listTemp.size() > 0) {
             iaC_version = listTemp.get(0);
         }

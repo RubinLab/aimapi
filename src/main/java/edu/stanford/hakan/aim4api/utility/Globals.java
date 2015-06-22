@@ -30,6 +30,8 @@ public class Globals {
     private static final String aimQLXmlFilePath = "";
     private static final String annotationListTxtFilePath = "";
     private static final String splineFlag = "###.spline.###";
+    public static final String flagDeleted = "%~#*deleted*#~%";
+    public static final String flagVersion = "%~#*version*#~%";
 
     public static String getSplineFlag() {
         return splineFlag;

@@ -36,6 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.utility.Logger;
 
 /**
  *
@@ -96,7 +97,7 @@ public class QueryParser {
             // "([a-zA -Z][a-zA-Z0-9]*)\\.([a-zA-Z][a-zA-Z0-9]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
             // regex =
             // "(^[A-Za-z ].*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
-            regex = "([a-zA-Z][a-zA-Z0-9.]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
+            regex = "([a-zA-Z][a-zA-Z0-9.]*)\\s*(=|(?:<>)|(?:>=)|(?:<=)|(?:<)|(?:>)|(?:(?i)not like)|(?:(?i)like))\\s*('?[a-zA-Z0-9\\s\\)\\(\\.%~]*'?)";
 
             pattern = Pattern.compile(regex);
             matcher = pattern.matcher(listUpdatedExpressions.get(i));

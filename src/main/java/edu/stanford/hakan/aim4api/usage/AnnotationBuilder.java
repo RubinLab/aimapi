@@ -135,15 +135,15 @@ public class AnnotationBuilder {
     public static ImageAnnotationCollection saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
 
-        Logger.write(" ");
-        Logger.write(" ");
-        Logger.write("**************** API VERSION 7 *****************");
+//        Logger.write(" ");
+//        Logger.write(" ");
+//        Logger.write("**************** API VERSION 7 *****************");
         if (Anno.getImageAnnotation().getUniqueIdentifier() == null || "".equals(Anno.getImageAnnotation().getUniqueIdentifier().getRoot())) {
             Anno.getImageAnnotation().refreshUniqueIdentifier();
         }
-        Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());        
-        if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
-        	Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
+        //Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());        
+//        if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
+//        	Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
 
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
@@ -152,6 +152,10 @@ public class AnnotationBuilder {
         boolean withAuditTrail = true;
         String operation = "Saving";
         try {
+            
+            if(Anno.getDescription() != null && Anno.getDescription().getValue() != null && Anno.getDescription().getValue().indexOf(Globals.flagDeleted) >=0)
+                withAuditTrail = false;
+            
             if (withAuditTrail) {
                 AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
                 Anno = auditTrailManager.performV4(Anno);

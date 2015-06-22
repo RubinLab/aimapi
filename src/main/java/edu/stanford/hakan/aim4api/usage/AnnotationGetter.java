@@ -34,6 +34,7 @@ import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.database.exist.ExistResponderThread;
 import edu.stanford.hakan.aim4api.utility.Globals;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import edu.stanford.hakan.aim4api.utility.XML;
 import edu.stanford.hakan.aim4api.utility.dotnet.StreamReader;
@@ -85,7 +86,7 @@ public class AnnotationGetter {
         return res;
     }
 
-    private static List<ImageAnnotationCollection> getImageAnnotationListFromServer(String Url, String XQuery,
+    public static List<ImageAnnotationCollection> getImageAnnotationListFromServer(String Url, String XQuery,
             String dbUserName, String dbUserPassword, String PathXSD, int startIndex, int maxRecords) throws AimException {
         try {
             String serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(Url, XQuery, dbUserName, dbUserPassword, 1, maxRecords);
@@ -174,11 +175,11 @@ public class AnnotationGetter {
 
     public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
             String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
-        
-            if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
-                PathXSD = Globals.getXSDPath();
-            }
-            
+
+        if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+            PathXSD = Globals.getXSDPath();
+        }
+
         if (namespace == null || "".equals(namespace.trim())) {
             throw new AimException("AimException: Namespace must be defined");
         }
@@ -188,7 +189,45 @@ public class AnnotationGetter {
         if (aimQuery == null || "".equals(aimQuery.trim())) {
             throw new AimException("AimException: AimQuery must be defined");
         }
+        
+        if (aimQuery.toLowerCase().indexOf(" where ") < 0) {
+            aimQuery = aimQuery + " WHERE (ImageAnnotationCollection.description.value NOT LIKE '" + Globals.flagDeleted + "' AND ImageAnnotationCollection.description.value NOT LIKE '" + Globals.flagVersion + "') ";
+        } else {
+            aimQuery = aimQuery + " AND (ImageAnnotationCollection.description.value NOT LIKE '" + Globals.flagDeleted + "' AND ImageAnnotationCollection.description.value NOT LIKE '" + Globals.flagVersion + "') ";
+        }
+        
         String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
+        //XQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/aimV4.dbxml/napel_nsclc')/ImageAnnotationCollection where  $x/person/name[contains(lower-case(@value),lower-case('274'))]  return $x";
+        return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, startIndex, maxRecords);// getDocumentFromServer(serverURL,
+    }
+
+    public static List<ImageAnnotationCollection> getWithAimQueryPlus(String serverURL, String namespace, String dbUserName,
+            String dbUserPassword, String aimQuery, String PathXSD) throws AimException {
+        return getWithAimQueryPlus(serverURL, namespace, dbUserName,
+                dbUserPassword, aimQuery, PathXSD, 1, MAX_RECORDS);
+    }
+
+    public static List<ImageAnnotationCollection> getWithAimQueryPlus(String serverURL, String namespace, String dbUserName,
+            String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
+
+        if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
+            PathXSD = Globals.getXSDPath();
+        }
+
+        if (namespace == null || "".equals(namespace.trim())) {
+            throw new AimException("AimException: Namespace must be defined");
+        }
+        if (serverURL == null || "".equals(serverURL.trim())) {
+            throw new AimException("AimException: ServerURL must be defined");
+        }
+        if (aimQuery == null || "".equals(aimQuery.trim())) {
+            throw new AimException("AimException: AimQuery must be defined");
+        }
+        
+        
+        Logger.write("========= aimQuery= " + aimQuery);
+        String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
+        Logger.write("========= XQuery= " + XQuery);
         //XQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/aimV4.dbxml/napel_nsclc')/ImageAnnotationCollection where  $x/person/name[contains(lower-case(@value),lower-case('274'))]  return $x";
         return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, startIndex, maxRecords);// getDocumentFromServer(serverURL,
     }
@@ -255,6 +294,20 @@ public class AnnotationGetter {
         }
         String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.description.value = '" + description + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }
+    
+     // *** ImageAnnotationCollection.description Like
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionVersionHandler(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String description)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (description == null || "".equals(description.trim())) {
+            throw new AimException("AimException: Name must be defined");
+        }
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.description.value = '" + description + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
         return listAnno;
     }
 
