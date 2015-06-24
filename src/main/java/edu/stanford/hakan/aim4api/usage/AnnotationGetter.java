@@ -1227,4 +1227,19 @@ public class AnnotationGetter {
         return listAnno;
     }
     
+    
+      public static List<ImageAnnotationCollection> getDeletedImageAnnotationCollectionByUserNameEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String userName)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (userName == null || "".equals(userName.trim())) {
+            throw new AimException("AimException: UserName must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE user.name.value = '" + userName + "' AND ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL,"");
+        return listAnno;
+    }
+    
 }
