@@ -405,7 +405,7 @@ public class ExistManager {
                 ImageAnnotationCollection imageAnnotationCollection = new ImageAnnotationCollection();
                 Node nodeImageAnnotation = listNodeImageAnnotationCollections.get(i);
                 imageAnnotationCollection.setXMLNode(nodeImageAnnotation);
-                if (!"".equals(PathXSD.trim())) {
+                if (PathXSD != null && !"".equals(PathXSD.trim())) {
                     // *** Validation Step
                     DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
                     DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
