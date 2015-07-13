@@ -856,6 +856,7 @@ public class AuditTrailManager {
         }
 
         for (ImageAnnotation ia : iaC_version.getImageAnnotations()) {
+            
             if (ia.getPrecedentReferencedAnnotationUid() == null || "".equals(ia.getPrecedentReferencedAnnotationUid().getRoot())) {
                 continue;
             }
@@ -892,3 +893,4 @@ public class AuditTrailManager {
 //        Date now = new Date();
 //        DateTimeFormat dateFormat = DateTimeFormat.getFormat("MM.dd.yyyy hh:mm:ss");
 //        dateFormat.format(now, createTimeZone(0));
+
