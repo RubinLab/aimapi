@@ -107,7 +107,6 @@ public class AuditTrailManager {
 
     public ImageAnnotationCollection getIACVersionHandler(String UIDofOriginal) throws AimException {
         String description = UIDofOriginal + Globals.flagVersion;
-        Logger.write("==== IAC description: " + description);
         List<ImageAnnotationCollection> listRes = AnnotationGetter.getImageAnnotationCollectionVersionHandler(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
         ImageAnnotationCollection iacVersion = null;
         if (listRes.size() > 0) {
@@ -116,282 +115,6 @@ public class AuditTrailManager {
         return iacVersion;
     }
 
-//    private ImageAnnotationCollection createIACVersionHandler(ImageAnnotationCollection iac) {
-//        ImageAnnotation iaOriginalInitialState = iac.getImageAnnotation().getInitialState().getClone();
-//        ImageAnnotationCollection iacVersionHandler = iac.getClone();
-//        iacVersionHandler.refreshUniqueIdentifier();
-//        iacVersionHandler.setDescription(new ST(iac.getUniqueIdentifier().getRoot() + this.key));
-//        iacVersionHandler.getImageAnnotations().clear();
-//
-//        String newUID = iaOriginalInitialState.refreshUniqueIdentifier();
-//        iac.getImageAnnotation().setPrecedentReferencedAnnotationUid(new II(newUID));
-//        
-//        
-//        this.convertToVersion(iaOriginalInitialState,  1,null);
-//        
-//        
-//        iacVersionHandler.addImageAnnotation(iaOriginalInitialState);
-//        return iacVersionHandler;
-//    }
-//    private void pushVersionToHandler(ImageAnnotationCollection iac, ImageAnnotationCollection iacHandler) {
-//        List<ImageAnnotation> sorted = getSortedVersions(iacHandler);
-//        if (sorted.size() <= 0) {
-//            return;
-//        }
-//        ImageAnnotation lastVersion = sorted.get(sorted.size() - 1);
-//
-//        ImageAnnotation iaOriginalInitialState = iac.getImageAnnotation().getInitialState().getClone();
-//        String newUID = iaOriginalInitialState.refreshUniqueIdentifier();
-//        iac.getImageAnnotation().setPrecedentReferencedAnnotationUid(new II(newUID));
-//        this.convertToVersion(iaOriginalInitialState, sorted.size() + 1, lastVersion.getUniqueIdentifier().getRoot());
-//        iacHandler.addImageAnnotation(iaOriginalInitialState);
-//    }
-//    private void convertToVersion(ImageAnnotation ia, int versionNumber, String PrecedentReferencedAnnotationUid) {
-//        AuditTrail auditTrail = new AuditTrail();
-//        auditTrail.setStatusCode(new CD("codeValue", "codeMeaning", "codingSchemeDesignator", "codingSchemeVersion"));
-//        auditTrail.setDateTime("01.01.1900");
-//        auditTrail.setChangeReason(new CD("codeValue", "codeMeaning", "codingSchemeDesignator", "codingSchemeVersion"));
-//        auditTrail.setComment(new ST(Integer.toString(versionNumber)));
-//        ia.addAuditTrail(auditTrail);
-//        ia.setVersion(versionNumber);
-//        if (PrecedentReferencedAnnotationUid != "") {
-//            ia.setPrecedentReferencedAnnotationUid(new II(PrecedentReferencedAnnotationUid));
-//        } else {
-//            ia.setPrecedentReferencedAnnotationUid(null);
-//        }
-//    }
-//
-//    private void convertToVersion(ImageAnnotationCollection iac, int versionNumber, String PrecedentReferencedAnnotationUid) {
-//        iac.refreshUniqueIdentifier();
-//        iac.getImageAnnotation().refreshUniqueIdentifier();
-//        this.convertToVersion(iac.getImageAnnotation(), versionNumber, PrecedentReferencedAnnotationUid);
-//        iac.setVersion(versionNumber);
-//    }
-//    public ImageAnnotationCollection perform(ImageAnnotationCollection iac) throws AimException {
-//        
-////        //*** Kontrol
-////        ImageAnnotation iaOriginalInitialState = iac.getImageAnnotation().getInitialState().getClone();
-////        if(iaOriginalInitialState.getVersion() != -1)
-////            System.out.println("KRIZZZZZZZZZZZZZZ");
-//        if (!iac.getIsEdited()) {
-//            return null;
-//        }
-//        ImageAnnotationCollection iacHandler = this.getIACVersionHandler(iac);
-//        if (iacHandler == null) {
-//            iacHandler = this.createIACVersionHandler(iac);
-//        } else {
-//            this.pushVersionToHandler(iac, iacHandler);
-//        }
-//        return iacHandler;
-//    }
-//    private List<ImageAnnotation> getSortedVersions(ImageAnnotationCollection iacVersinHandler) {
-//        List<ImageAnnotation> res = new ArrayList<>();
-//        List<ImageAnnotation> input = iacVersinHandler.getClone().getImageAnnotations();
-//        String UID = "";
-//        while (input.size() > 0) {
-//            ImageAnnotation ia = null;
-//            for (int i = 0; i < input.size(); i++) {
-//                ia = input.get(i);
-//                if (res.isEmpty() && (ia.getPrecedentReferencedAnnotationUid() == null || ia.getPrecedentReferencedAnnotationUid().getRoot() == null || "".equals(ia.getPrecedentReferencedAnnotationUid().getRoot()))) {
-//                    UID = ia.getUniqueIdentifier().getRoot();
-//                    res.add(ia);
-//                    break;
-//                } else {
-//                    if (ia.getPrecedentReferencedAnnotationUid().getRoot().equals(UID)) {
-//                        UID = ia.getUniqueIdentifier().getRoot();
-//                        res.add(ia);
-//                        break;
-//                    }
-//                }
-//            }
-//            if (ia != null) {
-//                input.remove(ia);
-//            }
-//        }
-//        return res;
-//    }
-//    private boolean isImageAnnotationCollectionVersionHandler(ImageAnnotationCollection iac)
-//    {
-//        if(iac.getDescription() == null)
-//            return false;
-//        return iac.getDescription().getValue().contains(this.key);
-//    }
-//    private boolean isImageAnnotatonCollectionVersion(ImageAnnotationCollection iac)
-//    {
-//        if(iac.getImageAnnotation().getAuditTrailCollection().size() > 0 || iac.getVersion() != -1)
-//            return true;
-//        return false;
-//    }
-//    
-//    public boolean isImageAnnotatonVersion(ImageAnnotation ia)
-//    {
-//        return this.isImageAnnotatonCollectionVersion(ia.getImageAnnotationCollection());
-//    }
-//    
-//    private ImageAnnotationCollection getCurrentImageAnnotationCollection(ImageAnnotationCollection iacVersionHandler) throws AimException {
-//        String uid = iacVersionHandler.getDescription().getValue().replace(key, "");
-//        return AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, uid);
-//    }
-//
-//    private ImageAnnotation getCurrentImageAnnotation(ImageAnnotationCollection iacVersionHandler) throws AimException {
-//        return this.getCurrentImageAnnotationCollection(iacVersionHandler).getImageAnnotation();
-//    }
-//
-//    private ImageAnnotationCollection getCurrentImageAnnotationCollection(ImageAnnotation iaVersion) throws AimException {
-//        return this.getCurrentImageAnnotationCollection(iaVersion.getImageAnnotationCollection());
-//    }
-//
-//    private ImageAnnotation getCurrentImageAnnotation(ImageAnnotation iaVersion) throws AimException {
-//        return this.getCurrentImageAnnotationCollection(iaVersion).getImageAnnotation();
-//    }
-//    private ImageAnnotationCollection convertVersionToCurrent(ImageAnnotation iaVersion) throws AimException {
-//        ImageAnnotationCollection iacCurrent = this.getCurrentImageAnnotationCollection(iaVersion).getClone();
-//        iacCurrent.getImageAnnotations().clear();
-//        iaVersion.setVersion(Integer.parseInt(iaVersion.getAuditTrailCollection().getAuditTrailList().get(0).getComment().getValue()));
-//        iaVersion.getAuditTrailCollection().getAuditTrailList().clear();
-//        iaVersion.setInitialState();
-//        iacCurrent.addImageAnnotation(iaVersion);
-//        return iacCurrent;
-//    }
-//    public List<ImageAnnotationCollection> getListVersions(ImageAnnotationCollection iac) throws AimException {
-//        List<ImageAnnotationCollection> res = new ArrayList<>();
-//        ImageAnnotationCollection iacHandler = this.getIACVersionHandler(iac);
-//        if (iacHandler == null) {
-//            return res;
-//        }
-//        List<ImageAnnotation> sortedIAs = getSortedVersions(iacHandler);
-//        for (ImageAnnotation iaVersion : sortedIAs) {
-//            res.add(this.convertVersionToCurrent(iaVersion));
-//        }
-//        return res;
-//    }
-//    public List<ImageAnnotationCollection> performV2(ImageAnnotationCollection iac) throws AimException {
-//        List<ImageAnnotationCollection> res = new ArrayList<>();
-//
-//        //Logger.write("0");
-//        //if (!iac.getIsEdited()) {
-//        if (!isEdited(iac)) {
-//
-//            //Logger.write("0.1");
-//            return res;
-//        }
-//        ImageAnnotationCollection iacCloneInitialState = iac.getClone();
-//        iacCloneInitialState.getImageAnnotations().clear();
-//        iacCloneInitialState.addImageAnnotation(iac.getImageAnnotation().getInitialState().getClone());
-//        iacCloneInitialState.getImageAnnotation().refreshUniqueIdentifier();
-//
-//        ImageAnnotationCollection iacVersionHandler = null;
-//        ImageAnnotationCollection lastVersion = this.getMaxVersionNumber(iac);
-//        List<ImageAnnotationCollection> listAllVersions = this.getListAllVersions(iac);
-//
-////        for (ImageAnnotationCollection temp : listAllVersions) {
-////            try {
-////                String uid = temp.getImageAnnotation().getUniqueIdentifier().getRoot();
-////                String commentA = temp.getImageAnnotation().getComment().getValue();
-////                String preUid = temp.getImageAnnotation().getPrecedentReferencedAnnotationUid().getRoot();
-////                if (preUid != null && !"".equals(preUid.trim())) {
-////                    for (ImageAnnotationCollection temp2 : listAllVersions) {
-////                        if (temp2.getImageAnnotation().getUniqueIdentifier().getRoot().equals(preUid)) {
-////
-////                            String commentB = temp2.getImageAnnotation().getComment().getValue();
-////                            String abc = "abc";
-////                        }
-////                    }
-////                }
-////            } catch (Throwable th) {
-////
-////            }
-////        }
-//        //Logger.write("1");
-//        //*** iac is the current state of the IAC
-//        if (iac.getVersion() == -1) {
-//            //Logger.write("2");
-//            //*** it will be the first version of the iac
-//            if ("".equals(getPreviousUID(iac)) || lastVersion == null) {
-//                //Logger.write("3");
-//                this.convertToVersion(iacCloneInitialState, 1, "");
-//                this.setPreviousUID(iacCloneInitialState, null);
-//                this.setPreviousUID(iac, iacCloneInitialState.getImageAnnotation().getUniqueIdentifier().getRoot());
-//                listAllVersions.add(iacCloneInitialState);
-//            }//*** I will append its initial state as the new version.
-//            else {
-//                //Logger.write("4");
-//                //*** just its initial state will be the next version
-//                //this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, lastVersion.getImageAnnotation().getUniqueIdentifier().getRoot());
-//                this.convertToVersion(iacCloneInitialState, lastVersion.getVersion() + 1, getPreviousUID(iac));
-//                this.setPreviousUID(iac, iacCloneInitialState.getImageAnnotation().getUniqueIdentifier().getRoot());
-//                listAllVersions.add(iacCloneInitialState);
-//            }
-//        }//*** iac is one of the version of IAC
-//        else {
-//            //Logger.write("5");
-//            ImageAnnotationCollection iacCurrent = this.getCurrentVersion(iac);// AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
-//            String originalUID_IAC = iacCurrent.getUniqueIdentifier().getRoot();
-//            String originalUID_IA = iacCurrent.getImageAnnotation().getUniqueIdentifier().getRoot();
-//            this.convertToVersion(iacCurrent, lastVersion.getVersion() + 1, this.getPreviousUID(iacCurrent));
-//            iac.setUniqueIdentifier(new II(originalUID_IAC));
-//            listAllVersions.add(iacCurrent);
-//            //res.add(iacCurrent);
-//
-//            iac = iac.getClone();
-//            iac.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().clear();
-//            iac.setVersion(-1);
-//            this.setPreviousUID(iac, iac.getImageAnnotation().getUniqueIdentifier().getRoot());
-//            iac.getImageAnnotation().setUniqueIdentifier(new II(originalUID_IA));
-//        }
-//        iacVersionHandler = this.buildIACVersionHandler(listAllVersions, iac);
-//        res.add(iac);
-//        res.add(iacVersionHandler);
-//        return res;
-//    }
-//    private ImageAnnotationCollection buildIACVersionHandler(List<ImageAnnotationCollection> listIACVersions, ImageAnnotationCollection iacCurrent) throws AimException {
-//        ImageAnnotationCollection res = this.getIACVersionHandler(iacCurrent);
-//        if (res == null) {
-//            res = iacCurrent.getClone();
-//            res.refreshUniqueIdentifier();
-//            res.setDescription(new ST(iacCurrent.getUniqueIdentifier().getRoot() + this.key));
-//        }
-//        res.getImageAnnotations().clear();
-//        for (ImageAnnotationCollection iacVersion : listIACVersions) {
-//            res.addImageAnnotation(iacVersion.getImageAnnotation().getClone());
-//        }
-//        return res;
-//    }
-//    private ImageAnnotationCollection buildIACVersionHandler(ImageAnnotationCollection listIACVersion, ImageAnnotationCollection iacCurrent) throws AimException {
-//        List<ImageAnnotationCollection> temp = new ArrayList<>();
-//        temp.add(listIACVersion);
-//        return buildIACVersionHandler(temp, iacCurrent);
-//    }
-//    private boolean isEdited(ImageAnnotationCollection iac) throws AimException {
-//        if (iac.getImageAnnotation().getVersion() > 0) {
-//            List<ImageAnnotationCollection> listVersions = this.getListAllVersions(iac);
-//            for (ImageAnnotationCollection other : listVersions) {
-//                if (other.getImageAnnotation().getVersion() == iac.getImageAnnotation().getVersion()) {
-//                    return !iac.isEqualTo(other);
-//                }
-//            }
-//        } else {
-//            ImageAnnotationCollection other = this.getCurrentVersion(iac);
-//            return !iac.isEqualTo(other);
-//        }
-//
-//        return false;
-//    }
-//    public List<ImageAnnotationCollection> getListOfVersions(ImageAnnotationCollection iacCurrent) throws AimException
-//    {
-//        List<ImageAnnotationCollection> res = new ArrayList<>();
-//        ImageAnnotationCollection iacVersionHandler = this.getIACVersionHandler(iacCurrent);
-//        if(iacVersionHandler == null)
-//            return res;
-//        for(ImageAnnotation iaVersion:iacVersionHandler.getImageAnnotations())
-//        {
-//            ImageAnnotationCollection iacClone = iacCurrent.getClone();
-//            iacClone.getImageAnnotations().clear();
-//            iacClone.addImageAnnotation(iaVersion);
-//            res.add(iacClone);
-//        }      
-//        return res;
-//    }
     //*** returns all versions of the annotation in order
     public List<ImageAnnotationCollection> getListAllVersions(ImageAnnotationCollection iacCurrent) throws AimException {
         List<ImageAnnotationCollection> temp = new ArrayList<>();
@@ -426,142 +149,6 @@ public class AuditTrailManager {
         return res;
     }
 
-//    private String getPreviousUID(ImageAnnotationCollection iac) {
-//        if (iac.getImageAnnotations() == null || iac.getImageAnnotations().size() <= 0) {
-//            return "";
-//        }
-//        ImageAnnotation ia = iac.getImageAnnotation();
-//        if (ia.getPrecedentReferencedAnnotationUid() == null) {
-//            return "";
-//        }
-//        return ia.getPrecedentReferencedAnnotationUid().getRoot();
-//    }
-//    private void setPreviousUID(ImageAnnotationCollection iac, String UID) {
-//        if (iac.getImageAnnotations() == null || iac.getImageAnnotations().size() <= 0) {
-//            return;
-//        }
-//        ImageAnnotation ia = iac.getImageAnnotation();
-//        if (UID == null) {
-//            ia.setPrecedentReferencedAnnotationUid(null);
-//        } else {
-//            ia.setPrecedentReferencedAnnotationUid(new II(UID));
-//        }
-//    }
-//    private ImageAnnotationCollection getMaxVersionNumber(ImageAnnotationCollection iacCurrent) throws AimException {
-//        int maxVersion = -1;
-//        ImageAnnotationCollection res = null;
-//        List<ImageAnnotationCollection> listAllVersions = getListAllVersions(iacCurrent);
-//        if (listAllVersions.size() > 0) {
-//            return listAllVersions.get(listAllVersions.size() - 1);
-//        }
-//        return res;
-//    }
-//    public ImageAnnotationCollection getCurrentVersion(ImageAnnotationCollection iac) throws AimException {
-//        return AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
-//    }
-//    public ImageAnnotationCollection getPreviousVersion(ImageAnnotationCollection iac) throws AimException {
-////        if("comment 0".equals(iac.getImageAnnotation().getComment().getValue()))
-////            iac= iac;
-//        ImageAnnotationCollection iacCurrent = null;
-//        if (iac.getVersion() != -1) {
-//            iacCurrent = this.getCurrentVersion(iac);
-//        } else {
-//            iacCurrent = iac;
-//        }
-//        List<ImageAnnotationCollection> listVersions = this.getListAllVersions(iacCurrent);
-//        String preUID = "";
-//        if (iac.getImageAnnotation().getPrecedentReferencedAnnotationUid() != null && iac.getImageAnnotation().getPrecedentReferencedAnnotationUid().getRoot() != null) {
-//            preUID = iac.getImageAnnotation().getPrecedentReferencedAnnotationUid().getRoot();
-//        } else {
-//            return null;
-//        }
-//        for (ImageAnnotationCollection temp : listVersions) {
-//            if (temp.getImageAnnotation().getUniqueIdentifier().getRoot() == null ? preUID == null : temp.getImageAnnotation().getUniqueIdentifier().getRoot().equals(preUID)) {
-//                ImageAnnotationCollection iacCurrentClone = iacCurrent.getClone();
-//                iacCurrentClone.getImageAnnotations().clear();
-//                iacCurrentClone.addImageAnnotation(temp.getImageAnnotation());
-//                return iacCurrentClone;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public List<ImageAnnotationCollection> getPreviousVersions(ImageAnnotationCollection iac) throws AimException {
-//        List<ImageAnnotationCollection> res = new ArrayList<>();
-//        ImageAnnotationCollection preVersion = this.getPreviousVersion(iac);
-//        while (preVersion != null) {
-//            res.add(preVersion);
-//            preVersion = this.getPreviousVersion(preVersion);
-//        }
-//        return res;
-//    }
-//    public List<ImageAnnotationCollection> performV3(ImageAnnotationCollection iac) throws AimException {
-//        //Logger.write("=== performV3 = starting");
-//        List<ImageAnnotationCollection> res = new ArrayList<>();
-//        ImageAnnotation iaComming = iac.getImageAnnotation();
-//        //***  setting required variables
-//        ImageAnnotationCollection iacCurrentDB = AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
-//        ImageAnnotationCollection iacVersionHandlerDB = null;
-//        String description = iac.getUniqueIdentifier().getRoot() + key;
-//        List<ImageAnnotationCollection> listTemp = AnnotationGetter.getImageAnnotationCollectionByDescriptionEqual(serverURL, namespace, collection, dbUserName, dbUserPassword, description);
-//        if (listTemp.size() > 0) {
-//            iacVersionHandlerDB = listTemp.get(0);
-//        }
-//        //*** ia from current iac in the db
-//        ImageAnnotation iaCurrentDB = null;
-//        //*** ia from version handler iac in the db
-//        ImageAnnotation iaVersionDB = null;
-//        if (iacCurrentDB != null) {
-//            //Logger.write("=== iacCurrentDB is not null");
-//            if (iacCurrentDB.getImageAnnotation().getUniqueIdentifier().getRoot().equals(iaComming.getUniqueIdentifier().getRoot())) {
-//                iaCurrentDB = iacCurrentDB.getImageAnnotation();
-//            }
-//
-//        } else //Logger.write("=== iacCurrentDB is null ???");
-//        //*** I couldn't fing the comming ia as the current ia, so I will shearch it in the version handler
-//        if (iaCurrentDB == null && iacVersionHandlerDB != null) {
-//            for (ImageAnnotation temp : iacVersionHandlerDB.getImageAnnotations()) {
-//                if (temp.getUniqueIdentifier().getRoot().equals(iaComming.getUniqueIdentifier().getRoot())) {
-//                    iaVersionDB = temp;
-//                }
-//            }
-//        }
-//
-//        //Logger.write("=== iacVersionHandlerDB " + iacVersionHandlerDB);
-//        //*** I found or not found the comming ia in the db.
-//        //*** the comming iac is not exist in the db. 
-//        //*** which means that, it is a new iac and we just save it.
-//        if (iacCurrentDB == null) {
-//            res.add(iac);
-//        } //*** which means that, the iac exist in the db but it has no version before.
-//        else if (iacCurrentDB != null && iacVersionHandlerDB == null) {
-//            //Logger.write("=== performV3 = 1");
-//            //*** so, i should see the comming ia in the iacCurrentDB.
-//            //*** I assume that, user won't update any UID.
-//            if (iaCurrentDB != null) {
-//                // Logger.write("=== performV3 = 2");
-//                if (!iaComming.isEqualTo(iaCurrentDB)) {
-//                    //Logger.write("=== performV3 = 3");
-//                    //*** firt, I should create a version handler for the iac
-//                    //*** so, at this point. i already pushed the ia-db to version handler.
-//                    ImageAnnotationCollection iacVersionHandler = iac.getClone();
-//                    iacVersionHandler.refreshUniqueIdentifier();
-//                    iacVersionHandler.setDescription(new ST(iac.getUniqueIdentifier().getRoot() + this.key));
-//                    res.add(iacVersionHandler);
-//                    iaComming.setPrecedentReferencedAnnotationUid(new II(iaCurrentDB.getUniqueIdentifier().getRoot()));
-//                    iaComming.refreshUniqueIdentifier();
-//                    res.add(iac);
-//                } else {
-//                    //*** the comming ia is not edited (same as ia in db)
-//                    //*** so, we don't need to make anything.
-//                }
-//            } else {
-//                //*** we have a problem...
-//            }
-//        }
-//
-//        return res;
-//    }
     public ImageAnnotationCollection performV4(ImageAnnotationCollection iac) throws AimException {
         ImageAnnotationCollection iaC_comming = null;
         ImageAnnotation ia_comming = null;
@@ -576,6 +163,16 @@ public class AuditTrailManager {
         //*** initialization
         iaC_comming = iac;
         ia_comming = iaC_comming.getImageAnnotation();
+//        if(ia_comming.getComment() == null)
+//        {
+//            ia_comming.setComment(new ST(""));
+//            ia_comming.getInitialState().setComment(new ST(""));
+//        }
+//        ia_comming.setComment(new ST(new STUser(ia_comming.getComment(),iaC_comming.getUser()).toString()));
+//        ia_comming.getInitialState().setComment(new ST(new STUser( ia_comming.getInitialState().getComment(),iaC_comming.getUser()).toString()));
+        String comment_1 = ia_comming.getComment().getValue();
+        String comment_2 = ia_comming.getInitialState().getComment().getValue();      
+
         iaC_db = AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
         if (iaC_db != null) {
             ia_db = iaC_db.getImageAnnotation();
@@ -652,12 +249,15 @@ public class AuditTrailManager {
             ia_temp.setPrecedentReferencedAnnotationUid(null);
             iaC_version.addImageAnnotation(ia_temp);
             ia_comming.setPrecedentReferencedAnnotationUid(ia_temp.getUniqueIdentifier().getClone());
-            Logger.write("====== ia_comming UID: " + ia_comming.getUniqueIdentifier().getRoot());
             ia_db = ia_comming.getClone();
-            Logger.write("====== ia_db (clone of ia_comming) UID: " + ia_db.getUniqueIdentifier().getRoot());
             iaC_db.getImageAnnotations().clear();
             iaC_db.addImageAnnotation(ia_db);
 
+            String comment_iaC_version = iaC_version.getImageAnnotation().getComment().getValue();
+            String comment_iaC_db = iaC_db.getImageAnnotation().getComment().getValue();
+            String userName_iaC_version = iaC_version.getUser().getName().getValue();
+            String userName_iaC_db = iaC_db.getUser().getName().getValue();
+            iaC_version.getImageAnnotation().setComment(new ST(new STUser(iaC_version.getImageAnnotation().getComment(),iaC_version.getUser()).toString()));
             res.add(iaC_version);
             res.add(iaC_db);
             iaC_comming = iaC_db.getClone();
@@ -682,40 +282,27 @@ public class AuditTrailManager {
             this.setVersionNumbers(iaC_db, iaC_version);
         }
 
-        Logger.write("==== performV4-1");
         for (ImageAnnotationCollection temp : res) {
             II uid = temp.getImageAnnotation().getUniqueIdentifier();
-            Logger.write("==== performV4-2: version:" + temp.getVersion());
-            Logger.write(temp.getUniqueIdentifier().getRoot());
-
             AnnotationBuilder.performUploadExist(temp, serverURL, collection, "AIM_" + temp.getUniqueIdentifier().getRoot() + ".xml", Globals.getXSDPath(),
                     dbUserName, dbUserPassword);
-            Logger.write("==== performV4-3");
             temp.getImageAnnotation().setUniqueIdentifier(uid);
-            Logger.write("==== performV4-4");
         }
-
-        Logger.write("==== performV4-5");
         return iaC_comming;
     }
 
     private void setVersionNumbers(ImageAnnotationCollection iaC_db, ImageAnnotationCollection iaC_version) {
-        Logger.write("==== setVersionNumbers-1");
         iaC_db.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().clear();
-        Logger.write("==== setVersionNumbers-2");
         iaC_db.setVersion(-1);
-        Logger.write("==== setVersionNumbers-3");
 
         int maxVersion = 0;
         for (ImageAnnotation ia_version : iaC_version.getImageAnnotations()) {
             if (ia_version.getVersion() > maxVersion) {
-                Logger.write("==== setVersionNumbers-4");
                 maxVersion = ia_version.getVersion();
             }
         }
         for (ImageAnnotation ia_version : iaC_version.getImageAnnotations()) {
             if (ia_version.getVersion() <= 0) {
-                Logger.write("==== setVersionNumbers-5");
                 AuditTrail auditTrail = new AuditTrail();
                 auditTrail.setStatusCode(new CD("codeValue", "codeMeaning", "codingSchemeDesignator", "codingSchemeVersion"));
                 auditTrail.setDateTime("01.01.1900");
@@ -723,7 +310,6 @@ public class AuditTrailManager {
                 auditTrail.setComment(new ST(Integer.toString(maxVersion + 1)));
                 ia_version.getAuditTrailCollection().addAuditTrail(auditTrail);
                 ia_version.setVersion(maxVersion + 1);
-                Logger.write("==== setVersionNumbers-6");
             }
         }
     }
@@ -856,7 +442,6 @@ public class AuditTrailManager {
         }
 
         for (ImageAnnotation ia : iaC_version.getImageAnnotations()) {
-            
             if (ia.getPrecedentReferencedAnnotationUid() == null || "".equals(ia.getPrecedentReferencedAnnotationUid().getRoot())) {
                 continue;
             }
@@ -893,4 +478,3 @@ public class AuditTrailManager {
 //        Date now = new Date();
 //        DateTimeFormat dateFormat = DateTimeFormat.getFormat("MM.dd.yyyy hh:mm:ss");
 //        dateFormat.format(now, createTimeZone(0));
-

@@ -16,7 +16,7 @@ public class STUser {
 
     private ST st = new ST();
     private User user = new User();
-    private String seperator = "|~*$%%$*~|";
+    public static String seperator = "|~*$%%$*~|";
 
     public STUser() {
 
@@ -28,7 +28,7 @@ public class STUser {
     }
 
     public STUser(String str) {
-        String[] array = str.split(this.seperator);
+        String[] array = str.split("[" + seperator + "]+");
         this.st = new ST(array[0]);
         if (array.length > 1) {
             this.user = new User();
@@ -49,7 +49,7 @@ public class STUser {
     public User getUser() {
         return user;
     }
-    
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -57,18 +57,18 @@ public class STUser {
     @Override
     public String toString() {
         String res = "";
-        res += this.st.getValue();
-        if (this.user.getName() != null) {
+        res += this.st.getValue() + seperator;
+        if (this.user.getName() != null && this.user.getName().getValue() != null) {
             res += this.user.getName().getValue() + seperator;
         } else {
             res += " " + seperator;
         }
-        if (this.user.getLoginName() != null) {
+        if (this.user.getLoginName() != null && this.user.getLoginName().getValue() != null) {
             res += this.user.getLoginName().getValue() + seperator;
         } else {
             res += " " + seperator;
         }
-        if (this.user.getRoleInTrial() != null) {
+        if (this.user.getRoleInTrial() != null && this.user.getRoleInTrial().getValue() != null) {
             res += this.user.getRoleInTrial().getValue() + seperator;
         } else {
             res += " " + seperator;
