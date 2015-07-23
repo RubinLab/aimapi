@@ -3,8 +3,8 @@
   <inherits name='com.google.gwt.user.User'/>  
   <!-- not important -->
 
-  <inherits name='com.google.gwt.user.theme.clean.Clean'/> 
-  <!-- not important -->
+  <!-- <inherits name='com.google.gwt.user.theme.clean.Clean'/> 
+  not important -->
 
   <inherits name='org.w3c.dom.DOM' /> 
   <!-- The lib we use to simulate the com.w3c classes in the client -->
