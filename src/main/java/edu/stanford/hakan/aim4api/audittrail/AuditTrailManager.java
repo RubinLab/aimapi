@@ -141,6 +141,14 @@ public class AuditTrailManager {
         for (int i = 1; i <= maxVersion; i++) {
             for (ImageAnnotationCollection iacVersion : temp) {
                 if (iacVersion.getVersion() == i) {
+                    ImageAnnotation iaVersion = iacVersion.getImageAnnotation();
+                    if(iaVersion.getComment() != null && iaVersion.getComment().getValue().contains(STUser.seperator))
+                    {
+                        STUser stUser = new STUser(iaVersion.getComment().getValue());
+                        iaVersion.setComment(stUser.getSt());
+                        if(stUser.getUser() != null)
+                            iacVersion.setUser(stUser.getUser());
+                    }
                     res.add(iacVersion);
                     break;
                 }
@@ -170,8 +178,8 @@ public class AuditTrailManager {
 //        }
 //        ia_comming.setComment(new ST(new STUser(ia_comming.getComment(),iaC_comming.getUser()).toString()));
 //        ia_comming.getInitialState().setComment(new ST(new STUser( ia_comming.getInitialState().getComment(),iaC_comming.getUser()).toString()));
-        String comment_1 = ia_comming.getComment().getValue();
-        String comment_2 = ia_comming.getInitialState().getComment().getValue();      
+//        String comment_1 = ia_comming.getComment().getValue();
+//        String comment_2 = ia_comming.getInitialState().getComment().getValue();      
 
         iaC_db = AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier(serverURL, namespace, collection, dbUserName, dbUserPassword, iac.getUniqueIdentifier().getRoot());
         if (iaC_db != null) {
@@ -188,25 +196,25 @@ public class AuditTrailManager {
             }
         }
         
-        String uid_ia_comming = "";
-        String comment_ia_comming = "";
-        String uid_ia_db = "";
-        String comment_ia_db = "";
-        String uid_ia_version= "";
-        String comment_ia_version = "";
+//        String uid_ia_comming = "";
+//        String comment_ia_comming = "";
+//        String uid_ia_db = "";
+//        String comment_ia_db = "";
+//        String uid_ia_version= "";
+//        String comment_ia_version = "";
         
-        if(ia_comming != null){
-            uid_ia_comming = ia_comming.getUniqueIdentifier().getRoot();
-            comment_ia_comming = ia_comming.getComment().getValue();
-        }
-        if(ia_db != null){
-            uid_ia_db = ia_db.getUniqueIdentifier().getRoot();
-            comment_ia_db = ia_db.getComment().getValue();
-        }
-        if(ia_version != null){
-            uid_ia_version = ia_version.getUniqueIdentifier().getRoot();
-            comment_ia_version = ia_version.getComment().getValue();
-        }
+//        if(ia_comming != null){
+//            uid_ia_comming = ia_comming.getUniqueIdentifier().getRoot();
+//            comment_ia_comming = ia_comming.getComment().getValue();
+//        }
+//        if(ia_db != null){
+//            uid_ia_db = ia_db.getUniqueIdentifier().getRoot();
+//            comment_ia_db = ia_db.getComment().getValue();
+//        }
+//        if(ia_version != null){
+//            uid_ia_version = ia_version.getUniqueIdentifier().getRoot();
+//            comment_ia_version = ia_version.getComment().getValue();
+//        }
 
         //*** decision
         if (iaC_db == null) {
@@ -214,6 +222,7 @@ public class AuditTrailManager {
         } else if (ia_version != null) {
             String uidBeforeRefresh = ia_db.getUniqueIdentifier().getRoot();
             ia_db.refreshUniqueIdentifier();
+            ia_db.setComment(new ST(new STUser(ia_db.getComment(),iaC_db.getUser()).toString()));
             iaC_version.addImageAnnotation(ia_db.getClone());
             
             
@@ -222,6 +231,7 @@ public class AuditTrailManager {
             
             ia_comming.setUniqueIdentifier(new II(uidBeforeRefresh));
             ia_comming.setPrecedentReferencedAnnotationUid(ia_version.getUniqueIdentifier().getClone());
+            //ia_comming.setComment(new ST(new STUser(ia_comming.getComment(),iaC_comming.getUser()).toString()));
             iaC_db.getImageAnnotations().clear();
             iaC_db.addImageAnnotation(ia_comming);
 
@@ -247,20 +257,48 @@ public class AuditTrailManager {
             ImageAnnotation ia_temp = ia_db.getClone();
             ia_temp.refreshUniqueIdentifier();
             ia_temp.setPrecedentReferencedAnnotationUid(null);
+            ia_temp.setComment(new ST(new STUser(ia_temp.getComment(),iaC_db.getUser()).toString()));
             iaC_version.addImageAnnotation(ia_temp);
             ia_comming.setPrecedentReferencedAnnotationUid(ia_temp.getUniqueIdentifier().getClone());
-            ia_db = ia_comming.getClone();
-            iaC_db.getImageAnnotations().clear();
-            iaC_db.addImageAnnotation(ia_db);
 
-            String comment_iaC_version = iaC_version.getImageAnnotation().getComment().getValue();
-            String comment_iaC_db = iaC_db.getImageAnnotation().getComment().getValue();
-            String userName_iaC_version = iaC_version.getUser().getName().getValue();
-            String userName_iaC_db = iaC_db.getUser().getName().getValue();
-            iaC_version.getImageAnnotation().setComment(new ST(new STUser(iaC_version.getImageAnnotation().getComment(),iaC_version.getUser()).toString()));
+//            ia_db = ia_comming.getClone();
+//            iaC_db.getImageAnnotations().clear();
+//            iaC_db.addImageAnnotation(ia_db);
+//
+//            String comment_iaC_version = iaC_version.getImageAnnotation().getComment().getValue();
+//            String comment_iaC_db = iaC_db.getImageAnnotation().getComment().getValue();
+//            String userName_iaC_version = iaC_version.getUser().getName().getValue();
+//            String userName_iaC_db = iaC_db.getUser().getName().getValue();
+//            iaC_version.getImageAnnotation().setComment(new ST(new STUser(iaC_version.getImageAnnotation().getComment(),iaC_version.getUser()).toString()));
+//            res.add(iaC_version);
+//            res.add(iaC_db);
+//            iaC_comming = iaC_db.getClone();
+//            String comment_iaC_version = iaC_version.getImageAnnotation().getComment().getValue();
+//            String comment_iaC_db = iaC_db.getImageAnnotation().getComment().getValue();
+//            String userName_iaC_version = iaC_version.getUser().getName().getValue();
+//            String userName_iaC_db = iaC_db.getUser().getName().getValue();
+            //iaC_version.getImageAnnotation().setComment(new ST(new STUser(iaC_version.getImageAnnotation().getComment(), iaC_version.getUser()).toString()));
+                        
+            //*** clear user
+            iaC_version.getUser().setName(new ST(""));
+            iaC_version.getUser().setLoginName(new ST(""));
+            iaC_version.getUser().setRoleInTrial(new ST(""));
+            //*** clear equipment
+            iaC_version.getEquipment().setManufacturerName(new ST(""));
+            iaC_version.getEquipment().setManufacturerModelName(new ST(""));
+            iaC_version.getEquipment().setSoftwareVersion(new ST(""));
+            //*** clear person
+            iaC_version.getPerson().setName(new ST(""));
+            iaC_version.getPerson().setId(new ST(""));
+            iaC_version.getPerson().setBirthDate("");
+            iaC_version.getPerson().setSex(new ST(""));
+            iaC_version.getPerson().setEthnicGroup(new ST(""));
+            
             res.add(iaC_version);
-            res.add(iaC_db);
-            iaC_comming = iaC_db.getClone();
+            res.add(iaC_comming);
+            //iaC_comming = iaC_db.getClone();
+
+            
         } else if (iaC_db != null && iaC_version != null) {
             if (ia_db.isEqualTo(ia_comming)) {
                 return iaC_comming;
@@ -268,14 +306,17 @@ public class AuditTrailManager {
 
             ImageAnnotation ia_temp = ia_db.getClone();
             ia_temp.refreshUniqueIdentifier();
+            ia_temp.setComment(new ST(new STUser(ia_temp.getComment(),iaC_db.getUser()).toString()));
             iaC_version.addImageAnnotation(ia_temp);
             ia_comming.setPrecedentReferencedAnnotationUid(ia_temp.getUniqueIdentifier().getClone());
-            ia_db = ia_comming.getClone();
-            iaC_db.getImageAnnotations().clear();
-            iaC_db.addImageAnnotation(ia_db);
+//            ia_db = ia_comming.getClone();
+//            iaC_db.getImageAnnotations().clear();
+//            iaC_db.addImageAnnotation(ia_db);
+            
 
             res.add(iaC_version);
-            res.add(iaC_db);
+            //res.add(iaC_db);
+            res.add(iaC_comming);
         }
 
         if (iaC_version != null) {

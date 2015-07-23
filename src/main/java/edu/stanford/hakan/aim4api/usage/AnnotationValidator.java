@@ -50,6 +50,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -141,5 +142,22 @@ public class AnnotationValidator {
             setValidationResult("XML Validation is Unsuccessful: " + ex.getMessage() + "\r\n");
             return null;
         }
+    }
+
+    public static String getAimVersion(String xmlFilePath) throws SAXException, IOException, ParserConfigurationException {
+        if (!xmlFilePath.toLowerCase().endsWith(".xml")) {
+            return "";
+        }
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        Document doc = docBuilder.parse(new File(xmlFilePath));
+        doc.getDocumentElement().normalize();
+        NamedNodeMap map = doc.getDocumentElement().getAttributes();
+
+        if (map.getNamedItem("aimVersion") != null) {
+            return map.getNamedItem("aimVersion").getNodeValue();
+        }
+
+        return "";
     }
 }
