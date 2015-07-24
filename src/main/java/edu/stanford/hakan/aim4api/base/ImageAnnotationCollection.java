@@ -130,6 +130,8 @@ public class ImageAnnotationCollection extends AnnotationCollection {
             String tempVersion = map.getNamedItem("aimVersion").getNodeValue().replace('.', '_');
             if("3_0".equals(tempVersion))
                 tempVersion = "AIM_3_0";
+            else if("1_0".equals(tempVersion))
+                tempVersion = "AIMv1_0";
             if(tempVersion.indexOf("^") > 0)
                 tempVersion = tempVersion.split("\\^")[0];
             super.setAimVersion(Enumerations.AimVersion.valueOf(tempVersion));
