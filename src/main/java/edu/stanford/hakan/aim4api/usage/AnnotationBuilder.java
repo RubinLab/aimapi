@@ -33,6 +33,7 @@ import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.resources.Resource;
+import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier;
 import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.XML;
@@ -135,6 +136,7 @@ public class AnnotationBuilder {
     public static ImageAnnotationCollection saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
 
+        
 //        Logger.write(" ");
 //        Logger.write(" ");
 //        Logger.write("**************** API VERSION 7 *****************");
@@ -152,10 +154,30 @@ public class AnnotationBuilder {
         boolean withAuditTrail = true;
         String operation = "Saving";
         try {
-            
-            if(Anno.getDescription() != null && Anno.getDescription().getValue() != null && Anno.getDescription().getValue().indexOf(Globals.flagDeleted) >=0)
+
+            if (Anno.getDescription() != null && Anno.getDescription().getValue() != null && Anno.getDescription().getValue().contains(Globals.flagDeleted)) {
                 withAuditTrail = false;
+            }
             
+            ImageAnnotationCollection iacDatabase = getImageAnnotationCollectionByUniqueIdentifier(serverUrl, nameSpace, collection,
+                dbUserName, dbUserPassword, Anno.getUniqueIdentifier().getRoot());
+            
+            if (iacDatabase != null && iacDatabase.getDescription() != null && iacDatabase.getDescription().getValue() != null && iacDatabase.getDescription().getValue().contains(Globals.flagDeleted)) {
+                withAuditTrail = false;
+            }
+            
+
+            Logger.write("============= saveToServer");
+            Logger.write("============= serverUrl: " + serverUrl);
+            Logger.write("============= nameSpace: " + nameSpace);
+            Logger.write("============= collection: " + collection);
+            Logger.write("============= PathXSD: " + PathXSD);
+            Logger.write("============= dbUserName: " + dbUserName);
+            Logger.write("============= dbUserPassword: " + dbUserPassword);
+            Logger.write(Anno.toStringXML());
+            Logger.write("===================================================");
+
+
             if (withAuditTrail) {
                 AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
                 Anno = auditTrailManager.performV4(Anno);
