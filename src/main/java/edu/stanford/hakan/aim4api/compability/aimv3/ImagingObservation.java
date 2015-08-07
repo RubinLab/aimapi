@@ -339,6 +339,14 @@ public class ImagingObservation implements IAimXMLOperations {
                 res.addTypeCode(validTerm.toCD());
             }
         }
+        if (res.getListTypeCode().size() <= 0) {
+            CD typeCode = new CD();
+            typeCode.setCode(this.getCodeValue());
+            typeCode.setCodeSystem(this.getCodeMeaning());
+            typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
+            typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
+            res.addTypeCode(typeCode);
+        }
 
         return res;
     }
