@@ -276,13 +276,29 @@ public class AnatomicEntity implements IAimXMLOperations {
             for (ValidTerm validTerm : this.allowedTerm.getListValidTerm()) {
                 res.addTypeCode(validTerm.toCD());
             }
-        } 
+        }
         if (res.getListTypeCode().size() <= 0) {
             CD typeCode = new CD();
-            typeCode.setCode(this.getCodeValue());
-            typeCode.setCodeSystem(this.getCodeMeaning());
-            typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
-            typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
+            if (this.getCodeValue() != null) {
+                typeCode.setCode(this.getCodeValue());
+            } else {
+                typeCode.setCode("Code");
+            }
+            if (this.getCodeMeaning() != null) {
+                typeCode.setCodeSystem(this.getCodeMeaning());
+            } else {
+                typeCode.setCodeSystem("CodeSystem");
+            }
+            if (this.getCodingSchemeDesignator() != null) {
+                typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
+            } else {
+                typeCode.setCodeSystemName("CodeSystem");
+            }
+            if (this.getCodingSchemeVersion() != null) {
+                typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());
+            } else {
+                typeCode.setCodeSystemVersion("CodeSystemVersion");
+            }
             res.addTypeCode(typeCode);
         }
         return res;

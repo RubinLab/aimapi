@@ -284,9 +284,11 @@ public class AuditTrailManager {
             iaC_version.getUser().setLoginName(new ST(""));
             iaC_version.getUser().setRoleInTrial(new ST(""));
             //*** clear equipment
-            iaC_version.getEquipment().setManufacturerName(new ST(""));
-            iaC_version.getEquipment().setManufacturerModelName(new ST(""));
-            iaC_version.getEquipment().setSoftwareVersion(new ST(""));
+            if (iaC_version.getEquipment() != null) {
+                iaC_version.getEquipment().setManufacturerName(new ST(""));
+                iaC_version.getEquipment().setManufacturerModelName(new ST(""));
+                iaC_version.getEquipment().setSoftwareVersion(new ST(""));
+            }
             //*** clear person
             iaC_version.getPerson().setName(new ST(""));
             iaC_version.getPerson().setId(new ST(""));
