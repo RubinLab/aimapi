@@ -174,6 +174,7 @@ public class AnnotationBuilder {
             Logger.write("============= PathXSD: " + PathXSD);
             Logger.write("============= dbUserName: " + dbUserName);
             Logger.write("============= dbUserPassword: " + dbUserPassword);
+            Logger.write("============= withAuditTrail: " + withAuditTrail);
             Logger.write(Anno.toStringXML());
             Logger.write("===================================================");
 
@@ -207,13 +208,18 @@ public class AnnotationBuilder {
 //                }
 //            }
             if (checkTheServer) {
-                if (AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+                if (withAuditTrail && AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+                        .getUniqueIdentifier().getRoot())) {
+                    setAimXMLsaveResult("XML " + operation + " operation is Successful.");
+                }
+                else if (!withAuditTrail && AnnotationGetter.isExistInTheServerPlus(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {
                     setAimXMLsaveResult("XML " + operation + " operation is Successful.");
                 } else {
                     setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
                     throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
                 }
+                
             }
         } catch (Exception ex) {
             setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "

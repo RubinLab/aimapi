@@ -239,6 +239,15 @@ public class AnnotationGetter {
         }
         return false;
     }
+    public static boolean isExistInTheServerPlus(String serverURL, String namespace, String collection, String dbUserName,
+            String dbUserPassword, String uniqueIdentifier) throws AimException {
+        ImageAnnotationCollection temp = getImageAnnotationCollectionByUniqueIdentifierPlus(serverURL, namespace, collection,
+                dbUserName, dbUserPassword, uniqueIdentifier);
+        if (temp != null) {
+            return true;
+        }
+        return false;
+    }
 
     // *************************************************//
     // ****************** QUERIES **********************//
@@ -256,6 +265,24 @@ public class AnnotationGetter {
         String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.uniqueIdentifier.root = '"
                 + uniqueIdentifier + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL,
+                "");
+        if (listAnno.size() <= 0) {
+            return null;
+        }
+        return listAnno.get(0);
+    }
+    public static ImageAnnotationCollection getImageAnnotationCollectionByUniqueIdentifierPlus(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String uniqueIdentifier)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (uniqueIdentifier == null || "".equals(uniqueIdentifier.trim())) {
+            throw new AimException("AimException: UniqueIdentifier must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.uniqueIdentifier.root = '"
+                + uniqueIdentifier + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL,
                 "");
         if (listAnno.size() <= 0) {
             return null;
