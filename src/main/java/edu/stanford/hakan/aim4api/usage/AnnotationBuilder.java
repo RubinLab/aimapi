@@ -133,6 +133,13 @@ public class AnnotationBuilder {
         }
     }
 
+    
+    public static void saveToAIME(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
+            String collection, String PathXSD, String dbUserName, String dbUserPassword)
+    {
+        
+    }
+    
     public static ImageAnnotationCollection saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
 
