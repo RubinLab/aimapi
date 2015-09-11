@@ -15,12 +15,14 @@
   <source path='base'/> 
   <source path='compability/aimv3'/> 
   <source path='database/exist'/> 
+  <source path='database/aime'/> 
   <source path='database/mysql'/> 
   <source path='resources'/> 
   <source path='usage'/> 
   <source path='utility'/> 
   <source path='utility/dotnet'/> 
   <source path='project/epad'/> 
+  <source path='plugin'/> 
   <!-- The directory where the client code is (it includes all subdirectories as well), it has to be a directory in the same folder as this XML file -->
 
 </module>

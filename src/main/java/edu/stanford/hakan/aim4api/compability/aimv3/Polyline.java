@@ -28,6 +28,8 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -134,6 +136,12 @@ public class Polyline extends GeometricShape implements IAimXMLOperations {
         geometricShapeEntity.setLineStyle(Converter.toST(this.getLineStyle()));
         geometricShapeEntity.setLineThickness(Converter.toST(this.getLineThickness()));
         geometricShapeEntity.setShapeIdentifier(this.getShapeIdentifier());
+        if (this.getPlugin() != null) {
+            if (geometricShapeEntity.getUniqueIdentifier() == null) {
+                geometricShapeEntity.setUniqueIdentifier(new II(GenerateId.getUUID()));
+            }
+            this.getPlugin().setMarkupEntityID(geometricShapeEntity.getUniqueIdentifier().getRoot());
+        }
     }
 
     @Override
@@ -142,6 +150,7 @@ public class Polyline extends GeometricShape implements IAimXMLOperations {
             edu.stanford.hakan.aim4api.base.TwoDimensionPolyline res = new edu.stanford.hakan.aim4api.base.TwoDimensionPolyline();
             setBaseProperties(res);
             res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
+  
             return res;
         } else if (this.getShapeDimension() == ShapeDimension.ThreeD) {
             edu.stanford.hakan.aim4api.base.ThreeDimensionPolyline res = new edu.stanford.hakan.aim4api.base.ThreeDimensionPolyline();

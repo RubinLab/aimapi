@@ -31,6 +31,9 @@ import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.plugin.Plugin;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -59,6 +62,7 @@ public class Calculation implements IAimXMLOperations {
     private ReferencedGeometricShapeCollection referencedGeometricShapeCollection = new ReferencedGeometricShapeCollection();
     private String rdfID;
     private boolean codeValueCanBeNull;
+    private Plugin plugin = null;
 
     public Calculation() {
         this.codeValueCanBeNull = false;
@@ -209,6 +213,15 @@ public class Calculation implements IAimXMLOperations {
     public void setCodeValueCanBeNull(boolean codeValueCanBeNull) {
         this.codeValueCanBeNull = codeValueCanBeNull;
     }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
+    
 
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
@@ -378,6 +391,13 @@ public class Calculation implements IAimXMLOperations {
                 itemV3.toAimV4(imageAnnotation, res.getUniqueIdentifier());
             }
         }
+        if (this.getPlugin() != null) {
+            if (res.getUniqueIdentifier() == null) {
+                res.setUniqueIdentifier(new II(GenerateId.getUUID()));
+            }
+            this.getPlugin().setCalculationEntityID(res.getUniqueIdentifier().getRoot());
+        }
+
         return res;
     }
 

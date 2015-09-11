@@ -28,6 +28,8 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -133,7 +135,13 @@ public class Circle extends GeometricShape implements IAimXMLOperations {
         geometricShapeEntity.setLineOpacity(Converter.toST(this.getLineOpacity()));
         geometricShapeEntity.setLineStyle(Converter.toST(this.getLineStyle()));
         geometricShapeEntity.setLineThickness(Converter.toST(this.getLineThickness()));
-        geometricShapeEntity.setShapeIdentifier(this.getShapeIdentifier());
+        geometricShapeEntity.setShapeIdentifier(this.getShapeIdentifier());    
+        if (this.getPlugin() != null) {          
+            if (geometricShapeEntity.getUniqueIdentifier() == null) {
+                geometricShapeEntity.setUniqueIdentifier(new II(GenerateId.getUUID()));
+            }
+            this.getPlugin().setMarkupEntityID(geometricShapeEntity.getUniqueIdentifier().getRoot());
+        }
     }
 
     @Override
