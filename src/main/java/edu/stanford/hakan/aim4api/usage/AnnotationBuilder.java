@@ -30,16 +30,12 @@ package edu.stanford.hakan.aim4api.usage;
 import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
-import edu.stanford.hakan.aim4api.resources.Resource;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier;
 import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.StringWriter;
-import java.net.URL;
-import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -71,6 +67,7 @@ public class AnnotationBuilder {
     }
 
     public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException {
+        Logger.write("AnnotationBuilder.saveToFile start.");
         try {
             if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
                 PathXSD = Globals.getXSDPath();
@@ -104,9 +101,11 @@ public class AnnotationBuilder {
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveToFile): " + ex.getMessage());
         }
+        Logger.write("AnnotationBuilder.saveToFile end.");
     }
 
     public static String convertToString(ImageAnnotationCollection Anno) throws AimException {
+        Logger.write("AnnotationBuilder.convertToString start.");
         try {
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
@@ -125,6 +124,7 @@ public class AnnotationBuilder {
             DOMSource source = new DOMSource(doc);
             trans.transform(source, result);
             String xmlString = sw.toString();
+        Logger.write("AnnotationBuilder.convertToString end.");
             return xmlString;
         } catch (Exception ex) {
             setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
@@ -142,17 +142,12 @@ public class AnnotationBuilder {
     
     public static ImageAnnotationCollection saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
+        Logger.write("AnnotationBuilder.saveToServer start.");
 
         
-//        Logger.write(" ");
-//        Logger.write(" ");
-//        Logger.write("**************** API VERSION 7 *****************");
         if (Anno.getImageAnnotation().getUniqueIdentifier() == null || "".equals(Anno.getImageAnnotation().getUniqueIdentifier().getRoot())) {
             Anno.getImageAnnotation().refreshUniqueIdentifier();
         }
-        //Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());        
-//        if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
-//        	Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
 
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
@@ -194,26 +189,7 @@ public class AnnotationBuilder {
                         dbUserName, dbUserPassword);
             }
 
-//            if (!AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
-//                    .getUniqueIdentifier().getRoot())) {
-//                performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                        dbUserName, dbUserPassword);
-//            } else {
-            //*** Audit Trail
-            //AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-            //List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV3(Anno);
-                //*** AC AC AC AC AC AC AC
-            //Anno = auditTrailManager.performV4(Anno);
-//Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
-//                for (ImageAnnotationCollection iac : resAuditTrail) {
-//                    if (iac.getUniqueIdentifier().getRoot().equals(Anno.getUniqueIdentifier().getRoot())) {
-//                        Anno = iac.getClone();
-//                    }
-//                    Logger.write("UID iac in the loop: " + iac.getImageAnnotation().getUniqueIdentifier().getRoot());
-//                    performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                            dbUserName, dbUserPassword);
-//                }
-//            }
+            
             if (checkTheServer) {
                 if (withAuditTrail && AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {
@@ -236,10 +212,12 @@ public class AnnotationBuilder {
         }
 
         Logger.write("UID IA after AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
+        Logger.write("AnnotationBuilder.saveToServer end.");
         return Anno;
     }
 
     public static void saveNode(Node node, String Path) throws AimException {
+        Logger.write("AnnotationBuilder.saveNode start.");
         try {
             Document doc = XML.createDocument();
             Node nodeCopy = doc.importNode(node, true);
@@ -255,11 +233,13 @@ public class AnnotationBuilder {
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; saveNode): " + getAimXMLsaveResult());
         }
+        Logger.write("AnnotationBuilder.saveNode end.");
     }
 
     public static void performUploadExist(ImageAnnotationCollection Anno, String Url, String Collection,
             String FileName, String PathXSD, String userName, String password) throws AimException {
 
+        Logger.write("AnnotationBuilder.performUploadExist start.");
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
         }
@@ -279,5 +259,6 @@ public class AnnotationBuilder {
             setAimXMLsaveResult("XML Saving operation is Unsuccessful (Method Name; performUploadExist): " + uploadResult);
             throw new AimException("XML Saving operation is Unsuccessful (Method Name; performUploadExist): " + uploadResult);
         }
+        Logger.write("AnnotationBuilder.performUploadExist end.");
     }
 }

@@ -218,11 +218,13 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
 
     @Override
     public String getComment() {
+        Logger.write("call get Comment");
         return comment;
     }
 
     @Override
     public void setComment(String comment) {
+        Logger.write("call set Comment");
         this.comment = comment;
     }
 

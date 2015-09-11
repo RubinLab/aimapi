@@ -490,6 +490,8 @@ Logger.write("comment set");
         if (iav4.getName() != null) {
             this.setName(iav4.getName().getValue());
         }
+        
+        Logger.write("cikti ImageAnnotation(edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacv4)");
     }
 
     @Override
