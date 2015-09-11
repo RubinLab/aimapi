@@ -426,6 +426,7 @@ Logger.write("comment set");
         this.setAimVersion("AIM.3.0", "al536anhb55555");
         this.setIAv3UID(iav4.getUniqueIdentifier().getRoot());        
         
+        Logger.write("Geldi ImageAnnotation (iav4.getComment() != null)");
         if (iav4.getComment() != null) {
             if (iav4.getComment().getValue().contains(ImageAnnotation.spliterPlugin)) {
                 String[] array = iav4.getComment().getValue().split("\\" + ImageAnnotation.spliterPlugin);
@@ -437,6 +438,7 @@ Logger.write("comment set");
                 this.setComment(iav4.getComment().getValue());
             }
         }
+        Logger.write("Cikti ImageAnnotation (iav4.getComment() != null)");
 
         if (iacv4.getEquipment() != null) {
             this.addEquipment(new Equipment(iacv4.getEquipment()));
