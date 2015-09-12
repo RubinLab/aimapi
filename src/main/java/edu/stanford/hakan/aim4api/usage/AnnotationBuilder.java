@@ -167,16 +167,20 @@ public class AnnotationBuilder {
             }
             
 
-            Logger.write("============= saveToServer");
-            Logger.write("============= serverUrl: " + serverUrl);
-            Logger.write("============= nameSpace: " + nameSpace);
-            Logger.write("============= collection: " + collection);
-            Logger.write("============= PathXSD: " + PathXSD);
-            Logger.write("============= dbUserName: " + dbUserName);
-            Logger.write("============= dbUserPassword: " + dbUserPassword);
-            Logger.write("============= withAuditTrail: " + withAuditTrail);
-            Logger.write(Anno.toStringXML());
-            Logger.write("===================================================");
+            Logger.write("============= API VERSION 1.4");
+            
+            
+            Logger.write("============= test OK");
+//            Logger.write("============= saveToServer");
+//            Logger.write("============= serverUrl: " + serverUrl);
+//            Logger.write("============= nameSpace: " + nameSpace);
+//            Logger.write("============= collection: " + collection);
+//            Logger.write("============= PathXSD: " + PathXSD);
+//            Logger.write("============= dbUserName: " + dbUserName);
+//            Logger.write("============= dbUserPassword: " + dbUserPassword);
+//            Logger.write("============= withAuditTrail: " + withAuditTrail);
+//            Logger.write(Anno.toStringXML());
+//            Logger.write("===================================================");
 
 
             if (withAuditTrail) {
@@ -228,7 +232,7 @@ public class AnnotationBuilder {
                     + ex.getMessage());
         }
 
-        Logger.write("UID IA after AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
+        //Logger.write("UID IA after AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
         return Anno;
     }
 
