@@ -27,19 +27,18 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
+//import edu.stanford.hakan.aim4api.plugin.v3.PluginCollectionV3;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -56,6 +55,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     //public static String line = "";
 
     private String iaV3UID ="";
+    //private PluginCollectionV3 pluginCollection  = new PluginCollectionV3();
 
     public ImageAnnotation() {
         super();
@@ -458,6 +458,11 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         if (iav4.getName() != null) {
             this.setName(iav4.getName().getValue());
         }
+
+//        if (iav4.getPluginCollection() != null) {
+//            iav4.getPluginCollection().setImageAnnotation(iav4);
+//            this.setPluginCollection(new PluginCollectionV3(iav4.getPluginCollection()));
+//        }
     }
 
     @Override
@@ -550,5 +555,13 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         }
         return res;
     }
+
+//    public PluginCollectionV3 getPluginCollection() {
+//        return pluginCollection;
+//    }
+//
+//    public void setPluginCollection(PluginCollectionV3 pluginCollection) {
+//        this.pluginCollection = pluginCollection;
+//    }
 
 }
