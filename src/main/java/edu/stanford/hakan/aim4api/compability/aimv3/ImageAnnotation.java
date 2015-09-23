@@ -27,22 +27,22 @@
  */
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
-import edu.stanford.hakan.aim4api.plugin.Plugin;
+import edu.stanford.hakan.aim4api.plugin.v3.PluginCollectionV3;
+import edu.stanford.hakan.aim4api.plugin.v3.PluginV3;
+import edu.stanford.hakan.aim4api.plugin.v4.CommentManagerV4;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Logger;
-//import java.util.regex.Pattern;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -56,9 +56,11 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
     private TextAnnotationCollection textAnnotationCollection = new TextAnnotationCollection();
+    private edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotationV4 = null;
     //public static String line = "";
 
-    private String iaV3UID = "";
+    private String iaV3UID ="";
+    private PluginCollectionV3 pluginCollection  = new PluginCollectionV3();
 
     public ImageAnnotation() {
         super();
@@ -222,7 +224,8 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
 
     public edu.stanford.hakan.aim4api.base.ImageAnnotationCollection toAimV4() throws AimException {
         
-        Logger.write("Geldi toAimV4");
+        Logger.write("=== toAimV4 start");
+        
         edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacV4 = new edu.stanford.hakan.aim4api.base.ImageAnnotationCollection();
 
         iacV4.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
@@ -260,19 +263,8 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         if (this.getInferenceCollection().getInferenceList().size() > 0) {//
             iaV4.setInferenceEntityCollection(this.getInferenceCollection().toAimV4());
         }
-Logger.write("reading list plugins");
-        if(this.getListPlugin().size() > 0)
-        {
-            if (this.getComment() == null || "".equals(this.getComment().trim())) {
-                this.setComment("-");
-            }
-            for (int i = 0; i < this.getListPlugin().size(); i++) {
-                this.setComment(this.getComment() + Annotation.spliterPlugin + this.getListPlugin().get(i).toString());
-            }
-        }
-Logger.write("setting comment");
+
         iaV4.setComment(Converter.toST(this.getComment()));//
-Logger.write("comment set");
         iaV4.setName(Converter.toST(this.getName()));//
         CD typeCode = new CD();//
         typeCode.setCode(this.getCodeValue());//
@@ -285,12 +277,12 @@ Logger.write("comment set");
             this.setIAv3UID(GenerateId.getUUID());
         }
         iaV4.setUniqueIdentifier(new II(this.getIAv3UID()));
+        
+        iaV4.setPluginCollection(this.pluginCollection.toAimV4(this.imageAnnotationV4));
 
         iacV4.addImageAnnotation(iaV4);
         
-        
-        Logger.write("Cikti toAimV4");
-        
+        Logger.write("=== toAimV4 end");
         
         return iacV4;
     }
@@ -418,27 +410,16 @@ Logger.write("comment set");
     }
 
     public ImageAnnotation(edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacv4) {
+        
+        Logger.write("=== ImageAnnotation v3 start");
+        
         edu.stanford.hakan.aim4api.base.ImageAnnotation iav4 = iacv4.getImageAnnotations().get(0);
         setXsiType("ImageAnnotation");
         this.setUniqueIdentifier(iacv4.getUniqueIdentifier().getRoot(), "al536anhb55555");
         this.setDateTime(iacv4.getDateTime());
         this.setCagridId(0);
         this.setAimVersion("AIM.3.0", "al536anhb55555");
-        this.setIAv3UID(iav4.getUniqueIdentifier().getRoot());        
-        
-        Logger.write("Geldi ImageAnnotation (iav4.getComment() != null)");
-        if (iav4.getComment() != null) {
-            if (iav4.getComment().getValue().contains(ImageAnnotation.spliterPlugin)) {
-                String[] array = iav4.getComment().getValue().split("\\" + ImageAnnotation.spliterPlugin);
-                this.setComment(array[0]);   
-                for (int i = 1; i < array.length; i++) {
-                    this.addPlugin(new Plugin(array[i]));
-                }
-            } else {
-                this.setComment(iav4.getComment().getValue());
-            }
-        }
-        Logger.write("Cikti ImageAnnotation (iav4.getComment() != null)");
+        this.setIAv3UID(iav4.getUniqueIdentifier().getRoot());
 
         if (iacv4.getEquipment() != null) {
             this.addEquipment(new Equipment(iacv4.getEquipment()));
@@ -456,7 +437,7 @@ Logger.write("comment set");
             this.setImageReferenceCollection(new ImageReferenceCollection(iav4.getImageReferenceEntityCollection()));
         }
         if (iav4.getMarkupEntityCollection() != null && iav4.getMarkupEntityCollection().getMarkupEntityList().size() > 0) {
-            this.setGeometricShapeCollection(new GeometricShapeCollection(iav4.getMarkupEntityCollection(), this));
+            this.setGeometricShapeCollection(new GeometricShapeCollection(iav4.getMarkupEntityCollection()));
         }
         if (iav4.getCalculationEntityCollection() != null && iav4.getCalculationEntityCollection().getCalculationEntityList().size() > 0) {
             this.setCalculationCollection(new CalculationCollection(iav4.getCalculationEntityCollection(), iav4));
@@ -487,11 +468,30 @@ Logger.write("comment set");
             }
         }
 
+        if (iav4.getComment() != null) {
+            Logger.write("CommentManagerV4 = 1");
+            CommentManagerV4 cm = new CommentManagerV4(iav4);
+            Logger.write("CommentManagerV4 = 2");
+            this.setComment(cm.getComment().getValue());
+            Logger.write("CommentManagerV4 = 3");
+        }
         if (iav4.getName() != null) {
             this.setName(iav4.getName().getValue());
         }
         
-        Logger.write("cikti ImageAnnotation(edu.stanford.hakan.aim4api.base.ImageAnnotationCollection iacv4)");
+        this.imageAnnotationV4 = iav4;
+        if(Globals.withPlugin)
+        this.pluginCollection = new PluginCollectionV3(iav4.getPluginCollection());
+
+//        if (iav4.getPluginCollection() != null) {
+//            iav4.getPluginCollection().setImageAnnotation(iav4);
+//            this.setPluginCollection(new PluginCollectionV3(iav4.getPluginCollection()));
+//        }
+        
+        
+        
+        Logger.write("--------- ia " + this.getComment());
+        Logger.write("=== ImageAnnotation v3 end");
     }
 
     @Override
@@ -583,6 +583,24 @@ Logger.write("comment set");
             res.textAnnotationCollection = this.textAnnotationCollection.getClone();
         }
         return res;
+    }
+
+    public PluginCollectionV3 getPluginCollection() {
+        return pluginCollection;
+    }
+
+    public void setPluginCollection(PluginCollectionV3 pluginCollection) {
+        this.pluginCollection = pluginCollection;
+    }
+    
+    
+    public void addPlugin(PluginV3 newPlugin) {
+        if(this.pluginCollection == null)
+        {
+            this.pluginCollection = new PluginCollectionV3();
+            
+        }
+        this.pluginCollection.addPlugin(newPlugin);
     }
 
 }

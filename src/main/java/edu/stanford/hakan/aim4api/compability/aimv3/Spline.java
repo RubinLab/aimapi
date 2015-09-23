@@ -29,7 +29,6 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.II;
-import edu.stanford.hakan.aim4api.utility.GenerateId;
 import java.io.Serializable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -74,11 +73,8 @@ public class Spline extends GeometricShape implements IAimXMLOperations {
         res.setLineThickness(Converter.toST(this.getLineThickness()));
         res.setShapeIdentifier(this.getShapeIdentifier());
         res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4_2D(res));
-        if (this.getPlugin() != null) {
-            if (res.getUniqueIdentifier() == null) {
-                res.setUniqueIdentifier(new II(GenerateId.getUUID()));
-            }
-            this.getPlugin().setMarkupEntityID(res.getUniqueIdentifier().getRoot());
+        if (this.getUniqueIdentifier() != null && !"".equals(this.getUniqueIdentifier())) {
+            res.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
         }
         return res;
     }
@@ -87,6 +83,7 @@ public class Spline extends GeometricShape implements IAimXMLOperations {
         setXsiType("Spline");
         this.setCagridId(0);
         this.setIncludeFlag(v4.getIncludeFlag());
+        this.setUniqueIdentifier(v4.getUniqueIdentifier().getRoot());
         if (v4.getLineColor() != null) {
             this.setLineColor(v4.getLineColor().getValue());
         }

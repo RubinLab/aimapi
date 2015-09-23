@@ -30,13 +30,13 @@ package edu.stanford.hakan.aim4api.base;
 import edu.stanford.hakan.aim4api.usage.AnnotationBuilder;
 import edu.stanford.hakan.aim4api.usage.AnnotationConverter;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
 
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -123,6 +123,9 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     
     @Override
     public void setXMLNode(Node node) {
+        
+        Logger.write("ImageAnnotationCollection-setXMLNode-s");
+        
         this.listImageAnnotations.clear();
 
         NamedNodeMap map = node.getAttributes();
@@ -142,7 +145,6 @@ public class ImageAnnotationCollection extends AnnotationCollection {
                 node = AnnotationConverter.annotationV3ToV4(node);
                 super.setAimVersion(Enumerations.AimVersion.AIMv4_0);
             } catch (AimException ex) {
-                Logger.getLogger(AnnotationCollection.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -175,6 +177,9 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         AuditTrail auditTrail = this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().get(0);
         this.setVersion(Integer.parseInt(auditTrail.getComment().getValue()));
         }
+        
+        Logger.write("--------- iac " + this.getImageAnnotation().getComment().getValue());
+        Logger.write("ImageAnnotationCollection-setXMLNode-e");
     }
 
 //    public boolean getIsEdited() {

@@ -30,13 +30,10 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 //import edu.stanford.hakan.aim3api.usage.AnnotationConverter;
 //import edu.stanford.hakan.aim3api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.plugin.Plugin;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
-import edu.stanford.hakan.aim4api.utility.Logger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.regex.Pattern;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -59,7 +56,7 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
     private List<AimStatus> listAimStatus = new ArrayList<AimStatus>();
     private Integer cagridId;
     private String aimVersion;
-    private String comment = "";
+    private String comment;
     private String dateTime;
     private String name;
     private String uniqueIdentifier;
@@ -70,24 +67,23 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
     private String precedentReferencedAnnotationUID;
     private String xsiType;
     private String OntologyPrefix;
-    public static final String spliterPlugin = "*sp1*";
-    private List<Plugin> listPlugin = new ArrayList<Plugin>();
     
+    
+
     public Annotation intitalState = null;
     private String accessKey = "al536anhb55555";
 
+    
+    
     public Annotation() {
-        Logger.write("created Annotation");
         this.uniqueIdentifier = GenerateId.getUUID();
         this.aimVersion = "AIM.3.0";
     }
 
     public Annotation(Integer cagridId, String comment, String dateTime, String name, String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion, String precedentReferencedAnnotationUID) {
-       
-        Logger.write("created Annotation");
         this.cagridId = cagridId;
         this.aimVersion = "AIM.3.0";
-        this.setComment(comment);
+        this.comment = comment;
         this.dateTime = dateTime;
         this.name = name;
         this.uniqueIdentifier = GenerateId.getUUID();
@@ -218,27 +214,12 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
 
     @Override
     public String getComment() {
-        Logger.write("call get Comment");
         return comment;
     }
 
     @Override
     public void setComment(String comment) {
-        Logger.write("call set Comment");
         this.comment = comment;
-    }
-
-    public List<Plugin> getListPlugin() {
-        return listPlugin;
-    }
-
-    public void setListPlugin(List<Plugin> listPlugin) {
-        this.listPlugin = listPlugin;
-    }
-
-   
-    public void addPlugin(Plugin plugin) {
-        this.listPlugin.add(plugin);
     }
 
     @Override
@@ -419,20 +400,9 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
         this.codeMeaning = map.getNamedItem("codeMeaning").getNodeValue();
         this.codingSchemeDesignator = map.getNamedItem("codingSchemeDesignator").getNodeValue();
 
-        Logger.write("Annotation - 1");
         if (map.getNamedItem("comment") != null) {
-            String xmlValue = map.getNamedItem("comment").getNodeValue();
-            if (xmlValue.contains(Annotation.spliterPlugin)) {
-                String[] array = xmlValue.split("\\" + Annotation.spliterPlugin);
-                this.comment = array[0];
-                for (int i = 1; i < array.length; i++) {
-                    this.addPlugin(new Plugin(array[i]));
-                }
-            } else {
-                this.comment = map.getNamedItem("comment").getNodeValue();
-            }
+            this.comment = map.getNamedItem("comment").getNodeValue();
         }
-        Logger.write("Annotation - 2");
         if (map.getNamedItem("codingSchemeVersion") != null) {
             this.codingSchemeVersion = map.getNamedItem("codingSchemeVersion").getNodeValue();
         }

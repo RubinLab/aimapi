@@ -147,8 +147,11 @@ public class AnnotationGetter {
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionsFromString(String text, String PathXSD)
             throws AimException {
         try {
+            Logger.write("AnnotationGetter-getImageAnnotationCollectionsFromString-s");
+            Logger.write(text);
             Document serverDoc = XML.getDocumentFromString(text);
             List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
+            Logger.write("AnnotationGetter-getImageAnnotationCollectionsFromString-e");
             return res;
         } catch (AimException ex) {
             throw new AimException("AimException: " + ex.getMessage());
@@ -223,9 +226,7 @@ public class AnnotationGetter {
             throw new AimException("AimException: AimQuery must be defined");
         }
 
-        Logger.write("========= aimQuery= " + aimQuery);
         String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
-        Logger.write("========= XQuery= " + XQuery);
         //XQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/aimV4.dbxml/napel_nsclc')/ImageAnnotationCollection where  $x/person/name[contains(lower-case(@value),lower-case('274'))]  return $x";
         return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, startIndex, maxRecords);// getDocumentFromServer(serverURL,
     }

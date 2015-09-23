@@ -100,7 +100,7 @@ public class GeometricShapeCollection implements IAimXMLOperations {
         return res;
     }
 
-    public GeometricShapeCollection(edu.stanford.hakan.aim4api.base.MarkupEntityCollection v4, ImageAnnotation ia ) {
+    public GeometricShapeCollection(edu.stanford.hakan.aim4api.base.MarkupEntityCollection v4) {
         List<edu.stanford.hakan.aim4api.base.MarkupEntity> listV4 = v4.getMarkupEntityList();
         for (edu.stanford.hakan.aim4api.base.MarkupEntity itemV4 : listV4) {
             if ("TwoDimensionCircle".equals(itemV4.getXsiType())) {
@@ -120,7 +120,6 @@ public class GeometricShapeCollection implements IAimXMLOperations {
             } else if ("TwoDimensionSpline".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Spline((edu.stanford.hakan.aim4api.base.TwoDimensionSpline) itemV4));
             }
-            
         }
     }
 

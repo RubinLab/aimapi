@@ -28,7 +28,6 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.plugin.Plugin;
 import java.util.List;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -49,7 +48,7 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
     private Integer shapeIdentifier;
     private SpatialCoordinateCollection spatialCoordinateCollection = new SpatialCoordinateCollection();
     private String xsiType;
-    private Plugin plugin;
+    private String uniqueIdentifier;
 
     protected void setXsiType(String xsiType) {
         this.xsiType = xsiType;
@@ -160,6 +159,15 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
     public List<SpatialCoordinate> getSpatialCoordinateList() {
         return this.spatialCoordinateCollection.getSpatialCoordinateList();
     }
+    
+    
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
 
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
@@ -190,16 +198,6 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
 //        return geometricShape;
 //
 //    }
-    public Plugin getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(Plugin plugin) {
-        this.plugin = plugin;
-    }
-    
-    
-    
     @Override
     public void setXMLNode(Node node) {
 
@@ -304,7 +302,7 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
                 res = new edu.stanford.hakan.aim4api.base.ThreeDimensionPoint();
             } else if ("Polyline".equals(this.getXsiType())) {
                 res = new edu.stanford.hakan.aim4api.base.ThreeDimensionPolyline();
-            }
+            } 
 
             res.setIncludeFlag(this.getIncludeFlag());
             res.setLineColor(Converter.toST(this.getLineColor()));

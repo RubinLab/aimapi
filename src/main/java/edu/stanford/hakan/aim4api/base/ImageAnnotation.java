@@ -27,10 +27,17 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.plugin.PluginParameter;
+import edu.stanford.hakan.aim4api.plugin.v4.CommentManagerV4;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginCollectionV4;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
 import java.util.List;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import edu.stanford.hakan.aim4api.utility.Globals;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import java.util.ArrayList;
+import jdk.nashorn.internal.objects.Global;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,17 +54,17 @@ public class ImageAnnotation extends AnnotationEntity {
     private ImageAnnotationStatementCollection imageAnnotationStatementCollection = new ImageAnnotationStatementCollection();
     private ImageReferenceEntityCollection imageReferenceEntityCollection = new ImageReferenceEntityCollection();
     private ImageAnnotationCollection imageAnnotationCollection;
-    
+
     private ImageAnnotation initialState = null;
     private int version = -1;
-    
-    
+
+    private PluginCollectionV4 pluginCollection = new PluginCollectionV4();
 
     public ImageAnnotation() {
         this.version = -1;
         setXsiType("ImageAnnotation");
     }
-    
+
     public SegmentationEntityCollection getSegmentationEntityCollection() {
         return segmentationEntityCollection;
     }
@@ -132,6 +139,19 @@ public class ImageAnnotation extends AnnotationEntity {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("ImageAnnotation");
         }
+
+//        PluginV4 pp = new PluginV4();
+//        pp.setName("Plugin Name");
+//        pp.addPluginParameter(new PluginParameter("param Name", "param Value"));
+//        this.addPlugin(pp);
+        Logger.write("CommentManagerV4 = 4");
+        if (Globals.withPlugin) {
+            CommentManagerV4 commentManagerV4 = new CommentManagerV4(this.getComment(), this.pluginCollection);
+            Logger.write("CommentManagerV4 = 5");
+            this.setComment(new ST(commentManagerV4.toString()));
+            Logger.write("CommentManagerV4 = 6");
+        }
+
         Element res = (Element) super.getXMLNode(doc);
         if (this.segmentationEntityCollection.size() > 0) {
             res.appendChild(this.segmentationEntityCollection.getXMLNode(doc));
@@ -150,6 +170,7 @@ public class ImageAnnotation extends AnnotationEntity {
             this.setUniqueIdentifier(new II(GenerateId.getUUID()));
             this.setDateTime(Utility.getNowAtGMT());
         }
+
         return res;
     }
 
@@ -174,9 +195,24 @@ public class ImageAnnotation extends AnnotationEntity {
         }
         //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
         this.setInitialState();
-        
-        if(this.getAuditTrailCollection() != null && this.getAuditTrailCollection().size() > 0)
+
+        if (this.getAuditTrailCollection() != null && this.getAuditTrailCollection().size() > 0) {
             this.setVersion(Integer.parseInt(this.getAuditTrailCollection().get(0).getComment().getValue()));
+        }
+
+        if (Globals.withPlugin) {
+            Logger.write("CommentManagerV4 = 7");
+            CommentManagerV4 commentManagerV4 = new CommentManagerV4(this);
+            Logger.write("CommentManagerV4 = 8");
+            this.setComment(commentManagerV4.getComment());
+            Logger.write("CommentManagerV4 = 9");
+            if (commentManagerV4.getPluginCollection() != null) {
+                Logger.write("CommentManagerV4 = 10");
+                this.setPluginCollection(commentManagerV4.getPluginCollection());
+                this.getPluginCollection().setImageAnnotation(this);
+            }
+            Logger.write("CommentManagerV4 = 11");
+        }
     }
 
     public boolean getIsEdited() {
@@ -189,11 +225,10 @@ public class ImageAnnotation extends AnnotationEntity {
     public ImageAnnotation getInitialState() {
         return this.initialState;
     }
-    
-    public void setInitialState()
-    {
+
+    public void setInitialState() {
         this.initialState = this.getClone();
-        
+
     }
 
     @Override
@@ -288,7 +323,7 @@ public class ImageAnnotation extends AnnotationEntity {
         if (this.getXsiType() != null) {
             res.setXsiType(this.getXsiType());
         }
-        
+
         res.setVersion(this.getVersion());
         return res;
     }
@@ -319,13 +354,32 @@ public class ImageAnnotation extends AnnotationEntity {
     public boolean isEdited() {
         return this.isEqualTo(this.initialState);
     }
-       @Override
+
+    @Override
     public boolean equals(Object obj) {
-       if (!(obj instanceof ImageAnnotation))
+        if (!(obj instanceof ImageAnnotation)) {
             return false;
-       
-       if(this.getUniqueIdentifier().getRoot().equals(((ImageAnnotation)obj).getUniqueIdentifier().getRoot()))
-           return true;
-       return false;
+        }
+
+        if (this.getUniqueIdentifier().getRoot().equals(((ImageAnnotation) obj).getUniqueIdentifier().getRoot())) {
+            return true;
+        }
+        return false;
+    }
+
+    public PluginCollectionV4 getPluginCollection() {
+        return pluginCollection;
+    }
+
+    public void setPluginCollection(PluginCollectionV4 pluginCollection) {
+        this.pluginCollection = pluginCollection;
+    }
+
+    public void addPlugin(PluginV4 newPlugin) {
+        if (this.pluginCollection == null) {
+            this.pluginCollection = new PluginCollectionV4();
+        }
+        this.pluginCollection.setImageAnnotation(this);
+        this.pluginCollection.addPlugin(newPlugin);
     }
 }

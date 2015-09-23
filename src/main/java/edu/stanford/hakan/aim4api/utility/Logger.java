@@ -22,7 +22,7 @@ public class Logger {
         if (f.exists() && !f.isDirectory()) {
             try {
                 StreamWriter sw = new StreamWriter(Globals.getAimLogPath(), true);
-                sw.WriteLine(line);
+                sw.WriteLine("[v1.2] "+line);
                 sw.Close();
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);

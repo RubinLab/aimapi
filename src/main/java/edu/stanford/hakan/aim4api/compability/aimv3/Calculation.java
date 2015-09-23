@@ -32,8 +32,6 @@ import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
-import edu.stanford.hakan.aim4api.plugin.Plugin;
-import edu.stanford.hakan.aim4api.utility.GenerateId;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,7 +60,6 @@ public class Calculation implements IAimXMLOperations {
     private ReferencedGeometricShapeCollection referencedGeometricShapeCollection = new ReferencedGeometricShapeCollection();
     private String rdfID;
     private boolean codeValueCanBeNull;
-    private Plugin plugin = null;
 
     public Calculation() {
         this.codeValueCanBeNull = false;
@@ -213,14 +210,7 @@ public class Calculation implements IAimXMLOperations {
     public void setCodeValueCanBeNull(boolean codeValueCanBeNull) {
         this.codeValueCanBeNull = codeValueCanBeNull;
     }
-
-    public Plugin getPlugin() {
-        return plugin;
-    }
-
-    public void setPlugin(Plugin plugin) {
-        this.plugin = plugin;
-    }
+    
     
 
 //    @Override
@@ -364,7 +354,11 @@ public class Calculation implements IAimXMLOperations {
 
     public edu.stanford.hakan.aim4api.base.CalculationEntity toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation) {
         edu.stanford.hakan.aim4api.base.CalculationEntity res = new edu.stanford.hakan.aim4api.base.CalculationEntity();
-        res.setUniqueIdentifier();
+        if (this.getUid() == null || "".equals(this.getUid())) {
+            res.setUniqueIdentifier();
+        } else {
+            res.setUniqueIdentifier(new II(this.getUid()));
+        }
         Algorithm algorithm = new Algorithm();
         algorithm.setName(Converter.toST(this.getAlgorithmName()));
         algorithm.setVersion(Converter.toST(this.getAlgorithmVersion()));
@@ -379,7 +373,7 @@ public class Calculation implements IAimXMLOperations {
         typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
         typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         res.addTypeCode(typeCode);
-
+        
         if (this.getReferencedCalculationCollection().getReferencedCalculationList().size() > 0) {
             for (edu.stanford.hakan.aim4api.compability.aimv3.ReferencedCalculation itemV3 : this.getReferencedCalculationCollection().getReferencedCalculationList()) {
                 edu.stanford.hakan.aim4api.base.CalculationEntityReferencesCalculationEntityStatement annotationStatement = itemV3.toAimV4(this);
@@ -391,13 +385,6 @@ public class Calculation implements IAimXMLOperations {
                 itemV3.toAimV4(imageAnnotation, res.getUniqueIdentifier());
             }
         }
-        if (this.getPlugin() != null) {
-            if (res.getUniqueIdentifier() == null) {
-                res.setUniqueIdentifier(new II(GenerateId.getUUID()));
-            }
-            this.getPlugin().setCalculationEntityID(res.getUniqueIdentifier().getRoot());
-        }
-
         return res;
     }
 

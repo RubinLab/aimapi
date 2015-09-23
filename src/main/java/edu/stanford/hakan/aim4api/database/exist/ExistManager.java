@@ -277,15 +277,12 @@ public class ExistManager {
             }
             reader.close();
 
-            Logger.write("==== auditTrailManager removing");
             AuditTrailManager auditTrailManager = new AuditTrailManager(Url, nameSpace, collection, dbUserName, dbUserPassword, null);
             ImageAnnotationCollection iacVersion = auditTrailManager.getIACVersionHandler(uniqueIdentifier);
             if (iacVersion != null) {
-                Logger.write("==== iacVersion NOT NULL");
                 removeImageAnnotationCollectionFromServerReal(Url, nameSpace, collection,
                         dbUserName, dbUserPassword, iacVersion.getUniqueIdentifier().getRoot());
             } else {
-                Logger.write("==== iacVersion NULL");
             }
 
             // Output the response
@@ -300,28 +297,20 @@ public class ExistManager {
     public static String removeImageAnnotationCollectionFromServer(String Url, String nameSpace, String collection,
             String dbUserName, String dbUserPassword, String uniqueIdentifier) throws AimException {
         try {
-            Logger.write("************ Removing-1 " + uniqueIdentifier);
-
             ImageAnnotationCollection iac = getImageAnnotationCollectionByUniqueIdentifier(Url, nameSpace, collection,
                     dbUserName, dbUserPassword, uniqueIdentifier);
             if (iac == null) {
-            Logger.write("************ Removing-2");
                 throw new AimException(
                         "AimException: The Image Annotation which you want to remove is not exist. Please check your parameters.");
             }
 
             if (iac.getDescription() != null) {
-            Logger.write("************ Removing-3");
                 iac.setDescription(new ST(iac.getDescription().getValue() + Globals.flagDeleted));
             } else {
-            Logger.write("************ Removing-4");
                 iac.setDescription(new ST(Globals.flagDeleted));
             }
-            
-            Logger.write("************ Removing-5 " + iac.getDescription().getValue());
 
             AnnotationBuilder.saveToServer(iac, Url, nameSpace, collection, "", dbUserName, dbUserPassword);
-            Logger.write("************ Removing-6");
 
             // Output the response
             return "XML removing operation is Successful.";

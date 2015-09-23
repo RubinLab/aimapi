@@ -2062,8 +2062,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         List<User> users = getListUser();
         if (users.size() > 0) {
             User firstUser = users.get(0);
-            logger.info("new loggedInUser " + firstUser.getLoginName()
-                    + firstUser.getName());
+//            logger.info("new loggedInUser " + firstUser.getLoginName()
+//                    + firstUser.getName());
             result = new LoggedInUser(firstUser.getLoginName(),
                     firstUser.getName());
         }

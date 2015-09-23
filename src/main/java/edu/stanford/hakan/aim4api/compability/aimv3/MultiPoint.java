@@ -29,7 +29,6 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.II;
-import edu.stanford.hakan.aim4api.utility.GenerateId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -80,6 +79,7 @@ public class MultiPoint extends GeometricShape implements IAimXMLOperations {
         setXsiType("MultiPoint");
         this.setCagridId(0);
         this.setIncludeFlag(v4.getIncludeFlag());
+        this.setUniqueIdentifier(v4.getUniqueIdentifier().getRoot());
         if (v4.getLineColor() != null) {
             this.setLineColor(v4.getLineColor().getValue());
         }
@@ -137,11 +137,8 @@ public class MultiPoint extends GeometricShape implements IAimXMLOperations {
         geometricShapeEntity.setLineStyle(Converter.toST(this.getLineStyle()));
         geometricShapeEntity.setLineThickness(Converter.toST(this.getLineThickness()));
         geometricShapeEntity.setShapeIdentifier(this.getShapeIdentifier());
-        if (this.getPlugin() != null) {
-                      if (geometricShapeEntity.getUniqueIdentifier() == null) {
-                geometricShapeEntity.setUniqueIdentifier(new II(GenerateId.getUUID()));
-            }
-            this.getPlugin().setMarkupEntityID(geometricShapeEntity.getUniqueIdentifier().getRoot());
+        if (this.getUniqueIdentifier() != null && !"".equals(this.getUniqueIdentifier())) {
+            geometricShapeEntity.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
         }
     }
 
