@@ -34,6 +34,9 @@ import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.database.exist.ExistResponderThread;
+import edu.stanford.hakan.aim4api.plugin.PluginParemeterCollection;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginCollectionV4;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
 import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
@@ -91,6 +94,21 @@ public class AnnotationGetter {
             String serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(Url, XQuery, dbUserName, dbUserPassword, 1, maxRecords);
             Document serverDoc = XML.getDocumentFromString(serverResponse);
             List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
+
+            for (ImageAnnotationCollection iac : res) {
+                Logger.write("Checking plugin parameters");
+                Logger.write(iac.getUniqueIdentifier().getRoot());
+                if (iac.getPluginCollection().size() > 0) {
+//                    Logger.write("NO Plugin Parameter");
+//                } else {
+                    PluginCollectionV4 pCollection = iac.getPluginCollection();
+                    for (PluginV4 p4 : pCollection.getListPlugin()) {
+                        Logger.write(p4.getName());
+                    }
+                }
+                Logger.write("================");
+            }
+
             return res;
         } catch (AimException ex) {
             throw new AimException("AimException: " + ex.getMessage());
@@ -223,9 +241,9 @@ public class AnnotationGetter {
             throw new AimException("AimException: AimQuery must be defined");
         }
 
-        Logger.write("========= aimQuery= " + aimQuery);
+        //Logger.write("========= aimQuery= " + aimQuery);
         String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
-        Logger.write("========= XQuery= " + XQuery);
+        //Logger.write("========= XQuery= " + XQuery);
         //XQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/aimV4.dbxml/napel_nsclc')/ImageAnnotationCollection where  $x/person/name[contains(lower-case(@value),lower-case('274'))]  return $x";
         return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, startIndex, maxRecords);// getDocumentFromServer(serverURL,
     }
@@ -239,6 +257,7 @@ public class AnnotationGetter {
         }
         return false;
     }
+
     public static boolean isExistInTheServerPlus(String serverURL, String namespace, String collection, String dbUserName,
             String dbUserPassword, String uniqueIdentifier) throws AimException {
         ImageAnnotationCollection temp = getImageAnnotationCollectionByUniqueIdentifierPlus(serverURL, namespace, collection,
@@ -271,6 +290,7 @@ public class AnnotationGetter {
         }
         return listAnno.get(0);
     }
+
     public static ImageAnnotationCollection getImageAnnotationCollectionByUniqueIdentifierPlus(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String uniqueIdentifier)
             throws AimException {
@@ -1215,7 +1235,7 @@ public class AnnotationGetter {
 
         String aimQL = "SELECT FROM " + collection + " WHERE person.id.value = '" + PersonId + "' AND ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
-       for (int i = 0 ; i < listAnno.size() ; i++){
+        for (int i = 0; i < listAnno.size(); i++) {
             listAnno.get(i).setDescription(new ST(listAnno.get(i).getDescription().getValue().replaceAll(Globals.flagDeleted, "")));
         }
         return listAnno;
@@ -1233,12 +1253,12 @@ public class AnnotationGetter {
 
         String aimQL = "SELECT FROM " + collection + " WHERE person.name.value = '" + PersonName + "' AND ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
-        for (int i = 0 ; i < listAnno.size() ; i++){
+        for (int i = 0; i < listAnno.size(); i++) {
             listAnno.get(i).setDescription(new ST(listAnno.get(i).getDescription().getValue().replaceAll(Globals.flagDeleted, "")));
         }
         return listAnno;
     }
-    
+
     // *** All Deleteds
     public static List<ImageAnnotationCollection> getDeletedImageAnnotationCollectionALL(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword)
@@ -1248,14 +1268,13 @@ public class AnnotationGetter {
 
         String aimQL = "SELECT FROM " + collection + " WHERE ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
-        for (int i = 0 ; i < listAnno.size() ; i++){
+        for (int i = 0; i < listAnno.size(); i++) {
             listAnno.get(i).setDescription(new ST(listAnno.get(i).getDescription().getValue().replaceAll(Globals.flagDeleted, "")));
         }
         return listAnno;
     }
-    
-    
-      public static List<ImageAnnotationCollection> getDeletedImageAnnotationCollectionByUserNameEqual(String serverURL,
+
+    public static List<ImageAnnotationCollection> getDeletedImageAnnotationCollectionByUserNameEqual(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String userName)
             throws AimException {
         serverURL = Utility.correctToUrl(serverURL);
@@ -1265,8 +1284,8 @@ public class AnnotationGetter {
         }
 
         String aimQL = "SELECT FROM " + collection + " WHERE user.name.value = '" + userName + "' AND ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
-        List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL,"");
+        List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
         return listAnno;
     }
-    
+
 }

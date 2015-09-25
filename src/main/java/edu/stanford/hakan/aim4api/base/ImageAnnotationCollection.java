@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.plugin.v4.PluginCollectionV4;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
 import edu.stanford.hakan.aim4api.usage.AnnotationBuilder;
 import edu.stanford.hakan.aim4api.usage.AnnotationConverter;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
@@ -69,10 +71,11 @@ public class ImageAnnotationCollection extends AnnotationCollection {
     public List<ImageAnnotation> getImageAnnotations() {
         return listImageAnnotations;
     }
-    
+
     public ImageAnnotation getImageAnnotation() {
-        if(this.listImageAnnotations.size() > 0)
+        if (this.listImageAnnotations.size() > 0) {
             return this.listImageAnnotations.get(0);
+        }
         return null;
     }
 
@@ -113,14 +116,6 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         return res;
     }
 
-    public int getVersion() {
-        return this.getImageAnnotations().get(0).getVersion();
-    }
-
-    public void setVersion(int version) {
-        this.getImageAnnotations().get(0).setVersion(version);
-    }
-    
     @Override
     public void setXMLNode(Node node) {
         this.listImageAnnotations.clear();
@@ -128,12 +123,14 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         NamedNodeMap map = node.getAttributes();
         if (map.getNamedItem("aimVersion") != null) {
             String tempVersion = map.getNamedItem("aimVersion").getNodeValue().replace('.', '_');
-            if("3_0".equals(tempVersion))
+            if ("3_0".equals(tempVersion)) {
                 tempVersion = "AIM_3_0";
-            else if("1_0".equals(tempVersion))
+            } else if ("1_0".equals(tempVersion)) {
                 tempVersion = "AIMv1_0";
-            if(tempVersion.indexOf("^") > 0)
+            }
+            if (tempVersion.indexOf("^") > 0) {
                 tempVersion = tempVersion.split("\\^")[0];
+            }
             super.setAimVersion(Enumerations.AimVersion.valueOf(tempVersion));
         }
 
@@ -156,6 +153,7 @@ public class ImageAnnotationCollection extends AnnotationCollection {
                     Node childNode = tempList.item(j);
                     if ("ImageAnnotation".equals(childNode.getNodeName())) {
                         ImageAnnotation obj = new ImageAnnotation();
+                        obj.setImageAnnotationCollection(this);
                         obj.setXMLNode(childNode);
                         this.addImageAnnotation(obj);
                     }
@@ -169,12 +167,21 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         }
 //        //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
 //        this.initialState = this.getClone();
+
         
-        if(this.getImageAnnotation() != null && this.getImageAnnotation().getAuditTrailCollection() != null &&this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().size() > 0 )
-        {
-        AuditTrail auditTrail = this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().get(0);
-        this.setVersion(Integer.parseInt(auditTrail.getComment().getValue()));
+        if (this.getImageAnnotation() != null && this.getImageAnnotation().getAuditTrailCollection() != null && this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().size() > 0) {
+            AuditTrail auditTrail = this.getImageAnnotation().getAuditTrailCollection().getAuditTrailList().get(0);
+            this.setVersion(Integer.parseInt(auditTrail.getComment().getValue()));
         }
+    }
+    
+    
+    public int getVersion() {
+        return this.getImageAnnotations().get(0).getVersion();
+    }
+
+    public void setVersion(int version) {
+        this.getImageAnnotations().get(0).setVersion(version);
     }
 
 //    public boolean getIsEdited() {
@@ -187,11 +194,12 @@ public class ImageAnnotationCollection extends AnnotationCollection {
 //    public ImageAnnotationCollection getInitialState() {
 //        return (ImageAnnotationCollection) this.initialState;
 //    }
-    
     public boolean getIsEdited() {
-        for(ImageAnnotation ia:this.getImageAnnotations())
-            if(ia.getIsEdited())
+        for (ImageAnnotation ia : this.getImageAnnotations()) {
+            if (ia.getIsEdited()) {
                 return true;
+            }
+        }
         return false;
     }
 
@@ -255,18 +263,15 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         }
         return res;
     }
-    
-    
-    public String getXMLString() throws AimException
-    {
-      return AnnotationBuilder.convertToString(this);
+
+    public String getXMLString() throws AimException {
+        return AnnotationBuilder.convertToString(this);
     }
-    
-    public String toStringXML() throws AimException
-    {
-      return getXMLString();
+
+    public String toStringXML() throws AimException {
+        return getXMLString();
     }
-    
+
     public String getXMLStringGWT() throws AimException {
 
         return convertToStringGWT(this);
@@ -287,5 +292,21 @@ public class ImageAnnotationCollection extends AnnotationCollection {
 
     public String toStringXMLGWT() throws AimException {
         return getXMLStringGWT();
+    }
+
+    public void addPlugin(PluginV4 newPlugin) {
+        this.getImageAnnotation().addPlugin(newPlugin);
+    }
+
+    public void clearPlugins() {
+        this.getImageAnnotation().getPluginCollection().getListPlugin().clear();
+    }
+
+    public PluginCollectionV4 getPluginCollection() {
+        return this.getImageAnnotation().getPluginCollection();
+    }
+
+    public void setPluginCollection(PluginCollectionV4 pluginCollection) {
+        this.getImageAnnotation().setPluginCollection(pluginCollection);
     }
 }

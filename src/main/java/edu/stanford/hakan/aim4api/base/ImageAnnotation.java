@@ -27,8 +27,12 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.plugin.v4.NameManagerV4;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginCollectionV4;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
 import java.util.List;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
 import java.util.ArrayList;
 import org.w3c.dom.Document;
@@ -51,7 +55,7 @@ public class ImageAnnotation extends AnnotationEntity {
     private ImageAnnotation initialState = null;
     private int version = -1;
     
-    
+    private PluginCollectionV4 pluginCollection = new PluginCollectionV4();
 
     public ImageAnnotation() {
         this.version = -1;
@@ -132,6 +136,13 @@ public class ImageAnnotation extends AnnotationEntity {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("ImageAnnotation");
         }
+
+        if(this.pluginCollection.size() > 0)
+            System.out.println("has plugin");
+        
+        NameManagerV4 commentManagerV4 = new NameManagerV4();
+        this.setName(new ST(commentManagerV4.toString(this)));
+        
         Element res = (Element) super.getXMLNode(doc);
         if (this.segmentationEntityCollection.size() > 0) {
             res.appendChild(this.segmentationEntityCollection.getXMLNode(doc));
@@ -174,9 +185,30 @@ public class ImageAnnotation extends AnnotationEntity {
         }
         //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
         this.setInitialState();
-        
-        if(this.getAuditTrailCollection() != null && this.getAuditTrailCollection().size() > 0)
+
+        if (this.getAuditTrailCollection() != null && this.getAuditTrailCollection().size() > 0) {
             this.setVersion(Integer.parseInt(this.getAuditTrailCollection().get(0).getComment().getValue()));
+        }
+
+        NameManagerV4 commentManagerV4 = new NameManagerV4(this);
+//        this.setComment(commentManagerV4.getComment());
+//        if (commentManagerV4.getPluginCollection() != null) {
+//            this.setPluginCollection(commentManagerV4.getPluginCollection());
+//            this.getPluginCollection().setImageAnnotation(this);
+//        }
+
+        Logger.write("Checking plugin parameters inside imageAnnotation setXML");
+        Logger.write(this.imageAnnotationCollection.getUniqueIdentifier().getRoot());
+        if (getPluginCollection().size() > 0) {
+//            Logger.write("NO Plugin Parameter");
+//        } else {
+            PluginCollectionV4 pCollection = getPluginCollection();
+            for (PluginV4 p4 : pCollection.getListPlugin()) {
+                Logger.write(p4.getName());
+            }
+        }
+        Logger.write("================");
+
     }
 
     public boolean getIsEdited() {
@@ -214,6 +246,9 @@ public class ImageAnnotation extends AnnotationEntity {
             return false;
         }
         if (this.imageReferenceEntityCollection == null ? oth.imageReferenceEntityCollection != null : !this.imageReferenceEntityCollection.isEqualTo(oth.imageReferenceEntityCollection)) {
+            return false;
+        }
+        if (this.pluginCollection == null ? oth.pluginCollection != null : !this.pluginCollection.isEqualTo(oth.pluginCollection)) {
             return false;
         }
         return super.isEqualTo(other);
@@ -289,6 +324,10 @@ public class ImageAnnotation extends AnnotationEntity {
             res.setXsiType(this.getXsiType());
         }
         
+        if(this.getPluginCollection() != null) {
+            res.setPluginCollection(this.getPluginCollection().getClone());
+        }
+        
         res.setVersion(this.getVersion());
         return res;
     }
@@ -324,8 +363,25 @@ public class ImageAnnotation extends AnnotationEntity {
        if (!(obj instanceof ImageAnnotation))
             return false;
        
-       if(this.getUniqueIdentifier().getRoot().equals(((ImageAnnotation)obj).getUniqueIdentifier().getRoot()))
-           return true;
-       return false;
+        if (this.getUniqueIdentifier().getRoot().equals(((ImageAnnotation) obj).getUniqueIdentifier().getRoot())) {
+            return true;
+        }
+        return false;
+    }
+
+    public PluginCollectionV4 getPluginCollection() {
+        return pluginCollection;
+    }
+
+    public void setPluginCollection(PluginCollectionV4 pluginCollection) {
+        this.pluginCollection = pluginCollection;
+    }
+
+    public void addPlugin(PluginV4 newPlugin) {
+        if (this.pluginCollection == null) {
+            this.pluginCollection = new PluginCollectionV4();
+        }
+        this.pluginCollection.setImageAnnotation(this);
+        this.pluginCollection.addPlugin(newPlugin);
     }
 }

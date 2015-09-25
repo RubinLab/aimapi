@@ -32,6 +32,7 @@ import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
+import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
 import edu.stanford.hakan.aim4api.resources.Resource;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier;
 import edu.stanford.hakan.aim4api.utility.Globals;
@@ -55,6 +56,7 @@ import org.w3c.dom.Node;
  */
 public class AnnotationBuilder {
 
+    private static final String apiVersion = "1.4";
     // private static String validationResult;
     private static String aimXMLsaveResult = "";
 
@@ -135,17 +137,33 @@ public class AnnotationBuilder {
 
     public static ImageAnnotationCollection saveToServer(ImageAnnotationCollection Anno, String serverUrl, String nameSpace,
             String collection, String PathXSD, String dbUserName, String dbUserPassword) throws AimException {
-
         
-//        Logger.write(" ");
-//        Logger.write(" ");
-//        Logger.write("**************** API VERSION 7 *****************");
+        
+        Logger.write("BEFORE saveToServer");
+        for(PluginV4 p4:Anno.getPluginCollection().getListPlugin())
+        {
+            System.out.println(p4.getName());
+        }
+        
+//        PluginV4 pv4 = new PluginV4();
+//        pv4.setName("pluginName-3");        
+//        Anno.getImageAnnotation().addPlugin(pv4);
+        
+        
+        Logger.write("AFTER saveToServer");
+        for(PluginV4 p4:Anno.getPluginCollection().getListPlugin())
+        {
+            System.out.println(p4.getName());
+        }
+        
+        Logger.write(" ");
+        Logger.write(" ");
+        Logger.write("**************** API VERSION " + apiVersion + " *****************");
+        
+        
         if (Anno.getImageAnnotation().getUniqueIdentifier() == null || "".equals(Anno.getImageAnnotation().getUniqueIdentifier().getRoot())) {
             Anno.getImageAnnotation().refreshUniqueIdentifier();
         }
-        //Logger.write("UID IAC: " + Anno.getUniqueIdentifier().getRoot());        
-//        if (Anno.getImageAnnotation().getUniqueIdentifier() != null)
-//        	Logger.write("UID IA before AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
 
         if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
             PathXSD = Globals.getXSDPath();
@@ -158,26 +176,13 @@ public class AnnotationBuilder {
             if (Anno.getDescription() != null && Anno.getDescription().getValue() != null && Anno.getDescription().getValue().contains(Globals.flagDeleted)) {
                 withAuditTrail = false;
             }
-            
+
             ImageAnnotationCollection iacDatabase = getImageAnnotationCollectionByUniqueIdentifier(serverUrl, nameSpace, collection,
-                dbUserName, dbUserPassword, Anno.getUniqueIdentifier().getRoot());
-            
+                    dbUserName, dbUserPassword, Anno.getUniqueIdentifier().getRoot());
+
             if (iacDatabase != null && iacDatabase.getDescription() != null && iacDatabase.getDescription().getValue() != null && iacDatabase.getDescription().getValue().contains(Globals.flagDeleted)) {
                 withAuditTrail = false;
             }
-            
-
-            Logger.write("============= saveToServer");
-            Logger.write("============= serverUrl: " + serverUrl);
-            Logger.write("============= nameSpace: " + nameSpace);
-            Logger.write("============= collection: " + collection);
-            Logger.write("============= PathXSD: " + PathXSD);
-            Logger.write("============= dbUserName: " + dbUserName);
-            Logger.write("============= dbUserPassword: " + dbUserPassword);
-            Logger.write("============= withAuditTrail: " + withAuditTrail);
-            Logger.write(Anno.toStringXML());
-            Logger.write("===================================================");
-
 
             if (withAuditTrail) {
                 AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
@@ -187,39 +192,18 @@ public class AnnotationBuilder {
                         dbUserName, dbUserPassword);
             }
 
-//            if (!AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
-//                    .getUniqueIdentifier().getRoot())) {
-//                performUploadExist(Anno, serverUrl, collection, "AIM_" + Anno.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                        dbUserName, dbUserPassword);
-//            } else {
-            //*** Audit Trail
-            //AuditTrailManager auditTrailManager = new AuditTrailManager(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, PathXSD);
-            //List<ImageAnnotationCollection> resAuditTrail = auditTrailManager.performV3(Anno);
-                //*** AC AC AC AC AC AC AC
-            //Anno = auditTrailManager.performV4(Anno);
-//Logger.write("resAuditTrail.size(): " + resAuditTrail.size());
-//                for (ImageAnnotationCollection iac : resAuditTrail) {
-//                    if (iac.getUniqueIdentifier().getRoot().equals(Anno.getUniqueIdentifier().getRoot())) {
-//                        Anno = iac.getClone();
-//                    }
-//                    Logger.write("UID iac in the loop: " + iac.getImageAnnotation().getUniqueIdentifier().getRoot());
-//                    performUploadExist(iac, serverUrl, collection, "AIM_" + iac.getUniqueIdentifier().getRoot() + ".xml", PathXSD,
-//                            dbUserName, dbUserPassword);
-//                }
-//            }
             if (checkTheServer) {
                 if (withAuditTrail && AnnotationGetter.isExistInTheServer(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {
                     setAimXMLsaveResult("XML " + operation + " operation is Successful.");
-                }
-                else if (!withAuditTrail && AnnotationGetter.isExistInTheServerPlus(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
+                } else if (!withAuditTrail && AnnotationGetter.isExistInTheServerPlus(serverUrl, nameSpace, collection, dbUserName, dbUserPassword, Anno
                         .getUniqueIdentifier().getRoot())) {
                     setAimXMLsaveResult("XML " + operation + " operation is Successful.");
                 } else {
                     setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
                     throw new AimException("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer)");
                 }
-                
+
             }
         } catch (Exception ex) {
             setAimXMLsaveResult("XML " + operation + " operation is Unsuccessful (Method Name; saveToServer): "
@@ -228,7 +212,6 @@ public class AnnotationBuilder {
                     + ex.getMessage());
         }
 
-        Logger.write("UID IA after AT: " + Anno.getImageAnnotation().getUniqueIdentifier().getRoot());
         return Anno;
     }
 

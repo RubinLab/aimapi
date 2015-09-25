@@ -39,6 +39,8 @@ import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.plugin.v3.PluginCollectionV3;
+import edu.stanford.hakan.aim4api.plugin.v3.PluginV3;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 
 /**
@@ -53,9 +55,11 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     private GeometricShapeCollection geometricShapeCollection = new GeometricShapeCollection();
     private List<Person> listPerson = new ArrayList<Person>();
     private TextAnnotationCollection textAnnotationCollection = new TextAnnotationCollection();
+    private edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotationV4 = null;
     //public static String line = "";
 
     private String iaV3UID ="";
+    private PluginCollectionV3 pluginCollection  = new PluginCollectionV3();
 
     public ImageAnnotation() {
         super();
@@ -270,6 +274,8 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         }
         iaV4.setUniqueIdentifier(new II(this.getIAv3UID()));
 
+        iaV4.setPluginCollection(this.pluginCollection.toAimV4(this.imageAnnotationV4));
+
         iacV4.addImageAnnotation(iaV4);
         return iacV4;
     }
@@ -458,6 +464,11 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         if (iav4.getName() != null) {
             this.setName(iav4.getName().getValue());
         }
+
+        this.imageAnnotationV4 = iav4;
+        if (iav4.getPluginCollection().size() > 0) {
+            this.pluginCollection = new PluginCollectionV3(iav4.getPluginCollection());
+        }
     }
 
     @Override
@@ -549,6 +560,22 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
             res.textAnnotationCollection = this.textAnnotationCollection.getClone();
         }
         return res;
+    }
+
+    public PluginCollectionV3 getPluginCollection() {
+        return pluginCollection;
+    }
+
+    public void setPluginCollection(PluginCollectionV3 pluginCollection) {
+        this.pluginCollection = pluginCollection;
+    }
+
+    public void addPlugin(PluginV3 newPlugin) {
+        if (this.pluginCollection == null) {
+            this.pluginCollection = new PluginCollectionV3();
+
+        }
+        this.pluginCollection.addPlugin(newPlugin);
     }
 
 }

@@ -48,6 +48,7 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
     private Integer shapeIdentifier;
     private SpatialCoordinateCollection spatialCoordinateCollection = new SpatialCoordinateCollection();
     private String xsiType;
+    private String uniqueIdentifier;
 
     protected void setXsiType(String xsiType) {
         this.xsiType = xsiType;
@@ -157,6 +158,15 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
 
     public List<SpatialCoordinate> getSpatialCoordinateList() {
         return this.spatialCoordinateCollection.getSpatialCoordinateList();
+    }
+    
+    
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
 //    @Override
