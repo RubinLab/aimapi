@@ -24,121 +24,32 @@ import edu.stanford.hakan.aim4api.utility.Utility;
 
 /**
  *
- * @author Hakan
+ * @author Emel Alkim
  */
 public class AimeManager {
-	
-	public static String BASE_URL="http://128.252.63.157:9099/services/TEST-AIM4.0/TEST/";
-	public static String API_KEY="aede9f53-5cb6-4e03-92fc-4b0b58258a82";
-	
-	private static String removeFromAIMEReal(String annotationContainerUID) throws AimException {
-        try {
-        	//control???
-//            if (!AnnotationGetter
-//                    .isExistInTheServer(Url, nameSpace, collection, dbUserName, dbUserPassword, uniqueIdentifier)) {
-//                throw new AimException(
-//                        "AimException: The Image Annotation which you want to remove is not exist. Please check your parameters.");
-//            }
 
-            String requestURL = Utility.correctToUrl(BASE_URL) + "delete/byUID" ;
-
-            if (!annotationContainerUID.equals(""))
-            	requestURL+="&annotationContainerUID="+annotationContainerUID;
-           
-            URL url = new URL(requestURL);
-            URLConnection conn = url.openConnection();
-
-            conn.setRequestProperty("Content-Type", "application/xml");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            if (conn instanceof HttpURLConnection) {
-                ((HttpURLConnection) conn).setRequestMethod("DELETE");
-                ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
-                
-                ((HttpURLConnection) conn).connect();
-            }
-
-            // Get the response
-            StringBuilder answer = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                answer.append(line);
-            }
-            reader.close();
-
-            // Output the response
-            return "XML removing operation is Successful.";
-        } catch (IOException ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        }
-    }
-	
-	public static String performXMLUploadToAIME(String XMLData)
-            throws AimException {
-        try {
-            String requestURL = Utility.correctToUrl(BASE_URL) + "submit/xml/";
-            String data = "";
-
-            URL url = new URL(requestURL);
-            URLConnection conn = url.openConnection();
-
-            conn.setRequestProperty("Content-Type", "application/xml");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            if (conn instanceof HttpURLConnection) {
-                ((HttpURLConnection) conn).setRequestMethod("POST");
-                ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
-                
-                ((HttpURLConnection) conn).connect();
-            }
-
-            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-
-            // write parameters
-            writer.write(XMLData);
-            writer.flush();
-
-            // Get the response
-            StringBuilder answer = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                answer.append(line);
-            }
-            writer.close();
-            reader.close();
-
-            // Output the response
-            return answer.toString();
-        } catch (Exception ex) {
-            throw new AimException("AimException: " + ex.getMessage());
-        }
-    }
-	
-	public static String findFromAIME(String username, String anatomicalEntity, String anatomicEntityCharacteristic, 
+	public static String findFromAIME(String aimeServer,String apiKey,String username, String anatomicalEntity, String anatomicEntityCharacteristic, 
 			String imagingObservationEntity,String imagingObservationEntityCharacteristic, String studyInstanceUID,
 			String patientName,String patientID, String annotationName,String annotationContainerUID)
             throws AimException {
-		return getFromAIME("find", username, anatomicalEntity, anatomicEntityCharacteristic, imagingObservationEntity, imagingObservationEntityCharacteristic, studyInstanceUID, patientName, patientID, annotationName, annotationContainerUID);
+		return getFromAIME("find",aimeServer, apiKey, username, anatomicalEntity, anatomicEntityCharacteristic, imagingObservationEntity, imagingObservationEntityCharacteristic, studyInstanceUID, patientName, patientID, annotationName, annotationContainerUID);
 	}
 	
-	public static String retrieveFromAIME(String username, String anatomicalEntity, String anatomicEntityCharacteristic, 
+	public static String retrieveFromAIME(String aimeServer,String apiKey,String username, String anatomicalEntity, String anatomicEntityCharacteristic, 
 			String imagingObservationEntity,String imagingObservationEntityCharacteristic, String studyInstanceUID,
 			String patientName,String patientID, String annotationName,String annotationContainerUID)
             throws AimException {
-		return getFromAIME("retrieve", username, anatomicalEntity, anatomicEntityCharacteristic, imagingObservationEntity, imagingObservationEntityCharacteristic, studyInstanceUID, patientName, patientID, annotationName, annotationContainerUID);
+		return getFromAIME("retrieve",aimeServer, apiKey, username, anatomicalEntity, anatomicEntityCharacteristic, imagingObservationEntity, imagingObservationEntityCharacteristic, studyInstanceUID, patientName, patientID, annotationName, annotationContainerUID);
 	}
 	//method should be find or retrieve
-	private static String getFromAIME(String method,String username, String anatomicalEntity, String anatomicEntityCharacteristic, 
+	private static String getFromAIME(String method,String aimeServer,String apiKey,String username, String anatomicalEntity, String anatomicEntityCharacteristic, 
 			String imagingObservationEntity,String imagingObservationEntityCharacteristic, String studyInstanceUID,
 			String patientName,String patientID, String annotationName,String annotationContainerUID)
             throws AimException {
+		String requestURL=null;
         try {
-            String requestURL = Utility.correctToUrl(BASE_URL) + "query/"+ method;
-            requestURL+="?api_key=" + API_KEY ;
+             requestURL = Utility.correctToUrl(aimeServer) + "query/"+ method;
+            requestURL+="?api_key=" + apiKey ;
             if (!username.equals(""))
             	requestURL+="&username="+username;
             if (!anatomicalEntity.equals(""))
@@ -158,38 +69,50 @@ public class AimeManager {
             if (!annotationName.equals(""))
             	requestURL+="&annotationName="+annotationName;
             if (!annotationContainerUID.equals(""))
-            	requestURL+="&annotationContainerUID="+annotationContainerUID;
+            	requestURL+="&annotationContainerUID='"+annotationContainerUID+"'";
             
             URL url = new URL(requestURL);
-            URLConnection conn = url.openConnection();
 
-            conn.setDoOutput(true);
-            
-            if (conn instanceof HttpURLConnection) {
-                ((HttpURLConnection) conn).setRequestMethod("GET");
-                ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/json");
-
-                //put icin
-//                DataOutputStream wr = new DataOutputStream(conn.getOutputStream ());
-//                wr.writeBytes("api_key=" + API_KEY + "&patientID="+patientID );
-                ((HttpURLConnection) conn).connect();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/xml");
+ 
+            if (conn.getResponseCode() != 200)
+            {
+                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
             }
-
-            
-            // Get the response
             StringBuilder answer = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             String line;
             while ((line = reader.readLine()) != null) {
-                answer.append(line);
+              answer.append(line);
             }
+            conn.disconnect();
+            
             reader.close();
-
+           
+            
             // Output the response
-            return answer.toString();
+            return correctTheServerRespond(answer.toString());
         } catch (Exception ex) {
-            throw new AimException("AimException: " + ex.getMessage());
+            throw new AimException("AimException: " + ex.getMessage() + requestURL);
         }
+    }
+	
+	private static String correctTheServerRespond(String serverRespond) {
+        serverRespond = serverRespond.replaceAll("\"", "~**~");
+        
+        String xmlRdf= "xmlns:rdf=~**~http://www.w3.org/1999/02/22-rdf-syntax-ns#~**~";
+        String xmlNsi= "xmlns:xsi=~**~http://www.w3.org/2001/XMLSchema-instance~**~";
+        	    
+        String xmlHeader = "<?xml version=~**~1.0~**~ encoding=~**~UTF-8~**~ standalone=~**~no~**~?>";
+        String xmlTag = "<results>";
+        String xmlTag2 = "</results>";
+        int indexStart = serverRespond.indexOf(xmlTag);
+        if (indexStart >= 0) {
+            serverRespond = (xmlHeader + serverRespond.replace(xmlTag, "").replace(xmlTag2, "").replace(xmlNsi, xmlRdf+ " "+ xmlNsi).replace(xmlHeader, "")).replace("~**~", "\"");
+        }
+        return serverRespond.replace("~**~", "\"");
     }
 
 }
