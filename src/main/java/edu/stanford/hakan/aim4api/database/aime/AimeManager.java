@@ -101,7 +101,7 @@ public class AimeManager {
 	
 	private static String correctTheServerRespond(String serverRespond) {
         serverRespond = serverRespond.replaceAll("\"", "~**~");
-        
+        String xmlNs= "xmlns=~**~gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM~**~";
         String xmlRdf= "xmlns:rdf=~**~http://www.w3.org/1999/02/22-rdf-syntax-ns#~**~";
         String xmlNsi= "xmlns:xsi=~**~http://www.w3.org/2001/XMLSchema-instance~**~";
         	    
@@ -110,7 +110,7 @@ public class AimeManager {
         String xmlTag2 = "</results>";
         int indexStart = serverRespond.indexOf(xmlTag);
         if (indexStart >= 0) {
-            serverRespond = (xmlHeader + serverRespond.replace(xmlTag, "").replace(xmlTag2, "").replace(xmlNsi, xmlRdf+ " "+ xmlNsi).replace(xmlHeader, "")).replace("~**~", "\"");
+            serverRespond = (xmlHeader + serverRespond.replace(xmlNs, "").replace(xmlTag, "").replace(xmlTag2, "").replace(xmlNsi, xmlRdf+ " "+ xmlNsi).replace(xmlHeader, "")).replace("~**~", "\"");
         }
         return serverRespond.replace("~**~", "\"");
     }
