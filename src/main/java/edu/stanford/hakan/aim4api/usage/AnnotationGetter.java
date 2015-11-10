@@ -189,6 +189,13 @@ public class AnnotationGetter {
         return getWithAimQuery(serverURL, namespace, dbUserName,
                 dbUserPassword, aimQuery, PathXSD, 1, MAX_RECORDS);
     }
+    
+     public static List<ImageAnnotationCollection> getWithXQuery(String serverURL, String namespace, String dbUserName,
+            String dbUserPassword, String XQuery, String PathXSD) throws AimException {
+         
+        return getImageAnnotationListFromServer(serverURL, XQuery, dbUserName, dbUserPassword, PathXSD, 1, MAX_RECORDS);
+    }
+
 
     public static List<ImageAnnotationCollection> getWithAimQuery(String serverURL, String namespace, String dbUserName,
             String dbUserPassword, String aimQuery, String PathXSD, int startIndex, int maxRecords) throws AimException {
@@ -1285,6 +1292,17 @@ public class AnnotationGetter {
 
         String aimQL = "SELECT FROM " + collection + " WHERE user.name.value = '" + userName + "' AND ImageAnnotationCollection.description.value LIKE '" + Globals.flagDeleted + "'";
         List<ImageAnnotationCollection> listAnno = getWithAimQueryPlus(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }
+
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionHasCloseShapes(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        String xQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/" + collection + "')/ImageAnnotationCollection "
+                + "where ($x/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionCircle'] or $x/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionEllipse'] or $x/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionPolyline'] or $x/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity[@xsi:type='TwoDimensionSpline'] or $x/imageAnnotations/ImageAnnotation/markupEntityCollection/MarkupEntity/uniqueIdentifier[contains(@root,'###.spline.###')])  "
+                + "and ((not(exists($x/description[@value])) or $x/description[not(contains(lower-case(@value),lower-case('%~#*deleted*#~%')))]) and (not(exists($x/description[@value])) or $x/description[not(contains(lower-case(@value),lower-case('%~#*version*#~%')))]))  order by $x/uniqueIdentifier/root return $x";
+        List<ImageAnnotationCollection> listAnno = getWithXQuery(serverURL, namespace, dbUserName, dbUserPassword, xQuery, "");
         return listAnno;
     }
 
