@@ -21,6 +21,8 @@ public class NameManagerV4 {
     private ST name = new ST("");
     private PluginCollectionV4 pluginCollection = new PluginCollectionV4();
     private ImageAnnotation ia;
+    private int dsoStartIndex = -1;
+    private String dsoColor = "#FFFFFF";
 
      public NameManagerV4() {
     }
@@ -28,21 +30,18 @@ public class NameManagerV4 {
     public NameManagerV4(ImageAnnotation imageAnnotation) {
         ia = imageAnnotation;
         parse();
-    }
-    
+    }   
     
     public NameManagerV4(ImageAnnotationCollection imageAnnotationCollection) {
         ia = imageAnnotationCollection.getImageAnnotation();
         parse();
-    }
-    
+    }    
     
     public NameManagerV4(ST name, PluginCollectionV4 pluginCollection, ImageAnnotation imageAnnotation) {
         ia = imageAnnotation;
         this.name = name;
         this.pluginCollection = pluginCollection;
     }
-
 
     public ST getName() {
         if (this.name.getValue().contains(Common.spliterOne)) {
@@ -55,6 +54,22 @@ public class NameManagerV4 {
         return pluginCollection;
     }
 
+    public int getDsoStartIndex() {
+        return dsoStartIndex;
+    }
+
+    public void setDsoStartIndex(int dsoStartIndex) {
+        this.dsoStartIndex = dsoStartIndex;
+    }
+
+    public String getDsoColor() {
+        return dsoColor;
+    }
+
+    public void setDsoColor(String dsoColor) {
+        this.dsoColor = dsoColor;
+    } 
+
     private void parse() {
 
         if (ia.getName() != null && ia.getName().getValue() != null && !"".equals(ia.getName().getValue())) {
@@ -62,8 +77,19 @@ public class NameManagerV4 {
             nameValue = nameValue.replace("*sp5*", "~sp5~");
             if (nameValue.contains(Common.spliterOne)) {
                 String[] array = nameValue.split("\\" + Common.spliterOne);
-                this.name = new ST(array[0]);
-                this.pluginCollection = new PluginCollectionV4(ia, array[1]);
+                if (array.length == 2) {
+                    this.name = new ST(array[0]);
+                    this.pluginCollection = new PluginCollectionV4(ia, array[1]);
+                } else if (array.length == 3) {
+                    this.name = new ST(array[0]);
+                    this.pluginCollection = new PluginCollectionV4(ia, array[1]);
+                    this.dsoStartIndex = Integer.parseInt(array[2]);
+                } else if (array.length == 4) {
+                    this.name = new ST(array[0]);
+                    this.pluginCollection = new PluginCollectionV4(ia, array[1]);
+                    this.dsoStartIndex = Integer.parseInt(array[2]);
+                    this.dsoColor =  array[3];
+                }
             } else {
                 this.name = new ST(nameValue);
             }
@@ -71,6 +97,8 @@ public class NameManagerV4 {
 
         this.ia.setName(this.name);
         this.ia.setPluginCollection(this.pluginCollection);
+        this.ia.setDsoStartIndex(this.dsoStartIndex);
+        this.ia.setDsoColor(this.dsoColor);
     }
 
     @Override
@@ -89,7 +117,6 @@ public class NameManagerV4 {
         return sb.toString();
     }
     
-    
     public String toString(ImageAnnotation imageAnnotation) {
         StringBuilder sb = new StringBuilder();
         if (imageAnnotation.getName()== null || imageAnnotation.getName().getValue() == null || "".equals(imageAnnotation.getName().getValue())) {
@@ -106,7 +133,16 @@ public class NameManagerV4 {
         if (imageAnnotation.getPluginCollection() != null && imageAnnotation.getPluginCollection().size() > 0) {
             sb.append(Common.spliterOne);
             sb.append(imageAnnotation.getPluginCollection().toString());
+        } else {
+            sb.append(Common.spliterOne);
+            sb.append("-");
         }
+
+        sb.append(Common.spliterOne);
+        sb.append(imageAnnotation.getDsoStartIndex());
+        sb.append(Common.spliterOne);
+        sb.append(imageAnnotation.getDsoColor());
+
         return sb.toString();
     }
 }

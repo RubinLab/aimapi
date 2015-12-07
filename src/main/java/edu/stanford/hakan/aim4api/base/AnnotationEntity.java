@@ -58,6 +58,7 @@ public class AnnotationEntity extends Entity {
     private LesionObservationEntityCollection lesionObservationEntityCollection = new LesionObservationEntityCollection();
     private ImagingObservationEntityCollection imagingObservationEntityCollection = new ImagingObservationEntityCollection();
     private TaskContextEntityCollection taskContextEntityCollection = new TaskContextEntityCollection();
+    
 
     public List<CD> getListTypeCode() {
         return this.listTypeCode;
@@ -216,6 +217,9 @@ public class AnnotationEntity extends Entity {
     public void addTaskContextEntity(TaskContextEntity newTaskContextEntity) {
         this.taskContextEntityCollection.addTaskContextEntity(newTaskContextEntity);
     }
+
+   
+    
 
     @Override
     public Node getXMLNode(Document doc) throws AimException {

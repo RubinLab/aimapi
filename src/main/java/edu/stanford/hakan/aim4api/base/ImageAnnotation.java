@@ -54,6 +54,8 @@ public class ImageAnnotation extends AnnotationEntity {
     
     private ImageAnnotation initialState = null;
     private int version = -1;
+    private int dsoStartIndex = -1;
+    private String dsoColor = "#FFFFFF";
     
     private PluginCollectionV4 pluginCollection = new PluginCollectionV4();
 
@@ -131,14 +133,30 @@ public class ImageAnnotation extends AnnotationEntity {
         this.version = version;
     }
 
+    public int getDsoStartIndex() {
+        return dsoStartIndex;
+    }
+
+    public void setDsoStartIndex(int dsoStartIndex) {
+        this.dsoStartIndex = dsoStartIndex;
+    }
+
+    public String getDsoColor() {
+        return dsoColor;
+    }
+
+    public void setDsoColor(String dsoColor) {
+        this.dsoColor = dsoColor;
+    }
+
     @Override
     public Node getXMLNode(Document doc) throws AimException {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("ImageAnnotation");
         }
 
-        if(this.pluginCollection.size() > 0)
-            System.out.println("has plugin");
+//        if(this.pluginCollection.size() > 0)
+//            System.out.println("has plugin");
         
         NameManagerV4 commentManagerV4 = new NameManagerV4();
         this.setName(new ST(commentManagerV4.toString(this)));

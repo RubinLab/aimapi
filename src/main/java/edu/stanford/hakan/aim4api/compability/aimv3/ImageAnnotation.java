@@ -60,6 +60,8 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
 
     private String iaV3UID ="";
     private PluginCollectionV3 pluginCollection  = new PluginCollectionV3();
+    private int dsoStartIndex = -1;
+    private String dsoColor = "#FFFFFF";
 
     public ImageAnnotation() {
         super();
@@ -140,6 +142,23 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     private void setIAv3UID(String iaV3UID) {
         this.iaV3UID = iaV3UID;
     }
+
+    public int getDsoStartIndex() {
+        return dsoStartIndex;
+    }
+
+    public void setDsoStartIndex(int dsoStartIndex) {
+        this.dsoStartIndex = dsoStartIndex;
+    }
+
+    public String getDsoColor() {
+        return dsoColor;
+    }
+
+    public void setDsoColor(String dsoColor) {
+        this.dsoColor = dsoColor;
+    }
+    
 
 //    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
@@ -275,8 +294,11 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         iaV4.setUniqueIdentifier(new II(this.getIAv3UID()));
 
         iaV4.setPluginCollection(this.pluginCollection.toAimV4(this.imageAnnotationV4));
-
+        iaV4.setDsoStartIndex(this.dsoStartIndex);
+        iaV4.setDsoColor(this.dsoColor);
+        
         iacV4.addImageAnnotation(iaV4);
+        
         return iacV4;
     }
     
@@ -469,6 +491,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         if (iav4.getPluginCollection().size() > 0) {
             this.pluginCollection = new PluginCollectionV3(iav4.getPluginCollection());
         }
+        this.setDsoStartIndex(iav4.getDsoStartIndex());
     }
 
     @Override
