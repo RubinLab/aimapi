@@ -27,6 +27,8 @@
  */
 package edu.stanford.hakan.aim4api.utility;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -35,15 +37,51 @@ import java.util.Random;
  */
 public class GenerateId {
         static public String getUUID() {
-        String res = "";
-        int idLenght = 40;
-        Random randomGenerator = new Random();
-        char[] bag = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'y', 'z', 'w', 'x', 'q'};
-        for (int i = 0; i < idLenght; i++) {
-            int randomInt = randomGenerator.nextInt(bag.length);
-            res = res.concat(String.valueOf(bag[randomInt]));
-        }
-        StringBuilder sb = new StringBuilder(res);
-        return sb.toString();
+            
+            return getDicomUUID();
+//        String res = "";
+//        int idLenght = 40;
+//        Random randomGenerator = new Random();
+//        char[] bag = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'y', 'z', 'w', 'x', 'q'};
+//        for (int i = 0; i < idLenght; i++) {
+//            int randomInt = randomGenerator.nextInt(bag.length);
+//            res = res.concat(String.valueOf(bag[randomInt]));
+//        }
+//        StringBuilder sb = new StringBuilder(res);
+//        return sb.toString();
     }
+        
+      
+        static public String getDicomUUID() { 
+                    String res = "";
+        Random randomGenerator = new Random();
+        List<Integer> listComponentLength = new ArrayList<Integer>();
+        listComponentLength.add(1);
+        listComponentLength.add(2);
+        listComponentLength.add(3);
+        listComponentLength.add(4);
+        listComponentLength.add(5);
+        listComponentLength.add(6);
+        listComponentLength.add(7);
+        listComponentLength.add(8);
+        listComponentLength.add(9);
+        listComponentLength.add(10);
+
+        while (listComponentLength.size() > 0) {
+            int componentLenght = randomGenerator.nextInt(11);
+            if (listComponentLength.remove((Integer) componentLenght)) {
+                for (int i = 0; i < componentLenght; i++) {
+                    if (i == 0) {
+                        res = res.concat(String.valueOf(randomGenerator.nextInt(9) + 1));
+                    } else {
+                        res = res.concat(String.valueOf(randomGenerator.nextInt(10)));
+                    }
+                }
+                if(listComponentLength.size() > 0)
+                res = res.concat(".");
+            }
+        }
+        
+        return res;
+        } 
 }

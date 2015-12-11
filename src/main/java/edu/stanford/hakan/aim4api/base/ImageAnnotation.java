@@ -162,6 +162,7 @@ public class ImageAnnotation extends AnnotationEntity {
         this.setName(new ST(commentManagerV4.toString(this)));
         
         Element res = (Element) super.getXMLNode(doc);
+        commentManagerV4 = new NameManagerV4(this);
         if (this.segmentationEntityCollection.size() > 0) {
             res.appendChild(this.segmentationEntityCollection.getXMLNode(doc));
         }

@@ -27,6 +27,7 @@
  */
 package edu.stanford.hakan.aim4api.base;
 
+import edu.stanford.hakan.aim4api.utility.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -293,6 +294,18 @@ public class CD implements IAimXMLOperations {
         if (this.codingRationale != null) {
             res.setAttribute("codingRationale", this.codingRationale.toString());
         }
+        
+        if ((this.code == null || "".equals(this.code.trim())) && (this.codeSystem
+                == null || "".equals(this.codeSystem.trim())) && (this.codeSystemName == null
+                || "".equals(this.codeSystemName.trim())) && (this.codeSystemVersion == null
+                || "".equals(this.codeSystemVersion.trim()))) {
+            //throw new AimException("All field of the CD type are empty.");
+            
+            
+            Logger.write("************ throw new AimException(\"All field of the CD type are empty. ");
+            
+        }
+        
         return res;
     }
 

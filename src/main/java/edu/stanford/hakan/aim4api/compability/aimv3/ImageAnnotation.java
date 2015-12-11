@@ -492,6 +492,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
             this.pluginCollection = new PluginCollectionV3(iav4.getPluginCollection());
         }
         this.setDsoStartIndex(iav4.getDsoStartIndex());
+        this.setDsoColor(iav4.getDsoColor());
     }
 
     @Override
