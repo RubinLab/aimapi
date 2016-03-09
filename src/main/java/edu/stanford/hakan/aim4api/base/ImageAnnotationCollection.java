@@ -122,7 +122,7 @@ public class ImageAnnotationCollection extends AnnotationCollection {
 
         NamedNodeMap map = node.getAttributes();
         if (map.getNamedItem("aimVersion") != null) {
-            String tempVersion = map.getNamedItem("aimVersion").getNodeValue().replace('.', '_');
+            String tempVersion = map.getNamedItem("aimVersion").getNodeValue().replace('.', '_')).replace(' ', '_');
             if ("3_0".equals(tempVersion)) {
                 tempVersion = "AIM_3_0";
             } else if ("1_0".equals(tempVersion)) {
