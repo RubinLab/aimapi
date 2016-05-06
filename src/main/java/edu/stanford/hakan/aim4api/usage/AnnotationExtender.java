@@ -6,6 +6,7 @@
 package edu.stanford.hakan.aim4api.usage;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.Calculation;
@@ -20,8 +21,11 @@ import edu.stanford.hakan.aim4api.compability.aimv3.ImageAnnotation;
  */
 public class AnnotationExtender {
 
-    public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double[] featureValue, String[] featureName, double featureVersion) throws AimException {
-        if (featureValue.length != featureName.length) {
+	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double[] featureValue, String[] featureName, double featureVersion) throws AimException {
+		return AnnotationExtender.addFeature(imageAnnotationCollection, featureValue, featureName, featureVersion, null);
+	}	
+	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double[] featureValue, String[] featureName, double featureVersion, CD calcCD) throws AimException {
+		if (featureValue.length != featureName.length) {
             throw new AimException("AimException: lenght of featureValue and featureString must be equal");
         }
 
@@ -44,11 +48,19 @@ public class AnnotationExtender {
             calculation = new Calculation();
             calculation.setCagridId(0);
             calculation.setAlgorithmVersion(Double.toString(featureVersion));
+            calculation.setAlgorithmType("99EPADA2"); //plugin
             calculation.setUid("0");
-            calculation.setDescription("description");
-            calculation.setCodeValue("codeValue");
-            calculation.setCodeMeaning("codeMeaning");
-            calculation.setCodingSchemeDesignator("codingSchemeDesignator");
+            if (calcCD!=null) {
+    	        calculation.setDescription(calcCD.getCodeSystem());
+    	        calculation.setCodeValue(calcCD.getCode());
+    	        calculation.setCodeMeaning(calcCD.getCodeSystem());
+    	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
+            }else {
+	            calculation.setDescription("Feature Extraction");
+	            calculation.setCodeValue("99EPADC0"); //double
+	            calculation.setCodeMeaning("Feature Extraction");
+	            calculation.setCodingSchemeDesignator("99EPAD");
+            }
 
             for (int i = 0; i < featureValue.length; i++) {
                 if (featureName[i] == null) {
@@ -95,6 +107,8 @@ public class AnnotationExtender {
         calculationResult.setCagridId(0);
         calculationResult.setType(CalculationResultIdentifier.Scalar);
         calculationResult.setUnitOfMeasure("ratio");
+        //ml double
+        calculationResult.setDataType("99EPADD1");;
         calculationResult.setNumberOfDimensions(1);
         // Create a CalculationData instance
         CalculationData calculationData = new CalculationData();

@@ -71,16 +71,35 @@ public class CD implements IAimXMLOperations {
      */
     public CD(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {  
         this.code = codeValue;
-        this.codeSystem = codeMeaning;
+//        this.codeSystem = codeMeaning;
+        this.setDisplayName(new ST(codeMeaning));
         this.codeSystemName = codingSchemeDesignator;
         this.codeSystemVersion = codingSchemeVersion;
     }
-
+    
+    /**
+     * @param codeValue = code 
+     * @param codeMeaning = codeSystem
+     * @param codingSchemeDesignator = codeSystemName
+     * @param codingSchemeVersion = codeSystemVersion
+     */
+    public CD(String codeValue, String codeMeaning, String codingSchemeDesignator) {  
+        this.code = codeValue;
+        this.codeSystem = "NA";
+        this.setDisplayName(new ST(codeMeaning),false);
+        this.codeSystemName = codingSchemeDesignator;
+    }
+   
     public ST getDisplayName() {
         return displayName;
     }
 
     public void setDisplayName(ST displayName) {
+        displayName.setTagName("displayName");
+        displayName.setHasIsoAttributes(true);
+        this.displayName = displayName;
+    }
+    public void setDisplayName(ST displayName, boolean setIso) {
         displayName.setTagName("displayName");
         displayName.setHasIsoAttributes(true);
         this.displayName = displayName;

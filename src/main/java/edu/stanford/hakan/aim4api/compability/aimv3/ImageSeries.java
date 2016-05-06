@@ -135,7 +135,10 @@ public class ImageSeries implements IAimXMLOperations {
         edu.stanford.hakan.aim4api.base.ImageSeries res = new edu.stanford.hakan.aim4api.base.ImageSeries();
         res.setImageCollection(this.getImageCollection().toAimV4());
         res.setInstanceUid(Converter.toII(this.getInstanceUID()));
-        res.setModality(new CD("", "", "", ""));
+        //ml get modality from image
+        String sopClassUID=this.getImageCollection().getImageList().get(0).getSopClassUID();
+        Modality mod=Modality.getInstance();
+        res.setModality(mod.get(sopClassUID));
         return res;
     }
 

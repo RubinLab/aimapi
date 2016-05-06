@@ -55,6 +55,7 @@ public class Calculation implements IAimXMLOperations {
     private String codingSchemeVersion;
     private String algorithmName;
     private String algorithmVersion;
+    private String algorithmType;
     private CalculationResultCollection calculationResultCollection = new CalculationResultCollection();
     private ReferencedCalculationCollection referencedCalculationCollection = new ReferencedCalculationCollection();
     private ReferencedGeometricShapeCollection referencedGeometricShapeCollection = new ReferencedGeometricShapeCollection();
@@ -213,7 +214,15 @@ public class Calculation implements IAimXMLOperations {
     
     
 
-//    @Override
+    public String getAlgorithmType() {
+		return algorithmType;
+	}
+
+	public void setAlgorithmType(String algorithmType) {
+		this.algorithmType = algorithmType;
+	}
+
+	//    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //        this.Control();
 //
@@ -284,6 +293,9 @@ public class Calculation implements IAimXMLOperations {
         if (map.getNamedItem("algorithmVersion") != null) {
             this.algorithmVersion = map.getNamedItem("algorithmVersion").getNodeValue();
         }
+        if (map.getNamedItem("algorithmType") != null) {
+            this.algorithmType = map.getNamedItem("algorithmType").getNodeValue();
+        }
     }
 
     private void Control() throws AimException {
@@ -340,6 +352,9 @@ public class Calculation implements IAimXMLOperations {
         if (this.algorithmVersion == null ? oth.algorithmVersion != null : !this.algorithmVersion.equals(oth.algorithmVersion)) {
             return false;
         }
+        if (this.algorithmType == null ? oth.algorithmType != null : !this.algorithmType.equals(oth.algorithmType)) {
+            return false;
+        }
         if (!this.referencedCalculationCollection.isEqualTo(oth.referencedCalculationCollection)) {
             return false;
         }
@@ -362,7 +377,10 @@ public class Calculation implements IAimXMLOperations {
         Algorithm algorithm = new Algorithm();
         algorithm.setName(Converter.toST(this.getAlgorithmName()));
         algorithm.setVersion(Converter.toST(this.getAlgorithmVersion()));
-        algorithm.addType(new CD("", "", "", ""));
+        //ml if you don't have it, don't put it. xsd rejects! put values in
+//        algorithm.addType(new CD("", "", "", ""));
+        Lexicon lex=Lexicon.getInstance();
+        algorithm.addType(lex.get(this.getAlgorithmType()));
         res.setAlgorithm(algorithm);
         res.setCalculationResultCollection(this.getCalculationResultCollection().toAimV4());//
         res.setDescription(Converter.toST(this.getDescription()));//
@@ -394,6 +412,8 @@ public class Calculation implements IAimXMLOperations {
         if (v4.getAlgorithm() != null) {
             this.setAlgorithmName(v4.getAlgorithm().getName().getValue());
             this.setAlgorithmVersion(v4.getAlgorithm().getVersion().getValue());
+            //ml
+            this.setAlgorithmType(v4.getAlgorithm().getListType().get(0).getCode());
         }
         if (v4.getCalculationResultCollection().getExtendedCalculationResultList().size() > 0) {
             this.setCalculationResultCollection(new CalculationResultCollection(v4.getCalculationResultCollection()));
@@ -475,6 +495,9 @@ public class Calculation implements IAimXMLOperations {
         }
         if (this.algorithmVersion != null) {
             res.algorithmVersion = this.algorithmVersion;
+        }
+        if (this.algorithmType != null) {
+            res.algorithmType = this.algorithmType;
         }
         if (this.calculationResultCollection != null) {
             res.calculationResultCollection = this.calculationResultCollection.getClone();

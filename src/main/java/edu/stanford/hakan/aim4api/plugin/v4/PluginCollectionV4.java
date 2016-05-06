@@ -6,6 +6,7 @@
 package edu.stanford.hakan.aim4api.plugin.v4;
 
 import edu.stanford.hakan.aim4api.plugin.Common;
+import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.IAimXMLOperations;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
@@ -41,6 +42,7 @@ public class PluginCollectionV4 implements IAimXMLOperations {
                 }
             }
         } else if (strPlugins.contains(Common.spliterThree)) {
+        	Logger.write("plugins str "+strPlugins);
             PluginV4 pluginV4 = new PluginV4(strPlugins, this);
             this.addPlugin(pluginV4);
         }
