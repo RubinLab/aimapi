@@ -51,9 +51,9 @@ public class AnnotationExtender {
             calculation.setAlgorithmType("99EPADA2"); //plugin
             calculation.setUid("0");
             if (calcCD!=null) {
-    	        calculation.setDescription(calcCD.getCodeSystem());
+    	        calculation.setDescription(calcCD.getDisplayName().getValue());
     	        calculation.setCodeValue(calcCD.getCode());
-    	        calculation.setCodeMeaning(calcCD.getCodeSystem());
+    	        calculation.setCodeMeaning(calcCD.getDisplayName().getValue());
     	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
             }else {
 	            calculation.setDescription("Feature Extraction");

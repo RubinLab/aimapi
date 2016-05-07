@@ -387,7 +387,7 @@ public class Calculation implements IAimXMLOperations {
         res.setMathML(Converter.toST(this.getMathML()));//
         CD typeCode = new CD();
         typeCode.setCode(this.getCodeValue());
-        typeCode.setCodeSystem(this.getCodeMeaning());
+        typeCode.setDisplayName(Converter.toST(this.getCodeMeaning()));
         typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
         typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         res.addTypeCode(typeCode);
@@ -429,8 +429,8 @@ public class Calculation implements IAimXMLOperations {
             if (typeCode.getCode() != null) {
                 this.setCodeValue(typeCode.getCode());
             }
-            if (typeCode.getCodeSystem() != null) {
-                this.setCodeMeaning(typeCode.getCodeSystem());
+            if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+                this.setCodeMeaning(typeCode.getDisplayName().getValue());
             }
             if (typeCode.getCodeSystemName() != null) {
                 this.setCodingSchemeDesignator(typeCode.getCodeSystemName());

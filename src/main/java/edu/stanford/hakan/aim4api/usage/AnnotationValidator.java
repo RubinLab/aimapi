@@ -29,9 +29,9 @@ package edu.stanford.hakan.aim4api.usage;
 
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.utility.Globals;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -59,7 +59,9 @@ import org.xml.sax.SAXException;
  * @author Hakan BULU
  */
 public class AnnotationValidator {
-
+	
+	
+	
     private static String validationResult;
 
     public static String getValidationResult() {
@@ -114,7 +116,7 @@ public class AnnotationValidator {
                 PathXSD = Globals.getXSDPath();
             }
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(new File(PathXSD));
+            Schema schema = schemaFactory.newSchema(new StreamSource(new File(PathXSD)));
             Validator validator = schema.newValidator();
             validator.validate(source);
             setValidationResult("XML Validation is Successful." + "\r\n");

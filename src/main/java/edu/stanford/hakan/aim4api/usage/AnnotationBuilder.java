@@ -80,7 +80,7 @@ public class AnnotationBuilder {
             if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
                 PathXSD = Globals.getXSDPath();
             }
-
+            Logger.write("aim="+convertToString(Anno));
             clearAimXMLsaveResult();
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);

@@ -29,11 +29,11 @@ public class Modality extends HashMap<String, CD> {
 		
 		
 		try {
-			this.put("1.2.840.10008.5.1.4.1.1.2", new CD("CT","Computed Radiography",dcmDesignator,lexVersion));
-			this.put("1.2.840.10008.5.1.4.1.1.1", new CD("CR","Computed Tomography",dcmDesignator,lexVersion));
-			this.put("1.2.840.10008.5.1.4.1.1.128", new CD("PT","Positron emission tomography",dcmDesignator,lexVersion));
-			this.put("1.2.840.10008.5.1.4.1.1.4", new CD("MR","Magnetic Resonance",dcmDesignator,lexVersion));
-			this.put("1.2.840.10008.5.1.4.1.1.6.1", new CD("US","Ultrasound",dcmDesignator,lexVersion));
+			this.put("1.2.840.10008.5.1.4.1.1.2", new CD("CT","Computed Radiography",dcmDesignator));
+			this.put("1.2.840.10008.5.1.4.1.1.1", new CD("CR","Computed Tomography",dcmDesignator));
+			this.put("1.2.840.10008.5.1.4.1.1.128", new CD("PT","Positron emission tomography",dcmDesignator));
+			this.put("1.2.840.10008.5.1.4.1.1.4", new CD("MR","Magnetic Resonance",dcmDesignator));
+			this.put("1.2.840.10008.5.1.4.1.1.6.1", new CD("US","Ultrasound",dcmDesignator));
 			
 			
 		} catch (Exception e) {

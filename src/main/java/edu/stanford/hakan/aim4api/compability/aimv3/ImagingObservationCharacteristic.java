@@ -31,6 +31,8 @@ import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.addition.ValidTerm;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.ST;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.NamedNodeMap;
@@ -289,11 +291,18 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
             } else {
                 typeCode.setCode("Code");
             }
+            //not system, display name
             if (this.getCodeMeaning() != null) {
-                typeCode.setCodeSystem(this.getCodeMeaning());
+            	typeCode.setDisplayName(new ST(this.getCodeMeaning()));
+                
             } else {
-                typeCode.setCodeSystem("CodeSystem");
+                typeCode.setDisplayName(new ST("CodeMeaning"));
             }
+//            if (this.getCodeMeaning() != null) {
+//                typeCode.setCodeSystem(this.getCodeMeaning());
+//            } else {
+//                typeCode.setCodeSystem("CodeSystem");
+//            }
             if (this.getCodingSchemeDesignator() != null) {
                 typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
             } else {
@@ -331,9 +340,13 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
             if (typeCode.getCode() != null) {
                 code_Value = typeCode.getCode();
             }
-            if (typeCode.getCodeSystem() != null) {
-                code_Meaning = typeCode.getCodeSystem();
+          //ml not code system display name
+            if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+                code_Meaning = typeCode.getDisplayName().getValue();
             }
+//            if (typeCode.getCodeSystem() != null) {
+//                code_Meaning = typeCode.getCodeSystem();
+//            }
             if (typeCode.getCodeSystemName() != null) {
                 coding_SchemeDesignator = typeCode.getCodeSystemName();
             }
@@ -348,9 +361,13 @@ public class ImagingObservationCharacteristic implements IAimXMLOperations {
                 if (typeCode.getCode() != null) {
                     code_Value = typeCode.getCode();
                 }
-                if (typeCode.getCodeSystem() != null) {
-                    code_Meaning = typeCode.getCodeSystem();
+              //ml not code system display name
+                if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+                    code_Meaning = typeCode.getDisplayName().getValue();
                 }
+//                if (typeCode.getCodeSystem() != null) {
+//                    code_Meaning = typeCode.getCodeSystem();
+//                }
                 if (typeCode.getCodeSystemName() != null) {
                     coding_SchemeDesignator = typeCode.getCodeSystemName();
                 }

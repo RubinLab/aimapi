@@ -1494,9 +1494,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         Lexicon lex=Lexicon.getInstance();
         CD calcCD= lex.get("G-D7FE");
         if (calcCD!=null) {
-	        calculation.setDescription(calcCD.getCodeSystem());
+	        calculation.setDescription(calcCD.getDisplayName().getValue());
 	        calculation.setCodeValue(calcCD.getCode());
-	        calculation.setCodeMeaning(calcCD.getCodeSystem());
+	        calculation.setCodeMeaning(calcCD.getDisplayName().getValue());
 	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
         }else {
         	calculation.setDescription(LINE_LENGTH);

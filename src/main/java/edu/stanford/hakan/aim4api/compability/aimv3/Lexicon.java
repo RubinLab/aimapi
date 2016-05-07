@@ -1,16 +1,13 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.Properties;
 import java.util.logging.Logger;
-
-import org.apache.commons.io.IOUtils;
 
 
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.utility.EPADResources;
+import edu.stanford.hakan.aim4api.utility.dotnet.StreamReader;
 
 
 /* author Emel Alkim
@@ -23,7 +20,7 @@ public class Lexicon extends HashMap<String, CD> {
 	private static final long serialVersionUID = -8907800188313433052L;
 	private static Lexicon ourInstance = null;
 	private static final Logger logger = Logger.getLogger("Aim");
-	
+	private static String FILE_NAME="lexicon.csv";
 	
 	public static Lexicon getInstance()
 	{
@@ -51,9 +48,16 @@ public class Lexicon extends HashMap<String, CD> {
 
 	private Lexicon()
 	{
+		
+		//use this instead
+//		loadFile(EPADResources.getEPADWebServerConfigFilePath()+"/"+FILE_NAME);
+		
 		String ePadDesignator="99EPAD",ePadCodeSystem="99EPAD", ePadLexVersion="1.0";
 		String algPrefix="99EPADA";
 		String dtPrefix="99EPADD";
+		
+		
+		//RID12780 calculation jjvector!!!
 		
 		try {
 			this.put("G-D7FE", new CD("G-D7FE","Length","SRT"));
@@ -73,5 +77,35 @@ public class Lexicon extends HashMap<String, CD> {
 	}
 	
 	
+	
+//	public void loadFile(String csvFile ) {
+//		StreamReader br = null;
+//		String line = "";
+//		String cvsSplitBy = ",";
+//
+//		try {
+//			br = new StreamReader(csvFile);
+//			while ((line = br.ReadLine()) != null) {
+//
+//				// use comma as separator
+//				String[] lex = line.split(cvsSplitBy);
+//
+//				this.put(lex[1], new CD(lex[1],lex[0],lex[2]));
+//
+//			}
+//
+//		
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (br != null) {
+//				try {
+//					br.Close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
 
 }
