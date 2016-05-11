@@ -214,7 +214,10 @@ public String getDataType() {
         res.setType(Converter.toAimV4(this.getType())); //
         //ml coded data type (a primitive programming data type such as integer, double, etc. as well as other data type such as URI)
         Lexicon lex=Lexicon.getInstance();
-        res.setDataType(lex.get(this.getDataType()));
+        if (this.getDataType()!=null && lex.get(this.getDataType())!=null)
+        	res.setDataType(lex.get(this.getDataType()));
+        else
+        	res.setDataType(lex.getDefaultDataType());
 //        res.setDataType(new CD("", "", "", ""));
         return res;
     }

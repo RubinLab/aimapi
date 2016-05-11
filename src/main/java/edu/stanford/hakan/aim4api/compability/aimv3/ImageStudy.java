@@ -28,6 +28,12 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.utility.Logger;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -81,7 +87,26 @@ public class ImageStudy implements IAimXMLOperations {
     }
 
     public String getStartDate() {
-        return startDate;
+    	if (startDate.contains("-")){
+			return startDate.replace("-", "").replace("T", "").replace(":", ""); //old format
+
+		}else {
+			return startDate;		
+		}
+    	
+//    	if (startDate.contains("-")){
+//			return startDate; //old format
+
+//		}else {
+//			//new format
+//			//convert to old so we dont need to change other codes
+//			if (startDate.length()==12) //TODO implement for time better 
+//				return startDate.substring(0, 4)+"-"+startDate.substring(4, 6)+"-"+startDate.substring(6, 8)+"T"+startDate.substring(8,10)+":"+startDate.substring(10);
+//			else
+//				return startDate.substring(0, 4)+"-"+startDate.substring(4, 6)+"-"+startDate.substring(6, 8);
+//			
+//		}
+        
     }
 
     public void setStartDate(String startDate) {
@@ -135,7 +160,9 @@ public class ImageStudy implements IAimXMLOperations {
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.instanceUID = map.getNamedItem("instanceUID").getNodeValue();
+        Logger.write("setxmlnode before "+ this.startDate);
         this.startDate = map.getNamedItem("startDate").getNodeValue();
+        Logger.write("setxmlnode after "+ this.startDate);
         this.startTime = map.getNamedItem("startTime").getNodeValue();
     }
 
@@ -176,6 +203,7 @@ public class ImageStudy implements IAimXMLOperations {
         res.setImageSeries(this.getImageSeries().toAimV4());
         res.setInstanceUid(Converter.toII(this.getInstanceUID()));
         res.setStartDate(this.getStartDate());
+//        res.setStartDate(this.startDate);//use actual value
         res.setStartTime(this.getStartTime());
         return res;
     }

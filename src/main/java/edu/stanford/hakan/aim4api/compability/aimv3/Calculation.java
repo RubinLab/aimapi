@@ -32,6 +32,8 @@ import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.utility.Logger;
+
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -380,7 +382,11 @@ public class Calculation implements IAimXMLOperations {
         //ml if you don't have it, don't put it. xsd rejects! put values in
 //        algorithm.addType(new CD("", "", "", ""));
         Lexicon lex=Lexicon.getInstance();
-        algorithm.addType(lex.get(this.getAlgorithmType()));
+        Logger.write("alg type "+ this.getAlgorithmType());
+        if (this.getAlgorithmType()!=null && lex.get(this.getAlgorithmType())!=null)  //ml for old files
+        	algorithm.addType(lex.get(this.getAlgorithmType()));
+        else
+        	algorithm.addType(lex.getDefaultAlgorithType());
         res.setAlgorithm(algorithm);
         res.setCalculationResultCollection(this.getCalculationResultCollection().toAimV4());//
         res.setDescription(Converter.toST(this.getDescription()));//

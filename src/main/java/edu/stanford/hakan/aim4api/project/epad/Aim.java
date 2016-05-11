@@ -70,6 +70,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.User;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 //import java.util.Calendar;
 import java.util.Date;
@@ -771,14 +772,28 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
             ImageStudy study = dicomImageReference.getImageStudy();
             String strStartDate = study.getStartDate();
+            
+            
             try {
-                int year = Integer.parseInt(strStartDate.substring(0, 4));
-                int month = Integer.parseInt(strStartDate.substring(5, 7));
-                int day = Integer.parseInt(strStartDate.substring(8, 10));
-
+            	int year ;
+                int month ;
+                int day;
+                //ml dateformat change
+            	if (strStartDate.contains("-")) {
+    				
+	                year = Integer.parseInt(strStartDate.substring(0, 4));
+	                month = Integer.parseInt(strStartDate.substring(5, 7));
+	                day = Integer.parseInt(strStartDate.substring(8, 10));
+            	}
+            	else {
+            		year = Integer.parseInt(strStartDate.substring(0, 4));
+	                month = Integer.parseInt(strStartDate.substring(4, 6));
+	                day = Integer.parseInt(strStartDate.substring(6, 8));
+            	}
                 System.out.println(year + " " + month + " " + day);
                 Date date = new Date(year, month - 1, day);
                 return date;
+            	
             } catch (NumberFormatException ex) {
                 throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
             }
