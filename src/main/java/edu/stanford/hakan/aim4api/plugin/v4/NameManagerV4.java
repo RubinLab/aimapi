@@ -86,6 +86,7 @@ public class NameManagerV4 {
                     this.dsoStartIndex = Integer.parseInt(array[2]);
                 } else if (array.length == 4) {
                     this.name = new ST(array[0]);
+                    Logger.write("plugin parse item "+array[1]);
                     this.pluginCollection = new PluginCollectionV4(ia, array[1]);
                     this.dsoStartIndex = Integer.parseInt(array[2]);
                     this.dsoColor =  array[3];

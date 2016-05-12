@@ -160,7 +160,6 @@ public class ImageAnnotation extends AnnotationEntity {
         
         NameManagerV4 commentManagerV4 = new NameManagerV4();
         this.setName(new ST(commentManagerV4.toString(this)));
-        
         Element res = (Element) super.getXMLNode(doc);
         commentManagerV4 = new NameManagerV4(this);
         if (this.segmentationEntityCollection.size() > 0) {
@@ -210,17 +209,11 @@ public class ImageAnnotation extends AnnotationEntity {
         }
 
         NameManagerV4 commentManagerV4 = new NameManagerV4(this);
-//        this.setComment(commentManagerV4.getComment());
-//        if (commentManagerV4.getPluginCollection() != null) {
-//            this.setPluginCollection(commentManagerV4.getPluginCollection());
-//            this.getPluginCollection().setImageAnnotation(this);
-//        }
-
+        //ml
+        this.setPluginCollection(commentManagerV4.getPluginCollection());
         Logger.write("Checking plugin parameters inside imageAnnotation setXML");
         Logger.write(this.imageAnnotationCollection.getUniqueIdentifier().getRoot());
         if (getPluginCollection().size() > 0) {
-//            Logger.write("NO Plugin Parameter");
-//        } else {
             PluginCollectionV4 pCollection = getPluginCollection();
             for (PluginV4 p4 : pCollection.getListPlugin()) {
                 Logger.write(p4.getName());
@@ -361,9 +354,11 @@ public class ImageAnnotation extends AnnotationEntity {
                 } else {
                     res.add((TwoDimensionPolyline) markup);
                 }
-            } 
+            }    
             else if (markup.getXsiType().equals("TwoDimensionSpline")) {
-                res.add((TwoDimensionSpline) markup);}
+            	res.add((TwoDimensionSpline) markup);
+            }
+
             else if (markup.getXsiType().equals("TwoDimensionMultiPoint")) {
                 res.add((TwoDimensionMultiPoint) markup);
             } else if (markup.getXsiType().equals("TwoDimensionPoint")) {

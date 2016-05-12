@@ -15,6 +15,8 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Annotation;
 import edu.stanford.hakan.aim4api.compability.aimv3.Calculation;
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShape;
 import edu.stanford.hakan.aim4api.plugin.v3.PluginV3;
+import edu.stanford.hakan.aim4api.utility.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,19 +58,21 @@ public final class PluginV4  implements IAimXMLOperations {
             }
 
             this.setName(strName);
-            ImageAnnotation ia = this.pluginCollection.getImageAnnotation();
-            for (MarkupEntity markupEntity : ia.getMarkupEntityCollection().getMarkupEntityList()) {
-                if (markupEntity.getUniqueIdentifier().getRoot().equals(markupEntityID)) {
-                    this.markupEntity = markupEntity;
-                    break;
-                }
-            }
-            for (CalculationEntity calculationEntity : ia.getCalculationEntityCollection().getCalculationEntityList()) {
-                if (calculationEntity.getUniqueIdentifier().getRoot().equals(calculationEntityID)) {
-                    this.calculationEntity = calculationEntity;
-                    break;
-                }
-            }
+            //ml commented out!!!!!! just get the parameters 
+//            ImageAnnotation ia = this.pluginCollection.getImageAnnotation();
+//            for (MarkupEntity markupEntity : ia.getMarkupEntityCollection().getMarkupEntityList()) {
+//            	Logger.write("markup unique "+markupEntity.getUniqueIdentifier());
+//                if (markupEntity.getUniqueIdentifier().getRoot().equals(markupEntityID)) {
+//                    this.markupEntity = markupEntity;
+//                    break;
+//                }
+//            }
+//            for (CalculationEntity calculationEntity : ia.getCalculationEntityCollection().getCalculationEntityList()) {
+//                if (calculationEntity.getUniqueIdentifier().getRoot().equals(calculationEntityID)) {
+//                    this.calculationEntity = calculationEntity;
+//                    break;
+//                }
+//            }
         }
     }
     

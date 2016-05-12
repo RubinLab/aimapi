@@ -119,9 +119,10 @@ public class ImageStudy implements IAimXMLOperations {
             res.appendChild(this.instanceUid.getXMLNode(doc));
         }
         if (this.startDate != null) {
-            if (this.startDate.length() == 8 && !this.startDate.contains("-")) {
-                this.startDate = this.startDate.substring(0, 4) + "-" + this.startDate.substring(4, 6) + "-" + this.startDate.substring(6, 8);
-            }
+        	//ml -s removed for proper date (clunie)
+//            if (this.startDate.length() == 8 && !this.startDate.contains("-")) {
+//                this.startDate = this.startDate.substring(0, 4) + "-" + this.startDate.substring(4, 6) + "-" + this.startDate.substring(6, 8);
+//            }
             Element el_startDate = doc.createElement("startDate");
             el_startDate.setAttribute("value", this.startDate.toString());
             res.appendChild(el_startDate);

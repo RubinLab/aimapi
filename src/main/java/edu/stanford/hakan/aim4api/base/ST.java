@@ -109,7 +109,7 @@ public class ST implements IAimXMLOperations {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("ST");
         }
-        if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
+        if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes() && !this.getTagName().startsWith("iso:")) {
             this.setTagName("iso:".concat(this.getTagName()));
         }
         Element res = doc.createElement(getTagName());

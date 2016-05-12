@@ -224,7 +224,13 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
 
     @Override
     public String getDateTime() {
-        return dateTime;
+//        return dateTime;
+        if (dateTime.contains("-")){
+			return dateTime.replace("-", "").replace("T", "").replace(":", ""); //old format
+
+		}else {
+			return dateTime;		
+		}
     }
 
     @Override

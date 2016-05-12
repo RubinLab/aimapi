@@ -57,11 +57,11 @@ public class Converter {
         if (codingSchemeVersion == null) {
             codingSchemeVersion = "";
         }
-        CD res = new CD();
-        res.setCode(codeValue);
-        res.setCodeSystem(codeMeaning);
-        res.setCodeSystemName(codingSchemeDesignator);
-        res.setCodeSystemVersion(codingSchemeVersion);
+        CD res = new CD(codeValue,codeMeaning,codingSchemeDesignator,codingSchemeVersion);
+//        res.setCode(codeValue);
+//        res.setCodeSystem(codeMeaning);
+//        res.setCodeSystemName(codingSchemeDesignator);
+//        res.setCodeSystemVersion(codingSchemeVersion);
         return res;
     }
     

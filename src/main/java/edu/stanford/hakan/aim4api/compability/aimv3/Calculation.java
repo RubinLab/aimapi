@@ -32,6 +32,8 @@ import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.utility.Logger;
+
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,6 +57,7 @@ public class Calculation implements IAimXMLOperations {
     private String codingSchemeVersion;
     private String algorithmName;
     private String algorithmVersion;
+    private String algorithmType;
     private CalculationResultCollection calculationResultCollection = new CalculationResultCollection();
     private ReferencedCalculationCollection referencedCalculationCollection = new ReferencedCalculationCollection();
     private ReferencedGeometricShapeCollection referencedGeometricShapeCollection = new ReferencedGeometricShapeCollection();
@@ -213,7 +216,15 @@ public class Calculation implements IAimXMLOperations {
     
     
 
-//    @Override
+    public String getAlgorithmType() {
+		return algorithmType;
+	}
+
+	public void setAlgorithmType(String algorithmType) {
+		this.algorithmType = algorithmType;
+	}
+
+	//    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //        this.Control();
 //
@@ -284,6 +295,9 @@ public class Calculation implements IAimXMLOperations {
         if (map.getNamedItem("algorithmVersion") != null) {
             this.algorithmVersion = map.getNamedItem("algorithmVersion").getNodeValue();
         }
+        if (map.getNamedItem("algorithmType") != null) {
+            this.algorithmType = map.getNamedItem("algorithmType").getNodeValue();
+        }
     }
 
     private void Control() throws AimException {
@@ -340,6 +354,9 @@ public class Calculation implements IAimXMLOperations {
         if (this.algorithmVersion == null ? oth.algorithmVersion != null : !this.algorithmVersion.equals(oth.algorithmVersion)) {
             return false;
         }
+        if (this.algorithmType == null ? oth.algorithmType != null : !this.algorithmType.equals(oth.algorithmType)) {
+            return false;
+        }
         if (!this.referencedCalculationCollection.isEqualTo(oth.referencedCalculationCollection)) {
             return false;
         }
@@ -362,14 +379,21 @@ public class Calculation implements IAimXMLOperations {
         Algorithm algorithm = new Algorithm();
         algorithm.setName(Converter.toST(this.getAlgorithmName()));
         algorithm.setVersion(Converter.toST(this.getAlgorithmVersion()));
-        algorithm.addType(new CD("", "", "", ""));
+        //ml if you don't have it, don't put it. xsd rejects! put values in
+//        algorithm.addType(new CD("", "", "", ""));
+        Lexicon lex=Lexicon.getInstance();
+        Logger.write("alg type "+ this.getAlgorithmType());
+        if (this.getAlgorithmType()!=null && lex.get(this.getAlgorithmType())!=null)  //ml for old files
+        	algorithm.addType(lex.get(this.getAlgorithmType()));
+        else
+        	algorithm.addType(lex.getDefaultAlgorithType());
         res.setAlgorithm(algorithm);
         res.setCalculationResultCollection(this.getCalculationResultCollection().toAimV4());//
         res.setDescription(Converter.toST(this.getDescription()));//
         res.setMathML(Converter.toST(this.getMathML()));//
         CD typeCode = new CD();
         typeCode.setCode(this.getCodeValue());
-        typeCode.setCodeSystem(this.getCodeMeaning());
+        typeCode.setDisplayName(Converter.toST(this.getCodeMeaning()));
         typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
         typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         res.addTypeCode(typeCode);
@@ -394,6 +418,8 @@ public class Calculation implements IAimXMLOperations {
         if (v4.getAlgorithm() != null) {
             this.setAlgorithmName(v4.getAlgorithm().getName().getValue());
             this.setAlgorithmVersion(v4.getAlgorithm().getVersion().getValue());
+            //ml
+            this.setAlgorithmType(v4.getAlgorithm().getListType().get(0).getCode());
         }
         if (v4.getCalculationResultCollection().getExtendedCalculationResultList().size() > 0) {
             this.setCalculationResultCollection(new CalculationResultCollection(v4.getCalculationResultCollection()));
@@ -409,8 +435,8 @@ public class Calculation implements IAimXMLOperations {
             if (typeCode.getCode() != null) {
                 this.setCodeValue(typeCode.getCode());
             }
-            if (typeCode.getCodeSystem() != null) {
-                this.setCodeMeaning(typeCode.getCodeSystem());
+            if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+                this.setCodeMeaning(typeCode.getDisplayName().getValue());
             }
             if (typeCode.getCodeSystemName() != null) {
                 this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
@@ -475,6 +501,9 @@ public class Calculation implements IAimXMLOperations {
         }
         if (this.algorithmVersion != null) {
             res.algorithmVersion = this.algorithmVersion;
+        }
+        if (this.algorithmType != null) {
+            res.algorithmType = this.algorithmType;
         }
         if (this.calculationResultCollection != null) {
             res.calculationResultCollection = this.calculationResultCollection.getClone();

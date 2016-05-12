@@ -29,6 +29,8 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.utility.Logger;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -135,7 +137,16 @@ public class ImageSeries implements IAimXMLOperations {
         edu.stanford.hakan.aim4api.base.ImageSeries res = new edu.stanford.hakan.aim4api.base.ImageSeries();
         res.setImageCollection(this.getImageCollection().toAimV4());
         res.setInstanceUid(Converter.toII(this.getInstanceUID()));
-        res.setModality(new CD("", "", "", ""));
+        //ml get modality from image
+        String sopClassUID=this.getImageCollection().getImageList().get(0).getSopClassUID();
+        Modality mod=Modality.getInstance();
+        Logger.write("sopclass "+ sopClassUID);
+        if (sopClassUID!=null && !sopClassUID.isEmpty() && mod.get(sopClassUID)!=null) {
+        	CD modCD = mod.get(sopClassUID);
+        	res.setModality(modCD);
+        }
+        else 
+        	res.setModality(mod.getDefaultModality());
         return res;
     }
 

@@ -46,6 +46,7 @@ public class CalculationResult implements IAimXMLOperations {
     private AimUtility.CalculationResultIdentifier type;
     private Integer numberOfDimensions;
     private String unitOfMeasure;
+    private String dataType;
     private CalculationDataCollection calculationDataCollection = new CalculationDataCollection();
     private DimensionCollection dimensionCollection = new DimensionCollection();
 
@@ -115,7 +116,15 @@ public class CalculationResult implements IAimXMLOperations {
         this.unitOfMeasure = unitOfMeasure;
     }
 
-//    @Override
+public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
+
+	//    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //
 //        this.Control();
@@ -150,6 +159,9 @@ public class CalculationResult implements IAimXMLOperations {
         this.type = CalculationResultIdentifier.valueOf(map.getNamedItem("type").getNodeValue());
         this.numberOfDimensions = Integer.parseInt(map.getNamedItem("numberOfDimensions").getNodeValue());
         this.unitOfMeasure = map.getNamedItem("unitOfMeasure").getNodeValue();
+        if (map.getNamedItem("dataType") != null) {
+        	this.dataType = map.getNamedItem("dataType").getNodeValue();
+        }
     }
 
     private void Control() throws AimException {
@@ -182,6 +194,9 @@ public class CalculationResult implements IAimXMLOperations {
         if (this.unitOfMeasure == null ? oth.unitOfMeasure != null : !this.unitOfMeasure.equals(oth.unitOfMeasure)) {
             return false;
         }
+        if (this.dataType == null ? oth.dataType != null : !this.dataType.equals(oth.dataType)) {
+            return false;
+        }
         if (!this.calculationDataCollection.isEqualTo(oth.calculationDataCollection)) {
             return false;
         }
@@ -197,7 +212,13 @@ public class CalculationResult implements IAimXMLOperations {
         res.setUnitOfMeasure(Converter.toST(this.getUnitOfMeasure()));//
         res.setCalculationDataCollection(this.getCalculationDataCollection().toAimV4());//
         res.setType(Converter.toAimV4(this.getType())); //
-        res.setDataType(new CD("", "", "", ""));
+        //ml coded data type (a primitive programming data type such as integer, double, etc. as well as other data type such as URI)
+        Lexicon lex=Lexicon.getInstance();
+        if (this.getDataType()!=null && lex.get(this.getDataType())!=null)
+        	res.setDataType(lex.get(this.getDataType()));
+        else
+        	res.setDataType(lex.getDefaultDataType());
+//        res.setDataType(new CD("", "", "", ""));
         return res;
     }
 
@@ -206,6 +227,8 @@ public class CalculationResult implements IAimXMLOperations {
         this.setCalculationDataCollection(new CalculationDataCollection(v4.getCalculationDataCollection()));
         this.setDimensionCollection(new DimensionCollection(v4.getDimensionCollection()));
         this.setType(Converter.toAimV3(v4.getType()));
+        //ml
+        this.setDataType(v4.getDataType().getCode());
         this.setNumberOfDimensions(0);
         if (v4.getUnitOfMeasure() != null) {
             this.setUnitOfMeasure(v4.getUnitOfMeasure().getValue());
@@ -226,6 +249,9 @@ public class CalculationResult implements IAimXMLOperations {
         if (this.unitOfMeasure != null) {
             res.unitOfMeasure = this.unitOfMeasure;
         }
+        if (this.dataType != null) {
+            res.dataType = this.dataType;
+        }
         if (this.calculationDataCollection != null) {
             res.calculationDataCollection = this.calculationDataCollection.getClone();
         }
@@ -234,4 +260,5 @@ public class CalculationResult implements IAimXMLOperations {
         }
         return res;
     }
+
 }

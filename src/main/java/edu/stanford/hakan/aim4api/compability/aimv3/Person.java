@@ -61,7 +61,13 @@ public class Person implements IAimXMLOperations {
     }
 
     public String getBirthDate() {
-        return birthDate;
+//        return birthDate;
+        if (birthDate.contains("-")){
+			return birthDate.replace("-", "").replace("T", "").replace(":", ""); //old format
+
+		}else {
+			return birthDate;		
+		}
     }
 
     public void setBirthDate(String birthDate) {

@@ -25,6 +25,7 @@ package edu.stanford.hakan.aim4api.project.epad;
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
@@ -53,6 +54,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservationCharacteri
 import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.Inference;
 import edu.stanford.hakan.aim4api.compability.aimv3.InferenceCollection;
+import edu.stanford.hakan.aim4api.compability.aimv3.Lexicon;
 import edu.stanford.hakan.aim4api.compability.aimv3.MultiPoint;
 import edu.stanford.hakan.aim4api.compability.aimv3.Person;
 import edu.stanford.hakan.aim4api.compability.aimv3.Point;
@@ -68,6 +70,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.User;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 //import java.util.Calendar;
 import java.util.Date;
@@ -128,6 +131,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         setGeometricShapeCollection(ia.getGeometricShapeCollection());
         setTextAnnotationCollection(ia.getTextAnnotationCollection());
         setListPerson(ia.getListPerson());
+        //ml
+        setPluginCollection(ia.getPluginCollection());
     }
 
     // build the new imageAnnotation
@@ -136,7 +141,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             String patientBirthdate, String manufacturerName, String model,
             String version, int activeImage, LoggedInUser user,
             String imageUid, String seriesUid, String studyUid,
-            String studyDate, String studyTime) {
+            String studyDate, String studyTime, String imageClassUid) { //ml imageclassuid added
 
         super();
 
@@ -153,46 +158,47 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReference(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime));
+                studyDate, studyTime, imageClassUid)); //ml imageclassuid added
 
         addAnatomicEntity(createAnatomicEntity());
 
     }
 
-    // build the new imageAnnotation
-    public Aim(String name, String modality, String description,
-            String patientName, String patientId, String patientSex,
-            String patientBirthdate, String manufacturerName, String model,
-            String version, int activeImage, LoggedInUser user,
-            String imageUid, String seriesUid, String studyUid,
-            String studyDate, String studyTime, String sopClassUID,
-            String referencedSopInstanceUID, int segmentNumber,
-            String sopInstanceUID, String dsoSeriesUID) {
-
-        super();
-
-        setName(name);
-        setDateTime(todaysDate());
-        setCagridId(caGridId);
-        setComment(fillComment(modality, description, activeImage));
-        addUser(user);
-        addPerson(createPerson(patientName, patientId, patientSex,
-                patientBirthdate));
-        addEquipment(createEquipment(manufacturerName, model, version));
-
-        // add a reference pointing to the source dicom
-        addAnatomicEntity(createAnatomicEntity());
-        addImageReference(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime));
-
-        // add the segmentation and an image reference pointing to the
-        // segmentation dso
-        addSegmentation(new Segmentation(caGridId, sopInstanceUID, sopClassUID,
-                referencedSopInstanceUID, segmentNumber));
-        addImageReference(createImageReference(studyUid, dsoSeriesUID,
-                sopInstanceUID, studyDate, studyTime));
-
-    }
+    //ml
+//    // build the new imageAnnotation
+//    public Aim(String name, String modality, String description,
+//            String patientName, String patientId, String patientSex,
+//            String patientBirthdate, String manufacturerName, String model,
+//            String version, int activeImage, LoggedInUser user,
+//            String imageUid, String seriesUid, String studyUid,
+//            String studyDate, String studyTime, String sopClassUID,
+//            String referencedSopInstanceUID, int segmentNumber,
+//            String sopInstanceUID, String dsoSeriesUID) {
+//
+//        super();
+//
+//        setName(name);
+//        setDateTime(todaysDate());
+//        setCagridId(caGridId);
+//        setComment(fillComment(modality, description, activeImage));
+//        addUser(user);
+//        addPerson(createPerson(patientName, patientId, patientSex,
+//                patientBirthdate));
+//        addEquipment(createEquipment(manufacturerName, model, version));
+//
+//        // add a reference pointing to the source dicom
+//        addAnatomicEntity(createAnatomicEntity());
+//        addImageReference(createImageReference(studyUid, seriesUid, imageUid,
+//                studyDate, studyTime));
+//
+//        // add the segmentation and an image reference pointing to the
+//        // segmentation dso
+//        addSegmentation(new Segmentation(caGridId, sopInstanceUID, sopClassUID,
+//                referencedSopInstanceUID, segmentNumber));
+//        addImageReference(createImageReference(studyUid, dsoSeriesUID,
+//                sopInstanceUID, studyDate, studyTime));
+//
+//    }
 
     public Aim(String name, String patientName, String patientId,
             LoggedInUser user, String studyUid, String studyDate,
@@ -215,7 +221,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public int addShapes(String studyID, String seriesID, String imageID,
             int activeImage, String studyDate, String studyTime,
             ShapeType shapeType, List<TwoDCoordinate> coords,
-            double pixelSpacingX, double pixelSpacingY) {
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
 
         int frameID = 1;
         int shapeID = getNextShapeID();
@@ -228,7 +234,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
             shape.setIncludeFlag(true);
 
-            addCalculation(addlengthCalculation(
+            //ml add calculation only if it is not point
+            if (shapeType!=ShapeType.POINT) 
+            	addCalculation(addlengthCalculation(
                     coords,
                     calculateLineLength(getCoords(shape), pixelSpacingX,
                             pixelSpacingY), shape.getShapeIdentifier()));
@@ -238,7 +246,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         if (!hasImage(imageID)) {
             updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
-                    studyTime);
+                    studyTime, imageClassUID);
         }
 
         return shapeID;
@@ -350,7 +358,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     // imageID
     // turn a study or series reference into the image reference if possible
     private void updateImageID(String studyID, String seriesID, String imageID,
-            int activeImage, String studyDate, String studyTime) {
+            int activeImage, String studyDate, String studyTime,  String imageClassUID) {
 
         for (ImageReference imageReference : getImageReferenceCollection()
                 .getImageReferenceList()) {
@@ -402,7 +410,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // didn't find it, so create a new one
         addImageReference(createImageReference(studyID, seriesID, imageID,
-                studyDate, studyTime));
+                studyDate, studyTime, imageClassUID));
 
     }
 
@@ -766,14 +774,28 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
             ImageStudy study = dicomImageReference.getImageStudy();
             String strStartDate = study.getStartDate();
+            
+            
             try {
-                int year = Integer.parseInt(strStartDate.substring(0, 4));
-                int month = Integer.parseInt(strStartDate.substring(5, 7));
-                int day = Integer.parseInt(strStartDate.substring(8, 10));
-
+            	int year ;
+                int month ;
+                int day;
+                //ml dateformat change
+            	if (strStartDate.contains("-")) {
+    				
+	                year = Integer.parseInt(strStartDate.substring(0, 4));
+	                month = Integer.parseInt(strStartDate.substring(5, 7));
+	                day = Integer.parseInt(strStartDate.substring(8, 10));
+            	}
+            	else {
+            		year = Integer.parseInt(strStartDate.substring(0, 4));
+	                month = Integer.parseInt(strStartDate.substring(4, 6));
+	                day = Integer.parseInt(strStartDate.substring(6, 8));
+            	}
                 System.out.println(year + " " + month + " " + day);
                 Date date = new Date(year, month - 1, day);
                 return date;
+            	
             } catch (NumberFormatException ex) {
                 throw new AimException("Dateformat of the ImageStudy must be started with 'yyyy-MM-dd'");
             }
@@ -1482,11 +1504,24 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculation.setCagridId(0);
         calculation.setAlgorithmVersion(VERSION);
         calculation.setAlgorithmName(LINE_LENGTH);
+        //ml value in Lexicon
+        calculation.setAlgorithmType("99EPADA1");
+        
         calculation.setUid("0");
-        calculation.setDescription(LINE_LENGTH);
-        calculation.setCodeValue(LINE_LENGTH);
-        calculation.setCodeMeaning(LINE_LENGTH);
-        calculation.setCodingSchemeDesignator(PRIVATE_DESIGNATOR);
+        Lexicon lex=Lexicon.getInstance();
+        CD calcCD= lex.get("G-D7FE");
+        if (calcCD!=null) {
+	        calculation.setDescription(calcCD.getDisplayName().getValue());
+	        calculation.setCodeValue(calcCD.getCode());
+	        calculation.setCodeMeaning(calcCD.getDisplayName().getValue());
+	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
+        }else {
+        	calculation.setDescription(LINE_LENGTH);
+            calculation.setCodeValue(LINE_LENGTH);
+            calculation.setCodeMeaning(LINE_LENGTH);
+            calculation.setCodingSchemeDesignator(PRIVATE_DESIGNATOR);
+        }
+        	
 
         // Create a CalculationResult instance
         CalculationResult calculationResult = new CalculationResult();
@@ -1494,13 +1529,17 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculationResult.setType(CalculationResultIdentifier.Scalar);
         calculationResult.setUnitOfMeasure(LINE_MEASURE);
         calculationResult.setNumberOfDimensions(0);
+        //ml value in Lexicon
+        calculationResult.setDataType("99EPADD1");
 
         // Create a CalculationData instance
         CalculationData calculationData = new CalculationData();
         calculationData.setCagridId(0);
         calculationData.setValue(length);
         calculationData.addCoordinate(0, 0, 0); // TODO what goes here?
-
+//        for(TwoDCoordinate c: coords) { //ml for add coordinates
+//        	calculationData.addCoordinate(0, 0, 0); // TODO what goes here?
+//        }
         // Create a Dimension instance
         Dimension dimension = new Dimension(0, 0, 1, LINE_LENGTH);
 
@@ -1640,13 +1679,13 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     // create the image reference
     private DICOMImageReference createImageReference(String studyID,
-            String seriesID, String imageID, String studyDate, String studyTime) {
+            String seriesID, String imageID, String studyDate, String studyTime, String imageClassID) { //class uid added
 
         // series reference
         ImageSeries imageSeries = new ImageSeries();
         imageSeries.setCagridId(0);
         imageSeries.setInstanceUID(seriesID);
-        imageSeries.addImage(new Image(caGridId, "", imageID));
+        imageSeries.addImage(new Image(caGridId, imageClassID, imageID));
 
         // study reference
         ImageStudy study = new ImageStudy();
@@ -2329,7 +2368,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+//        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        ///ml change for proper aim format (clunie)
+        
+        builder.append(Integer.toString(year)).append(strMount).append(strDay).append(strHour).append(strMinute).append(strSecond);
         return builder.toString();
     }
 
@@ -2349,7 +2391,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             strDay = "0" + strDay;
         }
         StringBuilder builder = new StringBuilder();
-        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay);
+        ///ml change for proper aim format (clunie)
+//         builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay);
+        builder.append(Integer.toString(year)).append(strMount).append(strDay);
         return builder.toString();
     }
 
@@ -2384,7 +2428,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+      ///ml change for proper aim format (clunie)
+//        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        builder.append(Integer.toString(year)).append(strMount).append(strDay).append(strHour).append(strMinute).append(strSecond);
         this.setDateTime(builder.toString());
     }
 }

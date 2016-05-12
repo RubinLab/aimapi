@@ -262,9 +262,9 @@ public class AnatomicEntityCharacteristic implements IAimXMLOperations {
                 typeCode.setCode("Code");
             }
             if (this.getCodeMeaning() != null) {
-                typeCode.setCodeSystem(this.getCodeMeaning());
+                typeCode.setDisplayName(Converter.toST(this.getCodeMeaning()));
             } else {
-                typeCode.setCodeSystem("CodeSystem");
+                typeCode.setDisplayName(Converter.toST("DisplayName"));
             }
             if (this.getCodingSchemeDesignator() != null) {
                 typeCode.setCodeSystemName(this.getCodingSchemeDesignator());
@@ -297,9 +297,13 @@ public class AnatomicEntityCharacteristic implements IAimXMLOperations {
             if (typeCode.getCode() != null) {
                 code_Value = typeCode.getCode();
             }
-            if (typeCode.getCodeSystem() != null) {
-                code_Meaning = typeCode.getCodeSystem();
+          //ml not code system display name
+            if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+                code_Meaning = typeCode.getDisplayName().getValue();
             }
+//            if (typeCode.getCodeSystem() != null) {
+//                code_Meaning = typeCode.getCodeSystem();
+//            }
             if (typeCode.getCodeSystemName() != null) {
                 coding_SchemeDesignator = typeCode.getCodeSystemName();
             }
@@ -314,9 +318,13 @@ public class AnatomicEntityCharacteristic implements IAimXMLOperations {
                 if (typeCode.getCode() != null) {
                     code_Value = typeCode.getCode();
                 }
-                if (typeCode.getCodeSystem() != null) {
-                    code_Meaning = typeCode.getCodeSystem();
+              //ml not code system display name
+                if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+                    code_Meaning = typeCode.getDisplayName().getValue();
                 }
+//                if (typeCode.getCodeSystem() != null) {
+//                    code_Meaning = typeCode.getCodeSystem();
+//                }
                 if (typeCode.getCodeSystemName() != null) {
                     coding_SchemeDesignator = typeCode.getCodeSystemName();
                 }

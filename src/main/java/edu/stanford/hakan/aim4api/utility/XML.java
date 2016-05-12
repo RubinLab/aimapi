@@ -36,10 +36,11 @@ public class XML {
     public static Document createDocument() {
         try {
             DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-            Document doc = docBuilder.newDocument();
+            DocumentBuilder docBuilder = dbfac.newDocumentBuilder(); 
+            Document doc = docBuilder.newDocument(); 
             return doc;
         } catch (Exception ex) {
+        	Logger.write("exception "+ex.getMessage());
             return null;
         }
     }

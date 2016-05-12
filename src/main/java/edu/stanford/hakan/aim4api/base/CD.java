@@ -71,11 +71,25 @@ public class CD implements IAimXMLOperations {
      */
     public CD(String codeValue, String codeMeaning, String codingSchemeDesignator, String codingSchemeVersion) {  
         this.code = codeValue;
-        this.codeSystem = codeMeaning;
+//        this.codeSystem = codeMeaning;
+        this.setDisplayName(new ST(codeMeaning));
         this.codeSystemName = codingSchemeDesignator;
         this.codeSystemVersion = codingSchemeVersion;
     }
-
+    
+    /**
+     * @param codeValue = code 
+     * @param codeMeaning = codeSystem
+     * @param codingSchemeDesignator = codeSystemName
+     * @param codingSchemeVersion = codeSystemVersion
+     */
+    public CD(String codeValue, String codeMeaning, String codingSchemeDesignator) {  
+        this.code = codeValue;
+//        this.codeSystem = "NA";
+        this.setDisplayName(new ST(codeMeaning));
+        this.codeSystemName = codingSchemeDesignator;
+    }
+   
     public ST getDisplayName() {
         return displayName;
     }
@@ -85,6 +99,7 @@ public class CD implements IAimXMLOperations {
         displayName.setHasIsoAttributes(true);
         this.displayName = displayName;
     }
+  
 
     public ED_Text getOriginalText() {
         return originalText;
@@ -239,7 +254,7 @@ public class CD implements IAimXMLOperations {
         if (getTagName() == null || "".equals(getTagName())) {
             setTagName("CD");
         }
-        if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
+        if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes() && !this.getTagName().startsWith("iso:")) {
             this.setTagName("iso:".concat(this.getTagName()));
         }
         Element res = doc.createElement(getTagName());

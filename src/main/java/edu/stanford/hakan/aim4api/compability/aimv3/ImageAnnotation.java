@@ -281,11 +281,12 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
 
         iaV4.setComment(Converter.toST(this.getComment()));//
         iaV4.setName(Converter.toST(this.getName()));//
-        CD typeCode = new CD();//
-        typeCode.setCode(this.getCodeValue());//
-        typeCode.setCodeSystem(this.getCodeMeaning());//
-        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
-        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
+        CD typeCode = new CD(this.getCodeValue(),this.getCodeMeaning(),this.getCodingSchemeDesignator(),this.getCodingSchemeVersion());//ml
+//        CD typeCode = new CD();//
+//        typeCode.setCode(this.getCodeValue());//
+//        typeCode.setCodeSystem(this.getCodeMeaning());//
+//        typeCode.setCodeSystemName(this.getCodingSchemeDesignator());//
+//        typeCode.setCodeSystemVersion(this.getCodingSchemeVersion());//
         iaV4.addTypeCode(typeCode);//
         iaV4.setDateTime(this.getDateTime());//
         if ("".equals(this.iaV3UID)) {
@@ -469,9 +470,13 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
             if (typeCode.getCode() != null) {
                 this.setCodeValue(typeCode.getCode());
             }
-            if (typeCode.getCodeSystem() != null) {
-                this.setCodeMeaning(typeCode.getCodeSystem());
+            //ml not code system display name
+            if (typeCode.getDisplayName() != null && typeCode.getDisplayName().getValue() != null) {
+            	this.setCodeMeaning(typeCode.getDisplayName().getValue());
             }
+//            if (typeCode.getCodeSystem() != null) {
+//                this.setCodeMeaning(typeCode.getCodeSystem());
+//            }
             if (typeCode.getCodeSystemName() != null) {
                 this.setCodingSchemeDesignator(typeCode.getCodeSystemName());
             }

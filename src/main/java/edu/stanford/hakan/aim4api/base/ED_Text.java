@@ -141,7 +141,7 @@ public Node getXMLNode(Document doc) throws AimException {
 if (getTagName() == null || "".equals(getTagName())) {
 setTagName("ED_Text");
 }
-if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes()) {
+if (this.getHasIsoAttributes() != null && this.getHasIsoAttributes() && !this.getTagName().startsWith("iso:")) {
 this.setTagName("iso:".concat(this.getTagName()));
 }
 Element res = doc.createElement(getTagName());

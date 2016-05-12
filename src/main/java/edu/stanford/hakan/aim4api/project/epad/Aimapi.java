@@ -87,7 +87,7 @@ public interface Aimapi {
 	int addShapes(String studyID, String seriesID, String imageID,
 			int activeImage, String studyDate, String studyTime,
 			ShapeType shapeType, List<TwoDCoordinate> coords,
-			double pixelSpacingX, double pixelSpacingY);
+			double pixelSpacingX, double pixelSpacingY,  String imageClassUID); //ml classuid added
 
 	boolean makeNameUnique(List<Aim> aims);
 

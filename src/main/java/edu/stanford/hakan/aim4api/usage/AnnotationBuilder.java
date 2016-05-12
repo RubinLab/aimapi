@@ -43,6 +43,8 @@ import java.net.URL;
 import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -74,10 +76,11 @@ public class AnnotationBuilder {
 
     public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException {
         try {
+        	Logger.write("save ");
             if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
                 PathXSD = Globals.getXSDPath();
             }
-
+            Logger.write("aim="+convertToString(Anno));
             clearAimXMLsaveResult();
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
@@ -110,28 +113,38 @@ public class AnnotationBuilder {
 
     public static String convertToString(ImageAnnotationCollection Anno) throws AimException {
         try {
-            Document doc = XML.createDocument();
+        	Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
             XML.setBaseAttributes(root);
             doc.appendChild(root);
-
+            
             // set up a transformer
             TransformerFactory transfac = TransformerFactory.newInstance();
-            Transformer trans = transfac.newTransformer();
-            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+            Transformer trans;
+			try {
+				trans = transfac.newTransformer();
+				trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+				trans.setOutputProperty(OutputKeys.INDENT, "yes");
+	            // create string from xml tree
+	            StringWriter sw = new StringWriter();
+	            StreamResult result = new StreamResult(sw);
+	            DOMSource source = new DOMSource(doc);
+	            trans.transform(source, result);
+	            String xmlString = sw.toString();
+	            return xmlString;
+            } catch ( TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+            
 
-            // create string from xml tree
-            StringWriter sw = new StringWriter();
-            StreamResult result = new StreamResult(sw);
-            DOMSource source = new DOMSource(doc);
-            trans.transform(source, result);
-            String xmlString = sw.toString();
-            return xmlString;
+            
+           
         } catch (Exception ex) {
-            setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString): " + ex.getMessage());
-            throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString): "
-                    + ex.getMessage());
+            setAimXMLsaveResult("XML Convertion operation is Unsuccessful (Method Name; convertToString)  ml: " + ex.getMessage());
+            throw new AimException("XML Convertion operation is Unsuccessful (Method Name; convertToString)  ml: "
+                    + " " + ex.getMessage());
         }
     }
 
