@@ -182,6 +182,9 @@ public class II implements IAimXMLOperations {
     @Override
     public boolean isEqualTo(Object other) {
         II oth = (II) other;
+        if (this == null ? oth != null : oth == null) { //if we have null items, for napel to qifp annotation get
+            return false;
+        }
         if (this.root == null ? oth.root != null : !this.root.equals(oth.root)) {
             return false;
         }
