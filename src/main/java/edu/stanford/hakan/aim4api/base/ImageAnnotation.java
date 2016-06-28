@@ -30,6 +30,8 @@ package edu.stanford.hakan.aim4api.base;
 import edu.stanford.hakan.aim4api.plugin.v4.NameManagerV4;
 import edu.stanford.hakan.aim4api.plugin.v4.PluginCollectionV4;
 import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
+import edu.stanford.hakan.aim4api.questions.QuestionCollection;
+
 import java.util.List;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import edu.stanford.hakan.aim4api.utility.Logger;
@@ -58,6 +60,7 @@ public class ImageAnnotation extends AnnotationEntity {
     private String dsoColor = "#FFFFFF";
     
     private PluginCollectionV4 pluginCollection = new PluginCollectionV4();
+    private QuestionCollection questionCollection = new QuestionCollection();
 
     public ImageAnnotation() {
         this.version = -1;
@@ -211,6 +214,7 @@ public class ImageAnnotation extends AnnotationEntity {
         NameManagerV4 commentManagerV4 = new NameManagerV4(this);
         //ml
         this.setPluginCollection(commentManagerV4.getPluginCollection());
+        this.setQuestionCollection(commentManagerV4.getQuestionCollection());
         Logger.write("Checking plugin parameters inside imageAnnotation setXML");
         Logger.write(this.imageAnnotationCollection.getUniqueIdentifier().getRoot());
         if (getPluginCollection().size() > 0) {
@@ -261,6 +265,9 @@ public class ImageAnnotation extends AnnotationEntity {
             return false;
         }
         if (this.pluginCollection == null ? oth.pluginCollection != null : !this.pluginCollection.isEqualTo(oth.pluginCollection)) {
+            return false;
+        }
+        if (this.questionCollection == null ? oth.questionCollection != null : !this.questionCollection.isEqualTo(oth.questionCollection)) {
             return false;
         }
         return super.isEqualTo(other);
@@ -339,7 +346,13 @@ public class ImageAnnotation extends AnnotationEntity {
         if(this.getPluginCollection() != null) {
             res.setPluginCollection(this.getPluginCollection().getClone());
         }
-        
+        try {
+	        if(this.getQuestionCollection() != null) {
+	            res.setQuestionCollection(this.getQuestionCollection().getClone());
+	        }
+        }catch (AimException e) {
+        	Logger.write("Question collection couldn't be retrieved " + e.getMessage());
+        }
         res.setVersion(this.getVersion());
         return res;
     }
@@ -401,4 +414,12 @@ public class ImageAnnotation extends AnnotationEntity {
         this.pluginCollection.setImageAnnotation(this);
         this.pluginCollection.addPlugin(newPlugin);
     }
+
+	public QuestionCollection getQuestionCollection() {
+		return questionCollection;
+	}
+
+	public void setQuestionCollection(QuestionCollection questionCollection) {
+		this.questionCollection = questionCollection;
+	}
 }

@@ -5,10 +5,12 @@
  */
 package edu.stanford.hakan.aim4api.plugin.v4;
 
+import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.plugin.Common;
+import edu.stanford.hakan.aim4api.questions.QuestionCollection;
 import edu.stanford.hakan.aim4api.utility.Logger;
 
 /**
@@ -23,8 +25,9 @@ public class NameManagerV4 {
     private ImageAnnotation ia;
     private int dsoStartIndex = -1;
     private String dsoColor = "#FFFFFF";
+    private QuestionCollection questionCollection = new QuestionCollection();
 
-     public NameManagerV4() {
+    public NameManagerV4() {
     }
      
     public NameManagerV4(ImageAnnotation imageAnnotation) {
@@ -70,7 +73,15 @@ public class NameManagerV4 {
         this.dsoColor = dsoColor;
     } 
 
-    private void parse() {
+    public QuestionCollection getQuestionCollection() {
+		return questionCollection;
+	}
+
+	public void setQuestionCollection(QuestionCollection questionCollection) {
+		this.questionCollection = questionCollection;
+	}
+
+	private void parse() {
 
         if (ia.getName() != null && ia.getName().getValue() != null && !"".equals(ia.getName().getValue())) {
             String nameValue = ia.getName().getValue();
@@ -90,7 +101,18 @@ public class NameManagerV4 {
                     this.pluginCollection = new PluginCollectionV4(ia, array[1]);
                     this.dsoStartIndex = Integer.parseInt(array[2]);
                     this.dsoColor =  array[3];
-                }
+                
+	            } else if (array.length == 5) {
+	                this.name = new ST(array[0]);
+	                this.pluginCollection = new PluginCollectionV4(ia, array[1]);
+	                this.dsoStartIndex = Integer.parseInt(array[2]);
+	                this.dsoColor =  array[3];
+	                try {
+						this.questionCollection = new QuestionCollection(array[4]);
+					} catch (AimException e) {
+						Logger.write("Question collection couldn't be retrieved "+ e.getMessage());
+					}
+	            }
             } else {
                 this.name = new ST(nameValue);
             }
@@ -100,6 +122,7 @@ public class NameManagerV4 {
         this.ia.setPluginCollection(this.pluginCollection);
         this.ia.setDsoStartIndex(this.dsoStartIndex);
         this.ia.setDsoColor(this.dsoColor);
+        this.ia.setQuestionCollection(this.questionCollection);
     }
 
     @Override
@@ -114,6 +137,10 @@ public class NameManagerV4 {
         if (this.pluginCollection != null && this.pluginCollection.size() > 0) {
             sb.append(Common.spliterOne);
             sb.append(this.pluginCollection.toString());
+        }
+        if (this.questionCollection != null && this.questionCollection.size() > 0) {
+            sb.append(Common.spliterOne);
+            sb.append(this.questionCollection.toString());
         }
         return sb.toString();
     }
@@ -144,6 +171,10 @@ public class NameManagerV4 {
         sb.append(Common.spliterOne);
         sb.append(imageAnnotation.getDsoColor());
 
+        if (imageAnnotation.getQuestionCollection() != null && imageAnnotation.getQuestionCollection().size() > 0) {
+            sb.append(Common.spliterOne);
+            sb.append(imageAnnotation.getQuestionCollection().toString());
+        }
         return sb.toString();
     }
 }

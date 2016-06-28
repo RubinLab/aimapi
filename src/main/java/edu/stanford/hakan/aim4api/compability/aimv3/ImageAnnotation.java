@@ -41,6 +41,7 @@ import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.plugin.v3.PluginCollectionV3;
 import edu.stanford.hakan.aim4api.plugin.v3.PluginV3;
+import edu.stanford.hakan.aim4api.questions.QuestionCollection;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 
 /**
@@ -62,7 +63,8 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
     private PluginCollectionV3 pluginCollection  = new PluginCollectionV3();
     private int dsoStartIndex = -1;
     private String dsoColor = "#FFFFFF";
-
+    private QuestionCollection questionCollection  = new QuestionCollection();
+    
     public ImageAnnotation() {
         super();
         this.setIAv3UID(GenerateId.getUUID());
@@ -297,6 +299,7 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         iaV4.setPluginCollection(this.pluginCollection.toAimV4(this.imageAnnotationV4));
         iaV4.setDsoStartIndex(this.dsoStartIndex);
         iaV4.setDsoColor(this.dsoColor);
+        iaV4.setQuestionCollection(this.questionCollection);
         
         iacV4.addImageAnnotation(iaV4);
         
@@ -496,6 +499,9 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         if (iav4.getPluginCollection().size() > 0) {
             this.pluginCollection = new PluginCollectionV3(iav4.getPluginCollection());
         }
+        if (iav4.getQuestionCollection().size() > 0) {
+            this.questionCollection = iav4.getQuestionCollection();
+        }
         this.setDsoStartIndex(iav4.getDsoStartIndex());
         this.setDsoColor(iav4.getDsoColor());
     }
@@ -606,5 +612,13 @@ public class ImageAnnotation extends Annotation implements IAimXMLOperations, Se
         }
         this.pluginCollection.addPlugin(newPlugin);
     }
+    
+    public QuestionCollection getQuestionCollection() {
+		return questionCollection;
+	}
+
+	public void setQuestionCollection(QuestionCollection questionCollection) {
+		this.questionCollection = questionCollection;
+	}
 
 }
