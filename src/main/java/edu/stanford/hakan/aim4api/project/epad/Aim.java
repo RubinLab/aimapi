@@ -133,6 +133,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         setListPerson(ia.getListPerson());
         //ml
         setPluginCollection(ia.getPluginCollection());
+        setDsoStartIndex(ia.getDsoStartIndex());
     }
 
     // build the new imageAnnotation
