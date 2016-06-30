@@ -90,6 +90,12 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     private static final int caGridId = 0;
     private static final String LINE_LENGTH = "LineLength";
+    private static final String MEAN = "Mean";
+    private static final String STD_DEV = "StandardDeviation";
+    private static final String MIN = "Min";
+    private static final String MAX = "Max";
+    
+    
     private static final String PRIVATE_DESIGNATOR = "private";
     private static final String LINE_MEASURE = "linear";
     private static final String VERSION = "1.0";
@@ -236,8 +242,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
             shape.setIncludeFlag(true);
 
-            //ml add calculation only if it is not point
-            if (shapeType!=ShapeType.POINT) 
+            //ml add calculation only if it is a line
+            if (shapeType==ShapeType.LINE) 
             	addCalculation(addlengthCalculation(
                     coords,
                     calculateLineLength(getCoords(shape), pixelSpacingX,
@@ -1561,6 +1567,86 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculation.addCalculationResult(calculationResult);
 
         return calculation;
+    }
+    
+    /**
+     * add mean calculation to the annonation
+     * @param mean
+     */
+    
+    public void addMeanCalculation(double value, int shapeId, String units) {
+    	addCalculation(value,shapeId,units,MEAN, "99EPADA4");
+    }
+    public void addStdDevCalculation(double value, int shapeId, String units) {
+    	addCalculation(value,shapeId,units,STD_DEV, "99EPADA5");
+    }
+    public void addMinCalculation(double value, int shapeId, String units) {
+    	addCalculation(value,shapeId,units,MIN, "99EPADA6");
+    }
+    public void addMaxCalculation(double value, int shapeId, String units) {
+    	addCalculation(value,shapeId,units,MAX, "99EPADA7");
+    }
+
+    public void addCalculation(double value, int shapeId, String units, String name, String code) {
+
+        // Create a Calculation instance
+        Calculation calculation = new Calculation();
+        calculation.setCagridId(0);
+        calculation.setAlgorithmVersion(VERSION);
+        calculation.setAlgorithmName(name);
+        //ml value in Lexicon
+        calculation.setAlgorithmType("99EPADA1");
+        
+        calculation.setUid("0");
+        Lexicon lex=Lexicon.getInstance();
+        CD calcCD= lex.get(code);
+        if (calcCD!=null) {
+	        calculation.setDescription(calcCD.getDisplayName().getValue());
+	        calculation.setCodeValue(calcCD.getCode());
+	        calculation.setCodeMeaning(calcCD.getDisplayName().getValue());
+	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
+        }else {
+        	calculation.setDescription(name);
+            calculation.setCodeValue(name);
+            calculation.setCodeMeaning(name);
+            calculation.setCodingSchemeDesignator(PRIVATE_DESIGNATOR);
+        }
+        	
+
+        // Create a CalculationResult instance
+        CalculationResult calculationResult = new CalculationResult();
+        calculationResult.setCagridId(0);
+        calculationResult.setType(CalculationResultIdentifier.Scalar);
+        calculationResult.setUnitOfMeasure(units);
+        calculationResult.setNumberOfDimensions(0);
+        //ml value in Lexicon
+        calculationResult.setDataType("99EPADD1");
+
+        // Create a CalculationData instance
+        CalculationData calculationData = new CalculationData();
+        calculationData.setCagridId(0);
+        calculationData.setValue(value);
+        calculationData.addCoordinate(0, 0, 0); // TODO what goes here?
+
+        // Create a Dimension instance
+        Dimension dimension = new Dimension(0, 0, 1, name);
+
+        // Add calculationData to calculationResult
+        calculationResult.addCalculationData(calculationData);
+
+        // Add dimension to calculationResult
+        calculationResult.addDimension(dimension);
+
+        // add the shape reference to the calculation
+        ReferencedGeometricShape reference = new ReferencedGeometricShape();
+        reference.setCagridId(0);
+        reference.setReferencedShapeIdentifier(shapeId);
+        calculation.addReferencedGeometricShape(reference);
+
+        // Add calculationResult to calculation
+        calculation.addCalculationResult(calculationResult);
+
+        addCalculation(calculation);
     }
 
 //    public ImageAnnotation cloneAim(ImageAnnotation fromAim) {

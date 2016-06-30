@@ -79,6 +79,15 @@ public class Lexicon extends HashMap<String, CD> {
 			//datatypes, start with 99EPADD
 			this.put(dtPrefix+"1", new CD(dtPrefix+"1","Double",ePadDesignator));
 			
+			
+			
+			//
+			this.put(algPrefix+"4", new CD(algPrefix+"4","Mean",ePadDesignator));
+			this.put(algPrefix+"5", new CD(algPrefix+"5","StandardDeviation",ePadDesignator));
+			this.put(algPrefix+"6", new CD(algPrefix+"6","Min",ePadDesignator));
+			this.put(algPrefix+"7", new CD(algPrefix+"7","Max",ePadDesignator));
+			
+			
 		} catch (Exception e) {
 			logger.info("Error getting lexicon "+ e.getMessage());
 			throw new RuntimeException(e.getMessage());
