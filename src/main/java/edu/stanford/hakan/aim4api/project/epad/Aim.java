@@ -90,7 +90,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     private static final int caGridId = 0;
     private static final String LINE_LENGTH = "LineLength";
-    private static final String MEAN = "Mean";
+    private static final String MEAN = "Mean"; 
+    private static final String AREA = "Area";
     private static final String STD_DEV = "StandardDeviation";
     private static final String MIN = "Min";
     private static final String MAX = "Max";
@@ -1575,7 +1576,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
      */
     
     public void addMeanCalculation(double value, int shapeId, String units) {
-    	addCalculation(value,shapeId,units,MEAN, "99EPADA4");
+    	addCalculation(value,shapeId,units,MEAN, "RID39224");
+    }
+    public void addAreaCalculation(double value, int shapeId, String units) {
+    	addCalculation(value,shapeId,units,AREA, "99EPADA4");
     }
     public void addStdDevCalculation(double value, int shapeId, String units) {
     	addCalculation(value,shapeId,units,STD_DEV, "99EPADA5");

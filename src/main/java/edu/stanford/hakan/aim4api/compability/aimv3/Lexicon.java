@@ -82,7 +82,8 @@ public class Lexicon extends HashMap<String, CD> {
 			
 			
 			//
-			this.put(algPrefix+"4", new CD(algPrefix+"4","Mean",ePadDesignator));
+			this.put("RID39224", new CD("RID39224","Mean value calculation","RadLex","3.12"));
+			this.put(algPrefix+"4", new CD(algPrefix+"4","Area",ePadDesignator));
 			this.put(algPrefix+"5", new CD(algPrefix+"5","StandardDeviation",ePadDesignator));
 			this.put(algPrefix+"6", new CD(algPrefix+"6","Min",ePadDesignator));
 			this.put(algPrefix+"7", new CD(algPrefix+"7","Max",ePadDesignator));
