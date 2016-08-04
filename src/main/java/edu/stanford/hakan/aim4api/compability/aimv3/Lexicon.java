@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import edu.stanford.hakan.aim4api.base.CD;
-import edu.stanford.hakan.aim4api.utility.EPADConfig;
+//import edu.stanford.hakan.aim4api.utility.EPADConfig;
 
 
 /* author Emel Alkim
@@ -31,9 +31,9 @@ public class Lexicon extends HashMap<String, CD> {
 	private static String FILE_NAME="lexicon.csv";
 	private final String ePadDesignator="99EPAD",ePadCodeSystem="99EPAD", ePadLexVersion="1.0";
 	
-	String username = EPADConfig.getInstance().getStringPropertyValue("epadDatabaseUsername");
-	String password = EPADConfig.getInstance().getStringPropertyValue("epadDatabasePassword");
-	String epadDatabaseURL = EPADConfig.getInstance().getStringPropertyValue("epadDatabaseURL");
+//	String username = EPADConfig.getInstance().getStringPropertyValue("epadDatabaseUsername");
+//	String password = EPADConfig.getInstance().getStringPropertyValue("epadDatabasePassword");
+//	String epadDatabaseURL = EPADConfig.getInstance().getStringPropertyValue("epadDatabaseURL");
 	
 	
 //	Connection conn ;
