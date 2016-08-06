@@ -1514,7 +1514,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculation.setAlgorithmVersion(VERSION);
         calculation.setAlgorithmName(LINE_LENGTH);
         //ml value in Lexicon
-        calculation.setAlgorithmType("99EPADA1");
+        calculation.setAlgorithmType("RID12780");
         
         calculation.setUid("0");
         Lexicon lex=Lexicon.getInstance();
@@ -1599,7 +1599,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculation.setAlgorithmVersion(VERSION);
         calculation.setAlgorithmName(name);
         //ml value in Lexicon
-        calculation.setAlgorithmType("99EPADA1");
+        calculation.setAlgorithmType("RID12780");
         
         calculation.setUid("0");
         Lexicon lex=Lexicon.getInstance();

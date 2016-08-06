@@ -58,7 +58,7 @@ public class AnnotationExtender {
     	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
             }else {
 	            calculation.setDescription("Feature Extraction");
-	            calculation.setCodeValue("99EPADC0"); //double
+	            calculation.setCodeValue("99EPADF0"); //feature default
 	            calculation.setCodeMeaning("Feature Extraction");
 	            calculation.setCodingSchemeDesignator("99EPAD");
             }
