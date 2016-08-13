@@ -76,9 +76,9 @@ public class AnnotationExtender {
         return imageAnnotation.toAimV4();
 
 	}
-	
+	//for keeping backwards compatibility
 	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double featureValue, CD feature, double featureVersion) throws AimException {
-		return AnnotationExtender.addFeature(imageAnnotationCollection, featureValue, feature, featureVersion, null);
+		return AnnotationExtender.addFeature(imageAnnotationCollection, featureValue, feature, featureVersion, null, feature.getDisplayName().getValue());
 	}	
 	
 	/**
@@ -91,7 +91,7 @@ public class AnnotationExtender {
 	 * @return
 	 * @throws AimException
 	 */
-	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double featureValue, CD feature, double featureVersion, CD calcCD) throws AimException {
+	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double featureValue, CD feature, double featureVersion, CD calcCD, String label) throws AimException {
 		
         ImageAnnotation imageAnnotation = new ImageAnnotation(imageAnnotationCollection);
 
@@ -101,7 +101,7 @@ public class AnnotationExtender {
         if (calculation != null) {
         	calculation.getCalculationResultCollection().getCalculationResultList().get(0).getCalculationDataCollection().getCalculationDataList().get(0).setValue(featureValue);
         } else {
-            imageAnnotation.addCalculation(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD));
+            imageAnnotation.addCalculation(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD, label));
         }
             
         return imageAnnotation.toAimV4();
@@ -184,14 +184,14 @@ public class AnnotationExtender {
      * @param featureName
      * @throws AimException 
      */
-    private static Calculation createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD) throws AimException {
+    private static Calculation createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label) throws AimException {
     	
     	Calculation calculation = new Calculation();
     	
     	calculation.setCagridId(0);
     	calculation.setAlgorithmVersion(parentCD.getCodeSystemVersion());
     	calculation.setAlgorithmType(parentCD.getCode()); 
-    	calculation.setAlgorithmName(parentCD.getCodeSystemName());
+    	calculation.setAlgorithmName(parentCD.getDisplayName().getValue());
     	calculation.setUid("0");
     	
     	
@@ -222,7 +222,7 @@ public class AnnotationExtender {
         calculationData.setValue(featureValue);
         calculationData.addCoordinate(0, 0, 0);
         // Create a Dimension instance
-        Dimension dimension = new Dimension(0, 0, 1, feature.getDisplayName().getValue());
+        Dimension dimension = new Dimension(0, 0, 1, label);
         // Add calculationData to calculationResult
         calculationResult.addCalculationData(calculationData);
         // Add dimension to calculationResult
