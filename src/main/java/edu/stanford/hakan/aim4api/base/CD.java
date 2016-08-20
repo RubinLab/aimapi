@@ -389,6 +389,14 @@ public class CD implements IAimXMLOperations {
                 this.setSource(obj);
             }
         }
+        Logger.write("check codesystem");
+        //chech the codesytem if display name is empty
+        if (this.displayName==null || this.displayName.getValue()==null || this.displayName.getValue().equals("")) {
+        	Logger.write("display still empty codesystem" +  this.codeSystem);
+        	if (this.codeSystem!=null)
+        		this.setDisplayName(new ST(this.codeSystem));
+        	Logger.write("this is the final display "+this.getDisplayName().getValue());
+        }
     }
 
     @Override
