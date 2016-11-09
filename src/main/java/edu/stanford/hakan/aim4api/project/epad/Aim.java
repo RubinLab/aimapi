@@ -598,11 +598,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return getShapeType(shapeID).equals(ShapeType.POLY);
     }
     
-    public boolean isLine(int shapeID) {
-    	return getShapeType(shapeID).equals(ShapeType.LINE);
-    }
-    
-
     @Override
     public boolean hasPolyLine() {
         for (GeometricShape shape : getGeometricShapeCollection()
@@ -1606,25 +1601,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public void addMaxCalculation(double value, int shapeId, String units) {
     	addCalculation(value,shapeId,units,MAX, "99EPADA7");
     }
-    
-    public void addHistogramCalculation(Map<Double,Double> histogram, int shapeId, String units) {
-    	addCalculation(histogram, shapeId, units, HISTOGRAM, "99EPADA8" );
-    }
-    
-
-    public void addCalculation(Map<Double, Double> histogram, int shapeId, String units, String name, String code) {
-    	
-    	// Create a Calculation instance
-        Calculation calculation = new Calculation();
-        calculation.setCagridId(0);
-        calculation.setAlgorithmVersion(VERSION);
-        calculation.setAlgorithmName(name);
-        //value in Lexicon
-        calculation.setAlgorithmType("RID12780");
-    	
-    }
-    
-    
+        
     public void addCalculation(double value, int shapeId, String units, String name, String code) {
 
         // Create a Calculation instance
