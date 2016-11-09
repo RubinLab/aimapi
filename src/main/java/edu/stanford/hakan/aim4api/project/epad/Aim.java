@@ -97,9 +97,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private static final String STD_DEV = "StandardDeviation";
     private static final String MIN = "Min";
     private static final String MAX = "Max";
-    private static final String HISTOGRAM = "Histogram";
-    private static final String VALUE = "Value";
-    private static final String COUNT = "Count";
     
     
     private static final String PRIVATE_DESIGNATOR = "private";
