@@ -39,6 +39,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.CalculationResult;
 import edu.stanford.hakan.aim4api.compability.aimv3.Circle;
 import edu.stanford.hakan.aim4api.compability.aimv3.DICOMImageReference;
 import edu.stanford.hakan.aim4api.compability.aimv3.Dimension;
+import edu.stanford.hakan.aim4api.compability.aimv3.Ellipse;
 import edu.stanford.hakan.aim4api.compability.aimv3.Equipment;
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShape;
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShapeCollection;
@@ -76,6 +77,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -486,8 +488,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     shapes.add(createShape(circle, coords, imageID, frameID));
                     break;
                 case NORMAL:
+                	//add the coorinates to the ellipse shape
+                	Ellipse ellipse = new Ellipse();
+                	ellipse.setShapeIdentifier(shapeID);;
+                	ellipse.setCagridId(caGridId);
+                	shapes.add(createShape(ellipse, coords, imageID, frameID));
+                	
                     // add the long axis line
-                    List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
+                    /*List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
                     longAxis.add(coords.get(0));
                     longAxis.add(coords.get(1));
                     MultiPoint longShape = new MultiPoint();
@@ -506,7 +514,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     shortShape.setCagridId(caGridId);
                     GeometricShape s = createShape(shortShape, shortAxis, imageID,
                             frameID);
-                    shapes.add(s);
+                    shapes.add(s);*/
 
                     break;
                 default:
@@ -520,7 +528,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private GeometricShape createShape(GeometricShape shape,
             List<TwoDCoordinate> coords, String imageUid, int frame) {
 
-        // logger.info("createShape " + shape.getXsiType());
+        logger.info("createShape " + shape.getXsiType());
         // put the coords into the shape
         for (int i = 0; i < coords.size(); i++) {
             TwoDimensionSpatialCoordinate coord = coords.get(i);
@@ -586,7 +594,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean isPolygon(int shapeID) {
         return getShapeType(shapeID).equals(ShapeType.POLY);
     }
-
+    
     @Override
     public boolean hasPolyLine() {
         for (GeometricShape shape : getGeometricShapeCollection()
@@ -1590,7 +1598,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public void addMaxCalculation(double value, int shapeId, String units) {
     	addCalculation(value,shapeId,units,MAX, "99EPADA7");
     }
-
+        
     public void addCalculation(double value, int shapeId, String units, String name, String code) {
 
         // Create a Calculation instance
