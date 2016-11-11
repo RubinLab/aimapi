@@ -246,12 +246,13 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             shape.setIncludeFlag(true);
 
             //ml add calculation only if it is a line
-            if (shapeType==ShapeType.LINE) 
+            if (shapeType==ShapeType.LINE) {
             	addCalculation(addlengthCalculation(
                     coords,
                     calculateLineLength(getCoords(shape), pixelSpacingX,
                             pixelSpacingY), shape.getShapeIdentifier()));
-
+            }
+            
             addGeometricShape(shape);
         }
 
@@ -495,6 +496,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 	shapes.add(createShape(ellipse, coords, imageID, frameID));
                 	
                     // add the long axis line
+                	// We are going to add this as shapes but will not add to geometic shape collection
+                	// so that the AIm will still store these as lines
                     /*List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
                     longAxis.add(coords.get(0));
                     longAxis.add(coords.get(1));
@@ -1349,7 +1352,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             result = ShapeType.CIRCLE;
         } else if (xsiType.equals("Point")) {
             result = ShapeType.POINT;
-        } else {
+        } else if (xsiType.equals("Ellipse")) {
+        	result = ShapeType.NORMAL; //ORTHOGONAL LINES
+        }
+        else {
             result = ShapeType.NONE;
         }
         return result;
