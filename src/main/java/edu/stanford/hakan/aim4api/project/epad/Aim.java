@@ -94,9 +94,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private static final String LINE_LENGTH = "LineLength";
     private static final String MEAN = "Mean"; 
     private static final String AREA = "Area";
-    private static final String STD_DEV = "StandardDeviation";
-    private static final String MIN = "Min";
-    private static final String MAX = "Max";
+    private static final String STD_DEV = "Standard Deviation";
+    private static final String MIN = "Minimum";
+    private static final String MAX = "Maximum";
     
     
     private static final String PRIVATE_DESIGNATOR = "private";
@@ -1584,19 +1584,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
      */
     
     public void addMeanCalculation(double value, int shapeId, String units) {
-    	addCalculation(value,shapeId,units,MEAN, "RID39224");
+    	addCalculation(value,shapeId,units,MEAN, "R-00317");
     }
     public void addAreaCalculation(double value, int shapeId, String units) {
     	addCalculation(value,shapeId,units,AREA, "99EPADA4");
     }
     public void addStdDevCalculation(double value, int shapeId, String units) {
-    	addCalculation(value,shapeId,units,STD_DEV, "99EPADA5");
+    	addCalculation(value,shapeId,units,STD_DEV, "R-10047");
     }
     public void addMinCalculation(double value, int shapeId, String units) {
-    	addCalculation(value,shapeId,units,MIN, "99EPADA6");
+    	addCalculation(value,shapeId,units,MIN, "R-404FB");
     }
     public void addMaxCalculation(double value, int shapeId, String units) {
-    	addCalculation(value,shapeId,units,MAX, "99EPADA7");
+    	addCalculation(value,shapeId,units,MAX, "G-A437");
     }
         
     public void addCalculation(double value, int shapeId, String units, String name, String code) {
