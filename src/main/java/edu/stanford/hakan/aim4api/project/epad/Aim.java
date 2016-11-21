@@ -1583,23 +1583,23 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
      * @param mean
      */
     
-    public void addMeanCalculation(double value, int shapeId, String units) {
+    public void addMeanCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,MEAN, "R-00317");
     }
-    public void addAreaCalculation(double value, int shapeId, String units) {
+    public void addAreaCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,AREA, "99EPADA4");
     }
-    public void addStdDevCalculation(double value, int shapeId, String units) {
+    public void addStdDevCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,STD_DEV, "R-10047");
     }
-    public void addMinCalculation(double value, int shapeId, String units) {
+    public void addMinCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,MIN, "R-404FB");
     }
-    public void addMaxCalculation(double value, int shapeId, String units) {
+    public void addMaxCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,MAX, "G-A437");
     }
         
-    public void addCalculation(double value, int shapeId, String units, String name, String code) {
+    public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
 
         // Create a Calculation instance
         Calculation calculation = new Calculation();
@@ -1650,10 +1650,13 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculationResult.addDimension(dimension);
 
         // add the shape reference to the calculation
-        ReferencedGeometricShape reference = new ReferencedGeometricShape();
-        reference.setCagridId(0);
-        reference.setReferencedShapeIdentifier(shapeId);
-        calculation.addReferencedGeometricShape(reference);
+        if (shapeId != null) {
+        	ReferencedGeometricShape reference = new ReferencedGeometricShape();
+            reference.setCagridId(0);
+            reference.setReferencedShapeIdentifier(shapeId);
+            calculation.addReferencedGeometricShape(reference);
+        }
+        
 
         // Add calculationResult to calculation
         calculation.addCalculationResult(calculationResult);
