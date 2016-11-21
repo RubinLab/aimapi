@@ -1336,6 +1336,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         ShapeType result = ShapeType.NONE;
 
         Shape shape = getShape(shapeID);
+        
+        if (shape == null) return result;
 
         String xsiType = shape.getXsiType();
 
