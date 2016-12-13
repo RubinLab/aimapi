@@ -233,7 +233,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             int activeImage, String studyDate, String studyTime,
             ShapeType shapeType, List<TwoDCoordinate> coords,
             double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
-
         int frameID = 1;
         int shapeID = getNextShapeID();
 
@@ -246,11 +245,33 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             shape.setIncludeFlag(true);
 
             //ml add calculation only if it is a line
-            if (shapeType==ShapeType.LINE) 
+            if (shapeType==ShapeType.LINE) {
             	addCalculation(addlengthCalculation(
                     coords,
                     calculateLineLength(getCoords(shape), pixelSpacingX,
                             pixelSpacingY), shape.getShapeIdentifier()));
+            }
+            else if (shapeType==ShapeType.NORMAL) {
+            	logger.info("ellipse");
+            	//first line long axis
+            	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
+            	coordslist.add(coords.get(0));
+            	coordslist.add(coords.get(1));
+            	double length = calculateLineLength(coordslist, pixelSpacingX,
+    					pixelSpacingY);
+            	logger.info("line length 1 : " + length);
+            	
+            	addCalculation(addlengthCalculation(coordslist, 
+            			length, shape.getShapeIdentifier()));
+            	coordslist.clear();
+            	coordslist.add(coords.get(2));
+            	coordslist.add(coords.get(3));
+            	length = calculateLineLength(coordslist, pixelSpacingX,
+    					pixelSpacingY);
+            	logger.info("line length 2: " + length);
+            	addCalculation(addlengthCalculation(coordslist, 
+            			length, shape.getShapeIdentifier()));
+            }
 
             addGeometricShape(shape);
         }
@@ -261,6 +282,63 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
 
         return shapeID;
+    }
+    
+    public void setNormalLineLengths(int shapeID, String algorithmName, List<TwoDCoordinate> coords,
+    		double pixelSpacingX, double pixelSpacingY) {
+   
+    	try {
+    		int index = 0;
+            // find the calculation for this algorithm
+            for (Calculation calculation : getCalculationCollection()
+                    .getCalculationList()) {
+                if (calculation.getAlgorithmName().equals(algorithmName)) {
+                	
+                    // find the shape
+                    for (ReferencedGeometricShape shape : calculation
+                            .getReferencedGeometricShapeCollection()
+                            .getReferencedGeometricShapeList()) {
+
+                        if (shape.getReferencedShapeIdentifier() == shapeID) {
+                        	
+                            // for each calculation result
+                            for (CalculationResult result : calculation
+                                    .getCalculationResultCollection()
+                                    .getCalculationResultList()) {
+
+                                CalculationDataCollection dataCollection = new CalculationDataCollection();
+                                List<CalculationData> data = new ArrayList<CalculationData>();
+                                CalculationData calculationData = new CalculationData();
+                                
+                                //first line long axis and remove the others
+                                if (index < 4) {
+                                	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
+                                	coordslist.add(coords.get(index++));
+                                	coordslist.add(coords.get(index++));
+                                	double length = calculateLineLength(coordslist, pixelSpacingX,
+                        					pixelSpacingY);
+                                	
+                                	logger.info("length in shape modified: " + length);
+                                	coordslist.clear();
+                                    calculationData.setValue(length);
+                                    calculationData.setCagridId(0);
+                                    calculationData.addCoordinate(0, 0, 0);
+                                    data.add(calculationData);
+
+                                    dataCollection
+                                            .AddCalculationData(calculationData);
+                                    result.setCalculationDataCollection(dataCollection);
+                                }
+                            	
+
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+        }
+    	
     }
 
     // get the coordinates for a geometric shape
