@@ -46,6 +46,13 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
 *
 * @since 2.1.0
 */
+
+/**
+ * Retrieved from https://github.com/eclipse/hudson.support.gwt/blob/master/hudson-gwt-common/src/main/java/org/hudsonci/gwt/common/UUID.java
+ * at December 16, 2016
+ * @author emelalkim
+ *
+ */
 public class UUID4GWT
 {
    private static final char[] CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
