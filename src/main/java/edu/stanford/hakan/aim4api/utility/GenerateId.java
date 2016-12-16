@@ -36,9 +36,17 @@ import java.util.Random;
  * @author localadmin
  */
 public class GenerateId {
+	
+		// david clunie's code (modified version for gwt)
+	 	static public String getUUIDBasedOID() {
+	 		UUIDBasedOID uidgen=new UUIDBasedOID();
+	 		return uidgen.getOID();
+	 	}
         static public String getUUID() {
+        	System.out.println("uid:"+getUUIDBasedOID());
+            return getUUIDBasedOID();
             
-            return getDicomUUID();
+//            return getDicomUUID();
 //        String res = "";
 //        int idLenght = 40;
 //        Random randomGenerator = new Random();
