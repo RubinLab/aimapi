@@ -171,9 +171,10 @@ public class ImageAnnotation extends AnnotationEntity {
         if (this.markupEntityCollection.size() > 0) {
             res.appendChild(this.markupEntityCollection.getXMLNode(doc));
         }
-        if (this.imageAnnotationStatementCollection.size() > 0) {
-            res.appendChild(this.imageAnnotationStatementCollection.getXMLNode(doc));
-        }
+      //removing rdf statements. TODO download rdf
+//        if (this.imageAnnotationStatementCollection.size() > 0) {
+//            res.appendChild(this.imageAnnotationStatementCollection.getXMLNode(doc));
+//        }
         if (this.imageReferenceEntityCollection.size() > 0) {
             res.appendChild(this.imageReferenceEntityCollection.getXMLNode(doc));
         }
@@ -197,9 +198,10 @@ public class ImageAnnotation extends AnnotationEntity {
             if ("markupEntityCollection".equals(listChilds.item(i).getNodeName())) {
                 this.markupEntityCollection.setXMLNode(listChilds.item(i));
             }
-            if ("imageAnnotationStatementCollection".equals(listChilds.item(i).getNodeName())) {
-                this.imageAnnotationStatementCollection.setXMLNode(listChilds.item(i));
-            }
+            //removing rdf statements. TODO download rdf
+//            if ("imageAnnotationStatementCollection".equals(listChilds.item(i).getNodeName())) {
+//                this.imageAnnotationStatementCollection.setXMLNode(listChilds.item(i));
+//            }
             if ("imageReferenceEntityCollection".equals(listChilds.item(i).getNodeName())) {
                 this.imageReferenceEntityCollection.setXMLNode(listChilds.item(i));
             }
@@ -282,9 +284,10 @@ public class ImageAnnotation extends AnnotationEntity {
         if (this.getMarkupEntityCollection() != null) {
             res.setMarkupEntityCollection(this.getMarkupEntityCollection().getClone());
         }
-        if (this.getImageAnnotationStatementCollection() != null) {
-            res.setImageAnnotationStatementCollection(this.getImageAnnotationStatementCollection().getClone());
-        }
+      //removing rdf statements. TODO download rdf
+//        if (this.getImageAnnotationStatementCollection() != null) {
+//            res.setImageAnnotationStatementCollection(this.getImageAnnotationStatementCollection().getClone());
+//        }
         if (this.getImageReferenceEntityCollection() != null) {
             res.setImageReferenceEntityCollection(this.getImageReferenceEntityCollection().getClone());
         }
