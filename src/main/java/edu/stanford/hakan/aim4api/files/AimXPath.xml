@@ -1219,6 +1219,18 @@
 			<Property name="comment" type="ST" isa="isoClass" />
 		</Properties>
 	</Class>
+	<Class name="DicomSegmentationEntity" abstract="false" type="aim">
+		<Paths>
+			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/segmentationEntityCollection/SegmentationEntity[@xsi:type='DicomSegmentationEntity']/" />
+		</Paths>
+		<Properties>
+			<Property name="uniqueIdentifier" type="II" isa="isoClass" />
+			<Property name="sopInstanceUid" type="II" isa="isoClass" />
+			<Property name="sopClassUid" type="II" isa="isoClass" />
+			<Property name="referencedSopInstanceUid" type="II" isa="isoClass" />
+			<Property name="segmentNumber" type="ST" isa="isoClass" />
+		</Properties>
+	</Class>
 	<Class name="SegmentationEntity" abstract="true" type="aim">
 		<Paths>
 			<Path value="ImageAnnotationCollection/imageAnnotations/ImageAnnotation/segmentationEntityCollection/SegmentationEntity/" />

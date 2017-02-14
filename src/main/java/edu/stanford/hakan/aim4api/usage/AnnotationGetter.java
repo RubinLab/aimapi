@@ -945,6 +945,21 @@ public class AnnotationGetter {
         return listAnno;
     }
 
+    // *** SegmentationEntity.sopInstanceUid Equal
+    public static List<ImageAnnotationCollection> getImageAnnotationCollectionByDsoInstanceUIDEqual(String serverURL,
+            String namespace, String collection, String dbUserName, String dbUserPassword, String instanceUid)
+            throws AimException {
+        serverURL = Utility.correctToUrl(serverURL);
+        control(serverURL, namespace, collection);
+        if (instanceUid == null || "".equals(instanceUid.trim())) {
+            throw new AimException("AimException: instanceUid must be defined");
+        }
+
+        String aimQL = "SELECT FROM " + collection + " WHERE DicomSegmentationEntity.sopInstanceUid.root = '" + instanceUid + "'";
+        List<ImageAnnotationCollection> listAnno = getWithAimQuery(serverURL, namespace, dbUserName, dbUserPassword, aimQL, "");
+        return listAnno;
+    }
+    
     // *** ImageSeries.instanceUid Equal
     public static List<ImageAnnotationCollection> getImageAnnotationCollectionByImageSeriesInstanceUIDEqual(String serverURL,
             String namespace, String collection, String dbUserName, String dbUserPassword, String instanceUid)
