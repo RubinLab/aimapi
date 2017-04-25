@@ -141,7 +141,8 @@ public class Scale extends CharacteristicQuantification implements IAimXMLOperat
         res.setAnnotatorConfidence(this.getAnnotatorConfidence());//
         res.setComment(Converter.toST(this.getComment()));//
         res.setValue(Converter.toST(this.getValue()));//
-        res.setLabel(Converter.toST(this.getDescription())); //*** label-description
+        res.setLabel(Converter.toST(this.getName())); //*** label-name
+        res.setValueLabel(Converter.toST(this.getDescription())); //*** valuelabel-description
         res.setType(Enumerations.ScaleType.Nominal);
         return res;
     }
@@ -157,7 +158,11 @@ public class Scale extends CharacteristicQuantification implements IAimXMLOperat
             this.setComment(v4.getComment().getValue());
         }
         if (v4.getLabel() != null) {
-            this.setDescription(v4.getLabel().getValue());
+            this.setName(v4.getLabel().getValue());
+        }
+        
+        if (v4.getValueLabel() != null) {
+            this.setDescription(v4.getValueLabel().getValue());
         }
     }
 
