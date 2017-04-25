@@ -658,7 +658,10 @@ public class Component implements Serializable {
 			for (CharacteristicQuantification characteristicQuantification : imagingObservationCharacteristic
 					.getCharacteristicQuantificationCollection()
 					.getCharacteristicQuantificationList()) {
-				result.add(new Quantifier(characteristicQuantification));
+				Quantifier q=new Quantifier(characteristicQuantification);
+				if (q.getName()==null || q.getName().trim().equals(""))
+					q.setName(imagingObservationCharacteristic.getLabel());
+				result.add(q);
 			}
 			break;
 		default:
