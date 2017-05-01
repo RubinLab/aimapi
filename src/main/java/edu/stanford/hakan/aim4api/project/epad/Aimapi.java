@@ -141,4 +141,24 @@ public interface Aimapi {
 
 	boolean hasIOLabel(String label);
 
+	
+	/**
+	 * 3D version of addshapes
+	 * @param studyID
+	 * @param seriesID
+	 * @param imageID
+	 * @param activeImage
+	 * @param studyDate
+	 * @param studyTime
+	 * @param shapeType
+	 * @param coords
+	 * @param pixelSpacingX
+	 * @param pixelSpacingY
+	 * @param imageClassUID
+	 * @return
+	 */
+	int add3DShapes(String studyID, String seriesID, String imageID, int activeImage, String studyDate,
+			String studyTime, ShapeType shapeType, List<ThreeDCoordinate> coords, double pixelSpacingX,
+			double pixelSpacingY, String imageClassUID);
+
 }

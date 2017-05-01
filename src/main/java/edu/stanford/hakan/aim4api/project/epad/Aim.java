@@ -66,6 +66,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.SegmentationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinateCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.Spline;
+import edu.stanford.hakan.aim4api.compability.aimv3.ThreeDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.User;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
@@ -224,6 +225,62 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         addImageReference(createImageReference(studyUid, studyDate, studyTime));
 
     }
+    
+    
+ // add the shape to this aim
+    // one shape can turn into multiple geometric shapes
+    // also the line length calculation is added
+    @Override
+    public int add3DShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<ThreeDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
+        int frameID = 1;
+        int shapeID = getNextShapeID();
+
+        List<GeometricShape> shapes = create3DShapes(imageID, frameID, shapeType,
+                coords, pixelSpacingX, pixelSpacingY, shapeID);
+
+        // could have created multiple shapes
+        for (GeometricShape shape : shapes) {
+
+            shape.setIncludeFlag(true);
+
+            //ml add calculation only if it is a line
+            if (shapeType==ShapeType.LINE) {
+            	addLengthCalculation(
+                    calculate3DLineLength(get3DCoords(shape)), shape.getShapeIdentifier(), LINE_MEASURE);
+            }
+            else if (shapeType==ShapeType.NORMAL) {
+            	logger.info("ellipse");
+            	//first line long axis
+            	List<ThreeDCoordinate> coordslist = new ArrayList<ThreeDCoordinate>();
+            	coordslist.add(coords.get(0));
+            	coordslist.add(coords.get(1));
+            	double length = calculate3DLineLength(coordslist);
+            	logger.info("line length 1 : " + length);
+            	
+            	addLengthCalculation( 
+            			length, shape.getShapeIdentifier(), LINE_MEASURE);
+            	coordslist.clear();
+            	coordslist.add(coords.get(2));
+            	coordslist.add(coords.get(3));
+            	length = calculate3DLineLength(coordslist);
+            	logger.info("line length 2: " + length);
+            	addLengthCalculation( 
+            			length, shape.getShapeIdentifier(),LINE_MEASURE);
+            }
+
+            addGeometricShape(shape);
+        }
+
+        if (!hasImage(imageID)) {
+            updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
+                    studyTime, imageClassUID);
+        }
+
+        return shapeID;
+    }
 
     // add the shape to this aim
     // one shape can turn into multiple geometric shapes
@@ -283,6 +340,62 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         return shapeID;
     }
+    
+    public void set3DNormalLineLengths(int shapeID, String algorithmName, List<ThreeDCoordinate> coords) {
+   
+    	try {
+    		int index = 0;
+            // find the calculation for this algorithm
+            for (Calculation calculation : getCalculationCollection()
+                    .getCalculationList()) {
+                if (calculation.getAlgorithmName().equals(algorithmName)) {
+                	
+                    // find the shape
+                    for (ReferencedGeometricShape shape : calculation
+                            .getReferencedGeometricShapeCollection()
+                            .getReferencedGeometricShapeList()) {
+
+                        if (shape.getReferencedShapeIdentifier() == shapeID) {
+                        	
+                            // for each calculation result
+                            for (CalculationResult result : calculation
+                                    .getCalculationResultCollection()
+                                    .getCalculationResultList()) {
+
+                                CalculationDataCollection dataCollection = new CalculationDataCollection();
+                                List<CalculationData> data = new ArrayList<CalculationData>();
+                                CalculationData calculationData = new CalculationData();
+                                
+                                //first line long axis and remove the others
+                                if (index < 4) {
+                                	List<ThreeDCoordinate> coordslist = new ArrayList<ThreeDCoordinate>();
+                                	coordslist.add(coords.get(index++));
+                                	coordslist.add(coords.get(index++));
+                                	double length = calculate3DLineLength(coordslist);
+                                	
+                                	logger.info("length in shape modified: " + length);
+                                	coordslist.clear();
+                                    calculationData.setValue(length);
+                                    calculationData.setCagridId(0);
+                                    calculationData.addCoordinate(0, 0, 0);
+                                    data.add(calculationData);
+
+                                    dataCollection
+                                            .AddCalculationData(calculationData);
+                                    result.setCalculationDataCollection(dataCollection);
+                                }
+                            	
+
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+        }
+    	
+    }
+
     
     public void setNormalLineLengths(int shapeID, String algorithmName, List<TwoDCoordinate> coords,
     		double pixelSpacingX, double pixelSpacingY) {
@@ -349,6 +462,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             if (coord instanceof TwoDimensionSpatialCoordinate) {
                 result.add(new TwoDCoordinate(
                         (TwoDimensionSpatialCoordinate) coord));
+            }
+        }
+        return result;
+    }
+    
+ // get the coordinates for a geometric shape
+    private List<ThreeDCoordinate> get3DCoords(GeometricShape shape) {
+        List<ThreeDCoordinate> result = new ArrayList<ThreeDCoordinate>();
+        for (SpatialCoordinate coord : shape.getSpatialCoordinateCollection()
+                .getSpatialCoordinateList()) {
+            if (coord instanceof ThreeDimensionSpatialCoordinate) {
+                result.add(new ThreeDCoordinate(
+                        (ThreeDimensionSpatialCoordinate) coord));
             }
         }
         return result;
@@ -515,6 +641,120 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return entity;
     }
 
+    
+    /* start of 3D create shape */
+    private List<GeometricShape> create3DShapes(String imageID, int frameID,
+            ShapeType shapeType, List<ThreeDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY, int shapeID) {
+
+        // logger.info("createShapes " + shapeType);
+        // build the shapes
+        List<GeometricShape> shapes = new ArrayList<GeometricShape>();
+
+        if (shapeType != null) {
+
+            switch (shapeType) {
+
+                case POINT:
+                    Point point = new Point();
+                    point.setShapeIdentifier(shapeID);
+                    point.setCagridId(caGridId);
+                    shapes.add(create3DShape(point, coords, imageID, frameID));
+                    break;
+
+                case LINE:
+                case OPENPOLY:
+                    MultiPoint multiPoint = new MultiPoint();
+                    multiPoint.setShapeIdentifier(shapeID);
+                    multiPoint.setCagridId(caGridId);
+                    GeometricShape shape = create3DShape(multiPoint, coords, imageID,
+                            frameID);
+                    shapes.add(shape);
+                    shape.setShapeIdentifier(shapeID);
+
+                    break;
+                case POLY:
+                case RECTANGLE:
+                    Polyline polyline = new Polyline();
+                    polyline.setShapeIdentifier(shapeID);
+                    polyline.setCagridId(caGridId);
+                    shapes.add(create3DShape(polyline, coords, imageID, frameID));
+                    break;
+                case SPLINE:
+//                case OPENSPLINE:
+                    Spline spline = new Spline();
+                    spline.setShapeIdentifier(shapeID);
+                    spline.setCagridId(caGridId);
+                    shapes.add(create3DShape(spline, coords, imageID, frameID));
+                    break;
+                case CIRCLE:
+                    Circle circle = new Circle();
+                    circle.setShapeIdentifier(shapeID);
+                    circle.setCagridId(caGridId);
+                    shapes.add(create3DShape(circle, coords, imageID, frameID));
+                    break;
+                case NORMAL:
+                	//add the coorinates to the ellipse shape
+                	Ellipse ellipse = new Ellipse();
+                	ellipse.setShapeIdentifier(shapeID);;
+                	ellipse.setCagridId(caGridId);
+                	shapes.add(create3DShape(ellipse, coords, imageID, frameID));
+                	
+                    // add the long axis line
+                    /*List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
+                    longAxis.add(coords.get(0));
+                    longAxis.add(coords.get(1));
+                    MultiPoint longShape = new MultiPoint();
+                    longShape.setShapeIdentifier(shapeID++);
+                    longShape.setCagridId(caGridId);
+                    GeometricShape l = createShape(longShape, longAxis, imageID,
+                            frameID);
+                    shapes.add(l);
+
+                    // add the short axis line
+                    List<TwoDCoordinate> shortAxis = new ArrayList<TwoDCoordinate>();
+                    shortAxis.add(coords.get(2));
+                    shortAxis.add(coords.get(3));
+                    MultiPoint shortShape = new MultiPoint();
+                    shortShape.setShapeIdentifier(shapeID);
+                    shortShape.setCagridId(caGridId);
+                    GeometricShape s = createShape(shortShape, shortAxis, imageID,
+                            frameID);
+                    shapes.add(s);*/
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return shapes;
+    }
+
+    private GeometricShape create3DShape(GeometricShape shape,
+            List<ThreeDCoordinate> coords, String imageUid, int frame) {
+
+        logger.info("createShape " + shape.getXsiType());
+        // put the coords into the shape
+        for (int i = 0; i < coords.size(); i++) {
+            ThreeDimensionSpatialCoordinate coord = coords.get(i);
+            //TODO
+            //frame of reference
+            String frameOfRefUID="";
+            //fiducial
+//            coord.setImageReferenceUID(imageUid);
+//            coord.setReferencedFrameNumber(frame);
+            coord.setCoordinateIndex(i);
+            
+            shape.addSpatialCoordinate(new ThreeDimensionSpatialCoordinate(
+                    caGridId, i, coord.getX(), coord.getY(), coord.getZ(),frameOfRefUID));
+        }
+        return shape;
+
+    }
+    
+    /*  end of 3d create*/
+    
     private List<GeometricShape> createShapes(String imageID, int frameID,
             ShapeType shapeType, List<TwoDCoordinate> coords,
             double pixelSpacingX, double pixelSpacingY, int shapeID) {
@@ -1499,6 +1739,28 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
         return result;
     }
+    
+    
+    /**
+     * calculate the line length on 3D coordinates.
+     * Does not need pixel spacing as 3D coordinates are assumed to be world coordinates
+     * @param coords
+     * @return
+     */
+    private double calculate3DLineLength(List<ThreeDCoordinate> coords) {
+
+        double result = 0.0;
+        if (coords.size() == 2) {
+            double length = Math.abs(coords.get(0).getX()
+                    - coords.get(1).getX());
+            double width = Math
+                    .abs(coords.get(0).getY() - coords.get(1).getY());
+            double depth = Math
+                    .abs(coords.get(0).getZ() - coords.get(1).getZ());
+            return Math.sqrt(length * length + width * width + depth* depth);
+        }
+        return result;
+    }
 
 //	public Aim cloneAim(SeriesView seriesView, DicomSeries activeSeries,
 //			int index) {
@@ -1677,6 +1939,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     }
     public void addMaxCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,MAX, "G-A437");
+    }
+    
+    public void addLengthCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,LINE_LENGTH, "G-D7FE");
     }
         
     public void addCalculation(double value, Integer shapeId, String units, String name, String code) {

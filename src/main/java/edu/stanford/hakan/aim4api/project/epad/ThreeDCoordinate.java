@@ -24,7 +24,7 @@ public class ThreeDCoordinate extends ThreeDimensionSpatialCoordinate implements
 
 		
 		setFrameOfReferenceUID(c.getFrameOfReferenceUID());
-		this.setFiducialUid(c.getFiducialUid());
+		setFiducialUid(c.getFiducialUid());
 		setX(c.getX());
 		setY(c.getY());
 		setZ(c.getY());
