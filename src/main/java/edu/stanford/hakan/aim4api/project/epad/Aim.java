@@ -231,15 +231,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     // one shape can turn into multiple geometric shapes
     // also the line length calculation is added
     @Override
-    public int add3DShapes(String studyID, String seriesID, String imageID,
-            int activeImage, String studyDate, String studyTime,
+    public int add3DShapes(String studyID, String seriesID, String imageID, 
+    		String studyDate, String studyTime,
             ShapeType shapeType, List<ThreeDCoordinate> coords,
-            double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
-        int frameID = 1;
+            String imageClassUID, String frameOfRefUID, String fiducialUID) {
         int shapeID = getNextShapeID();
 
-        List<GeometricShape> shapes = create3DShapes(imageID, frameID, shapeType,
-                coords, pixelSpacingX, pixelSpacingY, shapeID);
+        List<GeometricShape> shapes = create3DShapes(shapeType,
+                coords, shapeID, frameOfRefUID, fiducialUID);
 
         // could have created multiple shapes
         for (GeometricShape shape : shapes) {
@@ -275,7 +274,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
 
         if (!hasImage(imageID)) {
-            updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
+            updateImageID(studyID, seriesID, imageID, studyDate,
                     studyTime, imageClassUID);
         }
 
@@ -334,7 +333,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
 
         if (!hasImage(imageID)) {
-            updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
+            updateImageID(studyID, seriesID, imageID, studyDate,
                     studyTime, imageClassUID);
         }
 
@@ -573,7 +572,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     // imageID
     // turn a study or series reference into the image reference if possible
     private void updateImageID(String studyID, String seriesID, String imageID,
-            int activeImage, String studyDate, String studyTime,  String imageClassUID) {
+            String studyDate, String studyTime,  String imageClassUID) {
 
         for (ImageReference imageReference : getImageReferenceCollection()
                 .getImageReferenceList()) {
@@ -643,9 +642,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     
     /* start of 3D create shape */
-    private List<GeometricShape> create3DShapes(String imageID, int frameID,
+    private List<GeometricShape> create3DShapes(
             ShapeType shapeType, List<ThreeDCoordinate> coords,
-            double pixelSpacingX, double pixelSpacingY, int shapeID) {
+            int shapeID, String frameOfRefUID, String fiducialUID) {
 
         // logger.info("createShapes " + shapeType);
         // build the shapes
@@ -659,7 +658,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     Point point = new Point();
                     point.setShapeIdentifier(shapeID);
                     point.setCagridId(caGridId);
-                    shapes.add(create3DShape(point, coords, imageID, frameID));
+                    shapes.add(create3DShape(point, coords, frameOfRefUID, fiducialUID));
                     break;
 
                 case LINE:
@@ -667,8 +666,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     MultiPoint multiPoint = new MultiPoint();
                     multiPoint.setShapeIdentifier(shapeID);
                     multiPoint.setCagridId(caGridId);
-                    GeometricShape shape = create3DShape(multiPoint, coords, imageID,
-                            frameID);
+                    GeometricShape shape = create3DShape(multiPoint, coords,  frameOfRefUID, fiducialUID);
                     shapes.add(shape);
                     shape.setShapeIdentifier(shapeID);
 
@@ -678,27 +676,27 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     Polyline polyline = new Polyline();
                     polyline.setShapeIdentifier(shapeID);
                     polyline.setCagridId(caGridId);
-                    shapes.add(create3DShape(polyline, coords, imageID, frameID));
+                    shapes.add(create3DShape(polyline, coords, frameOfRefUID, fiducialUID));
                     break;
                 case SPLINE:
 //                case OPENSPLINE:
                     Spline spline = new Spline();
                     spline.setShapeIdentifier(shapeID);
                     spline.setCagridId(caGridId);
-                    shapes.add(create3DShape(spline, coords, imageID, frameID));
+                    shapes.add(create3DShape(spline, coords, frameOfRefUID, fiducialUID));
                     break;
                 case CIRCLE:
                     Circle circle = new Circle();
                     circle.setShapeIdentifier(shapeID);
                     circle.setCagridId(caGridId);
-                    shapes.add(create3DShape(circle, coords, imageID, frameID));
+                    shapes.add(create3DShape(circle, coords, frameOfRefUID, fiducialUID));
                     break;
                 case NORMAL:
                 	//add the coorinates to the ellipse shape
                 	Ellipse ellipse = new Ellipse();
                 	ellipse.setShapeIdentifier(shapeID);;
                 	ellipse.setCagridId(caGridId);
-                	shapes.add(create3DShape(ellipse, coords, imageID, frameID));
+                	shapes.add(create3DShape(ellipse, coords, frameOfRefUID, fiducialUID));
                 	
                     // add the long axis line
                     /*List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
@@ -732,18 +730,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     }
 
     private GeometricShape create3DShape(GeometricShape shape,
-            List<ThreeDCoordinate> coords, String imageUid, int frame) {
+            List<ThreeDCoordinate> coords, String frameOfRefUID, String fiducialUID) {
 
         logger.info("createShape " + shape.getXsiType());
         // put the coords into the shape
         for (int i = 0; i < coords.size(); i++) {
             ThreeDimensionSpatialCoordinate coord = coords.get(i);
-            //TODO
-            //frame of reference
-            String frameOfRefUID="";
-            //fiducial
-//            coord.setImageReferenceUID(imageUid);
-//            coord.setReferencedFrameNumber(frame);
+            coord.setFrameOfReferenceUID(frameOfRefUID);
+            coord.setFiducialUid(fiducialUID);
             coord.setCoordinateIndex(i);
             
             shape.addSpatialCoordinate(new ThreeDimensionSpatialCoordinate(
