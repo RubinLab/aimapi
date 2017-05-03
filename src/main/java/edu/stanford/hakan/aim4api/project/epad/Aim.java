@@ -165,6 +165,38 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         addPerson(createPerson(patientName, patientId, patientSex,
                 patientBirthdate));
+        //ml tested original/displayid with this
+//        addPerson(createPerson(patientName, patientId, patientSex,
+//                patientBirthdate,patientId+"orj"));
+        addEquipment(createEquipment(manufacturerName, model, version));
+
+        // don't add the image reference yet, we don't have any shapes or segs
+        addImageReference(createImageReference(studyUid, seriesUid, imageUid,
+                studyDate, studyTime, imageClassUid)); //ml imageclassuid added
+
+        addAnatomicEntity(createAnatomicEntity());
+
+    }
+    
+ // build the new imageAnnotation
+    public Aim(String name, String modality, String description,
+            String patientName, String patientId, String patientSex,
+            String patientBirthdate, String manufacturerName, String model,
+            String version, int activeImage, LoggedInUser user,
+            String imageUid, String seriesUid, String studyUid,
+            String studyDate, String studyTime, String imageClassUid, String originalPatientId) { //ml imageclassuid added
+
+        super();
+
+        setName(name);
+        setDateTime(todaysDate());
+        setCagridId(caGridId);
+        setComment(fillComment(modality, description, activeImage));
+
+        addUser(user);
+
+        addPerson(createPerson(patientName, patientId, patientSex,
+                patientBirthdate, originalPatientId));
         addEquipment(createEquipment(manufacturerName, model, version));
 
         // don't add the image reference yet, we don't have any shapes or segs
@@ -400,6 +432,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         person.setCagridId(caGridId);
         person.setName(name);
         person.setId(id);
+        person.setSex(sex);
+        return person;
+    }
+ // create a person object for this aim
+    public Person createPerson(String name, String id, String sex,
+            String birthdate, String originalId) {
+
+        Person person = new Person();
+        person.setBirthDate(birthdate);
+        person.setCagridId(caGridId);
+        person.setName(name);
+        person.setId(id);
+        person.setOriginalId(originalId);
         person.setSex(sex);
         return person;
     }
