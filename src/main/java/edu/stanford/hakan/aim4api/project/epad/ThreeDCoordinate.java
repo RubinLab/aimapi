@@ -10,7 +10,6 @@ import edu.stanford.hakan.aim4api.compability.aimv3.ThreeDimensionSpatialCoordin
  *
  */
 public class ThreeDCoordinate extends ThreeDimensionSpatialCoordinate implements Serializable {
-
 	public ThreeDCoordinate() {
 		super();
 	}
@@ -27,7 +26,9 @@ public class ThreeDCoordinate extends ThreeDimensionSpatialCoordinate implements
 		setFiducialUid(c.getFiducialUid());
 		setX(c.getX());
 		setY(c.getY());
-		setZ(c.getY());
+		setZ(c.getZ());
+		
+		
 	}
 	
 	public ThreeDCoordinate(Double x, Double y, Double z) {

@@ -29,6 +29,7 @@ import java.util.List;
 
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShape;
 import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinate;
+import edu.stanford.hakan.aim4api.compability.aimv3.ThreeDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 
@@ -68,9 +69,26 @@ public class Shape extends GeometricShape {
 				result.add(new TwoDCoordinate(
 						(TwoDimensionSpatialCoordinate) coord));
 			}
+			//TODO this shouldn't be here. it is loosing z dimension
+			//this was added to make the old viewer draw the shape as everything is based on TwoDCoordinate
+			if (coord instanceof ThreeDimensionSpatialCoordinate) {
+                result.add(new TwoDCoordinate(((ThreeDimensionSpatialCoordinate) coord).getX(),((ThreeDimensionSpatialCoordinate) coord).getY()));
+            }
 		}
 		return result;
 	}
+	
+	public List<ThreeDCoordinate> get3DCoords() {
+        List<ThreeDCoordinate> result = new ArrayList<ThreeDCoordinate>();
+        for (SpatialCoordinate coord : getSpatialCoordinateCollection()
+                .getSpatialCoordinateList()) {
+            if (coord instanceof ThreeDimensionSpatialCoordinate) {
+                result.add(new ThreeDCoordinate(
+                        (ThreeDimensionSpatialCoordinate) coord));
+            }
+        }
+        return result;
+    }
 
 	public ShapeType getShapeType() {
 

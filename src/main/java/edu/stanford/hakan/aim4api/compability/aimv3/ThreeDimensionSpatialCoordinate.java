@@ -40,7 +40,6 @@ import org.w3c.dom.Node;
  * @author Hakan BULU
  */
 public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implements IAimXMLOperations {
-
     private Double x;
     private Double y;
     private Double z;
@@ -55,9 +54,9 @@ public class ThreeDimensionSpatialCoordinate extends SpatialCoordinate implement
 
         setCagridId(cagridId);
         setCoordinateIndex(coordinateIndex);
-        this.x = x;
-        this.y = y;
-        this.y = z;
+        setX(x);
+        setY(y);
+        setZ(z);
         this.frameOfReferenceUID = frameOfReferenceUID;
         setXsiType("ThreeDimensionSpatialCoordinate");
     }

@@ -236,7 +236,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             ShapeType shapeType, List<ThreeDCoordinate> coords,
             String imageClassUID, String frameOfRefUID, String fiducialUID) {
         int shapeID = getNextShapeID();
-
+        
         List<GeometricShape> shapes = create3DShapes(shapeType,
                 coords, shapeID, frameOfRefUID, fiducialUID);
 
@@ -739,9 +739,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             coord.setFrameOfReferenceUID(frameOfRefUID);
             coord.setFiducialUid(fiducialUID);
             coord.setCoordinateIndex(i);
-            
-            shape.addSpatialCoordinate(new ThreeDimensionSpatialCoordinate(
-                    caGridId, i, coord.getX(), coord.getY(), coord.getZ(),frameOfRefUID));
+            coord.setCagridId(caGridId);
+            shape.addSpatialCoordinate(coord);
         }
         return shape;
 
