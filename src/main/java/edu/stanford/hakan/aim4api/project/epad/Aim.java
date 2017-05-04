@@ -1021,6 +1021,21 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return result;
 
     }
+    
+    @Override
+    public String getOriginalPatientID() {
+        String result = "";
+        try {
+            result= getListPerson().get(0).getOriginalId();
+            if (result==null)
+            	return getPatientID();
+
+        } catch (Exception e) {
+            logger.info("Error: Aim getOriginalPatientId " + e.getMessage());
+        }
+        return result;
+
+    }
 
     @Override
     public String getIOCodeValue(String label) {
