@@ -444,7 +444,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         person.setCagridId(caGridId);
         person.setName(name);
         person.setId(id);
-        person.setOriginalId(originalId);
+        if (!id.equalsIgnoreCase(originalId))
+        	person.setOriginalId(originalId);
         person.setSex(sex);
         return person;
     }
