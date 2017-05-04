@@ -91,9 +91,11 @@ public class XML {
     }
 
     public static void setBaseAttributes(Element root) {
-        root.setAttribute("xmlns", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");
+    	String namespaceV4 = Globals.getNamespace();
+        root.setAttribute("xmlns", namespaceV4);
         root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        root.setAttribute("xsi:schemaLocation", "gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM AIM_v4_rv44_XML.xsd");
+        String xsdFileV4 = Globals.getXsdFileName();
+        root.setAttribute("xsi:schemaLocation", namespaceV4+" "+xsdFileV4);
         root.setAttribute("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
     }
 }
