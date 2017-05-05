@@ -42,6 +42,7 @@ public class Person implements IAimXMLOperations {
     private Integer cagridId;
     private String name;
     private String id;
+    private String originalId;
     private String birthDate;
     private String sex;
     private String ethnicGroup;
@@ -105,6 +106,13 @@ public class Person implements IAimXMLOperations {
         this.name = name;
     }
 
+    public String getOriginalId() {
+        return originalId;
+    }
+
+    public void setOriginalId(String originalId) {
+        this.originalId = originalId;
+    }
     public String getSex() {
         return sex;
     }
@@ -156,6 +164,9 @@ public class Person implements IAimXMLOperations {
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
         this.name = map.getNamedItem("name").getNodeValue();
         this.id = map.getNamedItem("id").getNodeValue();
+        if (map.getNamedItem("originalId") != null) {
+            this.originalId = map.getNamedItem("originalId").getNodeValue();
+        }
         if (map.getNamedItem("birthDate") != null) {
             this.birthDate = map.getNamedItem("birthDate").getNodeValue();
         }
@@ -190,6 +201,9 @@ public class Person implements IAimXMLOperations {
         if (this.id == null ? oth.id != null : !this.id.equals(oth.id)) {
             return false;
         }
+        if (this.originalId == null ? oth.originalId != null : !this.originalId.equals(oth.originalId)) {
+            return false;
+        }
         if (this.birthDate == null ? oth.birthDate != null : !this.birthDate.equals(oth.birthDate)) {
             return false;
         }
@@ -207,6 +221,8 @@ public class Person implements IAimXMLOperations {
         res.setBirthDate(this.getBirthDate());//
         res.setEthnicGroup(Converter.toST(this.getEthnicGroup()));//
         res.setId(Converter.toST(this.getId()));//
+        if (this.getOriginalId()!=null)
+        	res.setOriginalId(Converter.toST(this.getOriginalId()));//
         res.setName(Converter.toST(this.getName()));//
         res.setSex(Converter.toST(this.getSex()));
         return res;
@@ -220,6 +236,9 @@ public class Person implements IAimXMLOperations {
         }
         if (v4.getId() != null) {
             this.setId(v4.getId().getValue());
+        }
+        if (v4.getOriginalId() != null) {
+            this.setOriginalId(v4.getOriginalId().getValue());
         }
         if (v4.getName() != null) {
             this.setName(v4.getName().getValue());
@@ -239,6 +258,9 @@ public class Person implements IAimXMLOperations {
         }
         if (this.id != null) {
             res.id = this.id;
+        }
+        if (this.originalId != null) {
+            res.originalId = this.originalId;
         }
         if (this.birthDate != null) {
             res.birthDate = this.birthDate;

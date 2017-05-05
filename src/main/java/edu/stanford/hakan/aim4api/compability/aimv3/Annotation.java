@@ -166,10 +166,16 @@ public class Annotation implements IAimXMLOperations, IAnnotation,Serializable  
     public CalculationCollection getCalculationCollection() {
         return calculationCollection;
     }
+    
 
     @Override
     public void setCalculationCollection(CalculationCollection calculationCollection) {
         this.calculationCollection = calculationCollection;
+    }
+    
+    @Override
+    public void clearCalculation() {
+    	this.calculationCollection =  new CalculationCollection();
     }
 
     @Override

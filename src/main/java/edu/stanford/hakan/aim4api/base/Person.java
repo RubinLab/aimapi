@@ -40,6 +40,7 @@ public class Person implements IAimXMLOperations {
 
     private ST name;
     private ST id;
+    private ST originalId;
     private String birthDate;
     private ST sex;
     private ST ethnicGroup;
@@ -62,6 +63,14 @@ public class Person implements IAimXMLOperations {
     public void setId(ST id) {
         id.setTagName("id");
         this.id = id;
+    }
+    public ST getOriginalId() {
+        return originalId;
+    }
+
+    public void setOriginalId(ST originalId) {
+        originalId.setTagName("originalId");
+        this.originalId = originalId;
     }
 
     public String getBirthDate() {
@@ -110,6 +119,9 @@ public class Person implements IAimXMLOperations {
         if (this.id != null) {
             res.appendChild(this.id.getXMLNode(doc));
         }
+        if (this.originalId != null) {
+            res.appendChild(this.originalId.getXMLNode(doc));
+        }
         if (this.birthDate != null) {
             Element el_birthDate = doc.createElement("birthDate");
             el_birthDate.setAttribute("value", this.birthDate.toString());
@@ -138,6 +150,11 @@ public class Person implements IAimXMLOperations {
                 ST obj = new ST();
                 obj.setXMLNode(currentNode);
                 this.setId(obj);
+            }
+            if ("originalId".equals(currentNode.getNodeName())) {
+                ST obj = new ST();
+                obj.setXMLNode(currentNode);
+                this.setOriginalId(obj);
             }
             if ("birthDate".equals(currentNode.getNodeName())) {
                 this.birthDate = currentNode.getAttributes().getNamedItem("value").getNodeValue();
@@ -182,6 +199,9 @@ public class Person implements IAimXMLOperations {
         if (this.id == null ? oth.id != null : !this.id.isEqualTo(oth.id)) {
             return false;
         }
+        if (this.originalId == null ? oth.originalId != null : !this.originalId.isEqualTo(oth.originalId)) {
+            return false;
+        }
         if (this.birthDate == null ? oth.birthDate != null : !this.birthDate.equals(oth.birthDate)) {
             return false;
         }
@@ -201,6 +221,9 @@ public class Person implements IAimXMLOperations {
         }
         if (this.getId() != null) {
             res.setId(this.getId().getClone());
+        }
+        if (this.getOriginalId() != null) {
+            res.setOriginalId(this.getOriginalId().getClone());
         }
         if (this.getBirthDate() != null) {
             res.setBirthDate(this.getBirthDate());

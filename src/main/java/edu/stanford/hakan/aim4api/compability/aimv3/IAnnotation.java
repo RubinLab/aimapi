@@ -125,4 +125,6 @@ public interface IAnnotation extends Serializable {
     public void setOntologyPrefix(String Prefix);
 
     public String getOntologyPrefix();
+
+	void clearCalculation();
 }

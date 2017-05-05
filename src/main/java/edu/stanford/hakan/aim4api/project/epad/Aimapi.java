@@ -141,4 +141,7 @@ public interface Aimapi {
 
 	boolean hasIOLabel(String label);
 
+	//get the original id.
+	String getOriginalPatientID();
+
 }
