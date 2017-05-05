@@ -14,13 +14,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Hakan
@@ -37,6 +33,21 @@ public class Globals {
         return splineFlag;
     }
 
+    public static String getNamespace() {
+    	String namespaceV4="gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM";
+        try{ 
+        	namespaceV4=EPADConfig.getInstance().getStringPropertyValue("namespaceV4");
+        }catch(Exception e){Logger.write("Couldn't read from proxy-config. Using default namespace gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM");}
+        return namespaceV4;
+    }
+    
+    public static String getXsdFileName() {
+        String xsdFileV4= "AIM_v4_rv44_XML.xsd";
+	    try{ 
+	    	xsdFileV4=EPADConfig.getInstance().getStringPropertyValue("xsdFileV4");
+	    }catch(Exception e){Logger.write("Couldn't read from proxy-config. Using default xsdfile AIM_v4_rv44_XML.xsd");}
+    	return xsdFileV4;
+    }
     public static String getAimQLXmlFilePath() {
         List<String> listResources = new ArrayList<>();
         List<String> listConfigVariables = new ArrayList<>();

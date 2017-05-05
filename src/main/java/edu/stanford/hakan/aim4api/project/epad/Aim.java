@@ -26,6 +26,7 @@ package edu.stanford.hakan.aim4api.project.epad;
 //import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
@@ -104,6 +105,11 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private static final String VERSION = "1.0";
     
 
+    public Aim(ImageAnnotationCollection iac)
+	{
+		super(iac);
+	}
+    
     public Aim() {
     }
 
@@ -118,7 +124,16 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         setCagridId(caGridId);
         setAimVersion(ia.getAimVersion(), "al536anhb55555");
         setComment(ia.getComment());
-        setDateTime(ia.getDateTime());
+        //ml from Aim44
+        logger.warning("date is:" + ia.getDateTime());
+		String date=ia.getDateTime();
+		if (!ia.getDateTime().contains("-")) {//new format change to old
+			if (date.length()==14)
+				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8)+"T"+date.substring(8,10)+":"+date.substring(10,12)+":"+date.substring(12,14);
+			else
+				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
+		}
+		setDateTime(date);
         setName(ia.getName());
         setUniqueIdentifier(ia.getUniqueIdentifier(), "al536anhb55555");
         setCodeValue(ia.getCodeValue());
@@ -256,6 +271,25 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         addImageReference(createImageReference(studyUid, studyDate, studyTime));
 
     }
+    
+    //ml from Aim4
+    public List<String> getSeriesIDs() {
+		List<String> results = new ArrayList<String>();
+
+		try {
+			List<ImageReference> imageList = getImageReferenceCollection()
+					.getImageReferenceList();
+			for (ImageReference imageReference: imageList) {
+				DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
+				ImageStudy imageStudy = dicomImageReference.getImageStudy();
+				ImageSeries imageSeries = imageStudy.getImageSeries();
+				results.add(imageSeries.getInstanceUID());
+			}
+		} catch (Exception e) {
+			logger.info("error: getting series ids "+e.getMessage());
+		}
+		return results;
+	}
 
     // add the shape to this aim
     // one shape can turn into multiple geometric shapes
@@ -444,7 +478,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         person.setCagridId(caGridId);
         person.setName(name);
         person.setId(id);
-        person.setOriginalId(originalId);
+        if (!id.equalsIgnoreCase(originalId))
+        	person.setOriginalId(originalId);
         person.setSex(sex);
         return person;
     }
@@ -2332,7 +2367,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         Person person = getFirstPerson();
         person.setName(patient.getName());
         person.setId(patient.getId());
-        person.setSex(patient.getSex());
+        //ml originalid
+        person.setOriginalId(patient.getOriginalId());
+		person.setSex(patient.getSex());
         person.setBirthDate(patient.getBirthDate());
 
     }

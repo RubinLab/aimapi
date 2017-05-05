@@ -221,7 +221,8 @@ public class Person implements IAimXMLOperations {
         res.setBirthDate(this.getBirthDate());//
         res.setEthnicGroup(Converter.toST(this.getEthnicGroup()));//
         res.setId(Converter.toST(this.getId()));//
-        res.setOriginalId(Converter.toST(this.getOriginalId()));//
+        if (this.getOriginalId()!=null)
+        	res.setOriginalId(Converter.toST(this.getOriginalId()));//
         res.setName(Converter.toST(this.getName()));//
         res.setSex(Converter.toST(this.getSex()));
         return res;
