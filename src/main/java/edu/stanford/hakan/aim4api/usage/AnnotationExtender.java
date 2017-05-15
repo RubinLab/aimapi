@@ -93,6 +93,11 @@ public class AnnotationExtender {
 	 */
 	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double featureValue, CD feature, double featureVersion, CD calcCD, String label) throws AimException {
 		
+       return addFeature(imageAnnotationCollection, featureValue, feature, featureVersion, calcCD, label, null);
+    }
+	
+	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double featureValue, CD feature, double featureVersion, CD calcCD, String label, String unit) throws AimException {
+		
         ImageAnnotation imageAnnotation = new ImageAnnotation(imageAnnotationCollection);
 
        
@@ -101,7 +106,7 @@ public class AnnotationExtender {
         if (calculation != null) {
         	calculation.getCalculationResultCollection().getCalculationResultList().get(0).getCalculationDataCollection().getCalculationDataList().get(0).setValue(featureValue);
         } else {
-            imageAnnotation.addCalculation(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD, label));
+            imageAnnotation.addCalculation(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD, label, unit));
         }
             
         return imageAnnotation.toAimV4();
@@ -186,6 +191,11 @@ public class AnnotationExtender {
      */
     private static Calculation createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label) throws AimException {
     	
+    	return createCalculationForFeature(iac, featureValue, feature, parentCD, label, "ratio");
+    }
+    
+    private static Calculation createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label, String unit) throws AimException {
+    	
     	Calculation calculation = new Calculation();
     	
     	calculation.setCagridId(0);
@@ -212,7 +222,9 @@ public class AnnotationExtender {
         CalculationResult calculationResult = new CalculationResult();
         calculationResult.setCagridId(0);
         calculationResult.setType(CalculationResultIdentifier.Scalar);
-        calculationResult.setUnitOfMeasure("ratio");
+        if (unit==null)
+        	unit="ratio";
+        calculationResult.setUnitOfMeasure(unit);
         //ml double
         calculationResult.setDataType("99EPADD1");;
         calculationResult.setNumberOfDimensions(1);
