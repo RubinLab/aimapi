@@ -144,4 +144,14 @@ public interface Aimapi {
 	//get the original id.
 	String getOriginalPatientID();
 
+	/**
+	 * fill in the study info for the series
+	 * @param seriesID
+	 * @param studyID
+	 * @param startDate
+	 * @param startTime
+	 * @return
+	 */
+	String setStudyID(String seriesID, String studyID, String startDate, String startTime);
+
 }

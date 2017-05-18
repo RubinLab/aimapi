@@ -103,6 +103,14 @@ public class TwoDimensionSpline extends TwoDimensionGeometricShapeEntity {
         }
         this.setXsiType("TwoDimensionSpline");
     }
+    
+    public void setUniqueIdentifier() {
+        super.setUniqueIdentifier();
+        String uid = super.getUniqueIdentifier().getRoot();
+        if (!uid.contains(Globals.getSplineFlag())) {
+            super.setUniqueIdentifier(new II(uid + Globals.getSplineFlag()));
+        }
+    }
 
     @Override
     public Node getXMLNode(Document doc) throws AimException {

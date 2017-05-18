@@ -913,6 +913,31 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
         return result;
     }
+    
+    @Override
+    public String setStudyID(String seriesID, String studyID, String startDate, String startTime) {
+
+        String result = "";
+        try {
+
+            for (ImageReference imageReference : getImageReferenceCollection()
+                    .getImageReferenceList()) {
+
+                DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
+
+                if (dicomImageReference.getImageStudy().getImageSeries()
+                        .getInstanceUID().equals(seriesID)) {
+                    dicomImageReference.getImageStudy()
+                            .setInstanceUID(studyID);
+                    dicomImageReference.getImageStudy().setStartDate(startDate);
+                    dicomImageReference.getImageStudy().setStartTime(startTime);
+                    break;
+                }
+            }
+        } finally {
+        }
+        return result;
+    }
 
     // @Override
     // public double getLineLength() {
