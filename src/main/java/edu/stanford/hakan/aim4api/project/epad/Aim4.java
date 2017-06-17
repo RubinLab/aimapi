@@ -118,7 +118,11 @@ import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageSeries;
 import edu.stanford.hakan.aim4api.base.ImageStudy;
+import edu.stanford.hakan.aim4api.base.Person;
+import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.SegmentationEntity;
+import edu.stanford.hakan.aim4api.compability.aimv3.DICOMImageReference;
+import edu.stanford.hakan.aim4api.compability.aimv3.ImageReference;
 
 /**
  * 
@@ -452,7 +456,45 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		}
 		return id;
 	}
+	public String getComment(){
+		return getImageAnnotation().getComment().getValue();
+	}
 
+
+	public void setPatient(Patient patient) {
+		Person person = getPerson();
+        person.setName(new ST(patient.getName()));
+        person.setId(new ST(patient.getId()));
+        //ml originalid
+        person.setOriginalId(new ST(patient.getOriginalId()));
+		person.setSex(new ST(patient.getSex()));
+        person.setBirthDate(patient.getBirthDate());
+		
+	}
+	
+	public String setStudyID(String seriesID, String studyID, String startDate, String startTime) {
+
+        String result = "";
+        try {
+
+            for (ImageReferenceEntity imageReference : getImageAnnotation().getImageReferenceEntityCollection()
+					.getImageReferenceEntityList()) {
+
+            	DicomImageReferenceEntity dicomImageReference = (DicomImageReferenceEntity) imageReference;
+
+                if (dicomImageReference.getImageStudy().getImageSeries()
+                        .getInstanceUid().getRoot().equals(seriesID)) {
+                    dicomImageReference.getImageStudy()
+                    	.getInstanceUid().setRoot(studyID);
+                    dicomImageReference.getImageStudy().setStartDate(startDate);
+                    dicomImageReference.getImageStudy().setStartTime(startTime);
+                    break;
+                }
+            }
+        } finally {
+        }
+        return result;
+    }
 	
 
 }

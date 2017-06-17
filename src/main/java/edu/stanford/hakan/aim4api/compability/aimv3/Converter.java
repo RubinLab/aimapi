@@ -38,7 +38,8 @@ public class Converter {
     }
 
     public static ST toST(Double val) {
-        if (val != Double.NaN) {
+    	int a;
+        if (val != Double.NaN && val != null) {
             return new ST(Double.toString(val));
         }
         return new ST();

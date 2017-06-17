@@ -107,7 +107,12 @@ public class CalculationData implements IAimXMLOperations {
 
         NamedNodeMap map = node.getAttributes();
         this.cagridId = Integer.parseInt(map.getNamedItem("cagridId").getNodeValue());
-        this.value = Double.parseDouble(map.getNamedItem("value").getNodeValue());
+        try{
+        	this.value = Double.parseDouble(map.getNamedItem("value").getNodeValue());
+        }catch(NumberFormatException ne){
+        	this.value = Double.NaN;
+        }
+        
     }
 
     private void Control() throws AimException {
@@ -134,7 +139,10 @@ public class CalculationData implements IAimXMLOperations {
     public edu.stanford.hakan.aim4api.base.CalculationData toAimV4() {
         edu.stanford.hakan.aim4api.base.CalculationData res = new edu.stanford.hakan.aim4api.base.CalculationData();
         res.setCoordinateCollection(this.getCoordinateCollection().toAimV4());
-        res.setValue(Converter.toST(this.getValue()));
+        if (this.getValue()!=null)
+        	res.setValue(Converter.toST(this.getValue()));
+        else 
+        	res.setValue(Converter.toST(Double.NaN));
         return res;
     }
 
@@ -144,7 +152,11 @@ public class CalculationData implements IAimXMLOperations {
             this.setCoordinateCollection(new CoordinateCollection(v4.getCoordinateCollection()));
         }
         if (v4.getValue() != null) {
-            this.setValue(Double.parseDouble(v4.getValue().getValue()));
+        	try{
+        		this.setValue(Double.parseDouble(v4.getValue().getValue()));
+        	}catch(NumberFormatException ne){
+        		this.setValue(Double.NaN);
+        	}
         }
     }
 
