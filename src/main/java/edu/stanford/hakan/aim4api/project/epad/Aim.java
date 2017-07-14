@@ -1560,7 +1560,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     // what if the calculation is not there?
     // set the shape calculation in the aim for a single result value
     @Override
-    public void setShapeCalculation(int shapeID, String algorithmName,
+    public boolean setShapeCalculation(int shapeID, String algorithmName,
             double value) {
 
         try {
@@ -1596,13 +1596,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                                 result.setCalculationDataCollection(dataCollection);
 
                             }
+                            return true;
                         }
                     }
                 }
             }
         } finally {
         }
-
+        return false; //not found
     }
 
     private double calculateLineLength(List<TwoDCoordinate> coords,
@@ -1801,6 +1802,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         
     public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
 
+    	//if it is there set it if not add it
+    	if (setShapeCalculation(shapeId, name, value))
+    		return;
+    	
         // Create a Calculation instance
         Calculation calculation = new Calculation();
         calculation.setCagridId(0);
