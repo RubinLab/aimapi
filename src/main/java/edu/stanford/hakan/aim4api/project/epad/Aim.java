@@ -93,6 +93,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
     private static final int caGridId = 0;
     private static final String LINE_LENGTH = "LineLength";
+    private static final String LONG_AXIS = "LongAxis";
+    private static final String SHORT_AXIS = "ShortAxis";
     private static final String MEAN = "Mean"; 
     private static final String AREA = "Area";
     private static final String STD_DEV = "Standard Deviation";
@@ -101,7 +103,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     
     
     private static final String PRIVATE_DESIGNATOR = "private";
-    private static final String LINE_MEASURE = "linear";
+    private static final String LINE_MEASURE = "cm";
     private static final String VERSION = "1.0";
     
 
@@ -323,20 +325,28 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
             	coordslist.add(coords.get(0));
             	coordslist.add(coords.get(1));
-            	double length = calculateLineLength(coordslist, pixelSpacingX,
+            	double length1 = calculateLineLength(coordslist, pixelSpacingX,
     					pixelSpacingY);
-            	logger.info("line length 1 : " + length);
+            	logger.info("line length 1 : " + length1);
             	
-            	addCalculation(addlengthCalculation(coordslist, 
-            			length, shape.getShapeIdentifier()));
+            	
             	coordslist.clear();
             	coordslist.add(coords.get(2));
             	coordslist.add(coords.get(3));
-            	length = calculateLineLength(coordslist, pixelSpacingX,
+            	double length2 = calculateLineLength(coordslist, pixelSpacingX,
     					pixelSpacingY);
-            	logger.info("line length 2: " + length);
-            	addCalculation(addlengthCalculation(coordslist, 
-            			length, shape.getShapeIdentifier()));
+            	logger.info("line length 2: " + length2);
+            	if (length1>=length2){
+            		addLongAxisCalculation(
+            			length1, shape.getShapeIdentifier(),LINE_MEASURE);
+            		addShortAxisCalculation( 
+            			length2, shape.getShapeIdentifier(),LINE_MEASURE);
+            	}else {
+            		addLongAxisCalculation(
+                			length2, shape.getShapeIdentifier(),LINE_MEASURE);
+                	addShortAxisCalculation( 
+                			length1, shape.getShapeIdentifier(),LINE_MEASURE);
+            	}
             }
 
             addGeometricShape(shape);
@@ -350,15 +360,41 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return shapeID;
     }
     
-    public void setNormalLineLengths(int shapeID, String algorithmName, List<TwoDCoordinate> coords,
+    public void setNormalLineLengths(int shapeID, List<TwoDCoordinate> coords,
     		double pixelSpacingX, double pixelSpacingY) {
-   
+    	
+    	//find the line lengths first
+    	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
+    	coordslist.add(coords.get(0));
+    	coordslist.add(coords.get(1));
+    	double length1 = calculateLineLength(coordslist, pixelSpacingX,
+				pixelSpacingY);
+    	logger.info("line length 1 : " + length1);
+    	
+    	
+    	coordslist.clear();
+    	coordslist.add(coords.get(2));
+    	coordslist.add(coords.get(3));
+    	double length2 = calculateLineLength(coordslist, pixelSpacingX,
+				pixelSpacingY);
+    	
+    	double longaxis=(length1>=length2?length1:length2);
+    	double shortaxis=(length1>=length2?length2:length1);
+    	
     	try {
     		int index = 0;
             // find the calculation for this algorithm
-            for (Calculation calculation : getCalculationCollection()
-                    .getCalculationList()) {
-                if (calculation.getAlgorithmName().equals(algorithmName)) {
+            for ( int i=0;i< getCalculationCollection()
+                    .getCalculationList().size(); i++) {
+            	Calculation calculation=getCalculationCollection()
+                        .getCalculationList().get(i);
+            	if (calculation.getAlgorithmName().equalsIgnoreCase(LINE_LENGTH)) {
+            		//it is old delete it
+            		getCalculationCollection()
+                    .getCalculationList().remove(i);
+            		i--;
+            		
+            	}else if (calculation.getAlgorithmName().equalsIgnoreCase(LONG_AXIS)) {
                 	
                     // find the shape
                     for (ReferencedGeometricShape shape : calculation
@@ -375,33 +411,58 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                                 CalculationDataCollection dataCollection = new CalculationDataCollection();
                                 List<CalculationData> data = new ArrayList<CalculationData>();
                                 CalculationData calculationData = new CalculationData();
-                                
-                                //first line long axis and remove the others
-                                if (index < 4) {
-                                	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
-                                	coordslist.add(coords.get(index++));
-                                	coordslist.add(coords.get(index++));
-                                	double length = calculateLineLength(coordslist, pixelSpacingX,
-                        					pixelSpacingY);
-                                	
-                                	logger.info("length in shape modified: " + length);
-                                	coordslist.clear();
-                                    calculationData.setValue(length);
-                                    calculationData.setCagridId(0);
-                                    calculationData.addCoordinate(0, 0, 0);
-                                    data.add(calculationData);
+                                calculationData.setValue(longaxis);
+                                calculationData.setCagridId(0);
+                                calculationData.addCoordinate(0, 0, 0);
+                                data.add(calculationData);
 
-                                    dataCollection
-                                            .AddCalculationData(calculationData);
-                                    result.setCalculationDataCollection(dataCollection);
-                                }
+                                dataCollection
+                                        .AddCalculationData(calculationData);
+                                result.setCalculationDataCollection(dataCollection);
+                            }
+                            	
+
+                            }
+                        }
+                }else if (calculation.getAlgorithmName().equalsIgnoreCase(SHORT_AXIS)) {
+                	
+                    // find the shape
+                    for (ReferencedGeometricShape shape : calculation
+                            .getReferencedGeometricShapeCollection()
+                            .getReferencedGeometricShapeList()) {
+
+                        if (shape.getReferencedShapeIdentifier() == shapeID) {
+                        	
+                            // for each calculation result
+                            for (CalculationResult result : calculation
+                                    .getCalculationResultCollection()
+                                    .getCalculationResultList()) {
+
+                                CalculationDataCollection dataCollection = new CalculationDataCollection();
+                                List<CalculationData> data = new ArrayList<CalculationData>();
+                                CalculationData calculationData = new CalculationData();
+                                calculationData.setValue(shortaxis);
+                                calculationData.setCagridId(0);
+                                calculationData.addCoordinate(0, 0, 0);
+                                data.add(calculationData);
+
+                                dataCollection
+                                        .AddCalculationData(calculationData);
+                                result.setCalculationDataCollection(dataCollection);
+                            }
                             	
 
                             }
                         }
                     }
                 }
-            }
+            	if (getCalculationCollection()
+                        .getCalculationList().isEmpty()){
+            		addLongAxisCalculation(
+                			longaxis, shapeID,LINE_MEASURE);
+                	addShortAxisCalculation( 
+                			shortaxis, shapeID,LINE_MEASURE);
+            	}
         } finally {
         }
     	
@@ -1798,6 +1859,12 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     }
     public void addMaxCalculation(double value, Integer shapeId, String units) {
     	addCalculation(value,shapeId,units,MAX, "G-A437");
+    }
+    public void addLongAxisCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,LONG_AXIS, "99EPADF283");
+    }
+    public void addShortAxisCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,SHORT_AXIS, "99EPADF272");
     }
         
     public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
