@@ -50,6 +50,7 @@ public class ImageStudy implements IAimXMLOperations {
     private String instanceUID;
     private String startDate;
     private String startTime;
+    private String accessionNumber;
     private ImageSeries imageSeries;
 
     public ImageStudy() {
@@ -60,6 +61,7 @@ public class ImageStudy implements IAimXMLOperations {
         this.instanceUID = instanceUID;
         this.startDate = startDate;
         this.startTime = startTime;
+        this.accessionNumber=null;
     }
 
     public Integer getCagridId() {
@@ -121,7 +123,15 @@ public class ImageStudy implements IAimXMLOperations {
         this.startTime = startTime;
     }
 
-//    @Override
+    public String getAccessionNumber() {
+		return accessionNumber;
+	}
+
+	public void setAccessionNumber(String accessionNumber) {
+		this.accessionNumber = accessionNumber;
+	}
+
+	//    @Override
 //    public Node getXMLNode(Document doc) throws AimException {
 //
 //        this.Control();
@@ -164,6 +174,8 @@ public class ImageStudy implements IAimXMLOperations {
         this.startDate = map.getNamedItem("startDate").getNodeValue();
         Logger.write("setxmlnode after "+ this.startDate);
         this.startTime = map.getNamedItem("startTime").getNodeValue();
+        if (map.getNamedItem("accessionNumber")!=null)
+        	this.accessionNumber = map.getNamedItem("accessionNumber").getNodeValue();
     }
 
     private void Control() throws AimException {
@@ -179,6 +191,10 @@ public class ImageStudy implements IAimXMLOperations {
         if (getStartTime() == null) {
             throw new AimException("AimException: ImageStudy's startTime can not be null");
         }
+        //optional. can be null for old aims
+//        if (getAccessionNumber() == null) {
+//            throw new AimException("AimException: ImageStudy's accessionNumber can not be null");
+//        }
     }
 
     public boolean isEqualTo(Object other) {
@@ -195,6 +211,9 @@ public class ImageStudy implements IAimXMLOperations {
         if (this.startTime == null ? oth.startTime != null : !this.startTime.equals(oth.startTime)) {
             return false;
         }
+        if (this.accessionNumber == null ? oth.accessionNumber != null : !this.accessionNumber.equals(oth.accessionNumber)) {
+            return false;
+        }
         return this.imageSeries.isEqualTo(oth.imageSeries);
     }
 
@@ -205,6 +224,8 @@ public class ImageStudy implements IAimXMLOperations {
         res.setStartDate(this.getStartDate());
 //        res.setStartDate(this.startDate);//use actual value
         res.setStartTime(this.getStartTime());
+        if (this.getAccessionNumber()!=null)
+        	res.setAccessionNumber(Converter.toST(this.getAccessionNumber()));
         return res;
     }
 
@@ -218,6 +239,8 @@ public class ImageStudy implements IAimXMLOperations {
         }
         this.setStartDate(v4.getStartDate());
         this.setStartTime(v4.getStartTime());
+        if (v4.getAccessionNumber()!=null)
+        	this.setAccessionNumber(v4.getAccessionNumber().getValue());
     }
 
     public ImageStudy getClone() {
@@ -233,6 +256,9 @@ public class ImageStudy implements IAimXMLOperations {
         }
         if (this.startTime != null) {
             res.startTime = this.startTime;
+        }
+        if (this.accessionNumber != null) {
+            res.accessionNumber = this.accessionNumber;
         }
         if (this.imageSeries != null) {
             res.imageSeries = this.imageSeries.getClone();

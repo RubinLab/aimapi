@@ -154,4 +154,8 @@ public interface Aimapi {
 	 */
 	String setStudyID(String seriesID, String studyID, String startDate, String startTime);
 
+	int addShapes(String studyID, String seriesID, String imageID, int activeImage, String studyDate, String studyTime,
+			ShapeType shapeType, List<TwoDCoordinate> coords, double pixelSpacingX, double pixelSpacingY,
+			String imageClassUID, String accessionNumber);
+
 }

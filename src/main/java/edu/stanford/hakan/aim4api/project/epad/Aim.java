@@ -187,7 +187,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReference(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime, imageClassUid)); //ml imageclassuid added
+                studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
 
         addAnatomicEntity(createAnatomicEntity());
 
@@ -216,7 +216,36 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReference(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime, imageClassUid)); //ml imageclassuid added
+                studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
+
+        addAnatomicEntity(createAnatomicEntity());
+
+    }
+    
+    
+    public Aim(String name, String modality, String description,
+            String patientName, String patientId, String patientSex,
+            String patientBirthdate, String manufacturerName, String model,
+            String version, int activeImage, LoggedInUser user,
+            String imageUid, String seriesUid, String studyUid,
+            String studyDate, String studyTime, String imageClassUid, String originalPatientId, String accessionNumber) { //ml imageclassuid added
+
+        super();
+
+        setName(name);
+        setDateTime(todaysDate());
+        setCagridId(caGridId);
+        setComment(fillComment(modality, description, activeImage));
+
+        addUser(user);
+
+        addPerson(createPerson(patientName, patientId, patientSex,
+                patientBirthdate, originalPatientId));
+        addEquipment(createEquipment(manufacturerName, model, version));
+
+        // don't add the image reference yet, we don't have any shapes or segs
+        addImageReference(createImageReference(studyUid, seriesUid, imageUid,
+                studyDate, studyTime, imageClassUid,accessionNumber)); //ml imageclassuid added
 
         addAnatomicEntity(createAnatomicEntity());
 
@@ -344,7 +373,63 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         if (!hasImage(imageID)) {
             updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
-                    studyTime, imageClassUID);
+                    studyTime, imageClassUID,null);
+        }
+
+        return shapeID;
+    }
+    
+    @Override
+    public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID, String accessionNumber) {
+        int frameID = 1;
+        int shapeID = getNextShapeID();
+
+        List<GeometricShape> shapes = createShapes(imageID, frameID, shapeType,
+                coords, pixelSpacingX, pixelSpacingY, shapeID);
+
+        // could have created multiple shapes
+        for (GeometricShape shape : shapes) {
+
+            shape.setIncludeFlag(true);
+
+            //ml add calculation only if it is a line
+            if (shapeType==ShapeType.LINE) {
+            	addCalculation(addlengthCalculation(
+                    coords,
+                    calculateLineLength(getCoords(shape), pixelSpacingX,
+                            pixelSpacingY), shape.getShapeIdentifier()));
+            }
+            else if (shapeType==ShapeType.NORMAL) {
+            	logger.info("ellipse");
+            	//first line long axis
+            	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
+            	coordslist.add(coords.get(0));
+            	coordslist.add(coords.get(1));
+            	double length = calculateLineLength(coordslist, pixelSpacingX,
+    					pixelSpacingY);
+            	logger.info("line length 1 : " + length);
+            	
+            	addCalculation(addlengthCalculation(coordslist, 
+            			length, shape.getShapeIdentifier()));
+            	coordslist.clear();
+            	coordslist.add(coords.get(2));
+            	coordslist.add(coords.get(3));
+            	length = calculateLineLength(coordslist, pixelSpacingX,
+    					pixelSpacingY);
+            	logger.info("line length 2: " + length);
+            	addCalculation(addlengthCalculation(coordslist, 
+            			length, shape.getShapeIdentifier()));
+            }
+
+            addGeometricShape(shape);
+        }
+
+        if (!hasImage(imageID)) {
+            updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
+                    studyTime, imageClassUID,accessionNumber);
         }
 
         return shapeID;
@@ -579,7 +664,64 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // didn't find it, so create a new one
         addImageReference(createImageReference(studyID, seriesID, imageID,
-                studyDate, studyTime, imageClassUID));
+                studyDate, studyTime, imageClassUID,null));
+
+    }
+    
+    private void updateImageID(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,  String imageClassUID, String accessionNumber) {
+
+        for (ImageReference imageReference : getImageReferenceCollection()
+                .getImageReferenceList()) {
+
+            DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
+
+            String studyInstanceUID = dicomImageReference.getImageStudy()
+                    .getInstanceUID();
+            String seriesInstanceUID = dicomImageReference.getImageStudy()
+                    .getImageSeries().getInstanceUID();
+
+            if (studyInstanceUID.equals(studyID)) {
+
+                // found the study
+                if (seriesInstanceUID.isEmpty()) {
+
+                    // turn a study reference into an image reference
+                    // logger.info("turn a study reference into an image reference");
+                    ImageSeries imageSeries = new ImageSeries();
+                    imageSeries.setCagridId(caGridId);
+                    imageSeries.setInstanceUID(seriesID);
+                    Image img = new Image(caGridId, "", imageID);
+                    imageSeries.addImage(img);
+
+                    dicomImageReference.getImageStudy().setImageSeries(
+                            imageSeries);
+
+                    return;
+
+                } else if (seriesInstanceUID.equals(seriesID)) {
+
+                    // turn a series reference into an image reference
+                    Image image = new Image(caGridId, "", imageID);
+
+                    List<Image> images = dicomImageReference.getImageStudy()
+                            .getImageSeries().getImageCollection()
+                            .getImageList();
+
+                    if (images.size() > 0) {
+                        images.clear();
+                    }
+
+                    images.add(image);
+                    return;
+
+                }
+            }
+        }
+
+        // didn't find it, so create a new one
+        addImageReference(createImageReference(studyID, seriesID, imageID,
+                studyDate, studyTime, imageClassUID, accessionNumber));
 
     }
 
@@ -1997,6 +2139,34 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         study.setStartTime(studyTime);
         study.setImageSeries(imageSeries);
         study.setInstanceUID(studyID);
+
+        // image reference
+        DICOMImageReference imageReference = new DICOMImageReference();
+        imageReference.setImageStudy(study);
+        imageReference.setCagridId(caGridId);
+
+        return imageReference;
+
+    }
+    
+ // create the image reference
+    private DICOMImageReference createImageReference(String studyID,
+            String seriesID, String imageID, String studyDate, String studyTime, String imageClassID,String accessionNumber) { //class uid added
+
+        // series reference
+        ImageSeries imageSeries = new ImageSeries();
+        imageSeries.setCagridId(0);
+        imageSeries.setInstanceUID(seriesID);
+        imageSeries.addImage(new Image(caGridId, imageClassID, imageID));
+
+        // study reference
+        ImageStudy study = new ImageStudy();
+        study.setCagridId(0);
+        study.setStartDate(studyDate);
+        study.setStartTime(studyTime);
+        study.setImageSeries(imageSeries);
+        study.setInstanceUID(studyID);
+        study.setAccessionNumber(accessionNumber);
 
         // image reference
         DICOMImageReference imageReference = new DICOMImageReference();
