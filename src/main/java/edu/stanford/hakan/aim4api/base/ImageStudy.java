@@ -107,7 +107,7 @@ public class ImageStudy implements IAimXMLOperations {
 	}
 
 	public void setAccessionNumber(ST accessionNumber) {
-		procedureDescription.setTagName("accessionNumber");
+		accessionNumber.setTagName("accessionNumber");
 		this.accessionNumber = accessionNumber;
 	}
 
