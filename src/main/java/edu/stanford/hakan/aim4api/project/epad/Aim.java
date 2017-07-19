@@ -328,55 +328,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             int activeImage, String studyDate, String studyTime,
             ShapeType shapeType, List<TwoDCoordinate> coords,
             double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
-        int frameID = 1;
-        int shapeID = getNextShapeID();
-
-        List<GeometricShape> shapes = createShapes(imageID, frameID, shapeType,
-                coords, pixelSpacingX, pixelSpacingY, shapeID);
-
-        // could have created multiple shapes
-        for (GeometricShape shape : shapes) {
-
-            shape.setIncludeFlag(true);
-
-            //ml add calculation only if it is a line
-            if (shapeType==ShapeType.LINE) {
-            	addCalculation(addlengthCalculation(
-                    coords,
-                    calculateLineLength(getCoords(shape), pixelSpacingX,
-                            pixelSpacingY), shape.getShapeIdentifier()));
-            }
-            else if (shapeType==ShapeType.NORMAL) {
-            	logger.info("ellipse");
-            	//first line long axis
-            	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
-            	coordslist.add(coords.get(0));
-            	coordslist.add(coords.get(1));
-            	double length = calculateLineLength(coordslist, pixelSpacingX,
-    					pixelSpacingY);
-            	logger.info("line length 1 : " + length);
-            	
-            	addCalculation(addlengthCalculation(coordslist, 
-            			length, shape.getShapeIdentifier()));
-            	coordslist.clear();
-            	coordslist.add(coords.get(2));
-            	coordslist.add(coords.get(3));
-            	length = calculateLineLength(coordslist, pixelSpacingX,
-    					pixelSpacingY);
-            	logger.info("line length 2: " + length);
-            	addCalculation(addlengthCalculation(coordslist, 
-            			length, shape.getShapeIdentifier()));
-            }
-
-            addGeometricShape(shape);
-        }
-
-        if (!hasImage(imageID)) {
-            updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
-                    studyTime, imageClassUID,null);
-        }
-
-        return shapeID;
+        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null);
     }
     
     @Override
@@ -614,57 +566,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private void updateImageID(String studyID, String seriesID, String imageID,
             int activeImage, String studyDate, String studyTime,  String imageClassUID) {
 
-        for (ImageReference imageReference : getImageReferenceCollection()
-                .getImageReferenceList()) {
-
-            DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
-
-            String studyInstanceUID = dicomImageReference.getImageStudy()
-                    .getInstanceUID();
-            String seriesInstanceUID = dicomImageReference.getImageStudy()
-                    .getImageSeries().getInstanceUID();
-
-            if (studyInstanceUID.equals(studyID)) {
-
-                // found the study
-                if (seriesInstanceUID.isEmpty()) {
-
-                    // turn a study reference into an image reference
-                    // logger.info("turn a study reference into an image reference");
-                    ImageSeries imageSeries = new ImageSeries();
-                    imageSeries.setCagridId(caGridId);
-                    imageSeries.setInstanceUID(seriesID);
-                    Image img = new Image(caGridId, "", imageID);
-                    imageSeries.addImage(img);
-
-                    dicomImageReference.getImageStudy().setImageSeries(
-                            imageSeries);
-
-                    return;
-
-                } else if (seriesInstanceUID.equals(seriesID)) {
-
-                    // turn a series reference into an image reference
-                    Image image = new Image(caGridId, "", imageID);
-
-                    List<Image> images = dicomImageReference.getImageStudy()
-                            .getImageSeries().getImageCollection()
-                            .getImageList();
-
-                    if (images.size() > 0) {
-                        images.clear();
-                    }
-
-                    images.add(image);
-                    return;
-
-                }
-            }
-        }
-
-        // didn't find it, so create a new one
-        addImageReference(createImageReference(studyID, seriesID, imageID,
-                studyDate, studyTime, imageClassUID,null));
+        updateImageID(studyID, seriesID, imageID, activeImage, studyDate, studyTime, imageClassUID, null);
 
     }
     
