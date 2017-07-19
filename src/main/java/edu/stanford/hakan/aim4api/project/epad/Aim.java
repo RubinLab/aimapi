@@ -2028,26 +2028,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private DICOMImageReference createImageReference(String studyID,
             String seriesID, String imageID, String studyDate, String studyTime, String imageClassID) { //class uid added
 
-        // series reference
-        ImageSeries imageSeries = new ImageSeries();
-        imageSeries.setCagridId(0);
-        imageSeries.setInstanceUID(seriesID);
-        imageSeries.addImage(new Image(caGridId, imageClassID, imageID));
-
-        // study reference
-        ImageStudy study = new ImageStudy();
-        study.setCagridId(0);
-        study.setStartDate(studyDate);
-        study.setStartTime(studyTime);
-        study.setImageSeries(imageSeries);
-        study.setInstanceUID(studyID);
-
-        // image reference
-        DICOMImageReference imageReference = new DICOMImageReference();
-        imageReference.setImageStudy(study);
-        imageReference.setCagridId(caGridId);
-
-        return imageReference;
+        return createImageReference(studyID, seriesID, imageID, studyDate, studyTime, imageClassID, null);
 
     }
     
@@ -2068,7 +2049,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         study.setStartTime(studyTime);
         study.setImageSeries(imageSeries);
         study.setInstanceUID(studyID);
-        study.setAccessionNumber(accessionNumber);
+        if (accessionNumber!=null) study.setAccessionNumber(accessionNumber);
 
         // image reference
         DICOMImageReference imageReference = new DICOMImageReference();
