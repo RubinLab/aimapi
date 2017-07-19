@@ -360,6 +360,12 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return shapeID;
     }
     
+    public void setNormalLineLengths(int shapeID, List<TwoDCoordinate> coords, String algorithmName,
+    		double pixelSpacingX, double pixelSpacingY) {
+    	logger.warning("Depreceated. Use setNormalLineLengths(int shapeID, List<TwoDCoordinate> coords, double pixelSpacingX, double pixelSpacingY) instead. Algorithm name not used");
+    	setNormalLineLengths(shapeID, coords, pixelSpacingX, pixelSpacingY);
+    	
+    }
     public void setNormalLineLengths(int shapeID, List<TwoDCoordinate> coords,
     		double pixelSpacingX, double pixelSpacingY) {
     	
