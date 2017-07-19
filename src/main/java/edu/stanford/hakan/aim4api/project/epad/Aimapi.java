@@ -82,7 +82,7 @@ public interface Aimapi {
 
 	ShapeType getShapeType(int shapeID);
 
-	void setShapeCalculation(int shapeID, String algorithmName, double value);
+	boolean setShapeCalculation(int shapeID, String algorithmName, double value);
 
 	int addShapes(String studyID, String seriesID, String imageID,
 			int activeImage, String studyDate, String studyTime,
