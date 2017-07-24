@@ -189,7 +189,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReference(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime, imageClassUid)); //ml imageclassuid added
+                studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
 
         addAnatomicEntity(createAnatomicEntity());
 
@@ -218,7 +218,36 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReference(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime, imageClassUid)); //ml imageclassuid added
+                studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
+
+        addAnatomicEntity(createAnatomicEntity());
+
+    }
+    
+    
+    public Aim(String name, String modality, String description,
+            String patientName, String patientId, String patientSex,
+            String patientBirthdate, String manufacturerName, String model,
+            String version, int activeImage, LoggedInUser user,
+            String imageUid, String seriesUid, String studyUid,
+            String studyDate, String studyTime, String imageClassUid, String originalPatientId, String accessionNumber) { //ml imageclassuid added
+
+        super();
+
+        setName(name);
+        setDateTime(todaysDate());
+        setCagridId(caGridId);
+        setComment(fillComment(modality, description, activeImage));
+
+        addUser(user);
+
+        addPerson(createPerson(patientName, patientId, patientSex,
+                patientBirthdate, originalPatientId));
+        addEquipment(createEquipment(manufacturerName, model, version));
+
+        // don't add the image reference yet, we don't have any shapes or segs
+        addImageReference(createImageReference(studyUid, seriesUid, imageUid,
+                studyDate, studyTime, imageClassUid,accessionNumber)); //ml imageclassuid added
 
         addAnatomicEntity(createAnatomicEntity());
 
@@ -301,6 +330,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             int activeImage, String studyDate, String studyTime,
             ShapeType shapeType, List<TwoDCoordinate> coords,
             double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
+        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null);
+    }
+    
+    @Override
+    public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID, String accessionNumber) {
         int frameID = 1;
         int shapeID = getNextShapeID();
 
@@ -354,7 +391,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         if (!hasImage(imageID)) {
             updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
-                    studyTime, imageClassUID);
+                    studyTime, imageClassUID,accessionNumber);
         }
 
         return shapeID;
@@ -596,6 +633,13 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private void updateImageID(String studyID, String seriesID, String imageID,
             int activeImage, String studyDate, String studyTime,  String imageClassUID) {
 
+        updateImageID(studyID, seriesID, imageID, activeImage, studyDate, studyTime, imageClassUID, null);
+
+    }
+    
+    private void updateImageID(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,  String imageClassUID, String accessionNumber) {
+
         for (ImageReference imageReference : getImageReferenceCollection()
                 .getImageReferenceList()) {
 
@@ -646,7 +690,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
         // didn't find it, so create a new one
         addImageReference(createImageReference(studyID, seriesID, imageID,
-                studyDate, studyTime, imageClassUID));
+                studyDate, studyTime, imageClassUID, accessionNumber));
 
     }
 
@@ -2062,6 +2106,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private DICOMImageReference createImageReference(String studyID,
             String seriesID, String imageID, String studyDate, String studyTime, String imageClassID) { //class uid added
 
+        return createImageReference(studyID, seriesID, imageID, studyDate, studyTime, imageClassID, null);
+
+    }
+    
+ // create the image reference
+    private DICOMImageReference createImageReference(String studyID,
+            String seriesID, String imageID, String studyDate, String studyTime, String imageClassID,String accessionNumber) { //class uid added
+
         // series reference
         ImageSeries imageSeries = new ImageSeries();
         imageSeries.setCagridId(0);
@@ -2075,6 +2127,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         study.setStartTime(studyTime);
         study.setImageSeries(imageSeries);
         study.setInstanceUID(studyID);
+        if (accessionNumber!=null) study.setAccessionNumber(accessionNumber);
 
         // image reference
         DICOMImageReference imageReference = new DICOMImageReference();

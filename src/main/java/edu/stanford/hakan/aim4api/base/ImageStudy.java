@@ -42,6 +42,7 @@ public class ImageStudy implements IAimXMLOperations {
     private String startDate;
     private String startTime;
     private ST procedureDescription;
+    private ST accessionNumber;
     private ImageSeries imageSeries;
     private ReferencedDicomObjectCollection referencedDicomObjectCollection = new ReferencedDicomObjectCollection();
     private String tagName;
@@ -101,7 +102,16 @@ public class ImageStudy implements IAimXMLOperations {
         this.referencedDicomObjectCollection.addReferencedDicomObject(newReferencedDicomObject);
     }
 
-    protected String getTagName() {
+    public ST getAccessionNumber() {
+		return accessionNumber;
+	}
+
+	public void setAccessionNumber(ST accessionNumber) {
+		accessionNumber.setTagName("accessionNumber");
+		this.accessionNumber = accessionNumber;
+	}
+
+	protected String getTagName() {
         return tagName;
     }
 
@@ -135,6 +145,9 @@ public class ImageStudy implements IAimXMLOperations {
         if (this.procedureDescription != null) {
             res.appendChild(this.procedureDescription.getXMLNode(doc));
         }
+        if (this.accessionNumber != null) {
+            res.appendChild(this.accessionNumber.getXMLNode(doc));
+        }
         if (this.imageSeries != null) {
             res.appendChild(this.imageSeries.getXMLNode(doc));
         }
@@ -165,6 +178,11 @@ public class ImageStudy implements IAimXMLOperations {
                 obj.setXMLNode(currentNode);
                 this.setProcedureDescription(obj);
             }
+            if ("accessionNumber".equals(currentNode.getNodeName())) {
+                ST obj = new ST();
+                obj.setXMLNode(currentNode);
+                this.setAccessionNumber(obj);
+            }
             if ("imageSeries".equals(currentNode.getNodeName())) {
                 ImageSeries obj = new ImageSeries();
                 obj.setXMLNode(currentNode);
@@ -194,6 +212,9 @@ public class ImageStudy implements IAimXMLOperations {
             return false;
         }
         if (this.procedureDescription == null ? oth.procedureDescription != null : !this.procedureDescription.isEqualTo(oth.procedureDescription)) {
+            return false;
+        }
+        if (this.accessionNumber == null ? oth.accessionNumber != null : !this.accessionNumber.isEqualTo(oth.accessionNumber)) {
             return false;
         }
         if (this.imageSeries == null ? oth.imageSeries != null : !this.imageSeries.isEqualTo(oth.imageSeries)) {
@@ -227,6 +248,9 @@ public class ImageStudy implements IAimXMLOperations {
         }
         if (this.getTagName() != null) {
             res.setTagName(this.getTagName());
+        }
+        if (this.getAccessionNumber() != null) {
+            res.setAccessionNumber(this.getAccessionNumber());
         }
         return res;
     }
