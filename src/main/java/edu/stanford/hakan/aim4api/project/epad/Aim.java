@@ -423,7 +423,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     	
     	double longaxis=(length1>=length2?length1:length2);
     	double shortaxis=(length1>=length2?length2:length1);
-    	
+    	boolean putLongAxis=false;
+    	boolean putShortAxis=false;
     	try {
     		int index = 0;
             // find the calculation for this algorithm
@@ -463,10 +464,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                                         .AddCalculationData(calculationData);
                                 result.setCalculationDataCollection(dataCollection);
                             }
-                            	
+                            putLongAxis=true;
 
-                            }
-                        }
+                         }
+                     }
                 }else if (calculation.getAlgorithmName().equalsIgnoreCase(SHORT_AXIS)) {
                 	
                     // find the shape
@@ -493,19 +494,21 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                                         .AddCalculationData(calculationData);
                                 result.setCalculationDataCollection(dataCollection);
                             }
-                            	
+                            putShortAxis=true;
 
-                            }
                         }
                     }
                 }
-            	if (getCalculationCollection()
-                        .getCalculationList().isEmpty()){
-            		addLongAxisCalculation(
-                			longaxis, shapeID,LINE_MEASURE);
-                	addShortAxisCalculation( 
-                			shortaxis, shapeID,LINE_MEASURE);
-            	}
+            }
+        	if (getCalculationCollection()
+                    .getCalculationList().isEmpty() || !putLongAxis || !putShortAxis){
+        		if (!putLongAxis)
+        			addLongAxisCalculation(
+            			longaxis, shapeID,LINE_MEASURE);
+            	if (!putShortAxis)
+            		addShortAxisCalculation( 
+            			shortaxis, shapeID,LINE_MEASURE);
+        	}
         } finally {
         }
     	
