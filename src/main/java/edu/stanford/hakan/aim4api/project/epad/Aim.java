@@ -1923,7 +1923,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
 
     	//if it is there set it if not add it
-    	if (setShapeCalculation(shapeId, name, value))
+    	if (shapeId!=null && setShapeCalculation(shapeId, name, value))
     		return;
     	
         // Create a Calculation instance
