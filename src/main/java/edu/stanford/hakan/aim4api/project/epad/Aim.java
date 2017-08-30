@@ -26,7 +26,9 @@ package edu.stanford.hakan.aim4api.project.epad;
 //import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
@@ -57,6 +59,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservationCollection
 import edu.stanford.hakan.aim4api.compability.aimv3.Inference;
 import edu.stanford.hakan.aim4api.compability.aimv3.InferenceCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.Lexicon;
+import edu.stanford.hakan.aim4api.compability.aimv3.Modality;
 import edu.stanford.hakan.aim4api.compability.aimv3.MultiPoint;
 import edu.stanford.hakan.aim4api.compability.aimv3.Person;
 import edu.stanford.hakan.aim4api.compability.aimv3.Point;
@@ -956,6 +959,32 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         }
         return result;
     }
+    
+    /**
+     * gets the modality solely based on the sopclassuid
+     * @return
+     */
+    public String getModality() {
+		String result = "";
+
+		try {
+			List<ImageReference> imageList = getImageReferenceCollection()
+                    .getImageReferenceList();
+            if (imageList.size() > 0) {
+                ImageReference imageReference = imageList.get(0);
+                DICOMImageReference dicomImageReference = (DICOMImageReference) imageReference;
+                ImageStudy imageStudy = dicomImageReference.getImageStudy();
+                ImageSeries imageSeries = imageStudy.getImageSeries();
+                CD modality=Modality.getInstance().get(imageSeries.getImageCollection().getImageList().get(0).getSopClassUID());
+				if (modality!=null)
+					result = modality.getCode();
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
     @Override
     public String getSeriesID(String imageID) {
@@ -2872,4 +2901,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         builder.append(Integer.toString(year)).append(strMount).append(strDay).append(strHour).append(strMinute).append(strSecond);
         this.setDateTime(builder.toString());
     }
+    
+    
 }
