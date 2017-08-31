@@ -58,6 +58,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Inference;
 import edu.stanford.hakan.aim4api.compability.aimv3.InferenceCollection;
 import edu.stanford.hakan.aim4api.compability.aimv3.Lexicon;
 import edu.stanford.hakan.aim4api.compability.aimv3.MultiPoint;
+import edu.stanford.hakan.aim4api.compability.aimv3.Orthogonal;
 import edu.stanford.hakan.aim4api.compability.aimv3.Person;
 import edu.stanford.hakan.aim4api.compability.aimv3.Point;
 import edu.stanford.hakan.aim4api.compability.aimv3.Polyline;
@@ -760,11 +761,15 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     shapes.add(createShape(circle, coords, imageID, frameID));
                     break;
                 case NORMAL:
-                	//add the coorinates to the ellipse shape
-                	Ellipse ellipse = new Ellipse();
-                	ellipse.setShapeIdentifier(shapeID);;
-                	ellipse.setCagridId(caGridId);
-                	shapes.add(createShape(ellipse, coords, imageID, frameID));
+                	//add the coorinates to the orthogonal shape
+                	Orthogonal orthogonal = new Orthogonal();
+                	orthogonal.setShapeIdentifier(shapeID);;
+                	orthogonal.setCagridId(caGridId);
+                	shapes.add(createShape(orthogonal, coords, imageID, frameID));
+//                	Ellipse ellipse = new Ellipse();
+//                	ellipse.setShapeIdentifier(shapeID);;
+//                	ellipse.setCagridId(caGridId);
+//                	shapes.add(createShape(ellipse, coords, imageID, frameID));
                 	
                     // add the long axis line
                     /*List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
