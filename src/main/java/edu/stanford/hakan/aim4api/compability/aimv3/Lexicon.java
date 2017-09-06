@@ -86,6 +86,11 @@ public class Lexicon extends HashMap<String, CD> {
 			this.put(pluginPrefix+"1", new CD(pluginPrefix+"1","JJVector",ePadDesignator,ePadLexVersion));
 			this.put(pluginPrefix+"2", new CD(pluginPrefix+"2","Qifp3D",ePadDesignator,ePadLexVersion));
 			
+			//UCUM lookup
+			this.put("SUV", new CD("{SUVbw}g/ml","Standardized Uptake Value body weight","UCUM"));
+			this.put("HU", new CD("[hnsf''U]","Hounsfield Unit","UCUM"));
+			this.put("cm", new CD("cm","Centimeter","UCUM"));
+
 			
 		} catch (Exception e) {
 			logger.info("Error getting lexicon "+ e.getMessage());
