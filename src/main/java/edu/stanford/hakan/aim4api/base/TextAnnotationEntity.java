@@ -280,6 +280,11 @@ public class TextAnnotationEntity extends MarkupEntity {
                         obj.setXMLNode(currentNode);
                         this.setGeometricShapeEntity(obj);
                     }
+                    if ("TwoDimensionOrthogonal".equals(xsiType)) {
+                        TwoDimensionOrthogonal obj = new TwoDimensionOrthogonal();
+                        obj.setXMLNode(currentNode);
+                        this.setGeometricShapeEntity(obj);
+                    }
                     if ("TwoDimensionPolyline".equals(xsiType)) {
                         TwoDimensionPolyline obj = new TwoDimensionPolyline();
                         obj.setXMLNode(currentNode);

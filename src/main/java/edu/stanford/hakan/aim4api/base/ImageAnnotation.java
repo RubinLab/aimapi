@@ -383,6 +383,8 @@ public class ImageAnnotation extends AnnotationEntity {
                 res.add((TwoDimensionCircle) markup);
             } else if (markup.getXsiType().equals("TwoDimensionEllipse")) {
                 res.add((TwoDimensionEllipse) markup);
+            } else if (markup.getXsiType().equals("TwoDimensionOrthogonal")) {
+                res.add((TwoDimensionOrthogonal) markup);
             }
         }
         return res;

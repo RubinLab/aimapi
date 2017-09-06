@@ -74,7 +74,7 @@ public class Orthogonal extends GeometricShape implements IAimXMLOperations {
 //        res.setTwoDimensionSpatialCoordinateCollection(this.getSpatialCoordinateCollection().toAimV4(res));
 //        return res;
 //    }
-    public Orthogonal(edu.stanford.hakan.aim4api.base.TwoDimensionEllipse v4) {
+    public Orthogonal(edu.stanford.hakan.aim4api.base.TwoDimensionOrthogonal v4) {
         setXsiType("Orthogonal");
         this.setCagridId(0);
         this.setIncludeFlag(v4.getIncludeFlag());

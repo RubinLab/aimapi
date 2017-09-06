@@ -156,6 +156,11 @@ public class MarkupEntityCollection implements IAimXMLOperations {
                         obj.setXMLNode(currentNode);
                         this.addMarkupEntity(obj);
                     }
+                    if ("TwoDimensionOrthogonal".equals(xsiType)) {
+                        TwoDimensionOrthogonal obj = new TwoDimensionOrthogonal();
+                        obj.setXMLNode(currentNode);
+                        this.addMarkupEntity(obj);
+                    }
                     if ("TwoDimensionPolyline".equals(xsiType)) {
                         TwoDimensionPolyline obj = new TwoDimensionPolyline();
                         obj.setXMLNode(currentNode);

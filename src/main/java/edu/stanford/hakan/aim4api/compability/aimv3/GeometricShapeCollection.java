@@ -107,6 +107,8 @@ public class GeometricShapeCollection implements IAimXMLOperations {
                 this.AddGeometricShape(new Circle((edu.stanford.hakan.aim4api.base.TwoDimensionCircle) itemV4));
             } else if ("TwoDimensionEllipse".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new Ellipse((edu.stanford.hakan.aim4api.base.TwoDimensionEllipse) itemV4));
+            } else if ("TwoDimensionOrthogonal".equals(itemV4.getXsiType())) {
+                this.AddGeometricShape(new Orthogonal((edu.stanford.hakan.aim4api.base.TwoDimensionOrthogonal) itemV4));
             } else if ("TwoDimensionMultiPoint".equals(itemV4.getXsiType())) {
                 this.AddGeometricShape(new MultiPoint((edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint) itemV4));
             } else if ("TwoDimensionPoint".equals(itemV4.getXsiType())) {

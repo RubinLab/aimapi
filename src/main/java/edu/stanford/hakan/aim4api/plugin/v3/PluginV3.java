@@ -16,6 +16,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.Converter;
 import edu.stanford.hakan.aim4api.compability.aimv3.Ellipse;
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShape;
 import edu.stanford.hakan.aim4api.compability.aimv3.MultiPoint;
+import edu.stanford.hakan.aim4api.compability.aimv3.Orthogonal;
 import edu.stanford.hakan.aim4api.compability.aimv3.Point;
 import edu.stanford.hakan.aim4api.compability.aimv3.Polyline;
 import edu.stanford.hakan.aim4api.compability.aimv3.Spline;
@@ -55,6 +56,8 @@ public final class PluginV3   implements IAimXMLOperations {
                 this.geometricShape = new Circle((edu.stanford.hakan.aim4api.base.TwoDimensionCircle) itemV4);
             } else if ("TwoDimensionEllipse".equals(itemV4.getXsiType())) {
                 this.geometricShape = new Ellipse((edu.stanford.hakan.aim4api.base.TwoDimensionEllipse) itemV4);
+            } else if ("TwoDimensionOrthogonal".equals(itemV4.getXsiType())) {
+                this.geometricShape = new Orthogonal((edu.stanford.hakan.aim4api.base.TwoDimensionOrthogonal) itemV4);
             } else if ("TwoDimensionMultiPoint".equals(itemV4.getXsiType())) {
                 this.geometricShape = new MultiPoint((edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint) itemV4);
             } else if ("TwoDimensionPoint".equals(itemV4.getXsiType())) {

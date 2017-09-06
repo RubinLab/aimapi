@@ -274,6 +274,8 @@ public class GeometricShape implements IGeometricShape, IAimXMLOperations {
                 res = new edu.stanford.hakan.aim4api.base.TwoDimensionCircle();
             } else if ("Ellipse".equals(this.getXsiType())) {
                 res = new edu.stanford.hakan.aim4api.base.TwoDimensionEllipse();
+            } else if ("Orthogonal".equals(this.getXsiType())) {
+                res = new edu.stanford.hakan.aim4api.base.TwoDimensionOrthogonal();
             } else if ("MultiPoint".equals(this.getXsiType())) {
                 res = new edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint();
             } else if ("Point".equals(this.getXsiType())) {
