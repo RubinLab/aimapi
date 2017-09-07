@@ -28,9 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
-import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
-import edu.stanford.hakan.aim4api.utility.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -211,6 +209,7 @@ public String getDataType() {
     public edu.stanford.hakan.aim4api.base.CalculationResult toAimV4() {
         edu.stanford.hakan.aim4api.base.ExtendedCalculationResult res = new edu.stanford.hakan.aim4api.base.ExtendedCalculationResult();
         res.setDimensionCollection(this.getDimensionCollection().toAimV4());//
+        //fill in UnitOfMeasureUCUM instead of UnitOfMeasure
 //        res.setUnitOfMeasure(Converter.toST(this.getUnitOfMeasure()));//
         
         res.setCalculationDataCollection(this.getCalculationDataCollection().toAimV4());//
@@ -222,8 +221,6 @@ public String getDataType() {
         else
         	res.setDataType(lex.getDefaultDataType());
 //        res.setDataType(new CD("", "", "", ""));
-        Logger.write("unit measure "+this.getUnitOfMeasure());
-        Logger.write("lex "+ lex.get(this.getUnitOfMeasure()));
         if (this.getUnitOfMeasure()!=null && lex.get(this.getUnitOfMeasure())!=null)
 	        res.setUnitOfMeasureUCUM(lex.get(this.getUnitOfMeasure()));
         return res;
@@ -240,8 +237,8 @@ public String getDataType() {
         if (v4.getUnitOfMeasure() != null) {
             this.setUnitOfMeasure(v4.getUnitOfMeasure().getValue());
         }else if (v4.getUnitOfMeasureUCUM() != null) {
-        	//TODO
-//            this.setUnitOfMeasure(v4.getUnitOfMeasureUCUM().getValue());
+        	Lexicon lex=Lexicon.getInstance();
+            this.setUnitOfMeasure(lex.reverseGet(v4.getUnitOfMeasureUCUM()));
         }
     }
 

@@ -2,6 +2,7 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import edu.stanford.hakan.aim4api.base.CD;
@@ -88,7 +89,7 @@ public class Lexicon extends HashMap<String, CD> {
 			
 			//UCUM lookup
 			this.put("SUV", new CD("{SUVbw}g/ml","Standardized Uptake Value body weight","UCUM"));
-			this.put("HU", new CD("[hnsf''U]","Hounsfield Unit","UCUM"));
+			this.put("HU", new CD("[hnsf'U]","Hounsfield Unit","UCUM"));
 			this.put("cm", new CD("cm","Centimeter","UCUM"));
 
 			
@@ -98,6 +99,19 @@ public class Lexicon extends HashMap<String, CD> {
 		}
 	}
 
+	public String reverseGet(CD value){
+		String key=null;
+		
+		for (Map.Entry<String, CD> entry : this.entrySet())
+		{	
+			//code should be unique
+			if (entry.getValue().getCode()!=null && value.getCode()!=null && entry.getValue().getCode().equals(value.getCode()) ){
+				key=entry.getKey();
+			}
+		}
+		
+		return key;
+	}
 
 
 }
