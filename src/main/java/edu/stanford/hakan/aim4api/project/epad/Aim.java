@@ -1930,37 +1930,40 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     }
     
     public void addLongAxisMeanCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MEAN, "R-00317");
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MEAN, "R-00317", MEAN);
     }
     public void addLongAxisStdDevCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+STD_DEV, "R-10047");
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+STD_DEV, "R-10047", STD_DEV);
     }
     public void addLongAxisMinCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MIN, "R-404FB");
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MIN, "R-404FB", MIN);
     }
     public void addLongAxisMaxCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MAX, "G-A437");
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MAX, "G-A437", MAX);
     }
     
     public void addShortAxisMeanCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MEAN, "R-00317");
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MEAN, "R-00317", MEAN);
     }
     public void addShortAxisStdDevCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+STD_DEV, "R-10047");
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+STD_DEV, "R-10047", STD_DEV);
     }
     public void addShortAxisMinCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MIN, "R-404FB");
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MIN, "R-404FB", MIN);
     }
     public void addShortAxisMaxCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MAX, "G-A437");
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MAX, "G-A437", MAX);
     }
     
     public void addLengthCalculation(double value, Integer shapeId) {
     	addCalculation(value,shapeId,LINE_MEASURE,LINE_LENGTH, "G-D7FE");
     }
     
-    
+
     public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
+    	addCalculation(value, shapeId, units, name, code, null);
+    }
+    public void addCalculation(double value, Integer shapeId, String units, String name, String code, String algorithmName) {
 
     	//rdf references needs to be fixed for shapeid to work
 //    	//if it is there set it if not add it
@@ -1973,7 +1976,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         Calculation calculation = new Calculation();
         calculation.setCagridId(0);
         calculation.setAlgorithmVersion(VERSION);
-        calculation.setAlgorithmName(name);
+        if (algorithmName==null)
+        	calculation.setAlgorithmName(name);
+        else
+        	calculation.setAlgorithmName(algorithmName);
         //ml value in Lexicon
         calculation.setAlgorithmType("RID12780");
         
