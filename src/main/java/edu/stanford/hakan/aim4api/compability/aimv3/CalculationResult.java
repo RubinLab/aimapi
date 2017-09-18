@@ -30,6 +30,7 @@ package edu.stanford.hakan.aim4api.compability.aimv3;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
+import edu.stanford.hakan.aim4api.utility.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
