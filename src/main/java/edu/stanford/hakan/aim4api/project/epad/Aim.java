@@ -1921,10 +1921,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     	addCalculation(value,shapeId,units,MAX, "G-A437");
     }
     public void addLongAxisCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,LONG_AXIS, "99EPADF283");
+    	addCalculation(value,shapeId,units,LONG_AXIS, "G-A185");
     }
     public void addShortAxisCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,SHORT_AXIS, "99EPADF272");
+    	addCalculation(value,shapeId,units,SHORT_AXIS, "G-A186");
     }
     //get the unit from line_measure constant
     public void addLongAxisCalculation(double value, Integer shapeId) {
