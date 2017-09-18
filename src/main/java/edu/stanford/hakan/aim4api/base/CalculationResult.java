@@ -40,7 +40,6 @@ import org.w3c.dom.NodeList;
 public class CalculationResult implements IAimXMLOperations {
 
     private ST unitOfMeasure;
-    private CD unitOfMeasureUCUM;
     private CD dataType;
     private DimensionCollection dimensionCollection = new DimensionCollection();
     private Enumerations.CalculationResultIdentifier type;
@@ -51,17 +50,9 @@ public class CalculationResult implements IAimXMLOperations {
         return unitOfMeasure;
     }
 
-    public CD getUnitOfMeasureUCUM() {
-        return unitOfMeasureUCUM;
-    }
     public void setUnitOfMeasure(ST unitOfMeasure) {
         unitOfMeasure.setTagName("unitOfMeasure");
         this.unitOfMeasure = unitOfMeasure;
-    }
-
-    public void setUnitOfMeasureUCUM(CD unitOfMeasureUCUM) {
-    	unitOfMeasureUCUM.setTagName("unitOfMeasureUCUM");
-        this.unitOfMeasureUCUM = unitOfMeasureUCUM;
     }
 
     public CD getDataType() {
@@ -118,9 +109,6 @@ public class CalculationResult implements IAimXMLOperations {
         if (this.unitOfMeasure != null) {
             res.appendChild(this.unitOfMeasure.getXMLNode(doc));
         }
-        if (this.unitOfMeasureUCUM != null) {
-            res.appendChild(this.unitOfMeasureUCUM.getXMLNode(doc));
-        }
         if (this.dataType != null) {
             res.appendChild(this.dataType.getXMLNode(doc));
         }
@@ -153,11 +141,6 @@ public class CalculationResult implements IAimXMLOperations {
                 obj.setXMLNode(currentNode);
                 this.setUnitOfMeasure(obj);
             }
-            if ("unitOfMeasureUCUM".equals(currentNode.getNodeName())) {
-            	CD obj = new CD();
-                obj.setXMLNode(currentNode);
-                this.setUnitOfMeasureUCUM(obj);
-            }
             if ("dataType".equals(currentNode.getNodeName())) {
                 CD obj = new CD();
                 obj.setXMLNode(currentNode);
@@ -180,9 +163,6 @@ public class CalculationResult implements IAimXMLOperations {
         if (this.unitOfMeasure == null ? oth.unitOfMeasure != null : !this.unitOfMeasure.isEqualTo(oth.unitOfMeasure)) {
             return false;
         }
-        if (this.unitOfMeasureUCUM == null ? oth.unitOfMeasureUCUM != null : !this.unitOfMeasureUCUM.isEqualTo(oth.unitOfMeasureUCUM)) {
-            return false;
-        }
         if (this.dataType == null ? oth.dataType != null : !this.dataType.isEqualTo(oth.dataType)) {
             return false;
         }
@@ -199,9 +179,6 @@ public class CalculationResult implements IAimXMLOperations {
         CalculationResult res = new CalculationResult();
         if (this.getUnitOfMeasure() != null) {
             res.setUnitOfMeasure(this.getUnitOfMeasure().getClone());
-        }
-        if (this.getUnitOfMeasureUCUM() != null) {
-            res.setUnitOfMeasureUCUM(this.getUnitOfMeasureUCUM().getClone());
         }
         if (this.getDataType() != null) {
             res.setDataType(this.getDataType().getClone());

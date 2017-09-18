@@ -28,6 +28,7 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 
 import org.w3c.dom.Document;
@@ -209,9 +210,7 @@ public String getDataType() {
     public edu.stanford.hakan.aim4api.base.CalculationResult toAimV4() {
         edu.stanford.hakan.aim4api.base.ExtendedCalculationResult res = new edu.stanford.hakan.aim4api.base.ExtendedCalculationResult();
         res.setDimensionCollection(this.getDimensionCollection().toAimV4());//
-        //fill in UnitOfMeasureUCUM instead of UnitOfMeasure
-//        res.setUnitOfMeasure(Converter.toST(this.getUnitOfMeasure()));//
-        
+        res.setUnitOfMeasure(Converter.toST(this.getUnitOfMeasure()));//
         res.setCalculationDataCollection(this.getCalculationDataCollection().toAimV4());//
         res.setType(Converter.toAimV4(this.getType())); //
         //ml coded data type (a primitive programming data type such as integer, double, etc. as well as other data type such as URI)
@@ -221,8 +220,6 @@ public String getDataType() {
         else
         	res.setDataType(lex.getDefaultDataType());
 //        res.setDataType(new CD("", "", "", ""));
-        if (this.getUnitOfMeasure()!=null && lex.get(this.getUnitOfMeasure())!=null)
-	        res.setUnitOfMeasureUCUM(lex.get(this.getUnitOfMeasure()));
         return res;
     }
 
@@ -236,9 +233,6 @@ public String getDataType() {
         this.setNumberOfDimensions(0);
         if (v4.getUnitOfMeasure() != null) {
             this.setUnitOfMeasure(v4.getUnitOfMeasure().getValue());
-        }else if (v4.getUnitOfMeasureUCUM() != null) {
-        	Lexicon lex=Lexicon.getInstance();
-            this.setUnitOfMeasure(lex.reverseGet(v4.getUnitOfMeasureUCUM()));
         }
     }
 
