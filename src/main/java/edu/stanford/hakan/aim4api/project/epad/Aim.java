@@ -1861,7 +1861,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         CalculationResult calculationResult = new CalculationResult();
         calculationResult.setCagridId(0);
         calculationResult.setType(CalculationResultIdentifier.Scalar);
-        calculationResult.setUnitOfMeasure(LINE_MEASURE);
+        calculationResult.setUnitOfMeasure(Aim.getUCUMUnit(LINE_MEASURE));
         calculationResult.setNumberOfDimensions(0);
         //ml value in Lexicon
         calculationResult.setDataType("99EPADD1");
@@ -1895,6 +1895,16 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return calculation;
     }
     
+    public static String getUCUMUnit(String units){
+		if (units==null) 
+			return "";
+		if (units.equalsIgnoreCase("HU")) {
+			return "[hnsf'U]";
+		}else if (units.equalsIgnoreCase("SUV")) {
+			return "{SUVbw}g/ml";
+		}
+		return units;
+    }
     /**
      * add mean calculation to the annonation
      * @param mean
@@ -1923,10 +1933,10 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     }
     //get the unit from line_measure constant
     public void addLongAxisCalculation(double value, Integer shapeId) {
-    	addCalculation(value,shapeId,LINE_MEASURE,LONG_AXIS, "99EPADF283");
+    	addCalculation(value,shapeId,LINE_MEASURE,LONG_AXIS, "G-A185");
     }
     public void addShortAxisCalculation(double value, Integer shapeId) {
-    	addCalculation(value,shapeId,LINE_MEASURE,SHORT_AXIS, "99EPADF272");
+    	addCalculation(value,shapeId,LINE_MEASURE,SHORT_AXIS, "G-A186");
     }
     
     public void addLongAxisMeanCalculation(double value, Integer shapeId, String units) {
@@ -2003,7 +2013,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         CalculationResult calculationResult = new CalculationResult();
         calculationResult.setCagridId(0);
         calculationResult.setType(CalculationResultIdentifier.Scalar);
-        calculationResult.setUnitOfMeasure(units);
+        calculationResult.setUnitOfMeasure(Aim.getUCUMUnit(units));
        
         calculationResult.setNumberOfDimensions(0);
         //ml value in Lexicon

@@ -14,6 +14,7 @@ import edu.stanford.hakan.aim4api.compability.aimv3.CalculationData;
 import edu.stanford.hakan.aim4api.compability.aimv3.CalculationResult;
 import edu.stanford.hakan.aim4api.compability.aimv3.Dimension;
 import edu.stanford.hakan.aim4api.compability.aimv3.ImageAnnotation;
+import edu.stanford.hakan.aim4api.project.epad.Aim;
 
 /**
  *
@@ -202,7 +203,7 @@ public class AnnotationExtender {
     	calculation.setAlgorithmVersion(parentCD.getCodeSystemVersion());
     	calculation.setAlgorithmType(parentCD.getCode()); 
     	calculation.setAlgorithmName(parentCD.getDisplayName().getValue());
-    	calculation.setUid("0");
+//    	calculation.setUid("0");
     	
     	
     	if (feature!=null) {
@@ -224,7 +225,7 @@ public class AnnotationExtender {
         calculationResult.setType(CalculationResultIdentifier.Scalar);
         if (unit==null)
         	unit="ratio";
-        calculationResult.setUnitOfMeasure(unit);
+        calculationResult.setUnitOfMeasure(Aim.getUCUMUnit(unit));
         //ml double
         calculationResult.setDataType("99EPADD1");;
         calculationResult.setNumberOfDimensions(1);
