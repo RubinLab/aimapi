@@ -536,37 +536,38 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	
 	/**
 	 * the code retrieved from edu.stanford.hakan.aim4api.project.epad.Aim and converted to aim4 classes
+	 * to keep a v4 copy of them. currently not in use
 	 * @param length
 	 * @return
 	 */
-	//values from edu.stanford.hakan.aim4api.project.epad.Aim to keep the same for default
-	private static final String LINE_LENGTH = "LineLength";
-	private static final String VERSION = "1.0";
-	private static final String PRIVATE_DESIGNATOR = "private";
-	private static final String MEAN = "Mean"; 
-	private static final String AREA = "Area";
-	private static final String STD_DEV = "Standard Deviation";
-	private static final String MIN = "Minimum";
-	private static final String MAX = "Maximum";
+	//values from edu.stanford.hakan.aim4api.project.epad.Aim use Aim classes values if exists
+//	private static final String LINE_LENGTH = "LineLength";
+//	private static final String VERSION = "1.0";
+//	private static final String PRIVATE_DESIGNATOR = "private";
+//	private static final String MEAN = "Mean"; 
+//	private static final String AREA = "Area";
+//	private static final String STD_DEV = "Standard Deviation";
+//	private static final String MIN = "Minimum";
+//	private static final String MAX = "Maximum";
 	private static final String VOLUME = "Volume";
 		
 	public static CalculationEntity addMeanCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,MEAN, "R-00317");
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.MEAN, "R-00317");
 	}
 	public static CalculationEntity addAreaCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,AREA, "99EPADA4");
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.AREA, "99EPADA4");
 	}
 	public static CalculationEntity addStdDevCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,STD_DEV, "R-10047");
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.STD_DEV, "R-10047");
 	}
 	public static CalculationEntity addMinCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,MIN, "R-404FB");
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.MIN, "R-404FB");
 	}
 	public static CalculationEntity addMaxCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,MAX, "G-A437");
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.MAX, "G-A437");
 	}
 	public static CalculationEntity addLengthCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,LINE_LENGTH, "G-D7FE");
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.LINE_LENGTH, "G-D7FE");
 	}
 	public static CalculationEntity addVolumeCalculation(double value, Integer shapeId, String units) {
 		return addCalculation(String.valueOf(value),shapeId,units,VOLUME, "RID28668");
@@ -594,7 +595,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			desc=calcCD.getDisplayName().getValue();
 		}else {
 
-			cal.addTypeCode(new CD(name,name,PRIVATE_DESIGNATOR));
+			cal.addTypeCode(new CD(name,name,Aim.PRIVATE_DESIGNATOR));
 			cal.setDescription(new ST(name));
 			desc=name;
 
@@ -602,7 +603,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		ExtendedCalculationResult calculationResult=new ExtendedCalculationResult();
 
 		calculationResult.setType(Enumerations.CalculationResultIdentifier.Scalar);
-		calculationResult.setUnitOfMeasure(new ST(Aim4.getUCUMUnit(units)));
+		calculationResult.setUnitOfMeasure(new ST(Aim.getUCUMUnit(units)));
 		if (units.equals(""))
 			calculationResult.setDataType(new CD("99EPADD2","String","99EPAD"));
 		else
@@ -634,7 +635,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 
 		Algorithm alg=new Algorithm();
 		alg.setName(new ST(desc));
-		alg.setVersion(new ST(VERSION));
+		alg.setVersion(new ST(Aim.VERSION));
 		ArrayList<CD> types=new ArrayList<>();
 		types.add(new CD("RID12780","Calculation","RadLex","3.2"));
 		alg.setType(types);
@@ -644,16 +645,6 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 
 	}
 	
-	public static String getUCUMUnit(String units){
-		if (units==null) 
-			return "";
-		if (units.equalsIgnoreCase("HU")) {
-			return "[hnsf'U]";
-		}else if (units.equalsIgnoreCase("SUV")) {
-			return "{SUVbw}g/ml";
-		}
-		return units;
-    }
 	
 	public void addCalculationEntity(CalculationEntity newCalculation) {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);

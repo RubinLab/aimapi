@@ -95,19 +95,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     private static final Logger logger = Logger.getLogger("Aim");
 
     private static final int caGridId = 0;
-    private static final String LINE_LENGTH = "LineLength";
-    private static final String LONG_AXIS = "LongAxis";
-    private static final String SHORT_AXIS = "ShortAxis";
-    private static final String MEAN = "Mean"; 
-    private static final String AREA = "Area";
-    private static final String STD_DEV = "Standard Deviation";
-    private static final String MIN = "Minimum";
-    private static final String MAX = "Maximum";
+    public static final String LINE_LENGTH = "LineLength";
+    public static final String LONG_AXIS = "LongAxis";
+    public static final String SHORT_AXIS = "ShortAxis";
+    public static final String MEAN = "Mean"; 
+    public static final String AREA = "Area";
+    public static final String STD_DEV = "Standard Deviation";
+    public static final String MIN = "Minimum";
+    public static final String MAX = "Maximum";
     
     
-    private static final String PRIVATE_DESIGNATOR = "private";
-    private static final String LINE_MEASURE = "cm";
-    private static final String VERSION = "1.0";
+    public static final String PRIVATE_DESIGNATOR = "private";
+    public static final String LINE_MEASURE = "cm";
+    public static final String VERSION = "1.0";
     
 
     public Aim(ImageAnnotationCollection iac)
