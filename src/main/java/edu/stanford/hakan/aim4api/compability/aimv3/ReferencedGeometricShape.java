@@ -108,6 +108,7 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
     }
 
     public void toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation, II calculationUniqueIdentifier) {
+    	//this is where the aimv3 referenceshapes are converted into statements for v4
         String uid = GenerateId.getUUID();
         ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement connectGeoShapeWithImagingPhysicalEntity = new ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement();
         connectGeoShapeWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(this.getReferencedShapeIdentifier()));

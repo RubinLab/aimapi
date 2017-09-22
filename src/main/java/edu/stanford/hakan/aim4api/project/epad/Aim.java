@@ -1839,7 +1839,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         //ml value in Lexicon
         calculation.setAlgorithmType("RID12780");
         
-        calculation.setUid("0");
+        //why no uid
+//        calculation.setUid("0");
         Lexicon lex=Lexicon.getInstance();
         CD calcCD= lex.get("G-D7FE");
         if (calcCD!=null) {
@@ -1933,8 +1934,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         calculation.setAlgorithmName(name);
         //ml value in Lexicon
         calculation.setAlgorithmType("RID12780");
-        
-        calculation.setUid("0");
+        //why uid 0
+//        calculation.setUid("0");
         Lexicon lex=Lexicon.getInstance();
         CD calcCD= lex.get(code);
         if (calcCD!=null) {
