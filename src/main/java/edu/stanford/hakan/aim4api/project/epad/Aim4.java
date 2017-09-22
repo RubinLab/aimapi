@@ -602,7 +602,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		ExtendedCalculationResult calculationResult=new ExtendedCalculationResult();
 
 		calculationResult.setType(Enumerations.CalculationResultIdentifier.Scalar);
-		calculationResult.setUnitOfMeasure(new ST(units));
+		calculationResult.setUnitOfMeasure(new ST(Aim4.getUCUMUnit(units)));
 		if (units.equals(""))
 			calculationResult.setDataType(new CD("99EPADD2","String","99EPAD"));
 		else
@@ -643,6 +643,17 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		return cal;
 
 	}
+	
+	public static String getUCUMUnit(String units){
+		if (units==null) 
+			return "";
+		if (units.equalsIgnoreCase("HU")) {
+			return "[hnsf'U]";
+		}else if (units.equalsIgnoreCase("SUV")) {
+			return "{SUVbw}g/ml";
+		}
+		return units;
+    }
 	
 	public void addCalculationEntity(CalculationEntity newCalculation) {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
