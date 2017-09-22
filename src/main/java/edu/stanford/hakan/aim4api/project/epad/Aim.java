@@ -26,9 +26,7 @@ package edu.stanford.hakan.aim4api.project.epad;
 //import com.google.gwt.i18n.client.DateTimeFormat;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
-import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
 import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
@@ -75,13 +73,9 @@ import edu.stanford.hakan.aim4api.compability.aimv3.User;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-//import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
