@@ -349,42 +349,43 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 
             shape.setIncludeFlag(true);
 
-            //ml add calculation only if it is a line
-            if (shapeType==ShapeType.LINE) {
-            	addCalculation(addlengthCalculation(
-                    coords,
-                    calculateLineLength(getCoords(shape), pixelSpacingX,
-                            pixelSpacingY), shape.getShapeIdentifier()));
-            }
-            else if (shapeType==ShapeType.NORMAL) {
-            	logger.info("ellipse");
-            	//first line long axis
-            	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
-            	coordslist.add(coords.get(0));
-            	coordslist.add(coords.get(1));
-            	double length1 = calculateLineLength(coordslist, pixelSpacingX,
-    					pixelSpacingY);
-            	logger.info("line length 1 : " + length1);
-            	
-            	
-            	coordslist.clear();
-            	coordslist.add(coords.get(2));
-            	coordslist.add(coords.get(3));
-            	double length2 = calculateLineLength(coordslist, pixelSpacingX,
-    					pixelSpacingY);
-            	logger.info("line length 2: " + length2);
-            	if (length1>=length2){
-            		addLongAxisCalculation(
-            			length1, shape.getShapeIdentifier(),LINE_MEASURE);
-            		addShortAxisCalculation( 
-            			length2, shape.getShapeIdentifier(),LINE_MEASURE);
-            	}else {
-            		addLongAxisCalculation(
-                			length2, shape.getShapeIdentifier(),LINE_MEASURE);
-                	addShortAxisCalculation( 
-                			length1, shape.getShapeIdentifier(),LINE_MEASURE);
-            	}
-            }
+            //ui will add the length calculations
+//            //ml add calculation only if it is a line
+//            if (shapeType==ShapeType.LINE) {
+//            	addCalculation(addlengthCalculation(
+//                    coords,
+//                    calculateLineLength(getCoords(shape), pixelSpacingX,
+//                            pixelSpacingY), shape.getShapeIdentifier()));
+//            }
+//            else if (shapeType==ShapeType.NORMAL) {
+//            	logger.info("ellipse");
+//            	//first line long axis
+//            	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
+//            	coordslist.add(coords.get(0));
+//            	coordslist.add(coords.get(1));
+//            	double length1 = calculateLineLength(coordslist, pixelSpacingX,
+//    					pixelSpacingY);
+//            	logger.info("line length 1 : " + length1);
+//            	
+//            	
+//            	coordslist.clear();
+//            	coordslist.add(coords.get(2));
+//            	coordslist.add(coords.get(3));
+//            	double length2 = calculateLineLength(coordslist, pixelSpacingX,
+//    					pixelSpacingY);
+//            	logger.info("line length 2: " + length2);
+//            	if (length1>=length2){
+//            		addLongAxisCalculation(
+//            			length1, shape.getShapeIdentifier(),LINE_MEASURE);
+//            		addShortAxisCalculation( 
+//            			length2, shape.getShapeIdentifier(),LINE_MEASURE);
+//            	}else {
+//            		addLongAxisCalculation(
+//                			length2, shape.getShapeIdentifier(),LINE_MEASURE);
+//                	addShortAxisCalculation( 
+//                			length1, shape.getShapeIdentifier(),LINE_MEASURE);
+//            	}
+//            }
 
             addGeometricShape(shape);
         }
@@ -406,6 +407,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public void setNormalLineLengths(int shapeID, List<TwoDCoordinate> coords,
     		double pixelSpacingX, double pixelSpacingY) {
     	
+    	logger.warning("Depreceated. Save the normal line calculations with addLongAxisCalculation and addShortAxisCalculation");
     	//find the line lengths first
     	List<TwoDCoordinate> coordslist = new ArrayList<TwoDCoordinate>();
     	coordslist.add(coords.get(0));
@@ -846,7 +848,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public boolean isEllipse(int shapeID) {
         return getShapeType(shapeID).equals(ShapeType.ELLIPSE);
     }
-
+    
     @Override
     public boolean isSpline(int shapeID) {
         return getShapeType(shapeID).equals(ShapeType.SPLINE);
@@ -1860,7 +1862,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         CalculationResult calculationResult = new CalculationResult();
         calculationResult.setCagridId(0);
         calculationResult.setType(CalculationResultIdentifier.Scalar);
-        calculationResult.setUnitOfMeasure(LINE_MEASURE);
+        calculationResult.setUnitOfMeasure(Aim.getUCUMUnit(LINE_MEASURE));
         calculationResult.setNumberOfDimensions(0);
         //ml value in Lexicon
         calculationResult.setDataType("99EPADD1");
@@ -1894,6 +1896,16 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return calculation;
     }
     
+    public static String getUCUMUnit(String units){
+		if (units==null) 
+			return "";
+		if (units.equalsIgnoreCase("HU")) {
+			return "[hnsf'U]";
+		}else if (units.equalsIgnoreCase("SUV")) {
+			return "{SUVbw}g/ml";
+		}
+		return units;
+    }
     /**
      * add mean calculation to the annonation
      * @param mean
@@ -1915,23 +1927,70 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     	addCalculation(value,shapeId,units,MAX, "G-A437");
     }
     public void addLongAxisCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,LONG_AXIS, "99EPADF283");
+    	addCalculation(value,shapeId,units,LONG_AXIS, "G-A185");
     }
     public void addShortAxisCalculation(double value, Integer shapeId, String units) {
-    	addCalculation(value,shapeId,units,SHORT_AXIS, "99EPADF272");
+    	addCalculation(value,shapeId,units,SHORT_AXIS, "G-A186");
     }
-        
-    public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
+    //get the unit from line_measure constant
+    public void addLongAxisCalculation(double value, Integer shapeId) {
+    	addCalculation(value,shapeId,LINE_MEASURE,LONG_AXIS, "G-A185");
+    }
+    public void addShortAxisCalculation(double value, Integer shapeId) {
+    	addCalculation(value,shapeId,LINE_MEASURE,SHORT_AXIS, "G-A186");
+    }
+    
+    public void addLongAxisMeanCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MEAN, "R-00317", MEAN);
+    }
+    public void addLongAxisStdDevCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+STD_DEV, "R-10047", STD_DEV);
+    }
+    public void addLongAxisMinCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MIN, "R-404FB", MIN);
+    }
+    public void addLongAxisMaxCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,LONG_AXIS+"_"+MAX, "G-A437", MAX);
+    }
+    
+    public void addShortAxisMeanCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MEAN, "R-00317", MEAN);
+    }
+    public void addShortAxisStdDevCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+STD_DEV, "R-10047", STD_DEV);
+    }
+    public void addShortAxisMinCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MIN, "R-404FB", MIN);
+    }
+    public void addShortAxisMaxCalculation(double value, Integer shapeId, String units) {
+    	addCalculation(value,shapeId,units,SHORT_AXIS+"_"+MAX, "G-A437", MAX);
+    }
+    
+    public void addLengthCalculation(double value, Integer shapeId) {
+    	addCalculation(value,shapeId,LINE_MEASURE,LINE_LENGTH, "G-D7FE");
+    }
+    
 
-    	//if it is there set it if not add it
-    	if (shapeId!=null && setShapeCalculation(shapeId, name, value))
-    		return;
+    public void addCalculation(double value, Integer shapeId, String units, String name, String code) {
+    	addCalculation(value, shapeId, units, name, code, null);
+    }
+    public void addCalculation(double value, Integer shapeId, String units, String name, String code, String algorithmName) {
+
+    	//rdf references needs to be fixed for shapeid to work
+//    	//if it is there set it if not add it
+//    	if (shapeId!=null && setShapeCalculation(shapeId, name, value)){
+//    		logger.info("set the calculation instead of adding new");
+//    		return;
+//    	}
     	
         // Create a Calculation instance
         Calculation calculation = new Calculation();
         calculation.setCagridId(0);
         calculation.setAlgorithmVersion(VERSION);
-        calculation.setAlgorithmName(name);
+        if (algorithmName==null)
+        	calculation.setAlgorithmName(name);
+        else
+        	calculation.setAlgorithmName(algorithmName);
         //ml value in Lexicon
         calculation.setAlgorithmType("RID12780");
         //why uid 0
@@ -1955,7 +2014,8 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         CalculationResult calculationResult = new CalculationResult();
         calculationResult.setCagridId(0);
         calculationResult.setType(CalculationResultIdentifier.Scalar);
-        calculationResult.setUnitOfMeasure(units);
+        calculationResult.setUnitOfMeasure(Aim.getUCUMUnit(units));
+       
         calculationResult.setNumberOfDimensions(0);
         //ml value in Lexicon
         calculationResult.setDataType("99EPADD1");

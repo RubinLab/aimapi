@@ -58,8 +58,8 @@ public class Lexicon extends HashMap<String, CD> {
 			//lexicon items that are used specificly by aimapi should be placed in the dictionary 
 			//this is used to achieve independence from epad-ws and db
 			this.put("G-D7FE", new CD("G-D7FE","Length","SRT"));
-			this.put("99EPADF272", new CD("99EPADF272","ShortAxis","99EPAD"));
-			this.put("99EPADF283", new CD("99EPADF283","LongAxis","99EPAD"));
+			this.put("G-A186", new CD("G-A186","ShortAxis","SRT"));
+			this.put("G-A185", new CD("G-A185","LongAxis","SRT"));
 			
 			this.put("RID12780", new CD("RID12780","Calculation","RadLex","3.2"));
 			//update with Andrey's list
