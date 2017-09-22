@@ -111,8 +111,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import edu.stanford.hakan.aim4api.base.Algorithm;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.CalculationEntity;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.DicomSegmentationEntity;
+import edu.stanford.hakan.aim4api.base.Enumerations;
+import edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
 import edu.stanford.hakan.aim4api.base.Image;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
@@ -121,8 +126,10 @@ import edu.stanford.hakan.aim4api.base.ImageStudy;
 import edu.stanford.hakan.aim4api.base.Person;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.SegmentationEntity;
+import edu.stanford.hakan.aim4api.compability.aimv3.Calculation;
 import edu.stanford.hakan.aim4api.compability.aimv3.DICOMImageReference;
 import edu.stanford.hakan.aim4api.compability.aimv3.ImageReference;
+import edu.stanford.hakan.aim4api.compability.aimv3.Modality;
 
 /**
  * 
@@ -200,6 +207,36 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 				}
 			}
 		} finally {
+		}
+		return result;
+	}
+	
+	/**
+	 * gets the modality from aim
+	 * tries to get it from the modality in series first.
+	 * if it is not there tries to get from the sopclassuid 
+	 * @return
+	 */
+	public String getModality() {
+		String result = "";
+
+		try {
+			List<ImageReferenceEntity> imageList = getImageAnnotation().getImageReferenceEntityCollection()
+					.getImageReferenceEntityList();
+			if (imageList.size() > 0) {
+				ImageReferenceEntity imageReference = imageList.get(0);
+				DicomImageReferenceEntity dicomImageReference = (DicomImageReferenceEntity) imageReference;
+				ImageStudy imageStudy = dicomImageReference.getImageStudy();
+				ImageSeries imageSeries = imageStudy.getImageSeries();
+				result =imageSeries.getModality().getCode();
+				if (result.equals("NA")){
+					CD modality=Modality.getInstance().get(imageSeries.getImageCollection().get(0).getSopClassUid().getRoot());
+					if (modality!=null)
+						result = modality.getCode();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}
@@ -494,6 +531,123 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
         } finally {
         }
         return result;
+    }
+	
+	
+	/**
+	 * the code retrieved from edu.stanford.hakan.aim4api.project.epad.Aim and converted to aim4 classes
+	 * to keep a v4 copy of them. currently not in use
+	 * @param length
+	 * @return
+	 */
+	//values from edu.stanford.hakan.aim4api.project.epad.Aim use Aim classes values if exists
+//	private static final String LINE_LENGTH = "LineLength";
+//	private static final String VERSION = "1.0";
+//	private static final String PRIVATE_DESIGNATOR = "private";
+//	private static final String MEAN = "Mean"; 
+//	private static final String AREA = "Area";
+//	private static final String STD_DEV = "Standard Deviation";
+//	private static final String MIN = "Minimum";
+//	private static final String MAX = "Maximum";
+	private static final String VOLUME = "Volume";
+		
+	public static CalculationEntity addMeanCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.MEAN, "R-00317");
+	}
+	public static CalculationEntity addAreaCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.AREA, "99EPADA4");
+	}
+	public static CalculationEntity addStdDevCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.STD_DEV, "R-10047");
+	}
+	public static CalculationEntity addMinCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.MIN, "R-404FB");
+	}
+	public static CalculationEntity addMaxCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.MAX, "G-A437");
+	}
+	public static CalculationEntity addLengthCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,Aim.LINE_LENGTH, "G-D7FE");
+	}
+	public static CalculationEntity addVolumeCalculation(double value, Integer shapeId, String units) {
+		return addCalculation(String.valueOf(value),shapeId,units,VOLUME, "RID28668");
+	}
+
+	/**
+	 * aimapi's addcalculation. it can only save controlled terms that are in aimapi's static lexicon
+	 * use epad-ws's AimUtil.addCalculation for being able to access the dynamic lexicon
+	 * @param value
+	 * @param shapeId
+	 * @param units
+	 * @param name
+	 * @param code
+	 * @return
+	 */
+	public static CalculationEntity addCalculation(String value, Integer shapeId, String units, String name, String code) {
+
+		CalculationEntity cal =new CalculationEntity();
+		cal.setUniqueIdentifier();
+		CD calcCD= edu.stanford.hakan.aim4api.compability.aimv3.Lexicon.getInstance().get(code);
+		String desc="";
+		if (calcCD!=null) {
+			cal.addTypeCode(new CD(calcCD.getCode(),calcCD.getDisplayName().getValue(),calcCD.getCodeSystemName()));
+			cal.setDescription(new ST(calcCD.getDisplayName().getValue()));
+			desc=calcCD.getDisplayName().getValue();
+		}else {
+
+			cal.addTypeCode(new CD(name,name,Aim.PRIVATE_DESIGNATOR));
+			cal.setDescription(new ST(name));
+			desc=name;
+
+		}
+		ExtendedCalculationResult calculationResult=new ExtendedCalculationResult();
+
+		calculationResult.setType(Enumerations.CalculationResultIdentifier.Scalar);
+		calculationResult.setUnitOfMeasure(new ST(Aim.getUCUMUnit(units)));
+		if (units.equals(""))
+			calculationResult.setDataType(new CD("99EPADD2","String","99EPAD"));
+		else
+			calculationResult.setDataType(new CD("99EPADD1","Double","99EPAD"));
+
+		// Create a CalculationData instance
+		edu.stanford.hakan.aim4api.base.CalculationData calculationData = new edu.stanford.hakan.aim4api.base.CalculationData();
+		calculationData.setValue(new ST(value));
+		calculationData.addCoordinate(0, 0);
+
+		// Create a Dimension instance
+		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
+
+		// Add calculationData to calculationResult
+		calculationResult.addCalculationData(calculationData);
+
+		// Add dimension to calculationResult
+		calculationResult.addDimension(dimension);
+
+		//this should be rdf removing for now. do not have shape id. and do not see it in the recist aim.
+		//                    // add the shape reference to the calculation
+		//                    ReferencedGeometricShape reference = new ReferencedGeometricShape();
+		//                    reference.setCagridId(0);
+		//                    reference.setReferencedShapeIdentifier(shapeId);
+		//                    calculation.addReferencedGeometricShape(reference);
+
+		// Add calculationResult to calculation
+		cal.addCalculationResult(calculationResult);
+
+		Algorithm alg=new Algorithm();
+		alg.setName(new ST(desc));
+		alg.setVersion(new ST(Aim.VERSION));
+		ArrayList<CD> types=new ArrayList<>();
+		types.add(new CD("RID12780","Calculation","RadLex","3.2"));
+		alg.setType(types);
+		cal.setAlgorithm(alg);
+
+		return cal;
+
+	}
+	
+	
+	public void addCalculationEntity(CalculationEntity newCalculation) {
+        this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
     }
 	
 

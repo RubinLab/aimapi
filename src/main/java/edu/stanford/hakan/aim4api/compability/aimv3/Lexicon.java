@@ -67,7 +67,8 @@ public class Lexicon extends HashMap<String, CD> {
 			this.put("R-404FB", new CD("R-404FB","Minimum","SRT"));
 			this.put("G-A437", new CD("G-A437","Maximum","SRT"));
 			this.put("R-10047", new CD("R-10047","Standard Deviation","SRT"));
-			
+			this.put("RID28668", new CD("RID28668","Volume","Radlex","3.14"));
+			this.put("99EPADA4", new CD("99EPADA4","Area","99EPAD"));
 			
 			//algorithms, start with 99EPADA
 			this.put(algPrefix+"2", new CD(algPrefix+"2","Plugin",ePadDesignator,ePadLexVersion));
