@@ -81,7 +81,6 @@ public class AnnotationBuilder {
                 PathXSD = Globals.getXSDPath();
             }
             Logger.write("aim="+convertToString(Anno));
-            Anno.getImageAnnotation().getImageAnnotationStatementCollection().getImageAnnotationStatementList().clear();
             clearAimXMLsaveResult();
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
