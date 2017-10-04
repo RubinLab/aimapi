@@ -165,6 +165,14 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		setAimVersion(iac.getAimVersion());
 		this.setImageAnnotations(iac.getImageAnnotations());
 		this.setPluginCollection(iac.getPluginCollection());
+		String date=iac.getDateTime();
+		if (iac!=null && !iac.getDateTime().contains("-")) {//new format change to old
+			if (date.length()==14)
+				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8)+"T"+date.substring(8,10)+":"+date.substring(10,12)+":"+date.substring(12,14);
+			else
+				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
+		}
+		setDateTime(date);
 	}
 
 	
@@ -590,7 +598,21 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		CD calcCD= edu.stanford.hakan.aim4api.compability.aimv3.Lexicon.getInstance().get(code);
 		String desc="";
 		if (calcCD!=null) {
+			if (units.equals("SUV")) {
+				CD typeCode = new CD();
+				typeCode.setCode("SUV");
+				typeCode.setDisplayName(new ST("SUV"));
+				typeCode.setCodeSystemName("99EPAD");
+				cal.addTypeCode(typeCode);
+			}
 			cal.addTypeCode(new CD(calcCD.getCode(),calcCD.getDisplayName().getValue(),calcCD.getCodeSystemName()));
+			if (units.equals("SUV")) {
+				CD typeCode = new CD();
+				typeCode.setCode("BW");
+				typeCode.setDisplayName(new ST("Body Weight"));
+				typeCode.setCodeSystemName("99EPAD");
+				cal.addTypeCode(typeCode);
+			}
 			cal.setDescription(new ST(calcCD.getDisplayName().getValue()));
 			desc=calcCD.getDisplayName().getValue();
 		}else {
@@ -633,13 +655,13 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		// Add calculationResult to calculation
 		cal.addCalculationResult(calculationResult);
 
-		Algorithm alg=new Algorithm();
-		alg.setName(new ST(desc));
-		alg.setVersion(new ST(Aim.VERSION));
-		ArrayList<CD> types=new ArrayList<>();
-		types.add(new CD("RID12780","Calculation","RadLex","3.2"));
-		alg.setType(types);
-		cal.setAlgorithm(alg);
+//		Algorithm alg=new Algorithm();
+//		alg.setName(new ST(desc));
+//		alg.setVersion(new ST(Aim.VERSION));
+//		ArrayList<CD> types=new ArrayList<>();
+//		types.add(new CD("RID12780","Calculation","RadLex","3.2"));
+//		alg.setType(types);
+//		cal.setAlgorithm(alg);
 
 		return cal;
 
