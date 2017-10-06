@@ -124,14 +124,14 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         setAimVersion(ia.getAimVersion(), "al536anhb55555");
         setComment(ia.getComment());
         //ml from Aim44
-        logger.warning("date is:" + ia.getDateTime());
+        logger.warning("aim date is:" + ia.getDateTime());
 		String date=ia.getDateTime();
-		if (!ia.getDateTime().contains("-")) {//new format change to old
-			if (date.length()==14)
-				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8)+"T"+date.substring(8,10)+":"+date.substring(10,12)+":"+date.substring(12,14);
-			else
-				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
-		}
+//		if (!ia.getDateTime().contains("-")) {//new format change to old
+//			if (date.length()==14)
+//				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8)+"T"+date.substring(8,10)+":"+date.substring(10,12)+":"+date.substring(12,14);
+//			else
+//				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
+//		}
 		setDateTime(date);
         setName(ia.getName());
         setUniqueIdentifier(ia.getUniqueIdentifier(), "al536anhb55555");
