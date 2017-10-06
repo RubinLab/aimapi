@@ -105,30 +105,30 @@
 package edu.stanford.hakan.aim4api.project.epad;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CalculationEntity;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.DicomSegmentationEntity;
 import edu.stanford.hakan.aim4api.base.Enumerations;
 import edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
+import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.Image;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.ImageCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageSeries;
 import edu.stanford.hakan.aim4api.base.ImageStudy;
 import edu.stanford.hakan.aim4api.base.Person;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.SegmentationEntity;
-import edu.stanford.hakan.aim4api.compability.aimv3.Calculation;
-import edu.stanford.hakan.aim4api.compability.aimv3.DICOMImageReference;
-import edu.stanford.hakan.aim4api.compability.aimv3.ImageReference;
+import edu.stanford.hakan.aim4api.base.SegmentationEntityCollection;
+import edu.stanford.hakan.aim4api.base.User;
 import edu.stanford.hakan.aim4api.compability.aimv3.Modality;
 
 /**
@@ -154,6 +154,23 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	public Aim4() {
 	}
 	
+	public Aim4(String username,String userFullName, String pName, String pId, String pBirthDate, String pSex, CD template, String lesionName, String comment, String imageUID,String sopClassUID,String studyDate, String studyTime,String studyUID, String sourceSeriesUID, String accessionNumber, String modality, String annotationDate){
+		try {
+			this.setUser(createUser(username,userFullName));
+			
+			logger.warning("annotationDate "+annotationDate);
+			logger.warning("formatted "+getFormattedDateTime(annotationDate));
+			//set the date 
+			this.setDateTime(getFormattedDateTime(annotationDate));
+
+			//put the patient information in aim
+			this.setPerson(setPerson(pName, pId, pBirthDate, pSex));
+			addImageAnnotation(createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime, studyUID, sourceSeriesUID, accessionNumber, modality, annotationDate));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public Aim4(ImageAnnotationCollection iac)
 	{
@@ -166,12 +183,12 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		this.setImageAnnotations(iac.getImageAnnotations());
 		this.setPluginCollection(iac.getPluginCollection());
 		String date=iac.getDateTime();
-		if (iac!=null && !iac.getDateTime().contains("-")) {//new format change to old
-			if (date.length()==14)
-				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8)+"T"+date.substring(8,10)+":"+date.substring(10,12)+":"+date.substring(12,14);
-			else
-				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
-		}
+//		if (iac!=null && !iac.getDateTime().contains("-")) {//new format change to old
+//			if (date.length()==14)
+//				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8)+"T"+date.substring(8,10)+":"+date.substring(10,12)+":"+date.substring(12,14);
+//			else
+//				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
+//		}
 		setDateTime(date);
 	}
 
@@ -599,18 +616,16 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		String desc="";
 		if (calcCD!=null) {
 			if (units.equals("SUV")) {
-				CD typeCode = new CD();
-				typeCode.setCode("SUV");
-				typeCode.setDisplayName(new ST("SUV"));
-				typeCode.setCodeSystemName("99EPAD");
+				CD typeCode = new CD("SUV","SUV","99EPAD");
+				cal.addTypeCode(typeCode);
+			}
+			if (units.equals("HU")) {
+				CD typeCode = new CD("112031","Attenuation Coefficient","DCM");
 				cal.addTypeCode(typeCode);
 			}
 			cal.addTypeCode(new CD(calcCD.getCode(),calcCD.getDisplayName().getValue(),calcCD.getCodeSystemName()));
 			if (units.equals("SUV")) {
-				CD typeCode = new CD();
-				typeCode.setCode("BW");
-				typeCode.setDisplayName(new ST("Body Weight"));
-				typeCode.setCodeSystemName("99EPAD");
+				CD typeCode = new CD("BW","Body Weight","99EPAD");
 				cal.addTypeCode(typeCode);
 			}
 			cal.setDescription(new ST(calcCD.getDisplayName().getValue()));
@@ -672,5 +687,168 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
     }
 	
+	
+	/**
+	 * create an ImageAnnotationCollection object using the properties
+	 * @param username
+	 * @param pName
+	 * @param pId
+	 * @param pBirthDate
+	 * @param pSex
+	 * @return
+	 */
+	public static edu.stanford.hakan.aim4api.base.ImageAnnotationCollection createImageAnnotationColectionFromProperties(String username, String pName, String pId, String pBirthDate, String pSex, String userFullName){
+		ImageAnnotationCollection iac = new ImageAnnotationCollection();
+		iac.setUser(createUser(username,userFullName));
+		
+		//set the date to current date
+		iac.setDateTime(getFormattedDateTime(null));
 
+		//put the patient information in aim
+		iac.setPerson(setPerson(pName, pId, pBirthDate, pSex));
+
+		return iac;
+	}
+	
+	public static User createUser(String username, String userFullName){
+		User user=new User();
+		//format the full name in dicom format
+		user.setName(new ST(userFullName.replace(" ", "^")));
+		user.setLoginName(new ST(username));
+		return user;
+	}
+	
+	public static Person setPerson(String pName, String pId, String pBirthDate, String pSex){
+		Person p=new Person();
+		p.setBirthDate(formatDate(pBirthDate));
+		p.setId(new ST(pId));
+		p.setName(new ST(pName));
+		if (pSex!=null)
+			pSex=pSex.trim();
+		p.setSex(new ST(pSex));
+		return p;
+	}
+	
+	/**
+	 * gets the formatted datetime for the given string
+	 * returns the current datetime if the input is null 
+	 * and default datetime if couldn't be parsed 
+	 * 
+	 * @param dateStr
+	 * @return
+	 */
+	public static String getFormattedDateTime(String dateStr){
+		if (dateStr!=null){ //set to now
+			return formatDate(dateStr);
+		}
+		Date now=new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		return dateFormat.format(now);
+	}
+	
+	
+	/**
+	 * puts 19000101000000 if null or empty
+	 * @param d
+	 * @return
+	 */
+	public static String formatDate(String d) {
+		if (d==null) d="";
+		String date = ((d.length() >= 4) ? d.substring(0, 4) : "1900") 
+				+ ((d.length() >= 6) ? d.substring(4, 6) : "01") 
+				+ ((d.length() >= 8) ? d.substring(6, 8) : "01") 
+				+ ((d.length() >= 10) ? d.substring(8, 10) : "00")
+				+ ((d.length() >= 12) ? d.substring(10, 12) : "00")
+				+ ((d.length() >= 14) ? d.substring(12, 14) : "00");
+		return date;
+
+	}
+
+
+	/**
+	 * create an ImageAnnotation object using the properties
+	 * @param username
+	 * @param templateCode
+	 * @param lesionName
+	 * @param comment
+	 * @param imageUID
+	 * @param sopClassUID
+	 * @param studyDate
+	 * @param studyTime
+	 * @param studyUID
+	 * @param sourceSeriesUID
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public static edu.stanford.hakan.aim4api.base.ImageAnnotation createImageAnnotationFromProperties(String username, CD template, String lesionName, String comment, String imageUID,String sopClassUID,String studyDate, String studyTime,String studyUID, String sourceSeriesUID) throws Exception {
+		return createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime, studyUID, sourceSeriesUID, "");
+	}
+	public static edu.stanford.hakan.aim4api.base.ImageAnnotation createImageAnnotationFromProperties(String username, CD template, String lesionName, String comment, String imageUID,String sopClassUID,String studyDate, String studyTime,String studyUID, String sourceSeriesUID, String accessionNumber) throws Exception {
+		return createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime, studyUID, sourceSeriesUID, accessionNumber,"");
+
+	}	
+	public static edu.stanford.hakan.aim4api.base.ImageAnnotation createImageAnnotationFromProperties(String username, CD template, String lesionName, String comment, String imageUID,String sopClassUID,String studyDate, String studyTime,String studyUID, String sourceSeriesUID, String accessionNumber, String modality) throws Exception {
+		return createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime, studyUID, sourceSeriesUID, accessionNumber, modality, null);
+	}
+	
+	public static edu.stanford.hakan.aim4api.base.ImageAnnotation createImageAnnotationFromProperties(String username, CD template, String lesionName, String comment, String imageUID,String sopClassUID,String studyDate, String studyTime,String studyUID, String sourceSeriesUID, String accessionNumber, String modality, String annotationDateTime) throws Exception {
+		
+		edu.stanford.hakan.aim4api.base.ImageAnnotation ia=new edu.stanford.hakan.aim4api.base.ImageAnnotation();
+		ia.refreshUniqueIdentifier();
+		ia.setDateTime(getFormattedDateTime(annotationDateTime));
+		
+		ia.setName(new ST(lesionName));
+		if (template!=null){
+			ArrayList<CD> types=new ArrayList<>();
+			types.add(template);
+			ia.setTypeCode(types);
+
+		}
+		ia.setComment(new ST(comment));
+
+		//add the image reference entity
+		DicomImageReferenceEntity dicomImageReferenceEntity  = new DicomImageReferenceEntity();
+		ImageStudy study = new ImageStudy();
+		study.setInstanceUid(new II(studyUID));
+		ImageSeries series=new ImageSeries();
+		series.setInstanceUid(new II(sourceSeriesUID));
+		Image image=new Image();
+		image.setSopInstanceUid(new II(imageUID));
+		image.setSopClassUid(new II(sopClassUID));
+		ImageCollection imageCol=new ImageCollection();
+		imageCol.addImage(image);
+		series.setImageCollection(imageCol);
+		Modality mod=Modality.getInstance();
+		if (modality!=null && mod.get(modality)!=null )
+			series.setModality(mod.get(modality));
+		else if ((mod.get(sopClassUID))!=null)
+			series.setModality(mod.get(sopClassUID));
+		else 
+			series.setModality(mod.getDefaultModality());
+		
+		study.setImageSeries(series);
+		study.setStartDate(studyDate);
+		study.setStartTime(studyTime);
+		if (accessionNumber!=null && !accessionNumber.equals("")) {
+			study.setAccessionNumber(new ST(accessionNumber));
+		}
+		dicomImageReferenceEntity.setImageStudy(study);
+		ia.addImageReferenceEntity(dicomImageReferenceEntity);
+
+		return ia;
+
+	}
+
+	/**
+	 * ignores the existing one, overwrites.
+	 * assumes one annotation
+	 * @param dc
+	 */
+	public void setSegmentationEntity(DicomSegmentationEntity dc){
+		SegmentationEntityCollection sc = new SegmentationEntityCollection();
+		sc.addSegmentationEntity(dc);
+		this.getImageAnnotation().setSegmentationEntityCollection(sc);
+		
+	}
 }
