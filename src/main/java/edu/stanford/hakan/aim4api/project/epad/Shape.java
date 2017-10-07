@@ -87,7 +87,8 @@ public class Shape extends GeometricShape {
 			result = ShapeType.CIRCLE;
 		} else if ("Point".equals(xsiType)) {
 			result = ShapeType.POINT;
-		} else if ("Ellipse".equals(xsiType)) { // To support NORMAL/ORTHOGONAL lines
+		} else if ("Ellipse".equals(xsiType) || "Normal".equals(xsiType)) { // To support NORMAL/ORTHOGONAL lines
+			//it is not goint to be normal as it is not persisted in xml
 			result = ShapeType.NORMAL;
 		}
 		return result;

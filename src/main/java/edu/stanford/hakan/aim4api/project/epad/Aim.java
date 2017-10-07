@@ -542,6 +542,11 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         return max;
     }
 
+    private Double roundDouble(Double val){
+	    if (val!=null)
+	        return ((double)Math.round(val*1000))/1000;
+	    return val;
+	}
     @Override
     public List<Shape> getShapes() {
 
@@ -550,6 +555,34 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                 .getGeometricShapeList()) {
             result.add(new Shape(shape));
         }
+        
+        //see if there are 2 lines and if they are orthogonal put a normal shape instead
+        if (result.size()==2 && result.get(0).getShapeType()==ShapeType.LINE && result.get(1).getShapeType()==ShapeType.LINE) {
+//        	by computing the dot product of their vectors and
+//        	determining that it is zero (within an appropriate floating point
+//        	precision related tolerance)
+
+        	Double x0=result.get(0).getCoords().get(0).getX();
+        	Double y0=result.get(0).getCoords().get(0).getY();
+        	Double x1=result.get(0).getCoords().get(1).getX();
+        	Double y1=result.get(0).getCoords().get(1).getY();
+        	Double x2=result.get(1).getCoords().get(0).getX();
+        	Double y2=result.get(1).getCoords().get(0).getY();
+        	Double x3=result.get(1).getCoords().get(1).getX();
+        	Double y3=result.get(1).getCoords().get(1).getY();
+        	logger.info("cross product is "+roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)));
+        	if (roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)) == 0) {
+        		//it is orthogonal
+        		logger.info("lines are orthogonal. create a normal shape instead");
+        		Normal n=new Normal(result.get(0),result.get(1));
+        		result.clear();
+        		result.add(n);
+        		
+        		
+        	}
+        	
+        }
+        logger.info("result is "+ result.size());
         return result;
     }
 
@@ -760,13 +793,13 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     break;
                 case NORMAL:
                 	//add the coorinates to the ellipse shape
-                	Ellipse ellipse = new Ellipse();
-                	ellipse.setShapeIdentifier(shapeID);;
-                	ellipse.setCagridId(caGridId);
-                	shapes.add(createShape(ellipse, coords, imageID, frameID));
-                	
+//                	Ellipse ellipse = new Ellipse();
+//                	ellipse.setShapeIdentifier(shapeID);;
+//                	ellipse.setCagridId(caGridId);
+//                	shapes.add(createShape(ellipse, coords, imageID, frameID));
+                	logger.info("adding two lines ");
                     // add the long axis line
-                    /*List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
+                    List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
                     longAxis.add(coords.get(0));
                     longAxis.add(coords.get(1));
                     MultiPoint longShape = new MultiPoint();
@@ -785,7 +818,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                     shortShape.setCagridId(caGridId);
                     GeometricShape s = createShape(shortShape, shortAxis, imageID,
                             frameID);
-                    shapes.add(s);*/
+                    shapes.add(s);
 
                     break;
                 default:
