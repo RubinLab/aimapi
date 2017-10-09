@@ -42,7 +42,8 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 public class Shape extends GeometricShape {
 
 	double labelOffsetX, labelOffsetY = 0.0;
-
+	int referencedFrameNumber = 1;
+	
 	public Shape() {
 	}
 
@@ -58,6 +59,11 @@ public class Shape extends GeometricShape {
 		this.setXsiType(geometricShape.getXsiType());
 		this.setSpatialCoordinateCollection(geometricShape
 				.getSpatialCoordinateCollection());
+		
+		//this is in twodimendisongeometricentity in v4
+		//get the referenced frame number
+		List<TwoDCoordinate> coords= getCoords();
+		setReferencedFrameNumber(coords.get(0).getReferencedFrameNumber());
 	}
 
 	public List<TwoDCoordinate> getCoords() {
@@ -109,6 +115,14 @@ public class Shape extends GeometricShape {
 
 	public void setLabelOffsetY(double labelOffsetY) {
 		this.labelOffsetY = labelOffsetY;
+	}
+
+	public int getReferencedFrameNumber() {
+		return referencedFrameNumber;
+	}
+
+	public void setReferencedFrameNumber(int referencedFrameNumber) {
+		this.referencedFrameNumber = referencedFrameNumber;
 	}
 
 }
