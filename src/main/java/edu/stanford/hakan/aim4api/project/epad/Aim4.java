@@ -790,6 +790,22 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 
 	}
 	
+	
+	/**
+	 * puts 19000101000000 if null or empty
+	 * @param d
+	 * @return
+	 */
+	public static String formatTimeForAim(String d) {
+		if (d==null) d="00:00:00";
+		String date = 
+				 ((d.length() >= 2) ? d.substring(0, 2) : "00")
+				+":"+ ((d.length() >= 4) ? d.substring(2, 4) : "00")
+				+":"+ ((d.length() >= 6) ? d.substring(4, 6) : "00");
+		return date;
+
+	}
+
 
 	/**
 	 * create an ImageAnnotation object using the properties
@@ -855,7 +871,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		
 		study.setImageSeries(series);
 		study.setStartDate(studyDate);
-		study.setStartTime(studyTime);
+		study.setStartTime(formatTimeForAim(studyTime));
 		if (accessionNumber!=null && !accessionNumber.equals("")) {
 			study.setAccessionNumber(new ST(accessionNumber));
 		}
