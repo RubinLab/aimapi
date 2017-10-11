@@ -713,6 +713,16 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
     }
 	
+	public void addCalculationEntityWithRef(CalculationEntity newCalculation,SegmentationEntity seg) {
+        this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
+        this.getImageAnnotation().addImageAnnotationStatement(createCalcRefSegStatement(newCalculation, seg));
+    }
+	
+	public void addCalculationEntityWithRef(CalculationEntity newCalculation,MarkupEntity markup) {
+        this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
+        this.getImageAnnotation().addImageAnnotationStatement(createCalcRefMarkupStatement(newCalculation, markup));
+    }
+	
 	
 	/**
 	 * create an ImageAnnotationCollection object using the properties
