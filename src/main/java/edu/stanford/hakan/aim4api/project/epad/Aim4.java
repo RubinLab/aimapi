@@ -113,6 +113,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CompactCalculationResult;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.DicomSegmentationEntity;
 import edu.stanford.hakan.aim4api.base.Enumerations;
@@ -637,28 +638,29 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			desc=name;
 
 		}
-		ExtendedCalculationResult calculationResult=new ExtendedCalculationResult();
+		CompactCalculationResult calculationResult=new CompactCalculationResult();
 
 		calculationResult.setType(Enumerations.CalculationResultIdentifier.Scalar);
 		calculationResult.setUnitOfMeasure(new ST(Aim.getUCUMUnit(units)));
 		if (units.equals(""))
 			calculationResult.setDataType(new CD("99EPADD2","String","99EPAD"));
 		else
-			calculationResult.setDataType(new CD("99EPADD1","Double","99EPAD"));
-
-		// Create a CalculationData instance
-		edu.stanford.hakan.aim4api.base.CalculationData calculationData = new edu.stanford.hakan.aim4api.base.CalculationData();
-		calculationData.setValue(new ST(value));
-		calculationData.addCoordinate(0, 0);
-
-		// Create a Dimension instance
-		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
-
-		// Add calculationData to calculationResult
-		calculationResult.addCalculationData(calculationData);
-
-		// Add dimension to calculationResult
-		calculationResult.addDimension(dimension);
+			calculationResult.setDataType(new CD("C48870","Double","NCI"));
+		calculationResult.setValue(new ST(value));
+		
+//		// Create a CalculationData instance
+//		edu.stanford.hakan.aim4api.base.CalculationData calculationData = new edu.stanford.hakan.aim4api.base.CalculationData();
+//		calculationData.setValue(new ST(value));
+//		calculationData.addCoordinate(0, 0);
+//
+//		// Create a Dimension instance
+//		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
+//
+//		// Add calculationData to calculationResult
+//		calculationResult.addCalculationData(calculationData);
+//
+//		// Add dimension to calculationResult
+//		calculationResult.addDimension(dimension);
 
 		//this should be rdf removing for now. do not have shape id. and do not see it in the recist aim.
 		//                    // add the shape reference to the calculation
