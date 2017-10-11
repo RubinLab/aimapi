@@ -44,10 +44,10 @@ public class Utility {
 
     public static String getNowAtGMT() {
         Date currentTime = new Date();
-        
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyyMMddHHmmss");
-        		//new SimpleDateFormat("MM.dd.yyyy'T'hh:mm:ssa'.Zone:'z");
-//        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        //timestamp change may mess up audit trail
+//        SimpleDateFormat sdf =new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy'T'hh:mm:ssa'.Zone:'z");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         return sdf.format(currentTime);
     }
 
