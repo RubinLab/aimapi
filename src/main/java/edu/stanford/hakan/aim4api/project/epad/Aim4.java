@@ -113,6 +113,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesMarkupEntityStatement;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesSegmentationEntityStatement;
 import edu.stanford.hakan.aim4api.base.CompactCalculationResult;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.DicomSegmentationEntity;
@@ -121,10 +123,12 @@ import edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.Image;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.ImageAnnotationStatement;
 import edu.stanford.hakan.aim4api.base.ImageCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageSeries;
 import edu.stanford.hakan.aim4api.base.ImageStudy;
+import edu.stanford.hakan.aim4api.base.MarkupEntity;
 import edu.stanford.hakan.aim4api.base.Person;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.SegmentationEntity;
@@ -648,19 +652,20 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			calculationResult.setDataType(new CD("C48870","Double","NCI"));
 		calculationResult.setValue(new ST(value));
 		
+		
 //		// Create a CalculationData instance
 //		edu.stanford.hakan.aim4api.base.CalculationData calculationData = new edu.stanford.hakan.aim4api.base.CalculationData();
 //		calculationData.setValue(new ST(value));
 //		calculationData.addCoordinate(0, 0);
 //
-//		// Create a Dimension instance
-//		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
+		// Create a Dimension instance
+		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
 //
 //		// Add calculationData to calculationResult
 //		calculationResult.addCalculationData(calculationData);
 //
-//		// Add dimension to calculationResult
-//		calculationResult.addDimension(dimension);
+		// Add dimension to calculationResult
+		calculationResult.addDimension(dimension);
 
 		//this should be rdf removing for now. do not have shape id. and do not see it in the recist aim.
 		//                    // add the shape reference to the calculation
@@ -684,6 +689,25 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 
 	}
 	
+	public static CalculationEntityReferencesSegmentationEntityStatement createCalcRefSegStatement(CalculationEntity calc,SegmentationEntity seg) {
+		CalculationEntityReferencesSegmentationEntityStatement calcSegRef= new CalculationEntityReferencesSegmentationEntityStatement();
+		calcSegRef.setSubjectUniqueIdentifier(calc.getUniqueIdentifier().getClone());
+		calcSegRef.setObjectUniqueIdentifier(seg.getUniqueIdentifier().getClone());
+		return calcSegRef;
+		
+	}
+	
+	public static CalculationEntityReferencesMarkupEntityStatement createCalcRefMarkupStatement(CalculationEntity calc,MarkupEntity markup) {
+		CalculationEntityReferencesMarkupEntityStatement calcMarkupRef= new CalculationEntityReferencesMarkupEntityStatement();
+		calcMarkupRef.setSubjectUniqueIdentifier(calc.getUniqueIdentifier().getClone());
+		calcMarkupRef.setObjectUniqueIdentifier(markup.getUniqueIdentifier().getClone());
+		return calcMarkupRef;
+		
+	}
+	
+	public void addImageAnnotationStatement(ImageAnnotationStatement ias) {
+        this.getImageAnnotation().addImageAnnotationStatement(ias);
+    }
 	
 	public void addCalculationEntity(CalculationEntity newCalculation) {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
@@ -765,7 +789,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		return date;
 
 	}
-
+	
 
 	/**
 	 * create an ImageAnnotation object using the properties
