@@ -102,7 +102,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public static final String PRIVATE_DESIGNATOR = "private";
     public static final String LINE_MEASURE = "cm";
     public static final String VERSION = "1.0";
-    
+    //this is the shapes list for epad version of shapes
+    transient private List<Shape> aimShapes=null;
+    transient private Boolean shapesDirty=false;
 
     public Aim(ImageAnnotationCollection iac)
 	{
@@ -549,7 +551,11 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
 	}
     @Override
     public List<Shape> getShapes() {
-
+    	
+    	if (aimShapes!=null && !shapesDirty){
+    		logger.info("returning aimshapes. size "+aimShapes.size());
+    		return aimShapes;
+    	}
         List<Shape> result = new ArrayList<Shape>();
         for (GeometricShape shape : getGeometricShapeCollection()
                 .getGeometricShapeList()) {
@@ -583,6 +589,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         	
         }
         logger.info("result is "+ result.size());
+        aimShapes=result;
         return result;
     }
 
