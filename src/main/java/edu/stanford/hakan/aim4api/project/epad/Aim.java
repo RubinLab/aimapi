@@ -40,7 +40,6 @@ import edu.stanford.hakan.aim4api.compability.aimv3.CalculationResult;
 import edu.stanford.hakan.aim4api.compability.aimv3.Circle;
 import edu.stanford.hakan.aim4api.compability.aimv3.DICOMImageReference;
 import edu.stanford.hakan.aim4api.compability.aimv3.Dimension;
-import edu.stanford.hakan.aim4api.compability.aimv3.Ellipse;
 import edu.stanford.hakan.aim4api.compability.aimv3.Equipment;
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShape;
 import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShapeCollection;
@@ -104,7 +103,6 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public static final String VERSION = "1.0";
     //this is the shapes list for epad version of shapes
     transient private List<Shape> aimShapes=null;
-    transient private Boolean shapesDirty=false;
 
     public Aim(ImageAnnotationCollection iac)
 	{
@@ -552,7 +550,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     @Override
     public List<Shape> getShapes() {
     	
-    	if (aimShapes!=null && !shapesDirty){
+    	if (aimShapes!=null){
     		logger.info("returning aimshapes. size "+aimShapes.size());
     		return aimShapes;
     	}
