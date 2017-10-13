@@ -581,6 +581,9 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         		//it is orthogonal
         		logger.info("lines are orthogonal. create a normal shape instead");
         		Normal n=new Normal(result.get(0),result.get(1));
+        		//put the smallest shape id of the lines to the normal shape
+        		int si=(result.get(0).getShapeIdentifier()<result.get(1).getShapeIdentifier()?result.get(0).getShapeIdentifier():result.get(1).getShapeIdentifier());
+        		n.setShapeIdentifier(si);
         		result.clear();
         		result.add(n);
         		
@@ -592,6 +595,55 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         aimShapes=result;
         return result;
     }
+    
+    
+    /**
+     * update the actual image annotation shapes to match the shape of this class 
+     * extra measure to handle the specific classes with multiple shapes like normal
+     */
+    private void updateIAShapes(){
+    	//if there are no aimshapes nothing to do
+    	if (aimShapes==null) 
+    		return;
+    	for (Shape aimShape : this.aimShapes) {
+	    	for (GeometricShape shape : this.getGeometricShapeCollection()
+	                .getGeometricShapeList()) {
+	    		if (aimShape instanceof Normal) {
+	    			 if (shape.getShapeIdentifier() == aimShape.getShapeIdentifier()+1) {
+	 	                updateCoords(shape
+	 	                        .getSpatialCoordinateCollection()
+	 	                        .getSpatialCoordinateList(),  aimShape
+	 	                        .getSpatialCoordinateCollection()
+	 	                        .getSpatialCoordinateList().subList(2, 4));
+	 	            }
+	    		}
+	            if (shape.getShapeIdentifier() == aimShape.getShapeIdentifier()) {
+	                updateCoords(shape
+	                        .getSpatialCoordinateCollection()
+	                        .getSpatialCoordinateList(),  aimShape
+	                        .getSpatialCoordinateCollection()
+	                        .getSpatialCoordinateList());
+	            }
+	        }
+    	}
+    }
+    
+    /**
+     * copy the aimshapecoords to xmlcoords
+     * @param xmlCoords
+     * @param aimShapeCoords
+     */
+    private void updateCoords(List<SpatialCoordinate> xmlCoords, List<SpatialCoordinate> aimShapeCoords){
+    	for (int i = 0; i < xmlCoords.size(); i++) {
+            if (i < aimShapeCoords.size()) {
+                TwoDimensionSpatialCoordinate c = (TwoDimensionSpatialCoordinate) xmlCoords
+                        .get(i);
+                c.setX(((TwoDimensionSpatialCoordinate) aimShapeCoords.get(i)).getX());
+                c.setY(((TwoDimensionSpatialCoordinate) aimShapeCoords.get(i)).getY());
+            }
+        }
+    }
+    
 
     // create a default name for an annotation
     private String todaysDate() {
@@ -1671,8 +1723,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     @Override
     public void setShapeCoords(int shapeID, List<TwoDCoordinate> coords) {
 
-        for (GeometricShape shape : this.getGeometricShapeCollection()
-                .getGeometricShapeList()) {
+        for (Shape shape : this.getShapes()) {
             if (shape.getShapeIdentifier() == shapeID) {
                 List<SpatialCoordinate> coordList = shape
                         .getSpatialCoordinateCollection()
@@ -1686,6 +1737,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
                         c.setY(coords.get(i).getY());
                     }
                 }
+                updateIAShapes();
                 return;
             }
         }
