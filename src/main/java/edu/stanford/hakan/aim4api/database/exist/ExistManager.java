@@ -48,12 +48,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import java.util.Base64;
 /**
  *
  * @author localadmin
  */
 public class ExistManager {
+	/**
+	 * base64 encode a string
+	 * 
+	 * @param a
+	 *            string to be encoded
+	 * @return encoded string
+	 */
+	private static native String b64encode(String a) /*-{
+														return window.btoa(a);
+														}-*/;
 
     public static String getXMLStringFromExist(String Url, String XQuery, String dbUserName, String dbUserPassword)
             throws AimException {
@@ -84,7 +93,7 @@ public class ExistManager {
                 ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
                 if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
                     String userPassword = dbUserName + ":" + dbUserPassword;
-                    String encoding = new String(Base64.getEncoder().encode(userPassword.getBytes()));
+                    String encoding = b64encode(userPassword);
                     ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
                 }
                 ((HttpURLConnection) conn).connect();
@@ -149,7 +158,7 @@ public class ExistManager {
                 ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
                 if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
                     String userPassword = dbUserName + ":" + dbUserPassword;
-                    String encoding =new String(Base64.getEncoder().encode(userPassword.getBytes()));
+                    String encoding =b64encode(userPassword);
                     ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
                 }
                 ((HttpURLConnection) conn).connect();
@@ -210,7 +219,7 @@ public class ExistManager {
                 ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
                 if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
                     String userPassword = dbUserName + ":" + dbUserPassword;
-                    String encoding =new String(Base64.getEncoder().encode(userPassword.getBytes()));
+                    String encoding =b64encode(userPassword);
                     ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
                 }
                 ((HttpURLConnection) conn).connect();
@@ -262,7 +271,7 @@ public class ExistManager {
                 ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
                 if (!"".equals(dbUserName.trim()) || !"".equals(dbUserPassword.trim())) {
                     String userPassword = dbUserName + ":" + dbUserPassword;
-                    String encoding = new String(Base64.getEncoder().encode(userPassword.getBytes()));
+                    String encoding = b64encode(userPassword);
                     ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
                 }
                 ((HttpURLConnection) conn).connect();
@@ -345,7 +354,7 @@ public class ExistManager {
                 ((HttpURLConnection) conn).setRequestProperty("Content-Type", "application/xml");
                 if (!"".equals(userName.trim()) || !"".equals(password.trim())) {
                     String userPassword = userName + ":" + password;
-                    String encoding = new String(Base64.getEncoder().encode(userPassword.getBytes()));
+                    String encoding = b64encode(userPassword);
                     ((HttpURLConnection) conn).setRequestProperty("Authorization", "Basic " + encoding);
                 }
                 ((HttpURLConnection) conn).connect();
