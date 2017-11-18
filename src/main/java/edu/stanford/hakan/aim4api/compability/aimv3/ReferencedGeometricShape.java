@@ -28,9 +28,11 @@
 package edu.stanford.hakan.aim4api.compability.aimv3;
 
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesMarkupEntityStatement;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityHasCalculationEntityStatement;
 import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement;
+import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -109,16 +111,31 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
 
     public void toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation, II calculationUniqueIdentifier) {
     	//this is where the aimv3 referenceshapes are converted into statements for v4
-        String uid = GenerateId.getUUID();
-        ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement connectGeoShapeWithImagingPhysicalEntity = new ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement();
-        connectGeoShapeWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(this.getReferencedShapeIdentifier()));
-        connectGeoShapeWithImagingPhysicalEntity.setObjectUniqueIdentifier(Converter.toII(uid));
-        imageAnnotation.addImageAnnotationStatement(connectGeoShapeWithImagingPhysicalEntity);
-
-        ImagingPhysicalEntityHasCalculationEntityStatement connectCalculationWithImagingPhysicalEntity = new ImagingPhysicalEntityHasCalculationEntityStatement();
-        connectCalculationWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(calculationUniqueIdentifier.getRoot()));
-        connectCalculationWithImagingPhysicalEntity.setObjectUniqueIdentifier(Converter.toII(uid));
-        imageAnnotation.addImageAnnotationStatement(connectCalculationWithImagingPhysicalEntity);
+//        String uid = GenerateId.getUUID();
+//        ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement connectGeoShapeWithImagingPhysicalEntity = new ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement();
+//        connectGeoShapeWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(this.getReferencedShapeIdentifier()));
+//        connectGeoShapeWithImagingPhysicalEntity.setObjectUniqueIdentifier(Converter.toII(uid));
+//        imageAnnotation.addImageAnnotationStatement(connectGeoShapeWithImagingPhysicalEntity);
+//
+//        ImagingPhysicalEntityHasCalculationEntityStatement connectCalculationWithImagingPhysicalEntity = new ImagingPhysicalEntityHasCalculationEntityStatement();
+//        connectCalculationWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(calculationUniqueIdentifier.getRoot()));
+//        connectCalculationWithImagingPhysicalEntity.setObjectUniqueIdentifier(Converter.toII(uid));
+//        imageAnnotation.addImageAnnotationStatement(connectCalculationWithImagingPhysicalEntity);
+    	
+    	CalculationEntityReferencesMarkupEntityStatement calcRefMarkup=new CalculationEntityReferencesMarkupEntityStatement();
+    	calcRefMarkup.setSubjectUniqueIdentifier(Converter.toII(calculationUniqueIdentifier.getRoot()));
+    	//find the uid of the shape
+    	for(int i=0;i<imageAnnotation.getMarkupEntityCollection().size();i++){
+    		if (imageAnnotation.getMarkupEntityCollection().get(i) instanceof TwoDimensionGeometricShapeEntity ){
+    			if (((TwoDimensionGeometricShapeEntity)imageAnnotation.getMarkupEntityCollection().get(i)).getShapeIdentifier().intValue()==this.getReferencedShapeIdentifier()){
+					if (((TwoDimensionGeometricShapeEntity)imageAnnotation.getMarkupEntityCollection().get(i)).getUniqueIdentifier()!=null){
+						calcRefMarkup.setObjectUniqueIdentifier(Converter.toII(((TwoDimensionGeometricShapeEntity)imageAnnotation.getMarkupEntityCollection().get(i)).getUniqueIdentifier().getRoot()));
+						break;
+					}
+    			}
+    		}
+    	}
+    	
     }
 
     public ReferencedGeometricShape getClone() {

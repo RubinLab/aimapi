@@ -620,19 +620,15 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		CD calcCD= edu.stanford.hakan.aim4api.compability.aimv3.Lexicon.getInstance().get(code);
 		String desc="";
 		if (calcCD!=null) {
-			if (units.equals("SUV")) {
-				CD typeCode = new CD("SUV","SUV","99EPAD");
+			if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
+				CD typeCode = new CD("126401","SUVbw","DCM");
 				cal.addTypeCode(typeCode);
 			}
-			if (units.equals("HU")) {
+			if (units.equals("HU") || units.equals("[hnsf'U]")) {
 				CD typeCode = new CD("112031","Attenuation Coefficient","DCM");
 				cal.addTypeCode(typeCode);
 			}
 			cal.addTypeCode(new CD(calcCD.getCode(),calcCD.getDisplayName().getValue(),calcCD.getCodeSystemName()));
-			if (units.equals("SUV")) {
-				CD typeCode = new CD("BW","Body Weight","99EPAD");
-				cal.addTypeCode(typeCode);
-			}
 			cal.setDescription(new ST(calcCD.getDisplayName().getValue()));
 			desc=calcCD.getDisplayName().getValue();
 		}else {
