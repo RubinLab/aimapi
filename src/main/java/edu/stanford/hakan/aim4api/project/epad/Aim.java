@@ -327,7 +327,15 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             int activeImage, String studyDate, String studyTime,
             ShapeType shapeType, List<TwoDCoordinate> coords,
             double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
-        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null);
+        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null, false);
+    }
+    
+    
+    public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID, boolean multiframe) {
+        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null, multiframe);
     }
     
     @Override
@@ -335,9 +343,19 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
             int activeImage, String studyDate, String studyTime,
             ShapeType shapeType, List<TwoDCoordinate> coords,
             double pixelSpacingX, double pixelSpacingY,  String imageClassUID, String accessionNumber) {
+    	return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, accessionNumber,false);
+    }
+    
+   
+    public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID, String accessionNumber, boolean multiframe) {
         int frameID = 1;
         int shapeID = getNextShapeID();
-
+        if (multiframe){
+        	frameID=activeImage+1;
+        }
         List<GeometricShape> shapes = createShapes(imageID, frameID, shapeType,
                 coords, pixelSpacingX, pixelSpacingY, shapeID);
 
