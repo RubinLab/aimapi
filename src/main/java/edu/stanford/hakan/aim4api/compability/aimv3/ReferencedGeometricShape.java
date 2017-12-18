@@ -130,6 +130,7 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
     			if (((TwoDimensionGeometricShapeEntity)imageAnnotation.getMarkupEntityCollection().get(i)).getShapeIdentifier().intValue()==this.getReferencedShapeIdentifier()){
 					if (((TwoDimensionGeometricShapeEntity)imageAnnotation.getMarkupEntityCollection().get(i)).getUniqueIdentifier()!=null){
 						calcRefMarkup.setObjectUniqueIdentifier(Converter.toII(((TwoDimensionGeometricShapeEntity)imageAnnotation.getMarkupEntityCollection().get(i)).getUniqueIdentifier().getRoot()));
+						imageAnnotation.addImageAnnotationStatement(calcRefMarkup);
 						break;
 					}
     			}
