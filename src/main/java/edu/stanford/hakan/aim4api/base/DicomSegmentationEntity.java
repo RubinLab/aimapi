@@ -42,6 +42,8 @@ public DicomSegmentationEntity() {
 setXsiType("DicomSegmentationEntity");
 }
 private II sopInstanceUid;
+private II studyInstanceUid;
+private II seriesInstanceUid;
 private II sopClassUid;
 private II referencedSopInstanceUid;
 private Integer segmentNumber;
@@ -53,6 +55,24 @@ return sopInstanceUid;
 public void setSopInstanceUid(II sopInstanceUid) {
 sopInstanceUid.setTagName("sopInstanceUid");
 this.sopInstanceUid = sopInstanceUid;
+}
+
+public II getStudyInstanceUid() {
+return studyInstanceUid;
+}
+
+public void setStudyInstanceUid(II studyInstanceUid) {
+studyInstanceUid.setTagName("studyInstanceUid");
+this.studyInstanceUid = studyInstanceUid;
+}
+
+public II getSeriesInstanceUid() {
+return seriesInstanceUid;
+}
+
+public void setSeriesInstanceUid(II seriesInstanceUid) {
+seriesInstanceUid.setTagName("seriesInstanceUid");
+this.seriesInstanceUid = seriesInstanceUid;
 }
 
 public II getSopClassUid() {
@@ -90,6 +110,12 @@ Element res = (Element) super.getXMLNode(doc);
 if (this.sopInstanceUid != null) {
 res.appendChild(this.sopInstanceUid.getXMLNode(doc));
 }
+if (this.studyInstanceUid!= null) {
+res.appendChild(this.studyInstanceUid.getXMLNode(doc));
+}
+if (this.seriesInstanceUid != null) {
+res.appendChild(this.seriesInstanceUid.getXMLNode(doc));
+}
 if (this.sopClassUid != null) {
 res.appendChild(this.sopClassUid.getXMLNode(doc));
 }
@@ -114,6 +140,16 @@ if ("sopInstanceUid".equals(currentNode.getNodeName())) {
 II obj = new II();
 obj.setXMLNode(currentNode);
 this.setSopInstanceUid(obj);
+}
+if ("studyInstanceUid".equals(currentNode.getNodeName())) {
+II obj = new II();
+obj.setXMLNode(currentNode);
+this.setStudyInstanceUid(obj);
+}
+if ("seriesInstanceUid".equals(currentNode.getNodeName())) {
+II obj = new II();
+obj.setXMLNode(currentNode);
+this.setSeriesInstanceUid(obj);
 }
 if ("sopClassUid".equals(currentNode.getNodeName())) {
 II obj = new II();
@@ -142,6 +178,12 @@ DicomSegmentationEntity oth = (DicomSegmentationEntity) other;
 if (this.sopInstanceUid == null ? oth.sopInstanceUid != null : !this.sopInstanceUid.isEqualTo(oth.sopInstanceUid)) {
 return false;
 }
+if (this.studyInstanceUid == null ? oth.studyInstanceUid != null : !this.studyInstanceUid.isEqualTo(oth.studyInstanceUid)) {
+return false;
+}
+if (this.seriesInstanceUid == null ? oth.seriesInstanceUid != null : !this.seriesInstanceUid.isEqualTo(oth.seriesInstanceUid)) {
+return false;
+}
 if (this.sopClassUid == null ? oth.sopClassUid != null : !this.sopClassUid.isEqualTo(oth.sopClassUid)) {
 return false;
 }
@@ -159,6 +201,12 @@ public DicomSegmentationEntity getClone() {
 DicomSegmentationEntity res = new DicomSegmentationEntity();
 if (this.getSopInstanceUid() != null) {
 res.setSopInstanceUid(this.getSopInstanceUid().getClone());
+}
+if (this.getStudyInstanceUid() != null) {
+res.setStudyInstanceUid(this.getStudyInstanceUid().getClone());
+}
+if (this.getSeriesInstanceUid() != null) {
+res.setSeriesInstanceUid(this.getSeriesInstanceUid().getClone());
 }
 if (this.getSopClassUid() != null) {
 res.setSopClassUid(this.getSopClassUid().getClone());

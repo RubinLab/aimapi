@@ -43,6 +43,9 @@ import org.w3c.dom.NodeList;
 public class AnnotationCollection implements IAimXMLOperations {
 
     private II uniqueIdentifier;
+    private II studyInstanceUid;
+    private II seriesInstanceUid;
+    private ST accessionNumber;
     private ST description;
     private String dateTime;
     private User user;
@@ -63,6 +66,31 @@ public class AnnotationCollection implements IAimXMLOperations {
         uniqueIdentifier.setTagName("uniqueIdentifier");
         this.uniqueIdentifier = uniqueIdentifier;
     }    
+    
+    public II getStudyInstanceUid() {
+        return studyInstanceUid;
+    }
+
+    public void setStudyInstanceUid(II studyInstanceUid) {
+        studyInstanceUid.setTagName("studyInstanceUid");
+        this.studyInstanceUid = studyInstanceUid;
+    }    
+    public II getSeriesInstanceUid() {
+        return seriesInstanceUid;
+    }
+
+    public void setSeriesInstanceUid(II seriesInstanceUid) {
+        seriesInstanceUid.setTagName("seriesInstanceUid");
+        this.seriesInstanceUid = seriesInstanceUid;
+    }    
+    public ST getAccessionNumber() {
+        return accessionNumber;
+    }
+
+    public void setAccessionNumber(ST accessionNumber) {
+    	accessionNumber.setTagName("accessionNumber");
+        this.accessionNumber = accessionNumber;
+    }      
     
     public String  refreshUniqueIdentifier() {
         this.setUniqueIdentifier(new II(GenerateId.getUUID()));
@@ -147,6 +175,17 @@ public class AnnotationCollection implements IAimXMLOperations {
             this.setUniqueIdentifier(new II(GenerateId.getUUID()));
         }
         res.appendChild(this.uniqueIdentifier.getXMLNode(doc));
+        if (this.studyInstanceUid == null) {
+            this.setStudyInstanceUid(new II(GenerateId.getUUID()));
+        }
+        res.appendChild(this.studyInstanceUid.getXMLNode(doc));
+        if (this.seriesInstanceUid == null) {
+            this.setSeriesInstanceUid(new II(GenerateId.getUUID()));
+        }
+        res.appendChild(this.seriesInstanceUid.getXMLNode(doc));
+        if (this.accessionNumber != null) {
+            res.appendChild(this.accessionNumber.getXMLNode(doc));
+        }
         if (this.description != null) {
             res.appendChild(this.description.getXMLNode(doc));
         }
@@ -199,6 +238,22 @@ public class AnnotationCollection implements IAimXMLOperations {
                 obj.setXMLNode(currentNode);
                 this.setUniqueIdentifier(obj);
             }
+            if ("studyInstanceUid".equals(currentNode.getNodeName())) {
+                II obj = new II();
+                obj.setXMLNode(currentNode);
+                this.setStudyInstanceUid(obj);
+            }
+            if ("seriesInstanceUid".equals(currentNode.getNodeName())) {
+                II obj = new II();
+                obj.setXMLNode(currentNode);
+                this.setSeriesInstanceUid(obj);
+            }
+            if ("accessionNumber".equals(currentNode.getNodeName())) {
+            	ST obj = new ST();
+                obj.setXMLNode(currentNode);
+                this.setAccessionNumber(obj);
+            }
+            
             if ("description".equals(currentNode.getNodeName())) {
                 ST obj = new ST();
                 obj.setXMLNode(currentNode);
@@ -231,6 +286,15 @@ public class AnnotationCollection implements IAimXMLOperations {
         if (this.uniqueIdentifier == null ? oth.uniqueIdentifier != null : !this.uniqueIdentifier.isEqualTo(oth.uniqueIdentifier)) {
             return false;
         }
+        if (this.studyInstanceUid == null ? oth.studyInstanceUid != null : !this.studyInstanceUid.isEqualTo(oth.studyInstanceUid)) {
+            return false;
+        }
+        if (this.seriesInstanceUid == null ? oth.seriesInstanceUid != null : !this.seriesInstanceUid.isEqualTo(oth.seriesInstanceUid)) {
+            return false;
+        }
+        if (this.accessionNumber == null ? oth.accessionNumber != null : !this.accessionNumber.isEqualTo(oth.accessionNumber)) {
+            return false;
+        }
         if (this.description == null ? oth.description != null : !this.description.isEqualTo(oth.description)) {
             return false;
         }
@@ -253,6 +317,15 @@ public class AnnotationCollection implements IAimXMLOperations {
         AnnotationCollection res = new AnnotationCollection();
         if (this.getUniqueIdentifier() != null) {
             res.setUniqueIdentifier(this.getUniqueIdentifier().getClone());
+        }
+        if (this.getStudyInstanceUid() != null) {
+            res.setStudyInstanceUid(this.getStudyInstanceUid().getClone());
+        }
+        if (this.getSeriesInstanceUid() != null) {
+            res.setSeriesInstanceUid(this.getSeriesInstanceUid().getClone());
+        }
+        if (this.getAccessionNumber() != null) {
+            res.setAccessionNumber(this.getAccessionNumber().getClone());
         }
         if (this.getDescription() != null) {
             res.setDescription(this.getDescription().getClone());
