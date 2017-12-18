@@ -135,6 +135,7 @@ import edu.stanford.hakan.aim4api.base.SegmentationEntity;
 import edu.stanford.hakan.aim4api.base.SegmentationEntityCollection;
 import edu.stanford.hakan.aim4api.base.User;
 import edu.stanford.hakan.aim4api.compability.aimv3.Modality;
+import edu.stanford.hakan.aim4api.utility.GenerateId;
 
 /**
  * 
@@ -899,4 +900,55 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		this.getImageAnnotation().setSegmentationEntityCollection(sc);
 		
 	}
+	
+	/**
+	 * sets the tracking unique id of the FIRST annotation
+	 * if the parameter is null generates a uid
+	 * @param trackingUniqueIdentifier
+	 */
+	public void setTrackingUniqueIdentifier(II trackingUniqueIdentifier){
+		if (trackingUniqueIdentifier==null) {//if it is null create a unique uid
+			this.getImageAnnotation().setTrackingUniqueIdentifier(new II(GenerateId.getUUID()));
+		}else {
+			this.getImageAnnotation().setTrackingUniqueIdentifier(trackingUniqueIdentifier);
+		}
+	}
+	
+	/**
+	 * sets the study uid of the aim
+	 * if the parameter is null generates a uid
+	 * @param studyInstanceUid
+	 */
+	public void setAimStudyInstanceUid(II studyInstanceUid){
+		if (studyInstanceUid==null) {//if it is null create a unique uid
+			this.setStudyInstanceUid(new II(GenerateId.getUUID()));
+		}else {
+			this.setStudyInstanceUid(studyInstanceUid);
+		}
+	}
+	
+	/**
+	 * sets the series uid of the aim
+	 * if the parameter is null generates a uid
+	 * @param seriesInstanceUid
+	 */
+	public void setAimSeriesInstanceUid(II seriesInstanceUid){
+		if (seriesInstanceUid==null) {//if it is null create a unique uid
+			this.setSeriesInstanceUid(new II(GenerateId.getUUID()));
+		}else {
+			this.setSeriesInstanceUid(seriesInstanceUid);
+		}
+	}
+	
+	/**
+	 * sets the accessionNumber of the aim
+	 * if the parameter is null it doesn't do anything
+	 * @param accessionNumber
+	 */
+	public void setAimAccessionNumber(ST accessionNumber){
+		if (accessionNumber!=null) {
+			this.setAccessionNumber(accessionNumber);
+		}
+	}
+	
 }
