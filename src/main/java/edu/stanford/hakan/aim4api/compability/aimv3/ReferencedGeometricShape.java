@@ -110,18 +110,6 @@ public class ReferencedGeometricShape implements IAimXMLOperations {
     }
 
     public void toAimV4(edu.stanford.hakan.aim4api.base.ImageAnnotation imageAnnotation, II calculationUniqueIdentifier) {
-    	//this is where the aimv3 referenceshapes are converted into statements for v4
-//        String uid = GenerateId.getUUID();
-//        ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement connectGeoShapeWithImagingPhysicalEntity = new ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement();
-//        connectGeoShapeWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(this.getReferencedShapeIdentifier()));
-//        connectGeoShapeWithImagingPhysicalEntity.setObjectUniqueIdentifier(Converter.toII(uid));
-//        imageAnnotation.addImageAnnotationStatement(connectGeoShapeWithImagingPhysicalEntity);
-//
-//        ImagingPhysicalEntityHasCalculationEntityStatement connectCalculationWithImagingPhysicalEntity = new ImagingPhysicalEntityHasCalculationEntityStatement();
-//        connectCalculationWithImagingPhysicalEntity.setSubjectUniqueIdentifier(Converter.toII(calculationUniqueIdentifier.getRoot()));
-//        connectCalculationWithImagingPhysicalEntity.setObjectUniqueIdentifier(Converter.toII(uid));
-//        imageAnnotation.addImageAnnotationStatement(connectCalculationWithImagingPhysicalEntity);
-    	
     	CalculationEntityReferencesMarkupEntityStatement calcRefMarkup=new CalculationEntityReferencesMarkupEntityStatement();
     	calcRefMarkup.setSubjectUniqueIdentifier(Converter.toII(calculationUniqueIdentifier.getRoot()));
     	//find the uid of the shape

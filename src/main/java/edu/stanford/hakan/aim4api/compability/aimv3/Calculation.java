@@ -31,7 +31,9 @@ import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.GeometricShapeEntity;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.MarkupEntity;
 import edu.stanford.hakan.aim4api.utility.Logger;
 
 import java.util.List;
@@ -458,26 +460,26 @@ public class Calculation implements IAimXMLOperations {
         }
 
         List<AnnotationStatement> listAnnotationStatement = ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList();
-        String annotationStatementID = "";
+        int referencedShapeIdentifier = -1;
+        String referencedShapeUniqueIdentifier = "";
         for (int i = 0; i < listAnnotationStatement.size(); i++) {
             AnnotationStatement annotationStatement = listAnnotationStatement.get(i);
-            if ("ImagingPhysicalEntityHasCalculationEntityStatement".equals(annotationStatement.getXsiType())) {
-                if (v4.getUniqueIdentifier().getRoot().equals(annotationStatement.getSubjectUniqueIdentifier().getRoot())) {
-                    annotationStatementID = annotationStatement.getObjectUniqueIdentifier().getRoot();
+            if ("CalculationEntityReferencesMarkupEntityStatement".equals(annotationStatement.getXsiType())) {
+            	if (this.getUid().equals(annotationStatement.getSubjectUniqueIdentifier().getRoot())) {
+            		referencedShapeUniqueIdentifier = annotationStatement.getObjectUniqueIdentifier().getRoot();
+            		//let's try and find the shape
+                    for (MarkupEntity ma: ia.getMarkupEntityCollection().getMarkupEntityList()){
+                    	if (ma.getUniqueIdentifier().getRoot().equals(referencedShapeUniqueIdentifier) && ma instanceof GeometricShapeEntity){
+                    		referencedShapeIdentifier=((GeometricShapeEntity)ma).getShapeIdentifier();
+                    	}
+                    }
                 }
             }
         }
-        String referencedShapeIdentifier = "";
-        for (int i = 0; i < listAnnotationStatement.size(); i++) {
-            AnnotationStatement annotationStatement = listAnnotationStatement.get(i);
-            if ("ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement".equals(annotationStatement.getXsiType())) {
-                if (annotationStatementID.equals(annotationStatement.getObjectUniqueIdentifier().getRoot())) {
-                    referencedShapeIdentifier = annotationStatement.getSubjectUniqueIdentifier().getRoot();
-                }
-            }
-        }
-        if (!"".equals(referencedShapeIdentifier)) {
-            this.addReferencedGeometricShape(new ReferencedGeometricShape(0, Integer.parseInt(referencedShapeIdentifier)));
+        
+        //TODO how about CalculationEntityReferencesSegmentationEntity
+        if (!"".equals(referencedShapeUniqueIdentifier)) {
+            this.addReferencedGeometricShape(new ReferencedGeometricShape(0, referencedShapeIdentifier));
         }
     }
 
