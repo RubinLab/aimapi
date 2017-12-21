@@ -166,7 +166,7 @@ public class AnnotationExtender {
         calculationResult.setType(CalculationResultIdentifier.Scalar);
         calculationResult.setUnitOfMeasure("ratio");
         //ml double
-        calculationResult.setDataType("99EPADD1");;
+        calculationResult.setDataType("C48870");
         calculationResult.setNumberOfDimensions(1);
         // Create a CalculationData instance
         CalculationData calculationData = new CalculationData();
@@ -227,7 +227,7 @@ public class AnnotationExtender {
         	unit="ratio";
         calculationResult.setUnitOfMeasure(Aim.getUCUMUnit(unit));
         //ml double
-        calculationResult.setDataType("99EPADD1");;
+        calculationResult.setDataType("C48870");
         calculationResult.setNumberOfDimensions(1);
         // Create a CalculationData instance
         CalculationData calculationData = new CalculationData();

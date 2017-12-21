@@ -430,8 +430,8 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	 public String getOriginalPatientID() {
 	        String result = "";
 	        try {
-	            if (getPerson().getOriginalId()!=null) 
-	            	result= getPerson().getOriginalId().getValue();
+	            if (getPerson().getSourcePatientGroupId()!=null) 
+	            	result= getPerson().getSourcePatientGroupId().getValue();
 	            else
 	            	return getPatientID();
 	        } catch (Exception e) {
@@ -534,7 +534,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
         person.setName(new ST(patient.getName()));
         person.setId(new ST(patient.getId()));
         //ml originalid
-        person.setOriginalId(new ST(patient.getOriginalId()));
+        person.setSourcePatientGroupId(new ST(patient.getSourcePatientGroupId()));
 		person.setSex(new ST(patient.getSex()));
         person.setBirthDate(patient.getBirthDate());
 		
@@ -804,11 +804,11 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	 * @return
 	 */
 	public static String formatTimeForAim(String d) {
-		if (d==null) d="00:00:00";
+		if (d==null) d="000000";
 		String date = 
 				 ((d.length() >= 2) ? d.substring(0, 2) : "00")
-				+":"+ ((d.length() >= 4) ? d.substring(2, 4) : "00")
-				+":"+ ((d.length() >= 6) ? d.substring(4, 6) : "00");
+				+ ((d.length() >= 4) ? d.substring(2, 4) : "00")
+				+ ((d.length() >= 6) ? d.substring(4, 6) : "00");
 		return date;
 
 	}

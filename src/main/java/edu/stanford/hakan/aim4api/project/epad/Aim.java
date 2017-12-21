@@ -685,15 +685,15 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     }
  // create a person object for this aim
     public Person createPerson(String name, String id, String sex,
-            String birthdate, String originalId) {
+            String birthdate, String sourcePatientGroupId) {
 
         Person person = new Person();
         person.setBirthDate(birthdate);
         person.setCagridId(caGridId);
         person.setName(name);
         person.setId(id);
-        if (!id.equalsIgnoreCase(originalId))
-        	person.setOriginalId(originalId);
+        if (!id.equalsIgnoreCase(sourcePatientGroupId))
+        	person.setSourcePatientGroupId(sourcePatientGroupId);
         person.setSex(sex);
         return person;
     }
@@ -1333,7 +1333,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
     public String getOriginalPatientID() {
         String result = "";
         try {
-            result= getListPerson().get(0).getOriginalId();
+            result= getListPerson().get(0).getSourcePatientGroupId();
             if (result==null)
             	return getPatientID();
 
@@ -2149,7 +2149,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
        
         calculationResult.setNumberOfDimensions(0);
         //ml value in Lexicon
-        calculationResult.setDataType("99EPADD1");
+        calculationResult.setDataType("C48870");
 
         // Create a CalculationData instance
         CalculationData calculationData = new CalculationData();
@@ -2719,7 +2719,7 @@ public class Aim extends ImageAnnotation implements Aimapi, Serializable {
         person.setName(patient.getName());
         person.setId(patient.getId());
         //ml originalid
-        person.setOriginalId(patient.getOriginalId());
+        person.setSourcePatientGroupId(patient.getSourcePatientGroupId());
 		person.setSex(patient.getSex());
         person.setBirthDate(patient.getBirthDate());
 
