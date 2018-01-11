@@ -133,6 +133,7 @@ import edu.stanford.hakan.aim4api.base.Person;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.SegmentationEntity;
 import edu.stanford.hakan.aim4api.base.SegmentationEntityCollection;
+import edu.stanford.hakan.aim4api.base.TextAnnotationEntity;
 import edu.stanford.hakan.aim4api.base.User;
 import edu.stanford.hakan.aim4api.compability.aimv3.Modality;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
@@ -563,6 +564,14 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
         }
         return result;
     }
+	
+	
+	public void addFreeText(String value){
+		TextAnnotationEntity ta=new TextAnnotationEntity();
+		ta.setText(new ST(value));
+		getImageAnnotation().addMarkupEntity(ta);
+		
+	}
 	
 	
 	/**
