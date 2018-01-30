@@ -67,4 +67,18 @@ public class TwoDCoordinate extends TwoDimensionSpatialCoordinate implements
 				referencedFrameNumber, x, y);
 	}
 
+	public TwoDCoordinate(edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate c, Shape s) {
+		super();
+//
+//		setCagridId(c.getCagridId());
+		setCoordinateIndex(c.getCoordinateIndex());
+//		setXsiType(c.getXsiType());
+		
+		setImageReferenceUID(s.getImageReferenceUid().getRoot());
+		setReferencedFrameNumber(s.getReferencedFrameNumber());
+		setX(c.getX());
+		setY(c.getY());
+		
+	}
+
 }

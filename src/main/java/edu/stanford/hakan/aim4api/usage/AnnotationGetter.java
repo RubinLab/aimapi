@@ -248,7 +248,7 @@ public class AnnotationGetter {
             throw new AimException("AimException: AimQuery must be defined");
         }
 
-        //Logger.write("========= aimQuery= " + aimQuery);
+        Logger.write("========= aimQuery= " + aimQuery);
         String XQuery = AimQuery.convertToXQuery(aimQuery, namespace);
         //Logger.write("========= XQuery= " + XQuery);
         //XQuery = "declare default element namespace 'gme://caCORE.caCORE/4.4/edu.northwestern.radiology.AIM'; for $x in collection('/aimV4.dbxml/napel_nsclc')/ImageAnnotationCollection where  $x/person/name[contains(lower-case(@value),lower-case('274'))]  return $x";

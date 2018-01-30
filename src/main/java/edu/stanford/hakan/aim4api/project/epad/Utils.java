@@ -1,5 +1,7 @@
 package edu.stanford.hakan.aim4api.project.epad;
 
+import edu.stanford.hakan.aim4api.base.Enumerations.ComparisonOperator;
+
 //Copyright (c) 2013 The Board of Trustees of the Leland Stanford Junior University
 //All rights reserved.
 //
@@ -24,7 +26,6 @@ package edu.stanford.hakan.aim4api.project.epad;
 //WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility;
 
 /**
  * Utils for aimapi.
@@ -34,26 +35,26 @@ import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility;
  */
 public class Utils {
 
-	public static AimUtility.ComparisonOperators getComparisonOperator(
+	public static ComparisonOperator getComparisonOperator(
 			String operator) {
-		AimUtility.ComparisonOperators result = AimUtility.ComparisonOperators.None;
+		ComparisonOperator result =ComparisonOperator.None;
 		if (operator.equalsIgnoreCase("Equal")) {
-			result = AimUtility.ComparisonOperators.Equal;
+			result = ComparisonOperator.Equal;
 		}
 		if (operator.equalsIgnoreCase("GreaterThan")) {
-			result = AimUtility.ComparisonOperators.GreaterThan;
+			result = ComparisonOperator.GreaterThan;
 		}
 		if (operator.equalsIgnoreCase("LessThan")) {
-			result = AimUtility.ComparisonOperators.LessThan;
+			result = ComparisonOperator.LessThan;
 		}
 		if (operator.equalsIgnoreCase("GreaterThanEqual")) {
-			result = AimUtility.ComparisonOperators.GreaterThanEqual;
+			result = ComparisonOperator.GreaterThanEqual;
 		}
 		if (operator.equalsIgnoreCase("LessThanEqual")) {
-			result = AimUtility.ComparisonOperators.LessThanEqual;
+			result = ComparisonOperator.LessThanEqual;
 		}
 		if (operator.equalsIgnoreCase("NotEqual")) {
-			result = AimUtility.ComparisonOperators.NotEqual;
+			result = ComparisonOperator.NotEqual;
 		}
 		return result;
 	}

@@ -2,13 +2,15 @@ package edu.stanford.hakan.aim4api.project.epad;
 
 import java.io.Serializable;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.ComparisonOperators;
-import edu.stanford.hakan.aim4api.compability.aimv3.CharacteristicQuantification;
-import edu.stanford.hakan.aim4api.compability.aimv3.Interval;
-import edu.stanford.hakan.aim4api.compability.aimv3.NonQuantifiable;
-import edu.stanford.hakan.aim4api.compability.aimv3.Numerical;
-import edu.stanford.hakan.aim4api.compability.aimv3.Quantile;
-import edu.stanford.hakan.aim4api.compability.aimv3.Scale;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.CharacteristicQuantification;
+import edu.stanford.hakan.aim4api.base.Enumerations.ComparisonOperator;
+import edu.stanford.hakan.aim4api.base.Interval;
+import edu.stanford.hakan.aim4api.base.NonQuantifiable;
+import edu.stanford.hakan.aim4api.base.Numerical;
+import edu.stanford.hakan.aim4api.base.Quantile;
+import edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.Scale;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.QuantifierType;
 import java.util.logging.Logger;
 
@@ -72,26 +74,26 @@ public class Quantifier implements Serializable {
 
 	}
 
-	public void setCagridId(int cagridId) {
-		switch (quantifierType) {
-		case numerical:
-			numerical.setCagridId(cagridId);
-			break;
-		case quantile:
-			quantile.setCagridId(cagridId);
-			break;
-		case interval:
-			interval.setCagridId(cagridId);
-			break;
-		case nonQuantifiable:
-			nonQuantifiable.setCagridId(cagridId);
-			break;
-		case scale:
-			scale.setCagridId(cagridId);
-			break;
-		}
-
-	}
+//	public void setCagridId(int cagridId) {
+//		switch (quantifierType) {
+//		case numerical:
+//			numerical.setCagridId(cagridId);
+//			break;
+//		case quantile:
+//			quantile.setCagridId(cagridId);
+//			break;
+//		case interval:
+//			interval.setCagridId(cagridId);
+//			break;
+//		case nonQuantifiable:
+//			nonQuantifiable.setCagridId(cagridId);
+//			break;
+//		case scale:
+//			scale.setCagridId(cagridId);
+//			break;
+//		}
+//
+//	}
 
 	public void setAnnotatorConfidence(double d) {
 		switch (quantifierType) {
@@ -114,10 +116,10 @@ public class Quantifier implements Serializable {
 
 	}
 
-	public void setComparisonOperators(ComparisonOperators comparisonOperator) {
+	public void setComparisonOperators(ComparisonOperator comparisonOperator) {
 		switch (quantifierType) {
 		case numerical:
-			numerical.setComparisonOperators(comparisonOperator);
+			numerical.setOperator(comparisonOperator);
 			break;
 		default:
 			break;
@@ -128,19 +130,19 @@ public class Quantifier implements Serializable {
 	public void setName(String valueLabel) {
 		switch (quantifierType) {
 		case numerical:
-			numerical.setName(valueLabel);
+			numerical.setLabel(new ST(valueLabel));
 			break;
 		case quantile:
-			quantile.setName(valueLabel);
+			quantile.setLabel(new ST(valueLabel));
 			break;
 		case interval:
-			interval.setName(valueLabel);
+			interval.setLabel(new ST(valueLabel));
 			break;
 		case nonQuantifiable:
-			nonQuantifiable.setName(valueLabel);
+			nonQuantifiable.setLabel(new ST(valueLabel));
 			break;
 		case scale:
-			scale.setName(valueLabel);
+			scale.setLabel(new ST(valueLabel));
 			break;
 		}
 
@@ -149,10 +151,10 @@ public class Quantifier implements Serializable {
 	public void setUcumString(String ucumString) {
 		switch (quantifierType) {
 		case numerical:
-			numerical.setUcumString(ucumString);
+			numerical.setUcumString(new ST(ucumString));
 			break;
 		case interval:
-			interval.setUcumString(ucumString);
+			interval.setUcumString(new ST(ucumString));
                         
 			break;
 		default:
@@ -176,7 +178,7 @@ public class Quantifier implements Serializable {
 	public void setBin(int bin) {
 		switch (quantifierType) {
 		case quantile:
-			quantile.setBin(bin);
+			quantile.setBins(bin);
 			break;
 		default:
 			break;
@@ -188,7 +190,7 @@ public class Quantifier implements Serializable {
 	public void setDescription(String valueDescription) {
 		switch (quantifierType) {
 		case scale:
-			scale.setDescription(valueDescription);
+			scale.setValueLabel(new ST(valueDescription));
 			break;
 		default:
 			break;
@@ -199,7 +201,7 @@ public class Quantifier implements Serializable {
 	public void setValue(String value) {
 		switch (quantifierType) {
 		case scale:
-			scale.setValue(value);
+			scale.setValue(new ST(value));
 			break;
 		default:
 			break;
@@ -212,7 +214,9 @@ public class Quantifier implements Serializable {
 		case numerical:
 
 		case nonQuantifiable:
-			nonQuantifiable.setCodingSchemeDesignator(codingSchemeDesignator);
+			if (nonQuantifiable.getTypeCode()==null)
+				nonQuantifiable.setTypeCode(new CD());
+			nonQuantifiable.getTypeCode().setCodeSystemName(codingSchemeDesignator);
 			break;
 		default:
 			break;
@@ -224,7 +228,9 @@ public class Quantifier implements Serializable {
 		case numerical:
 
 		case nonQuantifiable:
-			nonQuantifiable.setCodingSchemeVersion(codingSchemeVersion);
+			if (nonQuantifiable.getTypeCode()==null)
+				nonQuantifiable.setTypeCode(new CD());
+			nonQuantifiable.getTypeCode().setCodeSystemVersion(codingSchemeVersion);
 			break;
 		default:
 			break;
@@ -235,7 +241,9 @@ public class Quantifier implements Serializable {
 		switch (quantifierType) {
 
 		case nonQuantifiable:
-			nonQuantifiable.setCodeMeaning(value);
+			if (nonQuantifiable.getTypeCode()==null)
+				nonQuantifiable.setTypeCode(new CD());
+			nonQuantifiable.getTypeCode().setCodeSystem(value);
 			break;
 		default:
 			break;
@@ -246,7 +254,9 @@ public class Quantifier implements Serializable {
 	public void setCodeValue(String value) {
 		switch (quantifierType) {
 		case nonQuantifiable:
-			nonQuantifiable.setCodeValue(value);
+			if (nonQuantifiable.getTypeCode()==null)
+				nonQuantifiable.setTypeCode(new CD());
+			nonQuantifiable.getTypeCode().setCode(value);
 			break;
 		default:
 			break;
@@ -255,7 +265,7 @@ public class Quantifier implements Serializable {
 
 	}
 
-	public void setMaxOperator(ComparisonOperators comparisonOperator) {
+	public void setMaxOperator(ComparisonOperator comparisonOperator) {
 		switch (quantifierType) {
 		case interval:
 			interval.setMaxOperator(comparisonOperator);
@@ -265,7 +275,7 @@ public class Quantifier implements Serializable {
 		}
 	}
 
-	public void setMinOperator(ComparisonOperators comparisonOperator) {
+	public void setMinOperator(ComparisonOperator comparisonOperator) {
 		switch (quantifierType) {
 		case interval:
 			interval.setMinOperator(comparisonOperator);
@@ -302,19 +312,19 @@ public class Quantifier implements Serializable {
 		String result = "";
 		switch (quantifierType) {
 		case numerical:
-			result = numerical.getName();
+			result = numerical.getLabel().getValue();
 			break;
 		case quantile:
-			result = quantile.getName();
+			result = quantile.getLabel().getValue();
 			break;
 		case interval:
-			result = interval.getName();
+			result = interval.getLabel().getValue();
 			break;
 		case nonQuantifiable:
-			result = nonQuantifiable.getName();
+			result = nonQuantifiable.getLabel().getValue();
 			break;
 		case scale:
-			result = scale.getName();
+			result = scale.getLabel().getValue();
 			break;
 		}
 		return result;
@@ -324,7 +334,7 @@ public class Quantifier implements Serializable {
 		String result = "";
 		switch (quantifierType) {
 		case scale:
-			result = scale.getValue();
+			result = scale.getValue().getValue();
 			break;
 		default:
 			break;
@@ -336,10 +346,10 @@ public class Quantifier implements Serializable {
 		String result = "";
 		switch (quantifierType) {
 		case numerical:
-			result = numerical.getUcumString();
+			result = numerical.getUcumString().getValue();
 			break;
 		case interval:
-			result = interval.getUcumString();
+			result = interval.getUcumString().getValue();
 			break;
 		default:
 			break;
@@ -372,8 +382,8 @@ public class Quantifier implements Serializable {
 		return result;
 	}
 
-	public ComparisonOperators getMinOperator() {
-		ComparisonOperators result = null;
+	public ComparisonOperator getMinOperator() {
+		ComparisonOperator result = null;
 		switch (quantifierType) {
 		case interval:
 			result = interval.getMinOperator();
@@ -384,8 +394,8 @@ public class Quantifier implements Serializable {
 		return result;
 	}
 
-	public ComparisonOperators getMaxOperator() {
-		ComparisonOperators result = null;
+	public ComparisonOperator getMaxOperator() {
+		ComparisonOperator result = null;
 		switch (quantifierType) {
 		case interval:
 			result = interval.getMaxOperator();
@@ -400,7 +410,7 @@ public class Quantifier implements Serializable {
 		Integer result = 0;
 		switch (quantifierType) {
 		case quantile:
-			result = quantile.getBin();
+			result = quantile.getBins();
 			break;
 		default:
 			break;
@@ -412,7 +422,8 @@ public class Quantifier implements Serializable {
 		String result = "";
 		switch (quantifierType) {
 		case nonQuantifiable:
-			result = nonQuantifiable.getCodeValue();
+			if (nonQuantifiable.getTypeCode()!=null)
+				return nonQuantifiable.getTypeCode().getCode();
 			break;
 		default:
 			break;
@@ -421,11 +432,11 @@ public class Quantifier implements Serializable {
 		return result;
 	}
 
-	public ComparisonOperators getComparisonOperators() {
-		ComparisonOperators result = null;
+	public ComparisonOperator getComparisonOperators() {
+		ComparisonOperator result = null;
 		switch (quantifierType) {
 		case numerical:
-			result = numerical.getComparisonOperators();
+			result = numerical.getOperator();
 			break;
 		default:
 			break;

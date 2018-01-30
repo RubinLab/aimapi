@@ -105,44 +105,68 @@
 package edu.stanford.hakan.aim4api.project.epad;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationEntityCollection;
 import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesMarkupEntityStatement;
 import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesSegmentationEntityStatement;
 import edu.stanford.hakan.aim4api.base.CompactCalculationResult;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.DicomSegmentationEntity;
 import edu.stanford.hakan.aim4api.base.Enumerations;
+import edu.stanford.hakan.aim4api.base.Equipment;
 import edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
 import edu.stanford.hakan.aim4api.base.II;
 import edu.stanford.hakan.aim4api.base.Image;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationStatement;
 import edu.stanford.hakan.aim4api.base.ImageCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
+import edu.stanford.hakan.aim4api.base.ImageReferenceEntityCollection;
 import edu.stanford.hakan.aim4api.base.ImageSeries;
 import edu.stanford.hakan.aim4api.base.ImageStudy;
+import edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic;
+import edu.stanford.hakan.aim4api.base.ImagingObservationEntity;
+import edu.stanford.hakan.aim4api.base.ImagingObservationEntityCollection;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCollection;
+import edu.stanford.hakan.aim4api.base.InferenceEntity;
+import edu.stanford.hakan.aim4api.base.InferenceEntityCollection;
 import edu.stanford.hakan.aim4api.base.MarkupEntity;
+import edu.stanford.hakan.aim4api.base.MarkupEntityCollection;
 import edu.stanford.hakan.aim4api.base.Person;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.SegmentationEntity;
 import edu.stanford.hakan.aim4api.base.SegmentationEntityCollection;
 import edu.stanford.hakan.aim4api.base.TextAnnotationEntity;
+import edu.stanford.hakan.aim4api.base.TwoDimensionCircle;
+import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
+import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
+import edu.stanford.hakan.aim4api.base.TwoDimensionPoint;
+import edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
+import edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate;
+import edu.stanford.hakan.aim4api.base.TwoDimensionSpline;
 import edu.stanford.hakan.aim4api.base.User;
 import edu.stanford.hakan.aim4api.compability.aimv3.Modality;
+import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
+import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 import edu.stanford.hakan.aim4api.utility.GenerateId;
+
+//gwt 2.8
+//import com.google.gwt.i18n.client.DateTimeFormat;
 
 /**
  * 
  * @author debra willrett
  * 
- *         Aim wraps ImageAnnotation and calls methods: addGeometricShape,
+ *         Aim4 wraps ImageAnnotation and calls methods: addGeometricShape,
  *         addImageReference, addPerson, addSegmentation, addTextAnnotation,
  *         setName, setDateTime, setCagridId, setComment, addUser,createUser, ,
  *         addEquipment, createEquipment, addImageReference,
@@ -152,11 +176,14 @@ import edu.stanford.hakan.aim4api.utility.GenerateId;
  * 
  */
 @SuppressWarnings("serial")
-public class Aim4 extends ImageAnnotationCollection implements Serializable {
+public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
-	private static final Logger logger = Logger.getLogger("Aim");
+	private static final Logger logger = Logger.getLogger("Aim4");
 
 	String DSO_SOP_CLASSUID = "1.2.840.10008.5.1.4.1.1.66.4";
+
+    //this is the shapes list for epad version of shapes
+    transient private List<Shape> aimShapes=null;
 
 	public Aim4() {
 	}
@@ -197,9 +224,145 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 //				date=date.substring(0,4)+"-"+date.substring(4,6)+"-"+date.substring(6,8);
 //		}
 		setDateTime(date);
+		
+		setUniqueIdentifier(iac.getUniqueIdentifier(), "al536anhb55555");
+	       
+		setXsiType(iac.getXsiType());
+
+	       
+		//ml TODO 
+		getImageAnnotation().setPluginCollection(iac.getImageAnnotation().getPluginCollection());
+		getImageAnnotation().setDsoStartIndex(iac.getImageAnnotation().getDsoStartIndex());
 	}
 
 	
+	// build the new imageAnnotation
+    public Aim4(String name, String modality, String description,
+            String patientName, String patientId, String patientSex,
+            String patientBirthdate, String manufacturerName, String model,
+            String version, int activeImage, LoggedInUser user,
+            String imageUid, String seriesUid, String studyUid,
+            String studyDate, String studyTime, String imageClassUid) { //ml imageclassuid added
+
+        super();
+
+        setName(name);
+        setDateTime(todaysDate());
+        setComment(fillComment(modality, description, activeImage));
+
+        setUser(user);
+
+        setPerson(createPerson(patientName, patientId, patientSex,
+                patientBirthdate));
+        setEquipment(createEquipment(manufacturerName, model, version));
+
+        // don't add the image reference yet, we don't have any shapes or segs
+        addImageReferenceEntity(createImageReference(studyUid, seriesUid, imageUid,
+                studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
+        addImagingPhysicalEntity(createImagingPhysicalEntity());
+
+    }
+    
+    public Aim4(String name, String modality, String description,
+            String patientName, String patientId, String patientSex,
+            String patientBirthdate, String manufacturerName, String model,
+            String version, int activeImage, LoggedInUser user,
+            String imageUid, String seriesUid, String studyUid,
+            String studyDate, String studyTime, String imageClassUid, String originalPatientId, String accessionNumber) { //ml imageclassuid added
+
+        super();
+
+        setName(name);
+        setDateTime(todaysDate());
+        setComment(fillComment(modality, description, activeImage));
+
+        setUser(user);
+
+        setPerson(createPerson(patientName, patientId, patientSex,
+                patientBirthdate, originalPatientId));
+        setEquipment(createEquipment(manufacturerName, model, version));
+
+        // don't add the image reference yet, we don't have any shapes or segs
+        addImageReferenceEntity(createImageReference(studyUid, seriesUid, imageUid,
+                studyDate, studyTime, imageClassUid,accessionNumber)); //ml imageclassuid added
+        addImagingPhysicalEntity(createImagingPhysicalEntity());
+
+    }
+
+
+	public Aim4(String name, String patientName, String patientId,
+            LoggedInUser user, String studyUid, String studyDate,
+            String studyTime) {
+
+        super();
+        setName(name);
+        setDateTime(todaysDate());
+        setUser(user);
+        setPerson(createPerson(patientName, patientId, "unknown", todaysDate()));
+        addImageReferenceEntity(createImageReference(studyUid, studyDate, studyTime));
+
+    }
+    
+    private ImagingPhysicalEntity createImagingPhysicalEntity() {
+
+    	ImagingPhysicalEntity entity = new ImagingPhysicalEntity();
+    	entity.setAnnotatorConfidence(0.0);
+    	entity.addTypeCode(new CD("0","background","ePAD"));
+    	entity.setLabel(new ST("background"));
+    	return entity;
+    }
+    
+ // create the equipment object for this series
+    private Equipment createEquipment(String name, String model, String version) {
+
+        Equipment equipment = new Equipment();
+        equipment.setManufacturerName(new ST(name));
+        equipment.setManufacturerModelName(new ST(model));
+        equipment.setSoftwareVersion(new ST(version));
+        return equipment;
+    }
+
+    private String todaysDate() {
+      return getFormatedDateTime();
+  }
+    public static String getFormatedDateTime() {
+        Date date = new Date();
+
+        int year = date.getYear() + 1900;
+        int month = date.getMonth() + 1;
+        int day = date.getDate();
+        int hour = date.getHours();
+        int minute = date.getMinutes();
+        int second = date.getSeconds();
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        String strHour = Integer.toString(hour);
+        if (hour < 10) {
+            strHour = "0" + strHour;
+        }
+        String strMinute = Integer.toString(minute);
+        if (minute < 10) {
+            strMinute = "0" + strMinute;
+        }
+        String strSecond = Integer.toString(second);
+        if (second < 10) {
+            strSecond = "0" + strSecond;
+        }
+
+        StringBuilder builder = new StringBuilder();
+//        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        ///ml change for proper aim format (clunie)
+        
+        builder.append(Integer.toString(year)).append(strMount).append(strDay).append(strHour).append(strMinute).append(strSecond);
+        return builder.toString();
+    }
 	public boolean hasSeries(String seriesID) {
 		boolean result = false;
 		try {
@@ -232,7 +395,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 
 				for (Image image : dicomImageReference.getImageStudy()
 						.getImageSeries().getImageCollection().getImageList()) {
-					if (image.getSopInstanceUid().equals(imageID)) {
+					if (image.getSopInstanceUid().getRoot().equals(imageID)) {
 						result = true;
 						break;
 					}
@@ -393,19 +556,39 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			DicomImageReferenceEntity dicomImageReference = (DicomImageReferenceEntity) imageReference;
 			ImageStudy study = dicomImageReference.getImageStudy();
 
-			SimpleDateFormat fmt ;
-			Date date = new Date();
-			logger.warning("date is:" + study.getStartDate());
-			if (study.getStartDate().contains("-")) {
-				fmt = new SimpleDateFormat("yyyy-MM-dd");
-				date = fmt.parse(study.getStartDate().substring(0, 10));
-			}else
-			{
-				fmt = new SimpleDateFormat("yyyyMMdd");
-				date = fmt.parse(study.getStartDate().substring(0, 8));	
-			}
-
-			return date;
+			//SimpleDateFormat not working in client. DateTimeFormat is in gwt 2.8
+//			DateTimeFormat fmt ;
+//			Date date = new Date();
+//			logger.warning("date is:" + study.getStartDate());
+//			if (study.getStartDate().contains("-")) {
+//				fmt = DateTimeFormat.getFormat("yyyy-MM-dd");
+//				date = fmt.parse(study.getStartDate().substring(0, 10));
+//			}else
+//			{
+//				fmt = new DateTimeFormat.getFormat("yyyyMMdd");
+//				date = fmt.parse(study.getStartDate().substring(0, 8));	
+//			}
+//			return date;
+			
+			int year ;
+            int month ;
+            int day;
+            //ml dateformat change
+            String strStartDate= study.getStartDate();
+        	if (strStartDate.contains("-")) {
+				
+                year = Integer.parseInt(strStartDate.substring(0, 4));
+                month = Integer.parseInt(strStartDate.substring(5, 7));
+                day = Integer.parseInt(strStartDate.substring(8, 10));
+        	}
+        	else {
+        		year = Integer.parseInt(strStartDate.substring(0, 4));
+                month = Integer.parseInt(strStartDate.substring(4, 6));
+                day = Integer.parseInt(strStartDate.substring(6, 8));
+        	}
+            System.out.println(year + " " + month + " " + day);
+            Date date = new Date(year, month - 1, day);
+            return date;
 
 		} catch (Exception e) {
 			logger.info("Error: aimApi.getStudyDate " + e.getMessage());
@@ -422,7 +605,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			return getPerson().getId().getValue();
 
 		} catch (Exception e) {
-			logger.info("Error: Aim getPatientId " + e.getMessage());
+			logger.info("Error: Aim4 getPatientId " + e.getMessage());
 		}
 		return result;
 
@@ -436,7 +619,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	            else
 	            	return getPatientID();
 	        } catch (Exception e) {
-	            logger.info("Error: Aim getOriginalPatientId " + e.getMessage());
+	            logger.info("Error: Aim4 getOriginalPatientId " + e.getMessage());
 	            return getPatientID();
 	        }
 	        return result;
@@ -575,44 +758,93 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	
 	
 	/**
-	 * the code retrieved from edu.stanford.hakan.aim4api.project.epad.Aim and converted to aim4 classes
+	 * the code retrieved from edu.stanford.hakan.aim4api.project.epad.Aim4 and converted to aim4 classes
 	 * to keep a v4 copy of them. currently not in use
 	 * @param length
 	 * @return
 	 */
-	//values from edu.stanford.hakan.aim4api.project.epad.Aim use Aim classes values if exists
-//	private static final String LINE_LENGTH = "LineLength";
-//	private static final String VERSION = "1.0";
-//	private static final String PRIVATE_DESIGNATOR = "private";
-//	private static final String MEAN = "Mean"; 
-//	private static final String AREA = "Area";
-//	private static final String STD_DEV = "Standard Deviation";
-//	private static final String MIN = "Minimum";
-//	private static final String MAX = "Maximum";
+	//values from edu.stanford.hakan.aim4api.project.epad.Aim4 use Aim4 classes values if exists
+	private static final String LINE_LENGTH = "LineLength";
+	private static final String VERSION = "1.0";
+	private static final String PRIVATE_DESIGNATOR = "private";
+    public static final String LONG_AXIS = "LongAxis";
+    public static final String SHORT_AXIS = "ShortAxis";
+	private static final String MEAN = "Mean"; 
+	private static final String AREA = "Area";
+	private static final String STD_DEV = "Standard Deviation";
+	private static final String MIN = "Minimum";
+	private static final String MAX = "Maximum";
 	private static final String VOLUME = "Volume";
+    public static final String LINE_MEASURE = "cm";
 		
-	public static CalculationEntity addMeanCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,Aim.MEAN, "R-00317");
+    
+    //TODO all should be added with addCalculationEntityWithRef
+	public static CalculationEntity createMeanCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,Aim4.MEAN, "R-00317");
 	}
-	public static CalculationEntity addAreaCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,Aim.AREA, "99EPADA4");
+	public static CalculationEntity createAreaCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,Aim4.AREA, "99EPADA4");
 	}
-	public static CalculationEntity addStdDevCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,Aim.STD_DEV, "R-10047");
+	public static CalculationEntity createStdDevCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,Aim4.STD_DEV, "R-10047");
 	}
-	public static CalculationEntity addMinCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,Aim.MIN, "R-404FB");
+	public static CalculationEntity createMinCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,Aim4.MIN, "R-404FB");
 	}
-	public static CalculationEntity addMaxCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,Aim.MAX, "G-A437");
+	public static CalculationEntity createMaxCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,Aim4.MAX, "G-A437");
 	}
-	public static CalculationEntity addLengthCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,Aim.LINE_LENGTH, "G-D7FE");
+	public static CalculationEntity createLengthCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,Aim4.LINE_LENGTH, "G-D7FE");
 	}
-	public static CalculationEntity addVolumeCalculation(double value, Integer shapeId, String units) {
-		return addCalculation(String.valueOf(value),shapeId,units,VOLUME, "RID28668");
+	public static CalculationEntity createVolumeCalculation(double value, Integer shapeId, String units) {
+		return createCalculation(String.valueOf(value),shapeId,units,VOLUME, "RID28668");
 	}
-
+	
+	public static CalculationEntity createLongAxisCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,LONG_AXIS, "G-A185");
+    }
+    public static CalculationEntity createShortAxisCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,SHORT_AXIS, "G-A186");
+    }
+    //get the unit from line_measure constant
+    public static CalculationEntity createLongAxisCalculation(double value, Integer shapeId) {
+    	return createCalculation(String.valueOf(value),shapeId,LINE_MEASURE,LONG_AXIS, "G-A185");
+    }
+    public static CalculationEntity createShortAxisCalculation(double value, Integer shapeId) {
+    	return createCalculation(String.valueOf(value),shapeId,LINE_MEASURE,SHORT_AXIS, "G-A186");
+    }
+    
+    public static CalculationEntity createLongAxisMeanCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,LONG_AXIS+"_"+MEAN, "R-00317");
+    }
+    public static CalculationEntity createLongAxisStdDevCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,LONG_AXIS+"_"+STD_DEV, "R-10047");
+    }
+    public static CalculationEntity createLongAxisMinCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,LONG_AXIS+"_"+MIN, "R-404FB");
+    }
+    public static CalculationEntity createLongAxisMaxCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,LONG_AXIS+"_"+MAX, "G-A437");
+    }
+    
+    public static CalculationEntity createShortAxisMeanCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,SHORT_AXIS+"_"+MEAN, "R-00317");
+    }
+    public static CalculationEntity createShortAxisStdDevCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,SHORT_AXIS+"_"+STD_DEV, "R-10047");
+    }
+    public static CalculationEntity createShortAxisMinCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,SHORT_AXIS+"_"+MIN, "R-404FB");
+    }
+    public static CalculationEntity createShortAxisMaxCalculation(double value, Integer shapeId, String units) {
+    	return createCalculation(String.valueOf(value),shapeId,units,SHORT_AXIS+"_"+MAX, "G-A437");
+    }
+    
+    public static CalculationEntity createLengthCalculation(double value, Integer shapeId) {
+    	return createCalculation(String.valueOf(value),shapeId,LINE_MEASURE,LINE_LENGTH, "G-D7FE");
+    }
+    
 	/**
 	 * aimapi's addcalculation. it can only save controlled terms that are in aimapi's static lexicon
 	 * use epad-ws's AimUtil.addCalculation for being able to access the dynamic lexicon
@@ -623,7 +855,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 	 * @param code
 	 * @return
 	 */
-	public static CalculationEntity addCalculation(String value, Integer shapeId, String units, String name, String code) {
+	public static CalculationEntity createCalculation(String value, Integer shapeId, String units, String name, String code) {
 
 		CalculationEntity cal =new CalculationEntity();
 		cal.setUniqueIdentifier();
@@ -643,7 +875,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			desc=calcCD.getDisplayName().getValue();
 		}else {
 
-			cal.addTypeCode(new CD(name,name,Aim.PRIVATE_DESIGNATOR));
+			cal.addTypeCode(new CD(name,name,Aim4.PRIVATE_DESIGNATOR));
 			cal.setDescription(new ST(name));
 			desc=name;
 
@@ -651,7 +883,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 		CompactCalculationResult calculationResult=new CompactCalculationResult();
 
 		calculationResult.setType(Enumerations.CalculationResultIdentifier.Scalar);
-		calculationResult.setUnitOfMeasure(new ST(Aim.getUCUMUnit(units)));
+		calculationResult.setUnitOfMeasure(new ST(Aim4.getUCUMUnit(units)));
 		if (units.equals(""))
 			calculationResult.setDataType(new CD("99EPADD2","String","99EPAD"));
 		else
@@ -685,7 +917,7 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 
 //		Algorithm alg=new Algorithm();
 //		alg.setName(new ST(desc));
-//		alg.setVersion(new ST(Aim.VERSION));
+//		alg.setVersion(new ST(Aim4.VERSION));
 //		ArrayList<CD> types=new ArrayList<>();
 //		types.add(new CD("RID12780","Calculation","RadLex","3.2"));
 //		alg.setType(types);
@@ -784,11 +1016,14 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			return formatDate(dateStr);
 		}
 		Date now=new Date();
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-		return dateFormat.format(now);
+		
+//		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		return ""+((now.getYear()+1900))+addLeadingZeros(now.getMonth())+addLeadingZeros(now.getDate())+addLeadingZeros(now.getHours())+addLeadingZeros(now.getMinutes())+addLeadingZeros(now.getSeconds());
 	}
 	
-	
+	public static String addLeadingZeros(Integer val){
+		return (val>9?val.toString():"0"+val.toString());
+	}
 	/**
 	 * puts 19000101000000 if null or empty
 	 * @param d
@@ -959,5 +1194,963 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
 			this.setAccessionNumber(accessionNumber);
 		}
 	}
+
+	public void setUniqueIdentifier(II uniqueIdentifier, String string) {
+		logger.info("ignoring accesskey. no accesskey in v4");
+		this.setUniqueIdentifier(uniqueIdentifier);
+		
+	}
+
+	public String fillComment(String modality, String seriesDescription, int i) {
+		String SEPARATOR = "/";
+		String comment = modality + SEPARATOR + seriesDescription +SEPARATOR + i;
+		
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.getImageAnnotation().setComment(new ST(comment));
+		
+	}
+
+	public Aim4 cloneAim() {
+		Aim4 aim = new Aim4(this.getClone());
+        return aim;
+	}
+
+	public void addImagingPhysicalEntity(ImagingPhysicalEntity newImagingPhysicalEntity) {
+		this.getImageAnnotation().addImagingPhysicalEntity(newImagingPhysicalEntity);
+	}
 	
+	public void addImageReferenceEntity(DicomImageReferenceEntity newImageReferenceEntity) {
+		this.getImageAnnotation().addImageReferenceEntity(newImageReferenceEntity);
+		
+	}
+
+	public void clearImageReferenceEntityCollection() {
+		this.getImageAnnotation().getImageReferenceEntityCollection().getImageReferenceEntityList().clear();
+		
+	}
+
+	public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID) {
+        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null, false);
+    }
+	
+	public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID, boolean multiframe) {
+        return addShapes(studyID, seriesID, imageID, activeImage, studyDate, studyTime, shapeType, coords, pixelSpacingX, pixelSpacingY, imageClassUID, null, multiframe);
+    }
+	
+	// give me the next available shape identifier
+    private int getNextShapeID() {
+
+        int max = 0;
+        try {
+            for (MarkupEntity shape : getMarkupEntityCollection()
+                    .getMarkupEntityList()) {
+            	if (shape instanceof TwoDimensionGeometricShapeEntity)
+            		max = Math.max(max, ((TwoDimensionGeometricShapeEntity)shape).getShapeIdentifier());
+            }
+        } catch (Exception e) {
+            logger.info("error: has no geometric shape collection");
+        }
+        max++;
+        return max;
+    }
+
+	
+	public int addShapes(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY,  String imageClassUID, String accessionNumber, boolean multiframe) {
+        int frameID = 1;
+        int shapeID = getNextShapeID();
+        if (multiframe){
+        	frameID=activeImage+1;
+        }
+        List<TwoDimensionGeometricShapeEntity> shapes = create2DShapes(imageID, frameID, shapeType,
+                coords, pixelSpacingX, pixelSpacingY, shapeID);
+
+        // could have created multiple shapes
+        for (TwoDimensionGeometricShapeEntity shape : shapes) {
+
+            shape.setIncludeFlag(true);
+            addMarkupEntity(shape);
+        }
+
+        if (!hasImage(imageID)) {
+            updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
+                    studyTime, imageClassUID,accessionNumber);
+        }
+
+        return shapeID;
+    }
+	
+	private List<TwoDimensionGeometricShapeEntity> create2DShapes(String imageID, int frameID,
+            ShapeType shapeType, List<TwoDCoordinate> coords,
+            double pixelSpacingX, double pixelSpacingY, int shapeID) {
+
+        // logger.info("createShapes " + shapeType);
+        // build the shapes
+        List<TwoDimensionGeometricShapeEntity> shapes = new ArrayList<TwoDimensionGeometricShapeEntity>();
+
+        if (shapeType != null) {
+
+            switch (shapeType) {
+
+                case POINT:
+                    TwoDimensionPoint point = new TwoDimensionPoint();
+                    point.setShapeIdentifier(shapeID);
+//                    point.setCagridId(caGridId);
+                    shapes.add(create2DShape(point, coords, imageID, frameID));
+                    break;
+
+                case LINE:
+                case OPENPOLY:
+                	TwoDimensionMultiPoint multiPoint = new TwoDimensionMultiPoint();
+                    multiPoint.setShapeIdentifier(shapeID);
+//                    multiPoint.setCagridId(caGridId);
+                    TwoDimensionGeometricShapeEntity shape = create2DShape(multiPoint, coords, imageID,
+                            frameID);
+                    shapes.add(shape);
+                    shape.setShapeIdentifier(shapeID);
+
+                    break;
+                case POLY:
+                case RECTANGLE:
+                	TwoDimensionPolyline polyline = new TwoDimensionPolyline();
+                    polyline.setShapeIdentifier(shapeID);
+//                    polyline.setCagridId(caGridId);
+                    shapes.add(create2DShape(polyline, coords, imageID, frameID));
+                    break;
+                case SPLINE:
+//                case OPENSPLINE:
+                	TwoDimensionSpline spline = new TwoDimensionSpline();
+                    spline.setShapeIdentifier(shapeID);
+//                    spline.setCagridId(caGridId);
+                    shapes.add(create2DShape(spline, coords, imageID, frameID));
+                    break;
+                case CIRCLE:
+                	TwoDimensionCircle circle = new TwoDimensionCircle();
+                    circle.setShapeIdentifier(shapeID);
+//                    circle.setCagridId(caGridId);
+                    shapes.add(create2DShape(circle, coords, imageID, frameID));
+                    break;
+                case NORMAL:
+                	//add the coorinates to the ellipse shape
+//                	Ellipse ellipse = new Ellipse();
+//                	ellipse.setShapeIdentifier(shapeID);;
+//                	ellipse.setCagridId(caGridId);
+//                	shapes.add(createShape(ellipse, coords, imageID, frameID));
+                	logger.info("adding two lines ");
+                    // add the long axis line
+                    List<TwoDCoordinate> longAxis = new ArrayList<TwoDCoordinate>();
+                    longAxis.add(coords.get(0));
+                    longAxis.add(coords.get(1));
+                    TwoDimensionMultiPoint longShape = new TwoDimensionMultiPoint();
+                    longShape.setShapeIdentifier(shapeID++);
+//                    longShape.setCagridId(caGridId);
+                    TwoDimensionGeometricShapeEntity l = create2DShape(longShape, longAxis, imageID,
+                            frameID);
+                    shapes.add(l);
+
+                    // add the short axis line
+                    List<TwoDCoordinate> shortAxis = new ArrayList<TwoDCoordinate>();
+                    shortAxis.add(coords.get(2));
+                    shortAxis.add(coords.get(3));
+                    TwoDimensionMultiPoint shortShape = new TwoDimensionMultiPoint();
+                    shortShape.setShapeIdentifier(shapeID);
+//                    shortShape.setCagridId(caGridId);
+                    TwoDimensionGeometricShapeEntity s = create2DShape(shortShape, shortAxis, imageID,
+                            frameID);
+                    shapes.add(s);
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return shapes;
+    }
+
+    private TwoDimensionGeometricShapeEntity create2DShape(TwoDimensionGeometricShapeEntity shape,
+            List<TwoDCoordinate> coords, String imageUid, int frame) {
+
+        logger.info("createShape " + shape.getXsiType());
+        shape.setImageReferenceUid(new II(imageUid));
+        shape.setReferencedFrameNumber(frame);
+        // put the coords into the shape
+        for (int i = 0; i < coords.size(); i++) {
+            TwoDimensionSpatialCoordinate coord = new TwoDimensionSpatialCoordinate(coords.get(i).getX(),coords.get(i).getY(),i);
+            shape.setImageReferenceUid(new II(imageUid));
+            shape.setReferencedFrameNumber(frame);
+            shape.addTwoDimensionSpatialCoordinate(coord);
+        }
+        return shape;
+
+    }
+	
+	private void updateImageID(String studyID, String seriesID, String imageID,
+            int activeImage, String studyDate, String studyTime,  String imageClassUID, String accessionNumber) {
+
+        for (ImageReferenceEntity imageReference : getImageReferenceEntityCollection()
+                .getImageReferenceEntityList()) {
+
+        	DicomImageReferenceEntity dicomImageReference = (DicomImageReferenceEntity) imageReference;
+
+            String studyInstanceUID = dicomImageReference.getImageStudy()
+                    .getInstanceUid().getRoot();
+            String seriesInstanceUID = dicomImageReference.getImageStudy()
+                    .getImageSeries().getInstanceUid().getRoot();
+
+            if (studyInstanceUID.equals(studyID)) {
+
+                // found the study
+                if (seriesInstanceUID.isEmpty()) {
+
+                    // turn a study reference into an image reference
+                    // logger.info("turn a study reference into an image reference");
+                    ImageSeries imageSeries = new ImageSeries();
+                    imageSeries.setInstanceUid(new II(seriesID));
+                    Image img = new Image( "", imageID);
+                    imageSeries.addImage(img);
+
+                    dicomImageReference.getImageStudy().setImageSeries(
+                            imageSeries);
+
+                    return;
+
+                } else if (seriesInstanceUID.equals(seriesID)) {
+
+                    // turn a series reference into an image reference
+                    Image image = new Image( "", imageID);
+
+                    List<Image> images = dicomImageReference.getImageStudy()
+                            .getImageSeries().getImageCollection()
+                            .getImageList();
+
+                    if (images.size() > 0) {
+                        images.clear();
+                    }
+
+                    images.add(image);
+                    return;
+
+                }
+            }
+        }
+
+        // didn't find it, so create a new one
+        addImageReferenceEntity(createImageReference(studyID, seriesID, imageID,
+                studyDate, studyTime, imageClassUID, accessionNumber));
+
+    }
+
+	public boolean hasShapes() {
+		boolean result = true;
+        try {
+			result= this.getMarkupEntityCollection()!=null && this.getMarkupEntityCollection().getMarkupEntityList().size()>0;
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+	}
+
+	public String getName() {
+		return this.getImageAnnotation().getName().getValue();
+	}
+
+	/**
+	 * returns the first type of the first annotation
+	 * @return
+	 */
+	public String getCodeValue() {
+		if (this.getImageAnnotation().getListTypeCode()==null || this.getImageAnnotation().getListTypeCode().isEmpty())
+			return null;
+		return this.getImageAnnotation().getListTypeCode().get(0).getCode();
+	}
+
+	public String getCodeMeaning() {
+		if (this.getImageAnnotation().getListTypeCode()==null || this.getImageAnnotation().getListTypeCode().isEmpty())
+			return null;
+		return this.getImageAnnotation().getListTypeCode().get(0).getCodeSystem();
+	}
+	
+	public String getCodingSchemeDesignator() {
+		if (this.getImageAnnotation().getListTypeCode()==null || this.getImageAnnotation().getListTypeCode().isEmpty())
+			return null;
+		return this.getImageAnnotation().getListTypeCode().get(0).getCodeSystemName();
+	}
+	
+	public String getCodingSchemeVersion() {
+		if (this.getImageAnnotation().getListTypeCode()==null || this.getImageAnnotation().getListTypeCode().isEmpty())
+			return null;
+		return this.getImageAnnotation().getListTypeCode().get(0).getCodeSystemVersion();
+	}
+
+	public void setCodingSchemeDesignator(String val) {
+		this.getImageAnnotation().getListTypeCode().get(0).setCodeSystemName(val);
+	}
+	
+	public void setTemplate(CD val) {
+		this.getImageAnnotation().addTypeCode(val);
+		
+	}
+	
+
+	public void setCodeMeaning(String val) {
+		this.getImageAnnotation().getListTypeCode().get(0).setCodeSystem(val);
+		
+	}
+
+	public void setCodeValue(String val) {
+		this.getImageAnnotation().getListTypeCode().get(0).setCode(val);
+		
+	}
+	
+	public void setCodingSchemeVersion(String val) {
+		this.getImageAnnotation().getListTypeCode().get(0).setCodeSystemVersion(val);
+		
+	}
+
+	public List<Shape> getShapes() {
+		if (aimShapes!=null){
+    		logger.info("returning aimshapes. size "+aimShapes.size());
+    		return aimShapes;
+    	}
+        List<Shape> result = new ArrayList<Shape>();
+        for (MarkupEntity shape : getMarkupEntityCollection().getMarkupEntityList()) {
+            if (shape instanceof TwoDimensionGeometricShapeEntity)
+            	result.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
+        }
+        
+        //see if there are 2 lines and if they are orthogonal put a normal shape instead
+        if (result.size()==2 && result.get(0).getShapeType()==ShapeType.LINE && result.get(1).getShapeType()==ShapeType.LINE) {
+//        	by computing the dot product of their vectors and
+//        	determining that it is zero (within an appropriate floating point
+//        	precision related tolerance)
+
+        	Double x0=result.get(0).getCoords().get(0).getX();
+        	Double y0=result.get(0).getCoords().get(0).getY();
+        	Double x1=result.get(0).getCoords().get(1).getX();
+        	Double y1=result.get(0).getCoords().get(1).getY();
+        	Double x2=result.get(1).getCoords().get(0).getX();
+        	Double y2=result.get(1).getCoords().get(0).getY();
+        	Double x3=result.get(1).getCoords().get(1).getX();
+        	Double y3=result.get(1).getCoords().get(1).getY();
+        	logger.info("cross product is "+roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)));
+        	if (roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)) == 0) {
+        		//it is orthogonal
+        		logger.info("lines are orthogonal. create a normal shape instead");
+        		Normal n=new Normal(result.get(0),result.get(1));
+        		//put the smallest shape id of the lines to the normal shape
+        		int si=(result.get(0).getShapeIdentifier()<result.get(1).getShapeIdentifier()?result.get(0).getShapeIdentifier():result.get(1).getShapeIdentifier());
+        		n.setShapeIdentifier(si);
+        		result.clear();
+        		result.add(n);
+        		
+        		
+        	}
+        	
+        }
+        logger.info("result is "+ result.size());
+        aimShapes=result;
+        return result;
+	}
+	
+	private Double roundDouble(Double val){
+	    if (val!=null)
+	        return ((double)Math.round(val*1000))/1000;
+	    return val;
+	}
+
+	public User getLoggedInUser() {
+		LoggedInUser result = null;
+
+        User user = getUser();
+        if (user!=null) {
+            User firstUser = user;
+//            logger.info("new loggedInUser " + firstUser.getLoginName()
+//                    + firstUser.getName());
+            result = new LoggedInUser(firstUser.getLoginName().getValue(),
+                    firstUser.getName().getValue());
+        }
+
+        return result;
+	}
+
+	public int getDsoStartIndex() {
+		return getImageAnnotation().getDsoStartIndex();
+	}
+
+	public Shape getShape(int shapeID) {
+		 // logger.info("getShape " + shapeID);
+        Shape result = null;
+        for (MarkupEntity shape : getMarkupEntityCollection().getMarkupEntityList()) {
+            if (shape instanceof TwoDimensionGeometricShapeEntity && ((TwoDimensionGeometricShapeEntity)shape).getShapeIdentifier() == shapeID) {
+                result = new Shape((TwoDimensionGeometricShapeEntity)shape);
+            }
+        }
+        return result;
+	}
+
+	public void setShapeCoords(int shapeID, List<TwoDCoordinate> coords) {
+
+        for (Shape shape : this.getShapes()) {
+            if (shape.getShapeIdentifier() == shapeID) {
+                List<TwoDimensionSpatialCoordinate> coordList = shape
+                        .getTwoDimensionSpatialCoordinateCollection()
+                        .getTwoDimensionSpatialCoordinateList();
+
+                for (int i = 0; i < coordList.size(); i++) {
+                    if (i < coords.size()) {
+                        TwoDimensionSpatialCoordinate c = coordList
+                                .get(i);
+                        c.setX(coords.get(i).getX());
+                        c.setY(coords.get(i).getY());
+                    }
+                }
+                updateIAShapes();
+                return;
+            }
+        }
+    }
+	
+	/**
+     * update the actual image annotation shapes to match the shape of this class 
+     * extra measure to handle the specific classes with multiple shapes like normal
+     */
+    private void updateIAShapes(){
+    	//if there are no aimshapes nothing to do
+    	if (aimShapes==null) 
+    		return;
+    	for (Shape aimShape : this.aimShapes) {
+	    	for (MarkupEntity meshape : this.getMarkupEntityCollection()
+	                .getMarkupEntityList()) {
+	    		if (meshape instanceof TwoDimensionGeometricShapeEntity){
+	    			TwoDimensionGeometricShapeEntity shape =((TwoDimensionGeometricShapeEntity)meshape);
+			    		if (aimShape instanceof Normal) {
+			    			 if (shape instanceof TwoDimensionGeometricShapeEntity && ((TwoDimensionGeometricShapeEntity)shape).getShapeIdentifier() == aimShape.getShapeIdentifier()+1) {
+			 	                updateCoords(shape
+			 	                        .getTwoDimensionSpatialCoordinateCollection()
+			 	                        .getTwoDimensionSpatialCoordinateList(),  aimShape
+			 	                        .getTwoDimensionSpatialCoordinateCollection()
+			 	                        .getTwoDimensionSpatialCoordinateList().subList(2, 4));
+			 	            }
+			    		}
+			            if (shape.getShapeIdentifier() == aimShape.getShapeIdentifier()) {
+			                updateCoords(shape
+			                        .getTwoDimensionSpatialCoordinateCollection()
+			                        .getTwoDimensionSpatialCoordinateList(),  aimShape
+			                        .getTwoDimensionSpatialCoordinateCollection()
+			                        .getTwoDimensionSpatialCoordinateList());
+			            }
+	    		}
+	        }
+    	}
+    }
+    
+    /**
+     * copy the aimshapecoords to xmlcoords
+     * @param xmlCoords
+     * @param aimShapeCoords
+     */
+    private void updateCoords(List<TwoDimensionSpatialCoordinate> xmlCoords, List<TwoDimensionSpatialCoordinate> aimShapeCoords){
+    	for (int i = 0; i < xmlCoords.size(); i++) {
+            if (i < aimShapeCoords.size()) {
+                TwoDimensionSpatialCoordinate c = xmlCoords
+                        .get(i);
+                c.setX(((TwoDimensionSpatialCoordinate) aimShapeCoords.get(i)).getX());
+                c.setY(((TwoDimensionSpatialCoordinate) aimShapeCoords.get(i)).getY());
+            }
+        }
+    }
+    @Override
+    public ImageAnnotation getImageAnnotation(){
+    	if (getImageAnnotations().isEmpty()){
+    		this.addImageAnnotation(new ImageAnnotation());
+    	}
+    	return super.getImageAnnotation();
+    }
+	public void setName(String name) {
+		this.getImageAnnotation().setName(new ST(name));
+		
+	}
+
+	public void setPerson(String patientSex, String patientBirthDate) {
+		this.getPerson().setBirthDate(patientBirthDate);
+        this.getPerson().setSex(new ST(patientSex));
+		
+	}
+
+	public void setShapeLabelOffset(int shapeID, double dx, double dy) {
+		 List<Shape> shapes = this.getShapes();
+		 for (Shape shape : shapes) {
+			 if (shape.getShapeIdentifier() == shapeID) {
+				 shape.setLabelOffsetX(dx);
+				 shape.setLabelOffsetY(dy);
+			 }
+		 }
+		
+	}
+
+	public String getAECodeMeaning(String label) {
+		try {
+			List<ImagingPhysicalEntity> listAnatomicEntity = getImagingPhysicalEntityCollection().getImagingPhysicalEntityList();
+			for (ImagingPhysicalEntity anatomicEntity : listAnatomicEntity) {
+				if (anatomicEntity.getLabel().getValue().equalsIgnoreCase(label)) {
+					if (anatomicEntity.getListTypeCode()!=null) {
+						if (anatomicEntity.getListTypeCode().size()>1)
+							anatomicEntity.getListTypeCode().get(1).getCodeSystem();
+						else if (anatomicEntity.getListTypeCode().size()>0)
+							anatomicEntity.getListTypeCode().get(0).getCodeSystem();
+							//TODO
+//							getAllowedTerm() != null) {
+//						return anatomicEntity.getAllowedTerm().getCodeMeaning();
+//					} else if (anatomicEntity.getCodeMeaning() != null && !"".equals(anatomicEntity.getCodeMeaning())) {
+//						return anatomicEntity.getCodeMeaning();
+					}
+
+				}
+			}
+
+		} catch (Exception e) {
+			logger.info("Error: Aim getAECodeMeaning " + e.getMessage());
+		}
+
+		return "";
+	}
+
+	public String getIOCCodeValue(String IOlabel, String IOClabel) {
+        try {
+            List<ImagingObservationEntity> listImagingObservation = getImagingObservationEntityCollection().getImagingObservationEntityList();
+            for (ImagingObservationEntity imagingObservation : listImagingObservation) {
+                if (imagingObservation.getLabel().getValue().equalsIgnoreCase(IOlabel)) {
+                    List<ImagingObservationCharacteristic> listImagingObservationCharacteristic = imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList();
+                    for (ImagingObservationCharacteristic imagingObservationCharacteristic : listImagingObservationCharacteristic) {
+                        if (imagingObservationCharacteristic.getLabel().getValue().equalsIgnoreCase(IOClabel)) {
+                            if (imagingObservationCharacteristic.getListTypeCode()!= null) {
+                                return imagingObservationCharacteristic.getListTypeCode().get(0).getCode();
+                                //TODO what is this!!!!
+//	                            } else if (imagingObservationCharacteristic.getCodeValue() != null && !"".equals(imagingObservationCharacteristic.getCodeValue())) {
+//	                                return imagingObservationCharacteristic.getCodeValue();
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
+        }
+
+        return "";
+    }
+	
+
+	public boolean hasMultiPoint() {
+		for (MarkupEntity shape : getMarkupEntityCollection()
+                .getMarkupEntityList()) {
+            if (shape.getXsiType().toLowerCase().contains("multipoint")) {
+                return true;
+            }
+        }
+        return false;
+	}
+
+	public boolean hasAELabel(String label) {
+		try {
+
+            if (!"".equals(getAECodeMeaning(label))) {
+                return true;
+            }
+            return false;         
+        } catch (Exception e) {
+            logger.info("Error: Aim hasAELabel " + e.getMessage());
+        }
+
+        return false;
+	}
+
+	public String getIOCodeValue(String label) {
+       try {
+            List<ImagingObservationEntity> listImagingObservation = getImagingObservationEntityCollection().getImagingObservationEntityList();
+            for (ImagingObservationEntity imagingObservation : listImagingObservation) {
+                if (imagingObservation.getLabel().getValue().equalsIgnoreCase(label)) {
+                    if (imagingObservation.getListTypeCode() != null) {
+                        return imagingObservation.getListTypeCode().get(0).getCode();
+                        //TODO what is this 
+//                    } else if (imagingObservation.getCodeValue() != null && !"".equals(imagingObservation.getCodeValue())) {
+//                        return imagingObservation.getCodeValue();
+                    }
+
+                }
+            }
+
+        } catch (Exception e) {
+            logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
+        }
+
+        return "";
+	}
+
+	public boolean hasIOCLabel(String IOlabel, String IOClabel) {
+		 try {
+
+	            if (!"".equals(getIOCCodeValue(IOlabel, IOClabel))) {
+	                return true;
+	            }
+	            return false;
+	        } catch (Exception e) {
+	            logger.info("Error: Aim getObservationCodeValue " + e.getMessage());
+	        }
+
+	        return false;
+	}
+
+
+	public List<Component> getComponents(ComponentType componentType) {
+		
+		List<Component> result = new ArrayList<Component>();
+		switch (componentType) {
+		case anatomicEntity:
+			for (ImagingPhysicalEntity anatomicEntity : getImagingPhysicalEntityCollection().getImagingPhysicalEntityList()) {
+				result.add(new Component(anatomicEntity));
+				for (ImagingPhysicalEntityCharacteristic anatomicEntityCharacteristic : anatomicEntity.getImagingPhysicalEntityCharacteristicCollection().getImagingPhysicalEntityCharacteristicList()) {
+					result.add(new Component(anatomicEntityCharacteristic));
+				}
+			}
+			break;
+		case imagingObservation:
+			for (ImagingObservationEntity imagingObservation : getImagingObservationEntityCollection().getImagingObservationEntityList()) {
+				result.add(new Component(imagingObservation));
+				for (ImagingObservationCharacteristic imagingObservationCharacteristic : imagingObservation.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList()) {
+					result.add(new Component(imagingObservationCharacteristic));
+				}
+			}
+			break;
+		case inference:
+			for (InferenceEntity infernce : getInferenceEntityCollection().getInferenceEntityList()) {
+				result.add(new Component(infernce));
+			}
+			break;
+		default:
+			break;
+
+		}
+		return result;
+	}
+
+	public void updateDateAndTime() {
+		Date date = new Date();
+        int year = date.getYear() + 1900;// cal.get(Calendar.YEAR);
+        int month = date.getMonth() + 1;// cal.get(Calendar.MONTH) + 1;
+        int day = date.getDate();// cal.get(Calendar.DAY_OF_MONTH);
+        int hour = date.getHours();// cal.get(Calendar.HOUR_OF_DAY);
+        int minute = date.getMinutes();// cal.get(Calendar.MINUTE);
+        int second = date.getSeconds();//cal.get(Calendar.SECOND);
+
+        String strMount = Integer.toString(month);
+        if (month < 10) {
+            strMount = "0" + strMount;
+        }
+        String strDay = Integer.toString(day);
+        if (day < 10) {
+            strDay = "0" + strDay;
+        }
+        String strHour = Integer.toString(hour);
+        if (hour < 10) {
+            strHour = "0" + strHour;
+        }
+        String strMinute = Integer.toString(minute);
+        if (minute < 10) {
+            strMinute = "0" + strMinute;
+        }
+        String strSecond = Integer.toString(second);
+        if (second < 10) {
+            strSecond = "0" + strSecond;
+        }
+
+        StringBuilder builder = new StringBuilder();
+      ///ml change for proper aim format (clunie)
+//        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
+        builder.append(Integer.toString(year)).append(strMount).append(strDay).append(strHour).append(strMinute).append(strSecond);
+        this.setDateTime(builder.toString());
+		
+	}
+
+
+	
+    
+	public ShapeType getShapeType(int shapeID) {
+
+		ShapeType result = ShapeType.NONE;
+
+		Shape shape = getShape(shapeID);
+
+		if (shape == null) return result;
+
+		String xsiType = shape.getXsiType();
+
+		if (xsiType.toLowerCase().contains("multipoint")) {
+			result = ShapeType.LINE;
+		} else if (xsiType.toLowerCase().contains("polyline")) {
+			result = ShapeType.POLY;
+		} else if (xsiType.toLowerCase().contains("spline")) {
+			result = ShapeType.SPLINE;
+		} else if (xsiType.toLowerCase().contains("circle")) {
+			result = ShapeType.CIRCLE;
+		} else if (xsiType.toLowerCase().contains("point")) {
+			result = ShapeType.POINT;
+		} else {
+			result = ShapeType.NONE;
+		}
+		return result;
+
+	}
+
+	public boolean isClosedShape(int shapeID) {
+		return isPolygon(shapeID) || isCircle(shapeID) || isSpline(shapeID);
+	}
+	public boolean isCircle(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.CIRCLE);
+	}
+	
+	public boolean isEllipse(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.ELLIPSE);
+	}
+
+	public boolean isSpline(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.SPLINE);
+	}
+
+	public boolean isNormal(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.NORMAL);
+	}
+
+	public boolean isPoint(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.POINT);
+	}
+
+	public boolean isPolygon(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.POLY);
+	}
+
+	
+	public Person createPerson(String name, String id, String sex,
+            String birthdate) {
+		Person person = new Person();
+        person.setBirthDate(birthdate);
+        person.setName(new ST(name));
+        person.setId(new ST(id));
+        person.setSex(new ST(sex));
+        return person;
+	}
+
+	public Person createPerson(String name, String id, String sex,
+            String birthdate, String sourcePatientGroupId) {
+
+        Person person = new Person();
+        person.setBirthDate(birthdate);
+        person.setName(new ST(name));
+        person.setId(new ST(id));
+        if (!id.equalsIgnoreCase(sourcePatientGroupId))
+        	person.setSourcePatientGroupId(new ST(sourcePatientGroupId));
+
+        person.setSex(new ST(sex));
+        return person;
+    }
+
+	public void clearValues() {
+		getImagingPhysicalEntityCollection().getImagingPhysicalEntityList().clear();
+        getImagingObservationEntityCollection().getImagingObservationEntityList().clear();;
+        getInferenceEntityCollection().getInferenceEntityList().clear();;
+	}
+
+	public void addComponents(List<Component> components) {
+
+		for (Component component : components) {
+			switch (component.componentType) {
+			case anatomicEntity:
+				getImagingPhysicalEntityCollection().getImagingPhysicalEntityList().add(
+						component.anatomicEntity);
+				break;
+			case imagingObservation:
+				getImagingObservationEntityCollection().getImagingObservationEntityList()
+				.add(component.imagingObservation);
+				break;
+			case inference:
+				getInferenceEntityCollection().getInferenceEntityList().add(
+						component.inference);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	public static String getUCUMUnit(String units) {
+		if (units==null) 
+			return "";
+		if (units.equalsIgnoreCase("HU")) {
+			return "[hnsf'U]";
+		}else if (units.equalsIgnoreCase("SUV")) {
+			return "{SUVbw}g/ml";
+		}
+		return units;
+    }
+
+	//says static
+	//selectedAim.addMeanCalculation(pixelMap.getMean(), shapeId, units);
+//	selectedAim.addStdDevCalculation(pixelMap.getStdDev(), shapeId, units);
+//	selectedAim.addMinCalculation(pixelMap.getMin(), shapeId, units);
+//	selectedAim.addMaxCalculation(pixelMap.getMax(), shapeId, units);
+	
+	
+	public void clearCalculationEntityCollection(){
+		this.getImageAnnotation().getCalculationEntityCollection().getCalculationEntityList().clear();
+	}
+	
+	//get the first annotation
+	public CalculationEntityCollection getCalculationEntityCollection(){
+		return this.getImageAnnotation().getCalculationEntityCollection();
+	}
+
+	
+	public ImageReferenceEntityCollection getImageReferenceEntityCollection(){
+		return this.getImageAnnotation().getImageReferenceEntityCollection();
+	}
+
+	public SegmentationEntityCollection getSegmentationEntityCollection(){
+		return this.getImageAnnotation().getSegmentationEntityCollection();
+	}
+	
+	public void clearSegmentationEntityCollection(){
+		this.getImageAnnotation().getSegmentationEntityCollection().getSegmentationEntityList().clear();
+		
+	}
+
+	public void addSegmentationEntity(DicomSegmentationEntity dicomSegmentationEntity) {
+		this.getImageAnnotation().addSegmentationEntity(dicomSegmentationEntity);
+		
+	}
+	
+	 // create the image reference
+    private DicomImageReferenceEntity createImageReference(String studyID,
+            String studyDate, String studyTime) {
+        return createImageReference(studyID, "", "", studyDate, studyTime, "",null);
+
+    }
+	
+	//should't happen unless study annotation
+	public static DicomImageReferenceEntity createImageReference(String studyID,
+			String seriesID, String imageID, String studyDate, String studyTime) {
+		return createImageReference(studyID, seriesID, imageID, studyDate, studyTime, "",null);
+	}
+	
+	// ml create the image reference
+	public static DicomImageReferenceEntity createImageReference(String studyID,
+			String seriesID, String imageID, String studyDate, String studyTime, String sopClassUID) {
+		return createImageReference(studyID, seriesID, imageID, studyDate, studyTime, sopClassUID,null);
+	}
+	//ml added accession number
+	public static DicomImageReferenceEntity createImageReference(String studyID,
+			String seriesID, String imageID, String studyDate, String studyTime, String sopClassUID, String accessionNumber) {
+
+		// series reference
+		ImageSeries imageSeries = new ImageSeries();
+		imageSeries.setInstanceUid(new II(seriesID));
+		imageSeries
+		.addImage(new Image(new II(sopClassUID), new II(imageID))); //ml  soplclassuid added it was ""
+
+
+		// study reference
+		ImageStudy study = new ImageStudy();
+		study.setStartDate(studyDate);
+		study.setStartTime(studyTime);
+		study.setImageSeries(imageSeries);
+		study.setInstanceUid(new II(studyID));
+		if (accessionNumber!=null)
+			study.setAccessionNumber(new ST(accessionNumber));
+
+		// image reference
+		DicomImageReferenceEntity imageReference = new DicomImageReferenceEntity();
+		imageReference.setImageStudy(study);
+
+		return imageReference;
+
+	}
+
+
+	public void printImageReference() {
+		for (ImageReferenceEntity imageReference :  this.getImageAnnotation().getImageReferenceEntityCollection()
+				.getImageReferenceEntityList()) {
+			DicomImageReferenceEntity dicomImageReference = (DicomImageReferenceEntity) imageReference;
+
+			ImageStudy imageStudy = dicomImageReference.getImageStudy();
+
+			ImageSeries imageSeries = imageStudy.getImageSeries();
+
+			for (Image image : imageSeries
+					.getImageCollection().getImageList()) {
+				logger.info("image reference " + imageStudy.getInstanceUid()
+				+ " " + imageSeries.getInstanceUid() + " "
+				+ image.getSopClassUid() + " | ");
+
+			}
+		}
+	}
+
+	/**
+	 * debug output for the segmentation part of the aim
+	 * 
+	 * @param aim
+	 */
+	public void printSegmentation() {
+		String result = "segmentation ";
+
+		for (SegmentationEntity segmentation : this.getImageAnnotation().getSegmentationEntityCollection()
+				.getSegmentationEntityList()) {
+			if (segmentation instanceof DicomSegmentationEntity) {
+				result += ((DicomSegmentationEntity)segmentation).getReferencedSopInstanceUid().getRoot() + " "
+						+ ((DicomSegmentationEntity)segmentation).getSopClassUid().getRoot()
+						+ ((DicomSegmentationEntity)segmentation).getStudyInstanceUid().getRoot() + " "
+						+ ((DicomSegmentationEntity)segmentation).getSeriesInstanceUid().getRoot() + " "
+						+ ((DicomSegmentationEntity)segmentation).getSopInstanceUid().getRoot() + " "
+						+ ((DicomSegmentationEntity)segmentation).getSegmentNumber();
+			}else {
+				logger.warning("not a dicom segmentation entity");
+			}
+		}
+		logger.info(result);
+
+	}
+
+
+	public InferenceEntityCollection getInferenceEntityCollection() {
+		return this.getImageAnnotation().getInferenceEntityCollection();
+	}
+
+	public ImagingObservationEntityCollection getImagingObservationEntityCollection() {
+		return this.getImageAnnotation().getImagingObservationEntityCollection();
+	}
+
+	public ImagingPhysicalEntityCollection getImagingPhysicalEntityCollection() {
+		return this.getImageAnnotation().getImagingPhysicalEntityCollection();
+	}
+	
+	public MarkupEntityCollection getMarkupEntityCollection() {
+		return this.getImageAnnotation().getMarkupEntityCollection();
+	}
+
+	public void addMarkupEntity(MarkupEntity me){
+		this.getImageAnnotation().addMarkupEntity(me);
+	}
 }

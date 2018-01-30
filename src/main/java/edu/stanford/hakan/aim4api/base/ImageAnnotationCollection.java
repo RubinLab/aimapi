@@ -298,7 +298,7 @@ public class ImageAnnotationCollection extends AnnotationCollection {
         this.getImageAnnotation().addPlugin(newPlugin);
     }
 
-    public void clearPlugins() {
+    public void clearPluginCollection() {
         this.getImageAnnotation().getPluginCollection().getListPlugin().clear();
     }
 

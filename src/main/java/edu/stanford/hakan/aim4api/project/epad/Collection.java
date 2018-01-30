@@ -37,7 +37,7 @@ import java.util.List;
 public class Collection implements Serializable {
 
 	private String collectionUid;
-	private List<Aim> aims = new ArrayList<Aim>();
+	private List<Aim4> aims = new ArrayList<Aim4>();
 	String studyId;
 
 	public Collection() {
@@ -52,15 +52,15 @@ public class Collection implements Serializable {
 		return studyId;
 	}
 
-	public void setAims(List<Aim> aims) {
+	public void setAims(List<Aim4> aims) {
 		this.aims = aims;
 	}
 
-	public List<Aim> getAims() {
+	public List<Aim4> getAims() {
 		return aims;
 	}
 
-	public void addAim(Aim aim) {
+	public void addAim(Aim4 aim) {
 		aims.add(aim);
 	}
 

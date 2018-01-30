@@ -27,9 +27,8 @@ package edu.stanford.hakan.aim4api.project.epad;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.GeometricShape;
-import edu.stanford.hakan.aim4api.compability.aimv3.SpatialCoordinate;
-import edu.stanford.hakan.aim4api.compability.aimv3.TwoDimensionSpatialCoordinate;
+import edu.stanford.hakan.aim4api.base.TwoDimensionGeometricShapeEntity;
+import edu.stanford.hakan.aim4api.base.TwoDimensionSpatialCoordinate;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 
 /**
@@ -39,7 +38,7 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
  */
 
 @SuppressWarnings("serial")
-public class Shape extends GeometricShape {
+public class Shape extends TwoDimensionGeometricShapeEntity {
 
 	double labelOffsetX, labelOffsetY = 0.0;
 	int referencedFrameNumber = 1;
@@ -47,33 +46,35 @@ public class Shape extends GeometricShape {
 	public Shape() {
 	}
 
-	public Shape(GeometricShape geometricShape) {
+	public Shape(TwoDimensionGeometricShapeEntity geometricShape) {
 
-		this.setCagridId(geometricShape.getCagridId());
+//		this.setCagridId(geometricShape.getCagridId());
 		this.setIncludeFlag(geometricShape.getIncludeFlag());
-		this.setLineColor(geometricShape.getLineColor());
-		this.setLineOpacity(geometricShape.getLineOpacity());
-		this.setLineStyle(geometricShape.getLineStyle());
-		this.setLineThickness(geometricShape.getLineThickness());
+		if (geometricShape.getLineColor()!=null) this.setLineColor(geometricShape.getLineColor());
+		if (geometricShape.getLineOpacity()!=null) this.setLineOpacity(geometricShape.getLineOpacity());
+		if (geometricShape.getLineStyle()!=null) this.setLineStyle(geometricShape.getLineStyle());
+		if (geometricShape.getLineThickness()!=null) this.setLineThickness(geometricShape.getLineThickness());
 		this.setShapeIdentifier(geometricShape.getShapeIdentifier());
 		this.setXsiType(geometricShape.getXsiType());
-		this.setSpatialCoordinateCollection(geometricShape
-				.getSpatialCoordinateCollection());
+		this.setTwoDimensionSpatialCoordinateCollection(geometricShape
+				.getTwoDimensionSpatialCoordinateCollection());
 		
 		//this is in twodimendisongeometricentity in v4
 		//get the referenced frame number
-		List<TwoDCoordinate> coords= getCoords();
-		setReferencedFrameNumber(coords.get(0).getReferencedFrameNumber());
+//		List<TwoDCoordinate> coords= getCoords();
+		setReferencedFrameNumber(geometricShape.getReferencedFrameNumber());
+		setImageReferenceUid(geometricShape.getImageReferenceUid());
+		if (geometricShape.getUniqueIdentifier()!=null) setUniqueIdentifier(geometricShape.getUniqueIdentifier());
+		else setUniqueIdentifier();
+		
 	}
 
 	public List<TwoDCoordinate> getCoords() {
 		List<TwoDCoordinate> result = new ArrayList<TwoDCoordinate>();
-		for (SpatialCoordinate coord : getSpatialCoordinateCollection()
-				.getSpatialCoordinateList()) {
-			if (coord instanceof TwoDimensionSpatialCoordinate) {
-				result.add(new TwoDCoordinate(
-						(TwoDimensionSpatialCoordinate) coord));
-			}
+		for (TwoDimensionSpatialCoordinate coord : getTwoDimensionSpatialCoordinateCollection()
+				.getTwoDimensionSpatialCoordinateList()) {
+			result.add(new TwoDCoordinate(coord,this));
+			
 		}
 		return result;
 	}
@@ -83,17 +84,17 @@ public class Shape extends GeometricShape {
 		ShapeType result = ShapeType.NONE;
 
 		String xsiType = getXsiType();
-		if ("MultiPoint".equals(xsiType)) {
+		if (xsiType.contains("MultiPoint")) {
 			result = ShapeType.LINE;
-		} else if ("Polyline".equals(xsiType)) {
+		} else if (xsiType.contains("Polyline")) {
 			result = ShapeType.POLY;
-		} else if ("Spline".equals(xsiType)) {
+		} else if (xsiType.contains("Spline")) {
 			result = ShapeType.SPLINE;
-		}else if ("Circle".equals(xsiType)) {
+		}else if (xsiType.contains("Circle")) {
 			result = ShapeType.CIRCLE;
-		} else if ("Point".equals(xsiType)) {
+		} else if (xsiType.contains("Point")) {
 			result = ShapeType.POINT;
-		} else if ("Ellipse".equals(xsiType) || "Normal".equals(xsiType)) { // To support NORMAL/ORTHOGONAL lines
+		} else if (xsiType.contains("Ellipse") || xsiType.contains("Normal")) { // To support NORMAL/ORTHOGONAL lines
 			//it is not goint to be normal as it is not persisted in xml
 			result = ShapeType.NORMAL;
 		}
@@ -118,7 +119,7 @@ public class Shape extends GeometricShape {
 		this.labelOffsetY = labelOffsetY;
 	}
 
-	public int getReferencedFrameNumber() {
+	public Integer getReferencedFrameNumber() {
 		return referencedFrameNumber;
 	}
 

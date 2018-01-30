@@ -29,18 +29,18 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 public class Normal extends Shape {
 	
 	public Normal(Shape l1, Shape l2){
-		this.setCagridId(l1.getCagridId());
-		this.setIncludeFlag(l1.getIncludeFlag());
-		this.setLineColor(l1.getLineColor());
-		this.setLineOpacity(l1.getLineOpacity());
-		this.setLineStyle(l1.getLineStyle());
-		this.setLineThickness(l1.getLineThickness());
+//		this.setCagridId(l1.getCagridId());
+		if (l1.getIncludeFlag()!=null) this.setIncludeFlag(l1.getIncludeFlag());
+		if (l1.getLineColor()!=null) this.setLineColor(l1.getLineColor());
+		if (l1.getLineOpacity()!=null) this.setLineOpacity(l1.getLineOpacity());
+		if (l1.getLineStyle()!=null) this.setLineStyle(l1.getLineStyle());
+		if (l1.getLineThickness()!=null) this.setLineThickness(l1.getLineThickness());
 		this.setShapeIdentifier(l1.getShapeIdentifier());
 		this.setXsiType("Normal");
-		this.setSpatialCoordinateCollection(l1
-				.getSpatialCoordinateCollection().getClone());
-		this.getSpatialCoordinateCollection().getSpatialCoordinateList().addAll(l2
-				.getSpatialCoordinateCollection().getClone().getSpatialCoordinateList());
+		this.setTwoDimensionSpatialCoordinateCollection(l1
+				.getTwoDimensionSpatialCoordinateCollection().getClone());
+		this.getTwoDimensionSpatialCoordinateCollection().getTwoDimensionSpatialCoordinateList().addAll(l2
+				.getTwoDimensionSpatialCoordinateCollection().getClone().getTwoDimensionSpatialCoordinateList());
 		
 	}
 
