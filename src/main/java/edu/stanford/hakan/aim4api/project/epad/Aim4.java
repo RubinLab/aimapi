@@ -1935,6 +1935,8 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 //        builder.append(Integer.toString(year)).append("-").append(strMount).append("-").append(strDay).append("T").append(strHour).append(":").append(strMinute).append(":").append(strSecond);
         builder.append(Integer.toString(year)).append(strMount).append(strDay).append(strHour).append(strMinute).append(strSecond);
         this.setDateTime(builder.toString());
+        //ml set also the annotation's date time
+        this.getImageAnnotation().setDateTime(builder.toString());
 		
 	}
 
@@ -2121,7 +2123,11 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		imageSeries.setInstanceUid(new II(seriesID));
 		imageSeries
 		.addImage(new Image(new II(sopClassUID), new II(imageID))); //ml  soplclassuid added it was ""
-
+		Modality mod=Modality.getInstance();
+		if ((mod.get(sopClassUID))!=null)
+			imageSeries.setModality(mod.get(sopClassUID));
+		else 
+			imageSeries.setModality(mod.getDefaultModality());
 
 		// study reference
 		ImageStudy study = new ImageStudy();
