@@ -303,6 +303,58 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
     }
     
+	@Override
+	public String getDateTime(){
+		if (getDateTimeAsDate()!=null){
+			Date d=getDateTimeAsDate();
+//			return (d.getYear()+1900)+""+addLeadingZeros(d.getMonth()+1)+"-"+addLeadingZeros(d.getDate())+ "T"+addLeadingZeros(d.getHours())+":"+addLeadingZeros(d.getMinutes())+":"+addLeadingZeros(d.getSeconds());
+			return (d.getYear()+1900)+""+addLeadingZeros(d.getMonth()+1)+"-"+addLeadingZeros(d.getDate())+ " "+addLeadingZeros(d.getHours())+":"+addLeadingZeros(d.getMinutes())+":"+addLeadingZeros(d.getSeconds());
+
+		}
+		return "";
+	}
+	public Date getDateTimeAsDate(){
+		int year ;
+		int month ;
+		int day;
+		int hours=0;
+		int minutes=0;
+		int seconds=0;
+		String strStartDate= super.getDateTime();
+		Date date;
+		try {
+			if (strStartDate.contains("-")) {
+				year = Integer.parseInt(strStartDate.substring(0, 4));
+				month = Integer.parseInt(strStartDate.substring(5, 7));
+				day = Integer.parseInt(strStartDate.substring(8, 10));
+				if (strStartDate.length()>10){
+					hours = Integer.parseInt(strStartDate.substring(11, 13));
+					minutes = Integer.parseInt(strStartDate.substring(14, 16));
+					seconds = Integer.parseInt(strStartDate.substring(17, 19));
+				}
+			}
+			else {
+				year = Integer.parseInt(strStartDate.substring(0, 4));
+				month = Integer.parseInt(strStartDate.substring(4, 6));
+				day = Integer.parseInt(strStartDate.substring(6, 8));
+				if (strStartDate.length()>8){
+					hours = Integer.parseInt(strStartDate.substring(8, 10));
+					minutes = Integer.parseInt(strStartDate.substring(10, 12));
+					seconds = Integer.parseInt(strStartDate.substring(12, 14));
+				}
+			}
+			System.out.println(year + " " + month + " " + day);
+			if (strStartDate.length()>8){
+				date = new Date(year-1900, month - 1, day,hours,minutes,seconds);
+			}else {
+				date = new Date(year-1900, month - 1, day);
+			}
+			return date;
+		}catch(Exception e){
+			logger.info("Couldn't parse date "+ strStartDate+ " " + e.getMessage());
+		}
+		return null;
+	}
     private ImagingPhysicalEntity createImagingPhysicalEntity() {
 
     	ImagingPhysicalEntity entity = new ImagingPhysicalEntity();
@@ -587,7 +639,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
                 day = Integer.parseInt(strStartDate.substring(6, 8));
         	}
             System.out.println(year + " " + month + " " + day);
-            Date date = new Date(year, month - 1, day);
+            Date date = new Date(year-1900, month - 1, day);
             return date;
 
 		} catch (Exception e) {
