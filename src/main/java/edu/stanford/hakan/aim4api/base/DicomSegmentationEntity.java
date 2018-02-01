@@ -49,14 +49,15 @@ public class DicomSegmentationEntity extends SegmentationEntity {
 	private Integer segmentNumber;
 	
 	
-	 public DicomSegmentationEntity(II sopInstanceUid,II studyInstanceUid,II seriesInstanceUid, II sopClassUid, II referencedSopInstanceUid, Integer segmentNumber) {
-	        this.sopInstanceUid = sopInstanceUid;
-	        this.studyInstanceUid = studyInstanceUid;
-	        this.seriesInstanceUid = seriesInstanceUid;
-	        this.sopClassUid = sopClassUid;
-	        this.referencedSopInstanceUid = referencedSopInstanceUid;
-	        this.segmentNumber = segmentNumber;
-	    }
+	public DicomSegmentationEntity(II sopInstanceUid,II studyInstanceUid,II seriesInstanceUid, II sopClassUid, II referencedSopInstanceUid, Integer segmentNumber) {
+		 setXsiType("DicomSegmentationEntity");
+		 setSopInstanceUid(sopInstanceUid);
+	     setStudyInstanceUid(studyInstanceUid);
+	     setSeriesInstanceUid(seriesInstanceUid);
+	     setSopClassUid(sopClassUid);
+	     setReferencedSopInstanceUid(referencedSopInstanceUid);
+	     setSegmentNumber(segmentNumber);
+	}
 
 	public II getSopInstanceUid() {
 		return sopInstanceUid;

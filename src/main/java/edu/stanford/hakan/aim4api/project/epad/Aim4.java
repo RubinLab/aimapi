@@ -227,7 +227,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 //		}
 		setDateTime(date);
 		
-		setUniqueIdentifier(iac.getUniqueIdentifier(), "al536anhb55555");
+		setUniqueIdentifier(iac.getUniqueIdentifier().getClone(), "al536anhb55555");
 	       
 		setXsiType(iac.getXsiType());
 
