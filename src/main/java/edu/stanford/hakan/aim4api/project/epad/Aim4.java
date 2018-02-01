@@ -650,5 +650,14 @@ public class Aim4 extends ImageAnnotationCollection implements Serializable {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
     }
 	
+	// comment involves modality/series/slice info and free text so parse it and assign to variables
+    public String getUserComment() {
+    		String comment = this.getComment();
+    		if(comment.contains("~*")) {
+    			String[] comments = this.getComment().split("~\\*");
+    			return comments[1];
+    		}
+    		return comment;
+    }
 
 }
