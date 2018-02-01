@@ -40,10 +40,10 @@ public class Person implements IAimXMLOperations {
 
     private ST name;
     private ST id;
-    private ST originalId;
     private String birthDate;
     private ST sex;
     private ST ethnicGroup;
+    private ST sourcePatientGroupId;
     private String tagName;
     //private Person initialState = null;
 
@@ -64,13 +64,13 @@ public class Person implements IAimXMLOperations {
         id.setTagName("id");
         this.id = id;
     }
-    public ST getOriginalId() {
-        return originalId;
+    public ST getSourcePatientGroupId() {
+        return sourcePatientGroupId;
     }
 
-    public void setOriginalId(ST originalId) {
-        originalId.setTagName("originalId");
-        this.originalId = originalId;
+    public void setSourcePatientGroupId(ST sourcePatientGroupId) {
+    	sourcePatientGroupId.setTagName("sourcePatientGroupId");
+        this.sourcePatientGroupId = sourcePatientGroupId;
     }
 
     public String getBirthDate() {
@@ -119,9 +119,6 @@ public class Person implements IAimXMLOperations {
         if (this.id != null) {
             res.appendChild(this.id.getXMLNode(doc));
         }
-        if (this.originalId != null) {
-            res.appendChild(this.originalId.getXMLNode(doc));
-        }
         if (this.birthDate != null) {
             Element el_birthDate = doc.createElement("birthDate");
             el_birthDate.setAttribute("value", this.birthDate.toString());
@@ -132,6 +129,9 @@ public class Person implements IAimXMLOperations {
         }
         if (this.ethnicGroup != null) {
             res.appendChild(this.ethnicGroup.getXMLNode(doc));
+        }
+        if (this.sourcePatientGroupId != null) {
+            res.appendChild(this.sourcePatientGroupId.getXMLNode(doc));
         }
         return res;
     }
@@ -151,10 +151,11 @@ public class Person implements IAimXMLOperations {
                 obj.setXMLNode(currentNode);
                 this.setId(obj);
             }
+            //it is converted to sourcePatientGroupId
             if ("originalId".equals(currentNode.getNodeName())) {
                 ST obj = new ST();
                 obj.setXMLNode(currentNode);
-                this.setOriginalId(obj);
+                this.setSourcePatientGroupId(obj);
             }
             if ("birthDate".equals(currentNode.getNodeName())) {
                 this.birthDate = currentNode.getAttributes().getNamedItem("value").getNodeValue();
@@ -169,6 +170,12 @@ public class Person implements IAimXMLOperations {
                 obj.setXMLNode(currentNode);
                 this.setEthnicGroup(obj);
             }
+            if ("sourcePatientGroupId".equals(currentNode.getNodeName())) {
+                ST obj = new ST();
+                obj.setXMLNode(currentNode);
+                this.setSourcePatientGroupId(obj);
+            }
+            
         }
         //*** Setting the initialState. I will use it while saving operation, if the class is updated or not.
         //this.initialState = this.getClone();
@@ -199,7 +206,7 @@ public class Person implements IAimXMLOperations {
         if (this.id == null ? oth.id != null : !this.id.isEqualTo(oth.id)) {
             return false;
         }
-        if (this.originalId == null ? oth.originalId != null : !this.originalId.isEqualTo(oth.originalId)) {
+        if (this.sourcePatientGroupId == null ? oth.sourcePatientGroupId != null : !this.sourcePatientGroupId.isEqualTo(oth.sourcePatientGroupId)) {
             return false;
         }
         if (this.birthDate == null ? oth.birthDate != null : !this.birthDate.equals(oth.birthDate)) {
@@ -222,8 +229,8 @@ public class Person implements IAimXMLOperations {
         if (this.getId() != null) {
             res.setId(this.getId().getClone());
         }
-        if (this.getOriginalId() != null) {
-            res.setOriginalId(this.getOriginalId().getClone());
+        if (this.getSourcePatientGroupId() != null) {
+            res.setSourcePatientGroupId(this.getSourcePatientGroupId().getClone());
         }
         if (this.getBirthDate() != null) {
             res.setBirthDate(this.getBirthDate());

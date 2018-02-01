@@ -31,7 +31,9 @@ import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.AnnotationStatement;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.GeometricShapeEntity;
 import edu.stanford.hakan.aim4api.base.II;
+import edu.stanford.hakan.aim4api.base.MarkupEntity;
 import edu.stanford.hakan.aim4api.utility.Logger;
 
 import java.util.List;
@@ -376,21 +378,31 @@ public class Calculation implements IAimXMLOperations {
         } else {
             res.setUniqueIdentifier(new II(this.getUid()));
         }
-        Algorithm algorithm = new Algorithm();
-        algorithm.setName(Converter.toST(this.getAlgorithmName()));
-        algorithm.setVersion(Converter.toST(this.getAlgorithmVersion()));
-        //ml if you don't have it, don't put it. xsd rejects! put values in
-//        algorithm.addType(new CD("", "", "", ""));
-        Lexicon lex=Lexicon.getInstance();
-        Logger.write("alg type "+ this.getAlgorithmType());
-        if (this.getAlgorithmType()!=null && lex.get(this.getAlgorithmType())!=null)  //ml for old files
-        	algorithm.addType(lex.get(this.getAlgorithmType()));
-        else
-        	algorithm.addType(lex.getDefaultAlgorithType());
-        res.setAlgorithm(algorithm);
+        //we should make sure it doesn't get here for plugin calculations
+//        Algorithm algorithm = new Algorithm();
+//        algorithm.setName(Converter.toST(this.getAlgorithmName()));
+//        algorithm.setVersion(Converter.toST(this.getAlgorithmVersion()));
+//        //ml if you don't have it, don't put it. xsd rejects! put values in
+////        algorithm.addType(new CD("", "", "", ""));
+//        Lexicon lex=Lexicon.getInstance();
+//        Logger.write("alg type "+ this.getAlgorithmType());
+//        if (this.getAlgorithmType()!=null && lex.get(this.getAlgorithmType())!=null)  //ml for old files
+//        	algorithm.addType(lex.get(this.getAlgorithmType()));
+//        else
+//        	algorithm.addType(lex.getDefaultAlgorithType());
+//        res.setAlgorithm(algorithm);
         res.setCalculationResultCollection(this.getCalculationResultCollection().toAimV4());//
         res.setDescription(Converter.toST(this.getDescription()));//
         res.setMathML(Converter.toST(this.getMathML()));//
+        if (this.getCalculationResultCollection().getCalculationResultList().get(0).getUnitOfMeasure().equals("SUV") 
+        		|| this.getCalculationResultCollection().getCalculationResultList().get(0).getUnitOfMeasure().equals("{SUVbw}g/ml")) {
+        	CD typeCode = new CD("126401","SUVbw","DCM");
+    		res.addTypeCode(typeCode);
+        }else if (this.getCalculationResultCollection().getCalculationResultList().get(0).getUnitOfMeasure().equals("HU") 
+        		|| this.getCalculationResultCollection().getCalculationResultList().get(0).getUnitOfMeasure().equals("[hnsf'U]")) {
+        	CD typeCode = new CD("112031","Attenuation Coefficient","DCM");
+    		res.addTypeCode(typeCode);
+        }
         CD typeCode = new CD();
         typeCode.setCode(this.getCodeValue());
         typeCode.setDisplayName(Converter.toST(this.getCodeMeaning()));
@@ -431,7 +443,8 @@ public class Calculation implements IAimXMLOperations {
             this.setMathML(v4.getMathML().getValue());
         }
         if (v4.getListTypeCode().size() > 0) {
-            CD typeCode = v4.getListTypeCode().get(0);
+        	//get the second one if there are 2
+            CD typeCode = v4.getListTypeCode().get(v4.getListTypeCode().size()>1?1:0);
             if (typeCode.getCode() != null) {
                 this.setCodeValue(typeCode.getCode());
             }
@@ -447,26 +460,26 @@ public class Calculation implements IAimXMLOperations {
         }
 
         List<AnnotationStatement> listAnnotationStatement = ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList();
-        String annotationStatementID = "";
+        int referencedShapeIdentifier = -1;
+        String referencedShapeUniqueIdentifier = "";
         for (int i = 0; i < listAnnotationStatement.size(); i++) {
             AnnotationStatement annotationStatement = listAnnotationStatement.get(i);
-            if ("ImagingPhysicalEntityHasCalculationEntityStatement".equals(annotationStatement.getXsiType())) {
-                if (v4.getUniqueIdentifier().getRoot().equals(annotationStatement.getSubjectUniqueIdentifier().getRoot())) {
-                    annotationStatementID = annotationStatement.getObjectUniqueIdentifier().getRoot();
+            if ("CalculationEntityReferencesMarkupEntityStatement".equals(annotationStatement.getXsiType())) {
+            	if (this.getUid().equals(annotationStatement.getSubjectUniqueIdentifier().getRoot())) {
+            		referencedShapeUniqueIdentifier = annotationStatement.getObjectUniqueIdentifier().getRoot();
+            		//let's try and find the shape
+                    for (MarkupEntity ma: ia.getMarkupEntityCollection().getMarkupEntityList()){
+                    	if (ma.getUniqueIdentifier().getRoot().equals(referencedShapeUniqueIdentifier) && ma instanceof GeometricShapeEntity){
+                    		referencedShapeIdentifier=((GeometricShapeEntity)ma).getShapeIdentifier();
+                    	}
+                    }
                 }
             }
         }
-        String referencedShapeIdentifier = "";
-        for (int i = 0; i < listAnnotationStatement.size(); i++) {
-            AnnotationStatement annotationStatement = listAnnotationStatement.get(i);
-            if ("ImagingPhysicalEntityHasTwoDimensionGeometricShapeEntityStatement".equals(annotationStatement.getXsiType())) {
-                if (annotationStatementID.equals(annotationStatement.getObjectUniqueIdentifier().getRoot())) {
-                    referencedShapeIdentifier = annotationStatement.getSubjectUniqueIdentifier().getRoot();
-                }
-            }
-        }
-        if (!"".equals(referencedShapeIdentifier)) {
-            this.addReferencedGeometricShape(new ReferencedGeometricShape(0, Integer.parseInt(referencedShapeIdentifier)));
+        
+        //TODO how about CalculationEntityReferencesSegmentationEntity
+        if (!"".equals(referencedShapeUniqueIdentifier)) {
+            this.addReferencedGeometricShape(new ReferencedGeometricShape(0, referencedShapeIdentifier));
         }
     }
 

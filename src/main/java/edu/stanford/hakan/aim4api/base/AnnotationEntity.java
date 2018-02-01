@@ -50,6 +50,8 @@ public class AnnotationEntity extends Entity {
     private ST comment;
     private II precedentReferencedAnnotationUid;
     private II templateUid;
+    //supp 200
+    private II trackingUniqueIdentifier;
     private AuditTrailCollection auditTrailCollection = new AuditTrailCollection();
     private ImagingPhysicalEntityCollection imagingPhysicalEntityCollection = new ImagingPhysicalEntityCollection();
     private CalculationEntityCollection calculationEntityCollection = new CalculationEntityCollection();
@@ -121,6 +123,16 @@ public class AnnotationEntity extends Entity {
         this.templateUid = templateUid;
     }
 
+    public II getTrackingUniqueIdentifier() {
+        return trackingUniqueIdentifier;
+    }
+
+    public void setTrackingUniqueIdentifier(II trackingUniqueIdentifier) {
+        if(trackingUniqueIdentifier != null)
+        trackingUniqueIdentifier.setTagName("trackingUniqueIdentifier");
+        this.trackingUniqueIdentifier = trackingUniqueIdentifier;
+    }
+    
     public AuditTrailCollection getAuditTrailCollection() {
         return auditTrailCollection;
     }
@@ -249,6 +261,9 @@ public class AnnotationEntity extends Entity {
         if (this.templateUid != null) {
             res.appendChild(this.templateUid.getXMLNode(doc));
         }
+        if (this.trackingUniqueIdentifier != null) {
+            res.appendChild(this.trackingUniqueIdentifier.getXMLNode(doc));
+        }
         if (this.auditTrailCollection.size() > 0) {
             res.appendChild(this.auditTrailCollection.getXMLNode(doc));
         }
@@ -311,6 +326,11 @@ public class AnnotationEntity extends Entity {
                 obj.setXMLNode(currentNode);
                 this.setTemplateUid(obj);
             }
+            if ("trackingUniqueIdentifier".equals(currentNode.getNodeName())) {
+                II obj = new II();
+                obj.setXMLNode(currentNode);
+                this.setTrackingUniqueIdentifier(obj);
+            }
             if ("auditTrailCollection".equals(listChilds.item(i).getNodeName())) {
                 this.auditTrailCollection.setXMLNode(listChilds.item(i));
             }
@@ -370,6 +390,9 @@ public class AnnotationEntity extends Entity {
         if (this.templateUid == null ? oth.templateUid != null : !this.templateUid.isEqualTo(oth.templateUid)) {
             return false;
         }
+        if (this.trackingUniqueIdentifier == null ? oth.trackingUniqueIdentifier != null : !this.trackingUniqueIdentifier.isEqualTo(oth.trackingUniqueIdentifier)) {
+            return false;
+        }
         if (this.auditTrailCollection == null ? oth.auditTrailCollection != null : !this.auditTrailCollection.isEqualTo(oth.auditTrailCollection)) {
             return false;
         }
@@ -419,6 +442,9 @@ public class AnnotationEntity extends Entity {
         }
         if (this.getTemplateUid() != null) {
             res.setTemplateUid(this.getTemplateUid().getClone());
+        }
+        if (this.getTrackingUniqueIdentifier() != null) {
+            res.setTrackingUniqueIdentifier(this.getTrackingUniqueIdentifier().getClone());
         }
         if (this.getAuditTrailCollection() != null) {
             res.setAuditTrailCollection(this.getAuditTrailCollection().getClone());

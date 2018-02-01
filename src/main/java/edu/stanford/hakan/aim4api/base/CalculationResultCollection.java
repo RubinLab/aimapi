@@ -137,7 +137,46 @@ public class CalculationResultCollection implements IAimXMLOperations {
     public List<ExtendedCalculationResult> getExtendedCalculationResultList() {
         List<ExtendedCalculationResult> res = new ArrayList<ExtendedCalculationResult>();
         for (int i = 0; i < this.listCalculationResult.size(); i++) {
-            res.add((ExtendedCalculationResult) this.listCalculationResult.get(i));
+        	if (this.listCalculationResult.get(i) instanceof ExtendedCalculationResult)
+        		res.add((ExtendedCalculationResult) this.listCalculationResult.get(i));
+        	else {
+        		//TODO just a temporary solution. convert it to the extended calculation
+        		if (this.listCalculationResult.get(i) instanceof CompactCalculationResult){
+        			CompactCalculationResult ccr=(CompactCalculationResult)this.listCalculationResult.get(i);
+        			ExtendedCalculationResult ecr=new ExtendedCalculationResult();
+        			
+        	        if (ccr.getUnitOfMeasure() != null) {
+        	            ecr.setUnitOfMeasure(ccr.getUnitOfMeasure().getClone());
+        	        }
+        	        if (ccr.getDataType() != null) {
+        	            ecr.setDataType(ccr.getDataType().getClone());
+        	        }
+        	        if (ccr.getDimensionCollection() != null) {
+        	            ecr.setDimensionCollection(ccr.getDimensionCollection().getClone());
+        	        }
+        	        if (ccr.getType() != null) {
+        	            ecr.setType(ccr.getType());
+        	        }
+        	        if (ccr.getTagName() != null) {
+        	            ecr.setTagName(ccr.getTagName());
+        	        }
+        	        if (ccr.getXsiType() != null) {
+        	            ecr.setXsiType(ccr.getXsiType());
+        	        }
+        	        
+        	        //add data collection for extended
+        	        // Create a CalculationData instance
+        			edu.stanford.hakan.aim4api.base.CalculationData calculationData = new edu.stanford.hakan.aim4api.base.CalculationData();
+        			calculationData.setValue(ccr.getValue());
+        			calculationData.addCoordinate(0, 0);
+
+//        			// Add calculationData to calculationResult
+        			ecr.addCalculationData(calculationData);
+        			res.add(ecr);
+        		}
+        		
+        		
+        	}
         }
         return res;
     }

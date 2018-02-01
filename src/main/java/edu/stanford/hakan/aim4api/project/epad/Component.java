@@ -30,12 +30,14 @@ import java.util.logging.Logger;
 
 import edu.stanford.hakan.aim4api.addition.AllowedTerm;
 import edu.stanford.hakan.aim4api.addition.ValidTerm;
-import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntity;
-import edu.stanford.hakan.aim4api.compability.aimv3.AnatomicEntityCharacteristic;
-import edu.stanford.hakan.aim4api.compability.aimv3.CharacteristicQuantification;
-import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservation;
-import edu.stanford.hakan.aim4api.compability.aimv3.ImagingObservationCharacteristic;
-import edu.stanford.hakan.aim4api.compability.aimv3.Inference;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.CharacteristicQuantification;
+import edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic;
+import edu.stanford.hakan.aim4api.base.ImagingObservationEntity;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic;
+import edu.stanford.hakan.aim4api.base.InferenceEntity;
+import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 
 /**
@@ -47,10 +49,10 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.ComponentType;
 public class Component implements Serializable {
 
 	ComponentType componentType;
-	AnatomicEntity anatomicEntity;
-	ImagingObservation imagingObservation;
-	Inference inference;
-	AnatomicEntityCharacteristic anatomicEntityCharacteristic;
+	ImagingPhysicalEntity anatomicEntity;
+	ImagingObservationEntity imagingObservation;
+	InferenceEntity inference;
+	ImagingPhysicalEntityCharacteristic anatomicEntityCharacteristic;
 	ImagingObservationCharacteristic imagingObservationCharacteristic;
 
 	private static final Logger logger = Logger.getLogger("Component");
@@ -58,37 +60,33 @@ public class Component implements Serializable {
 	//
 	// anatomic entity
 	//
-	public Component(AnatomicEntity ae) {
+	public Component(ImagingPhysicalEntity ae) {
 
 		componentType = ComponentType.anatomicEntity;
 		
-		anatomicEntity = new AnatomicEntity();
-		anatomicEntity.setAnatomicEntityCharacteristicCollection(ae
-				.getAnatomicEntityCharacteristicCollection());
+		anatomicEntity = new ImagingPhysicalEntity();
+		anatomicEntity.setImagingPhysicalEntityCharacteristicCollection(ae
+				.getImagingPhysicalEntityCharacteristicCollection());
 		anatomicEntity.setAnnotatorConfidence(ae.getAnnotatorConfidence());
-		anatomicEntity.setCagridId(ae.getCagridId());
+//		anatomicEntity.setCagridId(ae.getCagridId());
 
-		if (ae.getAllowedTerm() != null) {
-			anatomicEntity.setCodeMeaning(ae.getAllowedTerm().getCodeMeaning());
-			anatomicEntity.setCodeValue(ae.getAllowedTerm().getCodeValue());
-			anatomicEntity.setCodingSchemeDesignator(ae.getAllowedTerm()
-					.getCodingSchemeVersion());
-			anatomicEntity.setCodingSchemeVersion(ae.getAllowedTerm()
-					.getCodingSchemeVersion());
-			anatomicEntity.setAllowedTerm(ae.getAllowedTerm());
+		if (ae.getListQuestionTypeCode()!=null){
+			anatomicEntity.setQuestionTypeCode(ae.getListQuestionTypeCode());
 		}
-
+		if (ae.getListTypeCode()!=null){
+			anatomicEntity.setTypeCode(ae.getListTypeCode());
+		}
 		anatomicEntity.setIsPresent(ae.getIsPresent());
 		anatomicEntity.setLabel(ae.getLabel());
 	}
 
-	public AnatomicEntityCharacteristic getAnatomicEntityCharacteristicItem(
+	public ImagingPhysicalEntityCharacteristic getAnatomicEntityCharacteristicItem(
 			int j) {
 
-		AnatomicEntityCharacteristic result = null;
+		ImagingPhysicalEntityCharacteristic result = null;
 		if (componentType == ComponentType.anatomicEntity) {
-			result = anatomicEntity.getAnatomicEntityCharacteristicCollection()
-					.getAnatomicEntityCharacteristicList().get(j);
+			result = anatomicEntity.getImagingPhysicalEntityCharacteristicCollection()
+					.getImagingPhysicalEntityCharacteristicList().get(j);
 		}
 		return result;
 	}
@@ -96,28 +94,25 @@ public class Component implements Serializable {
 	//
 	// imaging observation
 	//
-	public Component(ImagingObservation io) {
+	public Component(ImagingObservationEntity io) {
 		componentType = ComponentType.imagingObservation;
 
-		imagingObservation = new ImagingObservation();
+		imagingObservation = new ImagingObservationEntity();
 		imagingObservation.setImagingObservationCharacteristicCollection(io
 				.getImagingObservationCharacteristicCollection());
 		imagingObservation.setAnnotatorConfidence(io.getAnnotatorConfidence());
-		imagingObservation.setCagridId(io.getCagridId());
-		if (io.getAllowedTerm() != null) {
-			imagingObservation.setCodeMeaning(io.getAllowedTerm()
-					.getCodeMeaning());
-			imagingObservation.setCodeValue(io.getAllowedTerm().getCodeValue());
-			imagingObservation.setCodingSchemeDesignator(io.getAllowedTerm()
-					.getCodingSchemeVersion());
-			imagingObservation.setCodingSchemeVersion(io.getAllowedTerm()
-					.getCodingSchemeVersion());
-			imagingObservation.setAllowedTerm(io.getAllowedTerm());
+//		imagingObservation.setCagridId(io.getCagridId());
+		if (io.getListQuestionTypeCode()!=null){
+			imagingObservation.setQuestionTypeCode(io.getListQuestionTypeCode());
+		}
+		if (io.getListTypeCode()!=null){
+			imagingObservation.setTypeCode(io.getListTypeCode());
 		}
 		imagingObservation.setIsPresent(io.getIsPresent());
 		imagingObservation.setLabel(io.getLabel());
-		imagingObservation.setListReferencedGeometricShape(io
-				.getListReferencedGeometricShape());
+		//TODO needs ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement addition??
+//		imagingObservation.setListReferencedGeometricShape(io
+//				.getListReferencedGeometricShape());
 	}
 
 	public ImagingObservationCharacteristic getImagingObservationCharacteristicItem(
@@ -147,23 +142,20 @@ public class Component implements Serializable {
 	//
 	// inference
 	//
-	public Component(Inference inf) {
+	public Component(InferenceEntity inf) {
 		
 		componentType = ComponentType.inference;
 
-		inference = new Inference();
+		inference = new InferenceEntity();
 		
 
 		inference.setAnnotatorConfidence(inf.getAnnotatorConfidence());
-		inference.setCagridId(inf.getCagridId());
-		if (inf.getAllowedTerm() != null) {
-			inference.setCodeMeaning(inf.getAllowedTerm().getCodeMeaning());
-			inference.setCodeValue(inf.getAllowedTerm().getCodeValue());
-			inference.setCodingSchemeDesignator(inf.getAllowedTerm()
-					.getCodingSchemeVersion());
-			inference.setCodingSchemeVersion(inf.getAllowedTerm()
-					.getCodingSchemeVersion());
-			inference.setAllowedTerm(inf.getAllowedTerm());
+//		inference.setCagridId(inf.getCagridId());
+		if (inf.getListQuestionTypeCode()!=null){
+			inference.setQuestionTypeCode(inf.getListQuestionTypeCode());
+		}
+		if (inf.getListTypeCode()!=null){
+			inference.setTypeCode(inf.getListTypeCode());
 		}
 		inference.setImageEvidence(inf.getImageEvidence());
 	}
@@ -171,25 +163,20 @@ public class Component implements Serializable {
 	//
 	// anatomic entity characteristic
 	//
-	public Component(AnatomicEntityCharacteristic aec) {
+	public Component(ImagingPhysicalEntityCharacteristic aec) {
 
 		componentType = ComponentType.anatomicEntityCharacteristic;
 		
-		anatomicEntityCharacteristic = new AnatomicEntityCharacteristic();
+		anatomicEntityCharacteristic = new ImagingPhysicalEntityCharacteristic();
 
 		anatomicEntityCharacteristic.setAnnotatorConfidence(aec
 				.getAnnotatorConfidence());
-		anatomicEntityCharacteristic.setCagridId(aec.getCagridId());
-		if (aec.getAllowedTerm() != null) {
-			anatomicEntityCharacteristic.setCodeMeaning(aec.getAllowedTerm()
-					.getCodeMeaning());
-			anatomicEntityCharacteristic.setCodeValue(aec.getAllowedTerm()
-					.getCodeValue());
-			anatomicEntityCharacteristic.setCodingSchemeDesignator(aec
-					.getAllowedTerm().getCodingSchemeVersion());
-			anatomicEntityCharacteristic.setCodingSchemeVersion(aec
-					.getAllowedTerm().getCodingSchemeVersion());
-			anatomicEntityCharacteristic.setAllowedTerm(aec.getAllowedTerm());
+//		anatomicEntityCharacteristic.setCagridId(aec.getCagridId());
+		if (aec.getListQuestionTypeCode()!=null){
+			anatomicEntityCharacteristic.setQuestionTypeCode(aec.getListQuestionTypeCode());
+		}
+		if (aec.getListTypeCode()!=null){
+			anatomicEntityCharacteristic.setTypeCode(aec.getListTypeCode());
 		}
 
 		anatomicEntityCharacteristic.setLabel(aec.getLabel());
@@ -207,20 +194,15 @@ public class Component implements Serializable {
 
 		imagingObservationCharacteristic.setAnnotatorConfidence(ioc
 				.getAnnotatorConfidence());
-		imagingObservationCharacteristic.setCagridId(ioc.getCagridId());
-		if (ioc.getAllowedTerm() != null) {
-			imagingObservationCharacteristic.setCodeMeaning(ioc
-					.getAllowedTerm().getCodeMeaning());
-			imagingObservationCharacteristic.setCodeValue(ioc.getAllowedTerm()
-					.getCodeValue());
-			imagingObservationCharacteristic.setCodingSchemeDesignator(ioc
-					.getAllowedTerm().getCodingSchemeVersion());
-			imagingObservationCharacteristic.setCodingSchemeVersion(ioc
-					.getAllowedTerm().getCodingSchemeVersion());
-		imagingObservationCharacteristic.setAllowedTerm(ioc.getAllowedTerm());
+//		imagingObservationCharacteristic.setCagridId(ioc.getCagridId());
+		if (ioc.getListQuestionTypeCode()!=null){
+			imagingObservationCharacteristic.setQuestionTypeCode(ioc.getListQuestionTypeCode());
+		}
+		if (ioc.getListTypeCode()!=null){
+			imagingObservationCharacteristic.setTypeCode(ioc.getListTypeCode());
 		}
 		imagingObservationCharacteristic.setLabel(ioc.getLabel());
-		imagingObservationCharacteristic.setComment(ioc.getComment());
+		if (ioc.getComment()!=null) imagingObservationCharacteristic.setComment(ioc.getComment());
 		imagingObservationCharacteristic
 				.setCharacteristicQuantificationCollection(ioc
 						.getCharacteristicQuantificationCollection());
@@ -232,19 +214,19 @@ public class Component implements Serializable {
 
 		switch (componentType) {
 		case anatomicEntity:
-			anatomicEntity = new AnatomicEntity();
+			anatomicEntity = new ImagingPhysicalEntity();
 			break;
 
 		case imagingObservation:
-			imagingObservation = new ImagingObservation();
+			imagingObservation = new ImagingObservationEntity();
 			break;
 
 		case inference:
-			inference = new Inference();
+			inference = new InferenceEntity();
 			break;
 
 		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic = new AnatomicEntityCharacteristic();
+			anatomicEntityCharacteristic = new ImagingPhysicalEntityCharacteristic();
 			break;
 
 		case imagingObservationCharacteristic:
@@ -254,45 +236,46 @@ public class Component implements Serializable {
 	}
 
 	public void setCagridId(int cagridId) {
-		switch (componentType) {
-		case anatomicEntity:
-			anatomicEntity.setCagridId(cagridId);
-			break;
-
-		case imagingObservation:
-			imagingObservation.setCagridId(cagridId);
-			break;
-
-		case inference:
-			inference.setCagridId(cagridId);
-			break;
-
-		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic.setCagridId(cagridId);
-			break;
-
-		case imagingObservationCharacteristic:
-			imagingObservationCharacteristic.setCagridId(cagridId);
-			break;
-		}
+		logger.warning("no cagriid in v4");
+//		switch (componentType) {
+//		case anatomicEntity:
+//			anatomicEntity.setCagridId(cagridId);
+//			break;
+//
+//		case imagingObservation:
+//			imagingObservation.setCagridId(cagridId);
+//			break;
+//
+//		case inference:
+//			inference.setCagridId(cagridId);
+//			break;
+//
+//		case anatomicEntityCharacteristic:
+//			anatomicEntityCharacteristic.setCagridId(cagridId);
+//			break;
+//
+//		case imagingObservationCharacteristic:
+//			imagingObservationCharacteristic.setCagridId(cagridId);
+//			break;
+//		}
 	}
 
 	public void setLabel(String label) {
 		switch (componentType) {
 		case anatomicEntity:
-			anatomicEntity.setLabel(label);
+			anatomicEntity.setLabel(new ST(label));
 			break;
 
 		case imagingObservation:
-			imagingObservation.setLabel(label);
+			imagingObservation.setLabel(new ST(label));
 			break;
 
 		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic.setLabel(label);
+			anatomicEntityCharacteristic.setLabel(new ST(label));
 			break;
 
 		case imagingObservationCharacteristic:
-			imagingObservationCharacteristic.setLabel(label);
+			imagingObservationCharacteristic.setLabel(new ST(label));
 			break;
 		default:
 			break;
@@ -322,81 +305,105 @@ public class Component implements Serializable {
 			break;
 		}
 	}
-
-	public void setCodeValue(String codeValue) {
+	
+	public void addTypeCode(CD tc) {
 		switch (componentType) {
 		case anatomicEntity:
-			anatomicEntity.setCodeValue(codeValue);
+			anatomicEntity.addTypeCode(tc);
 			break;
 
 		case imagingObservation:
-			imagingObservation.setCodeValue(codeValue);
+			imagingObservation.addTypeCode(tc);
 			break;
 
 		case inference:
-			inference.setCodeValue(codeValue);
+			inference.addTypeCode(tc);
 			break;
 
 		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic.setCodeValue(codeValue);
+			anatomicEntityCharacteristic.addTypeCode(tc);
 			break;
 
 		case imagingObservationCharacteristic:
-			imagingObservationCharacteristic.setCodeValue(codeValue);
+			imagingObservationCharacteristic.addTypeCode(tc);
 			break;
 		}
 	}
 
-	public void setCodeMeaning(String codeMeaning) {
-		switch (componentType) {
-		case anatomicEntity:
-			anatomicEntity.setCodeMeaning(codeMeaning);
-			break;
-
-		case imagingObservation:
-			imagingObservation.setCodeMeaning(codeMeaning);
-			break;
-
-		case inference:
-			inference.setCodeMeaning(codeMeaning);
-			break;
-
-		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic.setCodeMeaning(codeMeaning);
-			break;
-
-		case imagingObservationCharacteristic:
-			imagingObservationCharacteristic.setCodeMeaning(codeMeaning);
-			break;
-		}
-	}
-
-	public void setCodingSchemeDesignator(String codingSchemeDesignator) {
-		switch (componentType) {
-		case anatomicEntity:
-			anatomicEntity.setCodingSchemeDesignator(codingSchemeDesignator);
-			break;
-
-		case imagingObservation:
-			imagingObservation
-					.setCodingSchemeDesignator(codingSchemeDesignator);
-			break;
-
-		case inference:
-			inference.setCodingSchemeDesignator(codingSchemeDesignator);
-			break;
-
-		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic
-					.setCodingSchemeDesignator(codingSchemeDesignator);
-			break;
-
-		case imagingObservationCharacteristic:
-			imagingObservationCharacteristic
-					.setCodingSchemeDesignator(codingSchemeDesignator);
-			break;
-		}
-	}
+//	public void setCodeValue(String codeValue) {
+//		switch (componentType) {
+//		case anatomicEntity:
+//			anatomicEntity.setCodeValue(codeValue);
+//			break;
+//
+//		case imagingObservation:
+//			imagingObservation.setCodeValue(codeValue);
+//			break;
+//
+//		case inference:
+//			inference.setCodeValue(codeValue);
+//			break;
+//
+//		case anatomicEntityCharacteristic:
+//			anatomicEntityCharacteristic.setCodeValue(codeValue);
+//			break;
+//
+//		case imagingObservationCharacteristic:
+//			imagingObservationCharacteristic.setCodeValue(codeValue);
+//			break;
+//		}
+//	}
+//
+//	public void setCodeMeaning(String codeMeaning) {
+//		switch (componentType) {
+//		case anatomicEntity:
+//			anatomicEntity.setCodeMeaning(codeMeaning);
+//			break;
+//
+//		case imagingObservation:
+//			imagingObservation.setCodeMeaning(codeMeaning);
+//			break;
+//
+//		case inference:
+//			inference.setCodeMeaning(codeMeaning);
+//			break;
+//
+//		case anatomicEntityCharacteristic:
+//			anatomicEntityCharacteristic.setCodeMeaning(codeMeaning);
+//			break;
+//
+//		case imagingObservationCharacteristic:
+//			imagingObservationCharacteristic.setCodeMeaning(codeMeaning);
+//			break;
+//		}
+//	}
+//
+//	public void setCodingSchemeDesignator(String codingSchemeDesignator) {
+//		switch (componentType) {
+//		case anatomicEntity:
+//			anatomicEntity.setCodingSchemeDesignator(codingSchemeDesignator);
+//			break;
+//
+//		case imagingObservation:
+//			imagingObservation
+//					.setCodingSchemeDesignator(codingSchemeDesignator);
+//			break;
+//
+//		case inference:
+//			inference.setCodingSchemeDesignator(codingSchemeDesignator);
+//			break;
+//
+//		case anatomicEntityCharacteristic:
+//			anatomicEntityCharacteristic
+//					.setCodingSchemeDesignator(codingSchemeDesignator);
+//			break;
+//
+//		case imagingObservationCharacteristic:
+//			imagingObservationCharacteristic
+//					.setCodingSchemeDesignator(codingSchemeDesignator);
+//			break;
+//		}
+//	}
 
 	public void setImageEvidence(boolean evidence) {
 		switch (componentType) {
@@ -432,89 +439,113 @@ public class Component implements Serializable {
 		String result = "";
 		switch (componentType) {
 		case anatomicEntity:
-			result = getCoordinatedValue(anatomicEntity.getCodeValue(),
-					anatomicEntity.getAllowedTerm());
+			result = getCoordinatedValue(anatomicEntity.getListTypeCode());
 			break;
 
 		case imagingObservation:
-			result = getCoordinatedValue(imagingObservation.getCodeValue(),
-					imagingObservation.getAllowedTerm());
+			result = getCoordinatedValue(imagingObservation.getListTypeCode());
 			break;
 
 		case inference:
-			result = getCoordinatedValue(inference.getCodeValue(),
-					inference.getAllowedTerm());
+			result = getCoordinatedValue(inference.getListTypeCode());
 			break;
 
 		case anatomicEntityCharacteristic:
 			result = getCoordinatedValue(
-					anatomicEntityCharacteristic.getCodeValue(),
-					anatomicEntityCharacteristic.getAllowedTerm());
+					anatomicEntityCharacteristic.getListTypeCode());
 			break;
 
 		case imagingObservationCharacteristic:
 			result = getCoordinatedValue(
-					imagingObservationCharacteristic.getCodeValue(),
-					imagingObservationCharacteristic.getAllowedTerm());
+					imagingObservationCharacteristic.getListTypeCode());
 			break;
 		}
 		return result;
 	}
 
-	private String getCoordinatedValue(String codeValue, AllowedTerm term) {
-		String result = codeValue;
-		if (term != null) {
-			result = term.getCodeValue();
-			if (term.getListValidTerm() != null) {
-				for (ValidTerm validTerm : term.getListValidTerm()) {
-					result += " " + validTerm.getCodeValue();
-				}
+	private String getCoordinatedValue(List<CD> typeCodes) {
+		String result="";
+		if (typeCodes==null)
+			return "";
+		if (typeCodes.size()==1){
+			result =typeCodes.get(0).getCode();
+		}
+		if (typeCodes.size()>1){
+			result="";
+			for (int i = 1; i < typeCodes.size(); i++) {
+				result += " " + typeCodes.get(i).getCode();
+	
 			}
 		}
-		return result;
+		return result.trim();
 	}
-
-	private String getCoordinatedMeaning(String codeMeaning, AllowedTerm term) {
-		String result = codeMeaning;
-		if (term != null) {
-			result = term.getCodeMeaning();
-			if (term.getListValidTerm() != null) {
-				for (ValidTerm validTerm : term.getListValidTerm()) {
-					result += " " + validTerm.getCodeMeaning();
-				}
+	
+	private String getCoordinatedMeaning(List<CD> typeCodes) {
+		String result="";
+		if (typeCodes==null)
+			return "";
+		if (typeCodes.size()==1){
+			result =typeCodes.get(0).getDisplayName().getValue();
+		}
+		if (typeCodes.size()>1){
+			result="";
+			for (int i = 1; i < typeCodes.size(); i++) {
+				result += typeCodes.get(i).getDisplayName().getValue() + " ";
+	
 			}
 		}
-		return result;
+		return result.trim();
 	}
+	
+//	private String getCoordinatedValue(String codeValue, AllowedTerm term) {
+//		String result = codeValue;
+//		if (term != null) {
+//			result = term.getCodeValue();
+//			if (term.getListValidTerm() != null) {
+//				for (ValidTerm validTerm : term.getListValidTerm()) {
+//					result += " " + validTerm.getCodeValue();
+//				}
+//			}
+//		}
+//		return result;
+//	}
+//
+//	private String getCoordinatedMeaning(String codeMeaning, AllowedTerm term) {
+//		String result = codeMeaning;
+//		if (term != null) {
+//			result = term.getCodeMeaning();
+//			if (term.getListValidTerm() != null) {
+//				for (ValidTerm validTerm : term.getListValidTerm()) {
+//					result += " " + validTerm.getCodeMeaning();
+//				}
+//			}
+//		}
+//		return result;
+//	}
 
 	public String getCoordinatedCodeMeaning() {
 		String result = "";
 		switch (componentType) {
 		case anatomicEntity:
-			result = getCoordinatedMeaning(anatomicEntity.getCodeMeaning(),
-					anatomicEntity.getAllowedTerm());
+			result = getCoordinatedMeaning(anatomicEntity.getListTypeCode());
 			break;
 
 		case imagingObservation:
-			result = getCoordinatedMeaning(imagingObservation.getCodeMeaning(),
-					imagingObservation.getAllowedTerm());
+			result = getCoordinatedMeaning(imagingObservation.getListTypeCode());
 			break;
 
 		case inference:
-			result = getCoordinatedMeaning(inference.getCodeMeaning(),
-					inference.getAllowedTerm());
+			result = getCoordinatedMeaning(inference.getListTypeCode());
 			break;
 
 		case anatomicEntityCharacteristic:
 			result = getCoordinatedMeaning(
-					anatomicEntityCharacteristic.getCodeMeaning(),
-					anatomicEntityCharacteristic.getAllowedTerm());
+					anatomicEntityCharacteristic.getListTypeCode());
 			break;
 
 		case imagingObservationCharacteristic:
 			result = getCoordinatedMeaning(
-					imagingObservationCharacteristic.getCodeMeaning(),
-					imagingObservationCharacteristic.getAllowedTerm());
+					imagingObservationCharacteristic.getListTypeCode());
 			break;
 		}
 		return result;
@@ -524,19 +555,19 @@ public class Component implements Serializable {
 		String result = "";
 		switch (componentType) {
 		case anatomicEntity:
-			result = anatomicEntity.getLabel();
+			result = anatomicEntity.getLabel().getValue();
 			break;
 
 		case imagingObservation:
-			result = imagingObservation.getLabel();
+			result = imagingObservation.getLabel().getValue();
 			break;
 
 		case anatomicEntityCharacteristic:
-			result = anatomicEntityCharacteristic.getLabel();
+			result = anatomicEntityCharacteristic.getLabel().getValue();
 			break;
 
 		case imagingObservationCharacteristic:
-			result = imagingObservationCharacteristic.getLabel();
+			result = imagingObservationCharacteristic.getLabel().getValue();
 			break;
 
 		case inference:
@@ -572,44 +603,44 @@ public class Component implements Serializable {
 	}
 
 	public String getCodeValue() {
+		//TODO gets the first type issue??
 		String result = "";
 		switch (componentType) {
 		case anatomicEntity:
-			result = anatomicEntity.getCodeValue();
+			result = anatomicEntity.getListTypeCode().get(0).getCode();
 			break;
 
 		case imagingObservation:
-			result = imagingObservation.getCodeValue();
+			result = imagingObservation.getListTypeCode().get(0).getCode();
 			break;
 
 		case inference:
-			result = inference.getCodeValue();
+			result = inference.getListTypeCode().get(0).getCode();
 			break;
 
 		case anatomicEntityCharacteristic:
-			result = anatomicEntityCharacteristic.getCodeValue();
+			result = anatomicEntityCharacteristic.getListTypeCode().get(0).getCode();
 			break;
 
 		case imagingObservationCharacteristic:
-			result = imagingObservationCharacteristic.getCodeValue();
+			result = imagingObservationCharacteristic.getListTypeCode().get(0).getCode();
 			break;
 		}
 		return result;
 	}
 
-	public void addCharacteristic(
-			edu.stanford.hakan.aim4api.project.epad.Component characteristic) {
+	public void addCharacteristic(Component characteristic) {
 		switch (componentType) {
 		case anatomicEntity:
-			anatomicEntity.getAnatomicEntityCharacteristicCollection()
-					.AddAnatomicEntityCharacteristic(
+			anatomicEntity.getImagingPhysicalEntityCharacteristicCollection()
+					.addImagingPhysicalEntityCharacteristic(
 							characteristic.anatomicEntityCharacteristic);
 
 			break;
 
 		case imagingObservation:
 			imagingObservation.getImagingObservationCharacteristicCollection()
-					.AddImagingObservationCharacteristic(
+					.addImagingObservationCharacteristic(
 							characteristic.imagingObservationCharacteristic);
 			break;
 		default:
@@ -622,9 +653,9 @@ public class Component implements Serializable {
 		switch (componentType) {
 		case anatomicEntity:
 
-			for (AnatomicEntityCharacteristic characteristic : anatomicEntity
-					.getAnatomicEntityCharacteristicCollection()
-					.getAnatomicEntityCharacteristicList()) {
+			for (ImagingPhysicalEntityCharacteristic characteristic : anatomicEntity
+					.getImagingPhysicalEntityCharacteristicCollection()
+					.getImagingPhysicalEntityCharacteristicList()) {
 				result.add(new Component(characteristic));
 			}
 			break;
@@ -724,21 +755,45 @@ public class Component implements Serializable {
 	}
 
 	public void setAllowedTerm(AllowedTerm term) {
+		if (term==null)
+			return;
 		switch (componentType) {
 		case anatomicEntity:
-			anatomicEntity.setAllowedTerm(term);
+			anatomicEntity.getListTypeCode().clear();
+			anatomicEntity.addTypeCode(term.toCD());
+            for (ValidTerm validTerm : term.getListValidTerm()) {
+            	anatomicEntity.addTypeCode(validTerm.toCD());
+            }
+	        
 			break;
 		case imagingObservation:
-			imagingObservation.setAllowedTerm(term);
+			imagingObservation.getListTypeCode().clear();
+			imagingObservation.addTypeCode(term.toCD());
+            for (ValidTerm validTerm : term.getListValidTerm()) {
+            	imagingObservation.addTypeCode(validTerm.toCD());
+            }
+        
 			break;
 		case inference:
-			inference.setAllowedTerm(term);
+			inference.getListTypeCode().clear();
+			inference.addTypeCode(term.toCD());
+            for (ValidTerm validTerm : term.getListValidTerm()) {
+            	inference.addTypeCode(validTerm.toCD());
+            }
 			break;
 		case anatomicEntityCharacteristic:
-			anatomicEntityCharacteristic.setAllowedTerm(term);
+			anatomicEntityCharacteristic.getListTypeCode().clear();
+			anatomicEntityCharacteristic.addTypeCode(term.toCD());
+            for (ValidTerm validTerm : term.getListValidTerm()) {
+            	anatomicEntityCharacteristic.addTypeCode(validTerm.toCD());
+            }
 			break;
 		case imagingObservationCharacteristic:
-			imagingObservationCharacteristic.setAllowedTerm(term);
+			imagingObservationCharacteristic.getListTypeCode().clear();
+			imagingObservationCharacteristic.addTypeCode(term.toCD());
+            for (ValidTerm validTerm : term.getListValidTerm()) {
+            	imagingObservationCharacteristic.addTypeCode(validTerm.toCD());
+            }
 			break;
 		}
 	}

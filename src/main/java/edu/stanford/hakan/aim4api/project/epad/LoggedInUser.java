@@ -26,7 +26,8 @@ package edu.stanford.hakan.aim4api.project.epad;
 
 import java.io.Serializable;
 
-import edu.stanford.hakan.aim4api.compability.aimv3.User;
+import edu.stanford.hakan.aim4api.base.ST;
+import edu.stanford.hakan.aim4api.base.User;
 
 /**
  * 
@@ -46,9 +47,9 @@ public class LoggedInUser extends User implements Serializable {
 	}
 
 	public void setUser(String loginName, String name) {
-		setLoginName(loginName);
-		setName(name);
-		setCagridId(0);
+		setLoginName(new ST(loginName));
+		setName(new ST(name));
+//		setCagridId(0);
 	}
 
 }
