@@ -7,7 +7,7 @@ package edu.stanford.hakan.aim4api.plugin;
 
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.IAimXMLOperations;
-import edu.stanford.hakan.aim4api.utility.Logger;
+//import edu.stanford.hakan.aim4api.utility.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -31,13 +31,13 @@ public class PluginParameter  implements IAimXMLOperations {
     }
 
     public PluginParameter(String nameValuePair) {
-        Logger.write("PluginParameter-s");
+//        Logger.write("PluginParameter-s");
         if (nameValuePair.contains(Common.spliterFive)) {
             String[] res = nameValuePair.split("\\" + Common.spliterFive);
             this.name = res[0];
             this.value = res[1];
         }
-        Logger.write("PluginParameter-e");
+//        Logger.write("PluginParameter-e");
     }
 
     public String getName() {

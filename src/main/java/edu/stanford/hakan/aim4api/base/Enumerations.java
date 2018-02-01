@@ -75,7 +75,7 @@ public class Enumerations {
 
     public enum AimVersion {
 
-        None, AIMv1_0, AIMv2_0, AIMv3_0, AIM_3_0, AIMv3_0_1, AIMv3_0_2, AIMv4_0, TCGA
+        None, AIMv1_0, AIMv2_0, AIMv3_0, AIM_3_0, AIMv3_0_1, AIMv3_0_2, AIMv4_0, TCGA, AIMv4_2
     };
 
     public enum CalculationResultIdentifier {

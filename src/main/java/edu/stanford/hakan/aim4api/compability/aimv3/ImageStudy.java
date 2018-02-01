@@ -116,7 +116,7 @@ public class ImageStudy implements IAimXMLOperations {
     }
 
     public String getStartTime() {
-        return startTime;
+        return startTime.replace(":", "");
     }
 
     public void setStartTime(String startTime) {

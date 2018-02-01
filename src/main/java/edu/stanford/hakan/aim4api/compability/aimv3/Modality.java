@@ -33,8 +33,8 @@ public class Modality extends HashMap<String, CD> {
 		//http://www.dicomlibrary.com/dicom/sop/
 		
 		try {
-			this.put("1.2.840.10008.5.1.4.1.1.2", new CD("CT","Computed Radiography",dcmDesignator,lexVersion));
-			this.put("1.2.840.10008.5.1.4.1.1.1", new CD("CR","Computed Tomography",dcmDesignator,lexVersion));
+			this.put("1.2.840.10008.5.1.4.1.1.2", new CD("CT","Computed Tomography",dcmDesignator,lexVersion));
+			this.put("1.2.840.10008.5.1.4.1.1.1", new CD("CR","Computed Radiography",dcmDesignator,lexVersion));
 			this.put("1.2.840.10008.5.1.4.1.1.128", new CD("PT","Positron emission tomography",dcmDesignator,lexVersion));
 			this.put("1.2.840.10008.5.1.4.1.1.4", new CD("MR","Magnetic Resonance",dcmDesignator,lexVersion));
 			this.put("1.2.840.10008.5.1.4.1.1.6.1", new CD("US","Ultrasound",dcmDesignator,lexVersion));
@@ -42,8 +42,8 @@ public class Modality extends HashMap<String, CD> {
 			this.put("1.2.840.10008.5.1.4.1.1.1.2.1", new CD("MG","Mammography",dcmDesignator,lexVersion));
 			
 			//put entities also for lookup from modality. putting extra records is faster
-			this.put("CT", new CD("CT","Computed Radiography",dcmDesignator,lexVersion));
-			this.put("CR", new CD("CR","Computed Tomography",dcmDesignator,lexVersion));
+			this.put("CT", new CD("CT","Computed Tomography",dcmDesignator,lexVersion));
+			this.put("CR", new CD("CR","Computed Radiography",dcmDesignator,lexVersion));
 			this.put("PT", new CD("PT","Positron emission tomography",dcmDesignator,lexVersion));
 			this.put("MR", new CD("MR","Magnetic Resonance",dcmDesignator,lexVersion));
 			this.put("US", new CD("US","Ultrasound",dcmDesignator,lexVersion));

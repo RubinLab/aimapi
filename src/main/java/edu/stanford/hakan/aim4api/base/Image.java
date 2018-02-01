@@ -48,8 +48,8 @@ public class Image implements IAimXMLOperations {
     }
 
     public Image(II sopClassUid, II sopInstanceUid) {
-        this.sopClassUid = sopClassUid;
-        this.sopInstanceUid = sopInstanceUid;
+    	this.setSopClassUid(sopClassUid);
+    	this.setSopInstanceUid(sopInstanceUid);
     }
     
 

@@ -139,6 +139,8 @@ public class MultiPoint extends GeometricShape implements IAimXMLOperations {
         geometricShapeEntity.setShapeIdentifier(this.getShapeIdentifier());
         if (this.getUniqueIdentifier() != null && !"".equals(this.getUniqueIdentifier())) {
             geometricShapeEntity.setUniqueIdentifier(new II(this.getUniqueIdentifier()));
+        }else {
+        	geometricShapeEntity.setUniqueIdentifier();
         }
     }
 

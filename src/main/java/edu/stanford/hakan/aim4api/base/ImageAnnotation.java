@@ -354,7 +354,7 @@ public class ImageAnnotation extends AnnotationEntity {
 	            res.setQuestionCollection(this.getQuestionCollection().getClone());
 	        }
         }catch (AimException e) {
-        	Logger.write("Question collection couldn't be retrieved " + e.getMessage());
+//        	Logger.write("Question collection couldn't be retrieved " + e.getMessage());
         }
         res.setVersion(this.getVersion());
         return res;

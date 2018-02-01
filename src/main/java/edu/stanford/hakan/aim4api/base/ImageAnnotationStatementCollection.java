@@ -370,6 +370,16 @@ public class ImageAnnotationStatementCollection implements IAimXMLOperations {
                         obj.setXMLNode(currentNode);
                         this.addImageAnnotationStatement(obj);
                     }
+                    if ("CalculationEntityReferencesMarkupEntityStatement".equals(xsiType)) {
+                        CalculationEntityReferencesMarkupEntityStatement obj = new CalculationEntityReferencesMarkupEntityStatement();
+                        obj.setXMLNode(currentNode);
+                        this.addImageAnnotationStatement(obj);
+                    }
+                    if ("CalculationEntityReferencesSegmentationEntityStatement".equals(xsiType)) {
+                    	CalculationEntityReferencesSegmentationEntityStatement obj = new CalculationEntityReferencesSegmentationEntityStatement();
+                        obj.setXMLNode(currentNode);
+                        this.addImageAnnotationStatement(obj);
+                    }
 
                 } else {
                     AnnotationStatement obj = new AnnotationStatement();

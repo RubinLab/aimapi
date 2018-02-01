@@ -1,7 +1,5 @@
 package edu.stanford.hakan.aim4api.project.epad;
 
-import edu.stanford.hakan.aim4api.base.Enumerations.ComparisonOperator;
-
 //Copyright (c) 2013 The Board of Trustees of the Leland Stanford Junior University
 //All rights reserved.
 //
@@ -25,37 +23,32 @@ import edu.stanford.hakan.aim4api.base.Enumerations.ComparisonOperator;
 //SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
 //WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
 //USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 
-
-/**
- * Utils for aimapi.
- * 
- * @author Debra Willrett
- * 
- */
-public class Utils {
-
-	public static ComparisonOperator getComparisonOperator(
-			String operator) {
-		ComparisonOperator result =ComparisonOperator.None;
-		if (operator.equalsIgnoreCase("Equal")) {
-			result = ComparisonOperator.Equal;
-		}
-		if (operator.equalsIgnoreCase("GreaterThan")) {
-			result = ComparisonOperator.GreaterThan;
-		}
-		if (operator.equalsIgnoreCase("LessThan")) {
-			result = ComparisonOperator.LessThan;
-		}
-		if (operator.equalsIgnoreCase("GreaterThanEqual")) {
-			result = ComparisonOperator.GreaterThanEqual;
-		}
-		if (operator.equalsIgnoreCase("LessThanEqual")) {
-			result = ComparisonOperator.LessThanEqual;
-		}
-		if (operator.equalsIgnoreCase("NotEqual")) {
-			result = ComparisonOperator.NotEqual;
-		}
-		return result;
+@SuppressWarnings("serial")
+public class Normal extends Shape {
+	
+	public Normal(Shape l1, Shape l2){
+//		this.setCagridId(l1.getCagridId());
+		if (l1.getIncludeFlag()!=null) this.setIncludeFlag(l1.getIncludeFlag());
+		if (l1.getLineColor()!=null) this.setLineColor(l1.getLineColor());
+		if (l1.getLineOpacity()!=null) this.setLineOpacity(l1.getLineOpacity());
+		if (l1.getLineStyle()!=null) this.setLineStyle(l1.getLineStyle());
+		if (l1.getLineThickness()!=null) this.setLineThickness(l1.getLineThickness());
+		this.setShapeIdentifier(l1.getShapeIdentifier());
+		this.setXsiType("Normal");
+		this.setTwoDimensionSpatialCoordinateCollection(l1
+				.getTwoDimensionSpatialCoordinateCollection().getClone());
+		this.getTwoDimensionSpatialCoordinateCollection().getTwoDimensionSpatialCoordinateList().addAll(l2
+				.getTwoDimensionSpatialCoordinateCollection().getClone().getTwoDimensionSpatialCoordinateList());
+		
 	}
+
+	
+	@Override
+	public ShapeType getShapeType() {
+		return ShapeType.NORMAL;
+	}
+	
+	
 }
