@@ -92,7 +92,7 @@ public class ImageAnnotationCollection extends AnnotationCollection {
             setTagName("ImageAnnotationCollection");
         }
         if (getAimVersion() == null || Enumerations.AimVersion.None.equals(getAimVersion())) {
-            setAimVersion(Enumerations.AimVersion.AIMv4_0);
+            setAimVersion(Enumerations.AimVersion.AIMv4_2);
         }
         Element res = (Element) super.getXMLNode(doc);
         if (this.person != null) {
@@ -134,10 +134,10 @@ public class ImageAnnotationCollection extends AnnotationCollection {
             super.setAimVersion(Enumerations.AimVersion.valueOf(tempVersion));
         }
 
-        if (Enumerations.AimVersion.AIMv4_0 != super.getAimVersion()) {
+        if (Enumerations.AimVersion.AIMv4_0 != super.getAimVersion() && Enumerations.AimVersion.AIMv4_2 != super.getAimVersion()) {
             try {
                 node = AnnotationConverter.annotationV3ToV4(node);
-                super.setAimVersion(Enumerations.AimVersion.AIMv4_0);
+                super.setAimVersion(Enumerations.AimVersion.AIMv4_2);
             } catch (AimException ex) {
                 Logger.getLogger(AnnotationCollection.class.getName()).log(Level.SEVERE, null, ex);
             }

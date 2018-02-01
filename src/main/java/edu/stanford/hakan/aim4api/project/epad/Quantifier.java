@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CharacteristicQuantification;
+import edu.stanford.hakan.aim4api.base.Enumerations;
 import edu.stanford.hakan.aim4api.base.Enumerations.ComparisonOperator;
 import edu.stanford.hakan.aim4api.base.Interval;
 import edu.stanford.hakan.aim4api.base.NonQuantifiable;
@@ -48,6 +49,8 @@ public class Quantifier implements Serializable {
 			break;
 		case scale:
 			scale = new Scale();
+			//TODO aimv4 conversion code was like this but this is not correct
+			scale.setType(Enumerations.ScaleType.Nominal);
 			break;
 		}
 	}

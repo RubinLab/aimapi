@@ -200,6 +200,8 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 			//put the patient information in aim
 			this.setPerson(setPerson(pName, pId, pBirthDate, pSex));
 			addImageAnnotation(createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime, studyUID, sourceSeriesUID, accessionNumber, modality, annotationDate));
+			setAimStudyInstanceUid(new II(studyUID));
+			setAccessionNumber(new ST(accessionNumber));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -233,6 +235,24 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		//ml TODO 
 		getImageAnnotation().setPluginCollection(iac.getImageAnnotation().getPluginCollection());
 		getImageAnnotation().setDsoStartIndex(iac.getImageAnnotation().getDsoStartIndex());
+		
+		//try and get from image reference
+		try{
+			setAimStudyInstanceUid((((DicomImageReferenceEntity)iac.getImageAnnotation().getImageReferenceEntityCollection().getImageReferenceEntityList().get(0)).getImageStudy().getInstanceUid().getClone()));
+		}catch(Exception e){
+			logger.warning("Couldn't read study uid from imageannotationcollection, see if the iac has one, generating one if not");
+			setAimStudyInstanceUid(iac.getStudyInstanceUid());
+		}
+		
+		
+		 //try and get from image reference			
+		try{
+			setAccessionNumber((((DicomImageReferenceEntity)iac.getImageAnnotation().getImageReferenceEntityCollection().getImageReferenceEntityList().get(0)).getImageStudy().getAccessionNumber().getClone()));
+		}catch(Exception e){
+			logger.warning("Couldn't read accession number from imageannotationcollection, see if the iac has one, not required don't put if not");
+			if (iac.getAccessionNumber()!=null) setAccessionNumber(iac.getAccessionNumber());
+		}
+		
 	}
 
 	
@@ -260,6 +280,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
         addImageReferenceEntity(createImageReference(studyUid, seriesUid, imageUid,
                 studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
         addImagingPhysicalEntity(createImagingPhysicalEntity());
+        setAimStudyInstanceUid(new II(studyUid));
 
     }
     
@@ -286,6 +307,9 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
         addImageReferenceEntity(createImageReference(studyUid, seriesUid, imageUid,
                 studyDate, studyTime, imageClassUid,accessionNumber)); //ml imageclassuid added
         addImagingPhysicalEntity(createImagingPhysicalEntity());
+        
+        setAimStudyInstanceUid(new II(studyUid));
+		setAccessionNumber(new ST(accessionNumber));
 
     }
 
@@ -300,6 +324,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
         setUser(user);
         setPerson(createPerson(patientName, patientId, "unknown", todaysDate()));
         addImageReferenceEntity(createImageReference(studyUid, studyDate, studyTime));
+        setAimStudyInstanceUid(new II(studyUid));
 
     }
     
@@ -1210,6 +1235,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		}
 	}
 	
+	public II getTrackingUniqueIdentifier(){
+		return this.getImageAnnotation().getTrackingUniqueIdentifier();
+	}
+	
 	/**
 	 * sets the study uid of the aim
 	 * if the parameter is null generates a uid
@@ -1222,6 +1251,11 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 			this.setStudyInstanceUid(studyInstanceUid);
 		}
 	}
+	
+	public II getAimStudyInstanceUid(){
+		return this.getStudyInstanceUid();
+	}
+	
 	
 	/**
 	 * sets the series uid of the aim
@@ -1236,6 +1270,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		}
 	}
 	
+	public II getAimSeriesInstanceUid(){
+		return this.getSeriesInstanceUid();
+	}
+	
 	/**
 	 * sets the accessionNumber of the aim
 	 * if the parameter is null it doesn't do anything
@@ -1245,6 +1283,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		if (accessionNumber!=null) {
 			this.setAccessionNumber(accessionNumber);
 		}
+	}
+	
+	public ST getAimAccessionNumber(){
+		return this.getAccessionNumber();
 	}
 
 	public void setUniqueIdentifier(II uniqueIdentifier, String string) {
@@ -2051,8 +2093,8 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 
 	public static String getUCUMUnit(String units) {
-		if (units==null) 
-			return "";
+		if (units==null || units.equalsIgnoreCase("pixels")) 
+			return "no units";
 		if (units.equalsIgnoreCase("HU")) {
 			return "[hnsf'U]";
 		}else if (units.equalsIgnoreCase("SUV")) {
