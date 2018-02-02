@@ -5,15 +5,21 @@
  */
 package edu.stanford.hakan.aim4api.usage;
 
+import java.util.ArrayList;
+
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.CalculationData;
+import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationResult;
+import edu.stanford.hakan.aim4api.base.CompactCalculationResult;
+import edu.stanford.hakan.aim4api.base.Dimension;
+import edu.stanford.hakan.aim4api.base.Enumerations;
+import edu.stanford.hakan.aim4api.base.Enumerations.CalculationResultIdentifier;
+import edu.stanford.hakan.aim4api.base.ExtendedCalculationResult;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
-import edu.stanford.hakan.aim4api.compability.aimv3.AimUtility.CalculationResultIdentifier;
-import edu.stanford.hakan.aim4api.compability.aimv3.Calculation;
-import edu.stanford.hakan.aim4api.compability.aimv3.CalculationData;
-import edu.stanford.hakan.aim4api.compability.aimv3.CalculationResult;
-import edu.stanford.hakan.aim4api.compability.aimv3.Dimension;
-import edu.stanford.hakan.aim4api.compability.aimv3.ImageAnnotation;
+import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.project.epad.Aim4;
 
 /**
@@ -31,9 +37,7 @@ public class AnnotationExtender {
             throw new AimException("AimException: lenght of featureValue and featureString must be equal");
         }
 
-        ImageAnnotation imageAnnotation = new ImageAnnotation(imageAnnotationCollection);
-
-        Calculation calculation = getCalculationByFeatureNameList(imageAnnotationCollection, featureName);
+        CalculationEntity calculation = getCalculationByFeatureNameList(imageAnnotationCollection, featureName);
         if (calculation != null) {
             for (int i = 0; i < featureValue.length; i++) {
                 if (featureName[i] == null) {
@@ -41,40 +45,45 @@ public class AnnotationExtender {
                 }  
                 CalculationResult calculationResult = getCalculationResultByFeatureName(calculation, featureName[i]);
                 if (calculationResult != null) {
-                    calculationResult.getCalculationDataCollection().getCalculationDataList().get(0).setValue(featureValue[i]);
+                	if (calculationResult instanceof CompactCalculationResult)
+                		((CompactCalculationResult)calculationResult).setValue(new ST(String.valueOf(featureValue[i])));
+                	else if (calculationResult instanceof ExtendedCalculationResult)
+                		((ExtendedCalculationResult)calculationResult).getCalculationDataCollection().getCalculationDataList().get(0).setValue(new ST(String.valueOf(featureValue[i])));
                 } else {
-                    addFeatureToCalculation(calculation, featureValue[i], featureName[i]);
+                    addFeatureToCalculation(calculation, featureValue[i], featureName[i],null);
                 }
             }
         } else {
-            calculation = new Calculation();
-            calculation.setCagridId(0);
-            calculation.setAlgorithmVersion(Double.toString(featureVersion));
-            calculation.setAlgorithmType("99EPADA2"); //plugin
-            calculation.setUid("0");
-            if (calcCD!=null) {
-    	        calculation.setDescription(calcCD.getDisplayName().getValue());
-    	        calculation.setCodeValue(calcCD.getCode());
-    	        calculation.setCodeMeaning(calcCD.getDisplayName().getValue());
-    	        calculation.setCodingSchemeDesignator(calcCD.getCodeSystemName());
-            }else {
-	            calculation.setDescription("Feature Extraction");
-	            calculation.setCodeValue("99EPADF0"); //feature default
-	            calculation.setCodeMeaning("Feature Extraction");
-	            calculation.setCodingSchemeDesignator("99EPAD");
+            calculation = new CalculationEntity();
+            Algorithm alg=new Algorithm();
+    		alg.setName(new ST("Plugin"));
+    		alg.setVersion(new ST(Double.toString(featureVersion)));
+    		ArrayList<CD> types=new ArrayList<>();
+    		types.add(new CD("99EPADA2","Plugin","99EPAD"));
+    		alg.setType(types);
+    		calculation.setAlgorithm(alg);
+    		if (calcCD!=null) {
+    			
+    			calculation.addTypeCode(new CD(calcCD.getCode(),calcCD.getDisplayName().getValue(),calcCD.getCodeSystemName()));
+    			calculation.setDescription(new ST(calcCD.getDisplayName().getValue()));
+    		}else {
+
+    			calculation.addTypeCode(new CD("99EPADF0","Feature Extraction","99EPAD"));
+    			calculation.setDescription(new ST("Feature Extraction"));
+
             }
 
             for (int i = 0; i < featureValue.length; i++) {
                 if (featureName[i] == null) {
                     continue;
                 }
-                addFeatureToCalculation(calculation, featureValue[i], featureName[i]);
+                addFeatureToCalculation(calculation, featureValue[i], featureName[i],null);
             }
-            imageAnnotation.addCalculation(calculation);
+            imageAnnotationCollection.getImageAnnotation().addCalculationEntity(calculation);
         }
 
         
-        return imageAnnotation.toAimV4();
+        return imageAnnotationCollection;
 
 	}
 	//for keeping backwards compatibility
@@ -99,21 +108,23 @@ public class AnnotationExtender {
 	
 	public static ImageAnnotationCollection addFeature(ImageAnnotationCollection imageAnnotationCollection, double featureValue, CD feature, double featureVersion, CD calcCD, String label, String unit) throws AimException {
 		
-        ImageAnnotation imageAnnotation = new ImageAnnotation(imageAnnotationCollection);
-
        
-        Calculation calculation = getCalculationByFeatureName(imageAnnotationCollection, feature.getDisplayName().getValue());
+        CalculationEntity calculation = getCalculationByFeatureName(imageAnnotationCollection, feature.getDisplayName().getValue());
         
         if (calculation != null) {
-        	calculation.getCalculationResultCollection().getCalculationResultList().get(0).getCalculationDataCollection().getCalculationDataList().get(0).setValue(featureValue);
+        	if (calculation.getCalculationResultCollection().getCalculationResultList().get(0) instanceof CompactCalculationResult)
+        		((CompactCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).setValue(new ST(String.valueOf(featureValue)));
+        	else if (calculation.getCalculationResultCollection().getCalculationResultList().get(0) instanceof ExtendedCalculationResult)
+        		((ExtendedCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).getCalculationDataCollection().getCalculationDataList().get(0).setValue(new ST(String.valueOf(featureValue)));
+
         } else {
-            imageAnnotation.addCalculation(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD, label, unit));
+        	imageAnnotationCollection.getImageAnnotation().addCalculationEntity(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD, label, unit));
         }
             
-        return imageAnnotation.toAimV4();
+        return imageAnnotationCollection;
     }
 
-    private static CalculationResult getCalculationResultByFeatureName(Calculation calculation, String featureName) {
+    private static CalculationResult getCalculationResultByFeatureName(CalculationEntity calculation, String featureName) {
         for (CalculationResult calculationResult : calculation.getCalculationResultCollection().getCalculationResultList()) {
             for (Dimension dimension : calculationResult.getDimensionCollection().getDimensionList()) {
                 if (dimension.getLabel().equals(featureName)) {
@@ -130,10 +141,9 @@ public class AnnotationExtender {
      * @param featureName
      * @return
      */
-    private static Calculation getCalculationByFeatureName(ImageAnnotationCollection imageAnnotationCollection, String featureName) {
-        ImageAnnotation imageAnnotation = new ImageAnnotation(imageAnnotationCollection);
-        for (Calculation calculation : imageAnnotation.getCalculationCollection().getCalculationList()) {
-            if (calculation.getCodeMeaning().equals(featureName) || calculation.getDescription().equals(featureName)) {
+    private static CalculationEntity getCalculationByFeatureName(ImageAnnotationCollection imageAnnotationCollection, String featureName) {
+        for (CalculationEntity calculation : imageAnnotationCollection.getImageAnnotation().getCalculationEntityCollection().getCalculationEntityList()) {
+            if ((calculation.getListTypeCode().get(0).getDisplayName().getValue()!=null && calculation.getListTypeCode().get(0).getDisplayName().getValue().equals(featureName)) ||(calculation.getListTypeCode().get(0).getCodeSystem()!=null && calculation.getListTypeCode().get(0).getCodeSystem().equals(featureName)) || calculation.getDescription().getValue().equals(featureName)) {
                 return calculation;
                        
             }
@@ -142,9 +152,8 @@ public class AnnotationExtender {
     }
 
 
-    private static Calculation getCalculationByFeatureNameList(ImageAnnotationCollection imageAnnotationCollection, String[] featureName) {
-        ImageAnnotation imageAnnotation = new ImageAnnotation(imageAnnotationCollection);
-        for (Calculation calculation : imageAnnotation.getCalculationCollection().getCalculationList()) {
+    private static CalculationEntity getCalculationByFeatureNameList(ImageAnnotationCollection imageAnnotationCollection, String[] featureName) {
+        for (CalculationEntity calculation : imageAnnotationCollection.getImageAnnotation().getCalculationEntityCollection().getCalculationEntityList()) {
             for (CalculationResult calculationResult : calculation.getCalculationResultCollection().getCalculationResultList()) {
                 for (Dimension dimension : calculationResult.getDimensionCollection().getDimensionList()) {
                     for (String fName : featureName) {
@@ -158,29 +167,25 @@ public class AnnotationExtender {
         return null;
     }
 
-    private static void addFeatureToCalculation(Calculation calculation, double featureValue, String featureName) {
+    private static void addFeatureToCalculation(CalculationEntity calculation, double featureValue, String featureName, String unit) {
 
         // Create a CalculationResult instance
-        CalculationResult calculationResult = new CalculationResult();
-        calculationResult.setCagridId(0);
+    	CompactCalculationResult calculationResult = new CompactCalculationResult();
         calculationResult.setType(CalculationResultIdentifier.Scalar);
-        calculationResult.setUnitOfMeasure("ratio");
+        if (unit==null)
+        	unit="ratio";
+        calculationResult.setUnitOfMeasure(new ST(Aim4.getUCUMUnit(unit)));
         //ml double
-        calculationResult.setDataType("C48870");
-        calculationResult.setNumberOfDimensions(1);
-        // Create a CalculationData instance
-        CalculationData calculationData = new CalculationData();
-        calculationData.setCagridId(0);
-        calculationData.setValue(featureValue);
-        calculationData.addCoordinate(0, 0, 0);
+        calculationResult.setDataType(new CD("C48870","Double","NCI"));
+        calculationResult.setType(Enumerations.CalculationResultIdentifier.Scalar);
+        calculationResult.setValue(new ST(String.valueOf(featureValue)));
         // Create a Dimension instance
-        Dimension dimension = new Dimension(0, 0, 1, featureName);
-        // Add calculationData to calculationResult
-        calculationResult.addCalculationData(calculationData);
+        Dimension dimension = new Dimension(0, 1, featureName);
         // Add dimension to calculationResult
         calculationResult.addDimension(dimension);
         // Add calculationResult to calculation
         calculation.addCalculationResult(calculationResult);
+
     }
     
     /**
@@ -190,59 +195,34 @@ public class AnnotationExtender {
      * @param featureName
      * @throws AimException 
      */
-    private static Calculation createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label) throws AimException {
+    private static CalculationEntity createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label) throws AimException {
     	
     	return createCalculationForFeature(iac, featureValue, feature, parentCD, label, "ratio");
     }
     
-    private static Calculation createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label, String unit) throws AimException {
+    private static CalculationEntity createCalculationForFeature(ImageAnnotationCollection iac, double featureValue, CD feature, CD parentCD, String label, String unit) throws AimException {
     	
-    	Calculation calculation = new Calculation();
-    	
-    	calculation.setCagridId(0);
-    	calculation.setAlgorithmVersion(parentCD.getCodeSystemVersion());
-    	calculation.setAlgorithmType(parentCD.getCode()); 
-    	calculation.setAlgorithmName(parentCD.getDisplayName().getValue());
-//    	calculation.setUid("0");
-    	
+        CalculationEntity calculation = new CalculationEntity();
+        Algorithm alg=new Algorithm();
+		alg.setName(new ST(parentCD.getDisplayName().getValue()));
+		alg.setVersion(new ST(parentCD.getCodeSystemVersion()));
+		ArrayList<CD> types=new ArrayList<>();
+		types.add(parentCD);
+		alg.setType(types);
+		calculation.setAlgorithm(alg);
     	
     	if (feature!=null) {
-    		calculation.setDescription(feature.getDisplayName().getValue());
-    		calculation.setCodeValue(feature.getCode());
-    		calculation.setCodeMeaning(feature.getDisplayName().getValue());
-    		calculation.setCodingSchemeDesignator(feature.getCodeSystemName());
-    	}else {
-    		calculation.setDescription("Feature Extraction");
-    		calculation.setCodeValue("99EPADC0"); //double
-    		calculation.setCodeMeaning("Feature Extraction");
-    		calculation.setCodingSchemeDesignator("99EPAD");
-    	}
+			
+			calculation.addTypeCode(new CD(feature.getCode(),feature.getDisplayName().getValue(),feature.getCodeSystemName()));
+			calculation.setDescription(new ST(feature.getDisplayName().getValue()));
+		}else {
 
+			calculation.addTypeCode(new CD("99EPADF0","Feature Extraction","99EPAD"));
+			calculation.setDescription(new ST("Feature Extraction"));
+
+        }
+    	addFeatureToCalculation(calculation, featureValue, label, unit);
     	
-        // Create a CalculationResult instance
-        CalculationResult calculationResult = new CalculationResult();
-        calculationResult.setCagridId(0);
-        calculationResult.setType(CalculationResultIdentifier.Scalar);
-        if (unit==null)
-        	unit="ratio";
-        calculationResult.setUnitOfMeasure(Aim4.getUCUMUnit(unit));
-        //ml double
-        calculationResult.setDataType("C48870");
-        calculationResult.setNumberOfDimensions(1);
-        // Create a CalculationData instance
-        CalculationData calculationData = new CalculationData();
-        calculationData.setCagridId(0);
-        calculationData.setValue(featureValue);
-        calculationData.addCoordinate(0, 0, 0);
-        // Create a Dimension instance
-        Dimension dimension = new Dimension(0, 0, 1, label);
-        // Add calculationData to calculationResult
-        calculationResult.addCalculationData(calculationData);
-        // Add dimension to calculationResult
-        calculationResult.addDimension(dimension);
-        // Add calculationResult to calculation
-        calculation.addCalculationResult(calculationResult);
-        
         
         return calculation;
         

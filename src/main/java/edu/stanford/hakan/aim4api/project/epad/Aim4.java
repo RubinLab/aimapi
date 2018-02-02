@@ -199,7 +199,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
 			//put the patient information in aim
 			this.setPerson(setPerson(pName, pId, pBirthDate, pSex));
-			addImageAnnotation(createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime, studyUID, sourceSeriesUID, accessionNumber, modality, annotationDate));
+			addImageAnnotation(createImageAnnotationFromProperties(username, template, lesionName, comment, imageUID, sopClassUID, studyDate, studyTime.replace(":", ""), studyUID, sourceSeriesUID, accessionNumber, modality, annotationDate));
 			setAimStudyInstanceUid(new II(studyUID));
 			setAccessionNumber(new ST(accessionNumber));
 		} catch (Exception e) {
@@ -227,7 +227,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 //		}
 		setDateTime(date);
 		
-		setUniqueIdentifier(iac.getUniqueIdentifier(), "al536anhb55555");
+		setUniqueIdentifier(iac.getUniqueIdentifier().getClone(), "al536anhb55555");
 	       
 		setXsiType(iac.getXsiType());
 
@@ -278,7 +278,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReferenceEntity(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime, imageClassUid, null)); //ml imageclassuid added
+                studyDate, studyTime.replace(":", ""), imageClassUid, null)); //ml imageclassuid added
         addImagingPhysicalEntity(createImagingPhysicalEntity());
         setAimStudyInstanceUid(new II(studyUid));
 
@@ -305,7 +305,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
         // don't add the image reference yet, we don't have any shapes or segs
         addImageReferenceEntity(createImageReference(studyUid, seriesUid, imageUid,
-                studyDate, studyTime, imageClassUid,accessionNumber)); //ml imageclassuid added
+                studyDate, studyTime.replace(":", ""), imageClassUid,accessionNumber)); //ml imageclassuid added
         addImagingPhysicalEntity(createImagingPhysicalEntity());
         
         setAimStudyInstanceUid(new II(studyUid));
@@ -323,7 +323,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
         setDateTime(todaysDate());
         setUser(user);
         setPerson(createPerson(patientName, patientId, "unknown", todaysDate()));
-        addImageReferenceEntity(createImageReference(studyUid, studyDate, studyTime));
+        addImageReferenceEntity(createImageReference(studyUid, studyDate, studyTime.replace(":", "")));
         setAimStudyInstanceUid(new II(studyUid));
 
     }
