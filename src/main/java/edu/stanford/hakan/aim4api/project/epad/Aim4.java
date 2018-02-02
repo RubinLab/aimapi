@@ -1385,12 +1385,14 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
             shape.setIncludeFlag(true);
             addMarkupEntity(shape);
+            addAimShape(shape);
         }
 
         if (!hasImage(imageID)) {
             updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
                     studyTime, imageClassUID,accessionNumber);
         }
+        
 
         return shapeID;
     }
@@ -1604,6 +1606,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 	
 	public void setTemplate(CD val) {
+		this.getImageAnnotation().getListTypeCode().clear();
 		this.getImageAnnotation().addTypeCode(val);
 		
 	}
@@ -1623,6 +1626,30 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		this.getImageAnnotation().getListTypeCode().get(0).setCodeSystemVersion(val);
 		
 	}
+	
+	public void addAimShape(TwoDimensionGeometricShapeEntity shape){
+		if (aimShapes!=null){
+			aimShapes.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
+		}
+	}
+	
+	public void removeAimShape(int shapeId){
+		if (aimShapes!=null){
+			for (Shape s:aimShapes){
+				if (s.getShapeIdentifier()==shapeId){
+					aimShapes.remove(s);
+				}
+					
+			}
+			for (MarkupEntity shape : getMarkupEntityCollection().getMarkupEntityList()) {
+	            if (shape instanceof TwoDimensionGeometricShapeEntity)
+	            	if (((TwoDimensionGeometricShapeEntity)shape).getShapeIdentifier()==shapeId){
+	            		getMarkupEntityCollection().getMarkupEntityList().remove(shape);
+	            	}
+
+	        }
+		}
+	}
 
 	public List<Shape> getShapes() {
 		if (aimShapes!=null){
@@ -1634,39 +1661,52 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
             if (shape instanceof TwoDimensionGeometricShapeEntity)
             	result.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
         }
-        
+        List<Shape> result2 = new ArrayList<Shape>();
         //see if there are 2 lines and if they are orthogonal put a normal shape instead
-        if (result.size()==2 && result.get(0).getShapeType()==ShapeType.LINE && result.get(1).getShapeType()==ShapeType.LINE) {
-//        	by computing the dot product of their vectors and
-//        	determining that it is zero (within an appropriate floating point
-//        	precision related tolerance)
+        if (result.size()>=2) {
+        	for (int i=0;i<result.size();i++){
+        		for (int j=i+1;j<result.size();j++){
+        			if (result.get(i).getShapeType()==ShapeType.LINE && result.get(j).getShapeType()==ShapeType.LINE){
+        				//see if the lines are perpendicular
+//        	        	by computing the dot product of their vectors and
+//        	        	determining that it is zero (within an appropriate floating point
+//        	        	precision related tolerance)
 
-        	Double x0=result.get(0).getCoords().get(0).getX();
-        	Double y0=result.get(0).getCoords().get(0).getY();
-        	Double x1=result.get(0).getCoords().get(1).getX();
-        	Double y1=result.get(0).getCoords().get(1).getY();
-        	Double x2=result.get(1).getCoords().get(0).getX();
-        	Double y2=result.get(1).getCoords().get(0).getY();
-        	Double x3=result.get(1).getCoords().get(1).getX();
-        	Double y3=result.get(1).getCoords().get(1).getY();
-        	logger.info("cross product is "+roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)));
-        	if (roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)) == 0) {
-        		//it is orthogonal
-        		logger.info("lines are orthogonal. create a normal shape instead");
-        		Normal n=new Normal(result.get(0),result.get(1));
-        		//put the smallest shape id of the lines to the normal shape
-        		int si=(result.get(0).getShapeIdentifier()<result.get(1).getShapeIdentifier()?result.get(0).getShapeIdentifier():result.get(1).getShapeIdentifier());
-        		n.setShapeIdentifier(si);
-        		result.clear();
-        		result.add(n);
-        		
-        		
+        	        	Double x0=result.get(0).getCoords().get(0).getX();
+        	        	Double y0=result.get(0).getCoords().get(0).getY();
+        	        	Double x1=result.get(0).getCoords().get(1).getX();
+        	        	Double y1=result.get(0).getCoords().get(1).getY();
+        	        	Double x2=result.get(1).getCoords().get(0).getX();
+        	        	Double y2=result.get(1).getCoords().get(0).getY();
+        	        	Double x3=result.get(1).getCoords().get(1).getX();
+        	        	Double y3=result.get(1).getCoords().get(1).getY();
+        	        	logger.info("cross product is "+roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)));
+        	        	if (roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)) == 0) {
+        	        		//it is orthogonal
+        	        		logger.info("lines are orthogonal. create a normal shape instead");
+        	        		Normal n=new Normal(result.get(0),result.get(1));
+        	        		//put the smallest shape id of the lines to the normal shape
+        	        		int si=(result.get(0).getShapeIdentifier()<result.get(1).getShapeIdentifier()?result.get(0).getShapeIdentifier():result.get(1).getShapeIdentifier());
+        	        		n.setShapeIdentifier(si);
+        	        		result2.add(n);
+        	        		result.remove(j);
+        	        		result.remove(i);
+        	        		i--;
+        	        		
+        	        		break;
+//        	        		j--;
+        	        	}
+        				
+        			}
+        		}
         	}
+        	if (!result.isEmpty())
+        		result2.addAll(result);
         	
         }
         logger.info("result is "+ result.size());
-        aimShapes=result;
-        return result;
+        aimShapes=result2;
+        return result2;
 	}
 	
 	private Double roundDouble(Double val){
@@ -1703,6 +1743,15 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
             }
         }
         return result;
+	}
+	
+	public void removeShape(int shapeID) {
+	   for (MarkupEntity shape : getMarkupEntityCollection().getMarkupEntityList()) {
+           if (shape instanceof TwoDimensionGeometricShapeEntity && ((TwoDimensionGeometricShapeEntity)shape).getShapeIdentifier() == shapeID) {
+        	   getMarkupEntityCollection().getMarkupEntityList().remove(shape);
+           }
+       }
+	   removeAimShape(shapeID);
 	}
 
 	public void setShapeCoords(int shapeID, List<TwoDCoordinate> coords) {
@@ -2123,6 +2172,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	
 	public void clearCalculationEntityCollection(){
 		this.getImageAnnotation().getCalculationEntityCollection().getCalculationEntityList().clear();
+		this.getImageAnnotation().getImageAnnotationStatementCollection().getImageAnnotationStatementList().clear();
 	}
 	
 	//get the first annotation
