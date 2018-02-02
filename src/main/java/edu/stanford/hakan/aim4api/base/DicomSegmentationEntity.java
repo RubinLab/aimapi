@@ -59,6 +59,14 @@ public class DicomSegmentationEntity extends SegmentationEntity {
 	     setSegmentNumber(segmentNumber);
 	}
 
+	public DicomSegmentationEntity(II sopInstanceUid, II sopClassUid, II referencedSopInstanceUid, Integer segmentNumber) {
+		 setXsiType("DicomSegmentationEntity");
+		 setSopInstanceUid(sopInstanceUid);
+	     setSopClassUid(sopClassUid);
+	     setReferencedSopInstanceUid(referencedSopInstanceUid);
+	     setSegmentNumber(segmentNumber);
+	}
+
 	public II getSopInstanceUid() {
 		return sopInstanceUid;
 	}
