@@ -27,8 +27,11 @@ import edu.stanford.hakan.aim4api.project.epad.Enumerations.ShapeType;
 
 @SuppressWarnings("serial")
 public class Normal extends Shape {
-	
+	Shape l1;
+	Shape l2;
 	public Normal(Shape l1, Shape l2){
+		this.l1=l1;
+		this.l2=l2;
 //		this.setCagridId(l1.getCagridId());
 		if (l1.getIncludeFlag()!=null) this.setIncludeFlag(l1.getIncludeFlag());
 		if (l1.getLineColor()!=null) this.setLineColor(l1.getLineColor());
@@ -41,9 +44,18 @@ public class Normal extends Shape {
 				.getTwoDimensionSpatialCoordinateCollection().getClone());
 		this.getTwoDimensionSpatialCoordinateCollection().getTwoDimensionSpatialCoordinateList().addAll(l2
 				.getTwoDimensionSpatialCoordinateCollection().getClone().getTwoDimensionSpatialCoordinateList());
+		this.setReferencedFrameNumber(l1.getReferencedFrameNumber());
+		this.setImageReferenceUid(l1.getImageReferenceUid());
 		
 	}
 
+	public Shape line1(){
+		return this.l1;
+	}
+	
+	public Shape line2(){
+		return this.l2;
+	}
 	
 	@Override
 	public ShapeType getShapeType() {
