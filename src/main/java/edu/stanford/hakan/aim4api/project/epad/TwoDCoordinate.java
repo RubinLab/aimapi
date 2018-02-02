@@ -74,7 +74,7 @@ public class TwoDCoordinate extends TwoDimensionSpatialCoordinate implements
 		setCoordinateIndex(c.getCoordinateIndex());
 //		setXsiType(c.getXsiType());
 		
-		setImageReferenceUID(s.getImageReferenceUid().getRoot());
+		if (s.getImageReferenceUid()!=null) setImageReferenceUID(s.getImageReferenceUid().getRoot());
 		setReferencedFrameNumber(s.getReferencedFrameNumber());
 		setX(c.getX());
 		setY(c.getY());

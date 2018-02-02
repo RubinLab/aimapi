@@ -1496,6 +1496,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
             shape.setReferencedFrameNumber(frame);
             shape.addTwoDimensionSpatialCoordinate(coord);
         }
+        shape.setUniqueIdentifier();
         return shape;
 
     }
