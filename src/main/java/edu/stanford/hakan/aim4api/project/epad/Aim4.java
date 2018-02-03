@@ -1628,9 +1628,11 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 	
 	public void addAimShape(TwoDimensionGeometricShapeEntity shape){
-		if (aimShapes!=null){
-			aimShapes.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
+		if (aimShapes==null){
+			aimShapes = new ArrayList<Shape>();
 		}
+		aimShapes.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
+		
 	}
 	
 	public void removeAimShape(int shapeId){
