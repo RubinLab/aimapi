@@ -1702,10 +1702,11 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
         			}
         		}
         	}
-        	if (!result.isEmpty())
-        		result2.addAll(result);
+        	
         	
         }
+        if (!result.isEmpty())
+    		result2.addAll(result);
         logger.info("result is "+ result.size());
         aimShapes=result2;
         return result2;
