@@ -76,7 +76,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -3066,14 +3065,23 @@ public abstract class Aim extends ImageAnnotation implements Aimapi, Serializabl
 //        this.setDateTime(builder.toString());
 //    }
     
-    // comment involves modality/series/slice info and free text so parse it and assign to variables
+ // comment involves prorammedComment and userComment so parse it and assign to variables
     public String getUserComment() {
     		String comment = this.getComment();
     		if(comment.contains("~*")) {
     			String[] comments = this.getComment().split("~\\*");
     			return comments[1];
     		}
-    		return comment;
+    		return "";
+    }
+    
+    public String getProgrammedComment() {
+		String comment = this.getComment();
+		if(comment.contains("~*")) {
+			String[] comments = this.getComment().split("~\\*");
+			return comments[0];
+		}
+		return comment;
     }
     
 }

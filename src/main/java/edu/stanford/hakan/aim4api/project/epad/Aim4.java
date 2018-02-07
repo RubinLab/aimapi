@@ -179,6 +179,7 @@ import edu.stanford.hakan.aim4api.utility.GenerateId;
 public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
 	private static final Logger logger = Logger.getLogger("Aim4");
+	public static final String commentSeperator = "~~"; //some special chars need escape in string.contains function, changing the separator needs attention 
 
 	String DSO_SOP_CLASSUID = "1.2.840.10008.5.1.4.1.1.66.4";
 
@@ -1028,14 +1029,23 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
         this.getImageAnnotation().getCalculationEntityCollection().addCalculationEntity(newCalculation);
     }
 	
-	// comment involves modality/series/slice info and free text so parse it and assign to variables
+	// comment involves prorammedComment and userComment so parse it and assign to variables
     public String getUserComment() {
     		String comment = this.getComment();
-    		if(comment.contains("~*")) {
-    			String[] comments = this.getComment().split("~\\*");
+    		if(comment.contains(Aim4.commentSeperator)) {
+    			String[] comments = this.getComment().split(Aim4.commentSeperator);
     			return comments[1];
     		}
     		return comment;
+    }
+    
+    public String getProgrammedComment() {
+		String comment = this.getComment();
+		if(comment.contains(Aim4.commentSeperator)) {
+			String[] comments = this.getComment().split(Aim4.commentSeperator);
+			return comments[0];
+		}
+		return comment;
     }
   
 	public void addCalculationEntityWithRef(CalculationEntity newCalculation,SegmentationEntity seg) {
