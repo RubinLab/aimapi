@@ -3068,8 +3068,8 @@ public abstract class Aim extends ImageAnnotation implements Aimapi, Serializabl
  // comment involves prorammedComment and userComment so parse it and assign to variables
     public String getUserComment() {
     		String comment = this.getComment();
-    		if(comment.contains("~*")) {
-    			String[] comments = this.getComment().split("~\\*");
+    		if(comment.contains(Aim4.commentSeperator)) {
+    			String[] comments = this.getComment().split(Aim4.commentSeperator);
     			return comments[1];
     		}
     		return "";
@@ -3077,8 +3077,8 @@ public abstract class Aim extends ImageAnnotation implements Aimapi, Serializabl
     
     public String getProgrammedComment() {
 		String comment = this.getComment();
-		if(comment.contains("~*")) {
-			String[] comments = this.getComment().split("~\\*");
+		if(comment.contains(Aim4.commentSeperator)) {
+			String[] comments = this.getComment().split(Aim4.commentSeperator);
 			return comments[0];
 		}
 		return comment;

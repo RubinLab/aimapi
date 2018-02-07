@@ -1036,7 +1036,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
     			String[] comments = this.getComment().split(Aim4.commentSeperator);
     			return comments[1];
     		}
-    		return comment;
+    		return "";
     }
     
     public String getProgrammedComment() {
