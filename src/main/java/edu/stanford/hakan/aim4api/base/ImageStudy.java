@@ -69,7 +69,7 @@ public class ImageStudy implements IAimXMLOperations {
     }
 
     public void setStartTime(String startTime) {
-        this.startTime = startTime;
+        this.startTime = startTime.replace(":", "");
     }
 
     public ST getProcedureDescription() {
@@ -168,10 +168,10 @@ public class ImageStudy implements IAimXMLOperations {
                 this.setInstanceUid(obj);
             }
             if ("startDate".equals(currentNode.getNodeName())) {
-                this.startDate = currentNode.getAttributes().getNamedItem("value").getNodeValue();
+                this.setStartDate(currentNode.getAttributes().getNamedItem("value").getNodeValue());
             }
             if ("startTime".equals(currentNode.getNodeName())) {
-                this.startTime = currentNode.getAttributes().getNamedItem("value").getNodeValue();
+            	this.setStartTime(currentNode.getAttributes().getNamedItem("value").getNodeValue());
             }
             if ("procedureDescription".equals(currentNode.getNodeName())) {
                 ST obj = new ST();
