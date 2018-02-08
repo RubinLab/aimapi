@@ -151,7 +151,12 @@ public class AnnotationBuilder {
         return Anno;
     	
     }
-
+    /**
+     * added this code to change the datetime to dicomformat. 
+     * Changes it but getXMLNode puts back a new GMT as it figures the aim is edited
+     * @param Anno
+     * @return
+     */
     private static ImageAnnotationCollection formatDateTimeForFile(ImageAnnotationCollection Anno){
     	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
     		Logger.write("old datetime is "+ia.getDateTime());
