@@ -31,7 +31,6 @@ import edu.stanford.hakan.aim4api.base.MarkupEntity;
 import edu.stanford.hakan.aim4api.base.TwoDimensionPolyline;
 import edu.stanford.hakan.aim4api.base.TwoDimensionSpline;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -51,6 +50,20 @@ public class Utility {
         return sdf.format(currentTime);
     }
 
+    public static String parseGMTToLocalDicomTime(String GMTdate){
+    	
+    	SimpleDateFormat sdfgmt = new SimpleDateFormat("MM.dd.yyyy'T'hh:mm:ssa'.Zone:'z");
+        sdfgmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = null;
+        try {
+            date = sdfgmt.parse(GMTdate);
+        } catch (Exception e) {Logger.write("error in gmt date conversion "+e.getMessage());}
+    	
+        SimpleDateFormat dicomsdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        
+        return dicomsdf.format(date);
+    	
+    }
     public static String correctToUrl(String Url) {
         String[] tempArray = Url.split("/");
         String res = "";

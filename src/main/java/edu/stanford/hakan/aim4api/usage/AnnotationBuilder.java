@@ -29,17 +29,29 @@ package edu.stanford.hakan.aim4api.usage;
 
 import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.CD;
+import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationResult;
+import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
+import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
+import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
+import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
+import edu.stanford.hakan.aim4api.project.epad.Aim4;
 import edu.stanford.hakan.aim4api.resources.Resource;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier;
 import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Logger;
+import edu.stanford.hakan.aim4api.utility.Utility;
 import edu.stanford.hakan.aim4api.utility.XML;
 import java.io.StringWriter;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -73,9 +85,89 @@ public class AnnotationBuilder {
     private static void clearAimXMLsaveResult() {
         aimXMLsaveResult = "";
     }
+    
+    private static ImageAnnotationCollection fixVersionChangeIssues(ImageAnnotationCollection Anno){
+    	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
+    		//fix the old incorrect CT value 
+            for (ImageReferenceEntity ir:ia.getImageReferenceEntityCollection().getImageReferenceEntityList()){
+        		if (ir instanceof DicomImageReferenceEntity){
+        			try {
+        				CD obj=((DicomImageReferenceEntity)ir).getImageStudy().getImageSeries().getModality();
+        				if (obj!=null && obj.getCode().equals("CT") && obj.getDisplayName().getValue().equals("Computed Radiography"))
+        					obj.getDisplayName().setValue("Computed Tomography");
+        				((DicomImageReferenceEntity)ir).getImageStudy().getImageSeries().setModality(obj);
+        			}catch(Exception e){
+        				
+        			}
+        			
+        		}
+        	}
+            String units="";
+        	//fix calculations. issues: two types according to the modality, ucumstring in unitofmeasure,datatype 
+            for (CalculationEntity ce:ia.getCalculationEntityCollection().getCalculationEntityList()){
+            	for (CalculationResult cr: ce.getCalculationResultCollection().getCalculationResultList()){
+            		cr.setUnitOfMeasure(new ST(Aim4.getUCUMUnit(cr.getUnitOfMeasure().getValue())));
+            		units=cr.getUnitOfMeasure().getValue();
+            		//everything is double!
+            		cr.setDataType(new CD("C48870","Double","NCI"));
+            	}
+            	if (ce.getListTypeCode().size()==1){//this is old format see if the modality is ct or pet and add to the beginning
+            		CD typeCode=null;
+            		try {
+            			//get the first and see if you can find modalty
+        				CD obj=((DicomImageReferenceEntity)ia.getImageReferenceEntityCollection().get(0)).getImageStudy().getImageSeries().getModality();
+        				if (obj!=null && obj.getCode().equals("PET")) {
+        					typeCode = new CD("126401","SUVbw","DCM");
+        				}
+        				if (obj!=null && obj.getCode().equals("CT")) {
+            				typeCode = new CD("112031","Attenuation Coefficient","DCM");
+        				}
+        					
+        			}catch(Exception e){
+        				if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
+        					typeCode = new CD("126401","SUVbw","DCM");
+        				}
+        				if (units.equals("HU") || units.equals("[hnsf'U]")) {
+        					typeCode = new CD("112031","Attenuation Coefficient","DCM");
+        				}
+        			}
+            		//we need to add to the beginning
+            		if (typeCode!=null){
+	            		List<CD> listTypeCode=ce.getListTypeCode();
+	            		listTypeCode.add(0,typeCode);
+	            		ce.setTypeCode(listTypeCode);
+            		}
+            	}
+            	
+            	//template fix???
+            	
+            	//addrefs
+            	
+            	//datetime
+            	
+            }
+	    	
+        }
+        return Anno;
+    	
+    }
 
+    private static ImageAnnotationCollection formatDateTimeForFile(ImageAnnotationCollection Anno){
+    	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
+    		Logger.write("old datetime is "+ia.getDateTime());
+    		if (ia.getDateTime().contains("GMT")){
+    			ia.setDateTime(Utility.parseGMTToLocalDicomTime(ia.getDateTime()));
+        		Logger.write("new datetime is "+ia.getDateTime());
+    		}
+    		
+    	}
+    	return Anno;
+    }
     public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException {
         try {
+        	Anno=fixVersionChangeIssues(Anno);
+        	//only for save change the datetime format
+        	Anno=formatDateTimeForFile(Anno);
         	Logger.write("save ");
             if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
                 PathXSD = Globals.getXSDPath();
@@ -113,6 +205,7 @@ public class AnnotationBuilder {
 
     public static String convertToString(ImageAnnotationCollection Anno) throws AimException {
         try {
+        	Anno=fixVersionChangeIssues(Anno);
         	Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
             XML.setBaseAttributes(root);

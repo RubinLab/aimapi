@@ -1115,7 +1115,12 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		Date now=new Date();
 		
 //		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-		return ""+((now.getYear()+1900))+addLeadingZeros(now.getMonth())+addLeadingZeros(now.getDate())+addLeadingZeros(now.getHours())+addLeadingZeros(now.getMinutes())+addLeadingZeros(now.getSeconds());
+		return getFormattedDateTimeString(now);
+	}
+	
+	public static String getFormattedDateTimeString(Date date){
+		return ""+((date.getYear()+1900))+addLeadingZeros(date.getMonth())+addLeadingZeros(date.getDate())+addLeadingZeros(date.getHours())+addLeadingZeros(date.getMinutes())+addLeadingZeros(date.getSeconds());
+
 	}
 	
 	public static String addLeadingZeros(Integer val){
@@ -1596,7 +1601,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	public String getCodeMeaning() {
 		if (this.getImageAnnotation().getListTypeCode()==null || this.getImageAnnotation().getListTypeCode().isEmpty())
 			return null;
-		return this.getImageAnnotation().getListTypeCode().get(0).getCodeSystem();
+		return this.getImageAnnotation().getListTypeCode().get(0).getDisplayName().getValue();
 	}
 	
 	public String getCodingSchemeDesignator() {
@@ -1623,7 +1628,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	
 
 	public void setCodeMeaning(String val) {
-		this.getImageAnnotation().getListTypeCode().get(0).setCodeSystem(val);
+		this.getImageAnnotation().getListTypeCode().get(0).setDisplayName(new ST(val));
 		
 	}
 
