@@ -1400,9 +1400,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
             shape.setIncludeFlag(true);
             addMarkupEntity(shape);
-            addAimShape(shape);
         }
-
+        //we should send all shapes so it can check if normal
+        addAimShapes(shapes);
+        
         if (!hasImage(imageID)) {
             updateImageID(studyID, seriesID, imageID, activeImage, studyDate,
                     studyTime, imageClassUID,accessionNumber);
@@ -1642,11 +1643,15 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		
 	}
 	
-	public void addAimShape(TwoDimensionGeometricShapeEntity shape){
+	public void addAimShapes(List<TwoDimensionGeometricShapeEntity> shapes){
 		if (aimShapes==null){
 			aimShapes = new ArrayList<Shape>();
 		}
-		aimShapes.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
+		List<Shape> result = new ArrayList<Shape>();
+        for (TwoDimensionGeometricShapeEntity shape : shapes) {
+            result.add(new Shape(shape));
+        }
+        aimShapes.addAll(organizeNormals(result));
 		
 	}
 	
@@ -1667,6 +1672,62 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	        }
 		}
 	}
+	
+	public Normal getNormalIfPerpendicular(Shape s1, Shape s2){
+		if (s1.getShapeType()==ShapeType.LINE && s2.getShapeType()==ShapeType.LINE){
+			//see if the lines are perpendicular
+//        	by computing the dot product of their vectors and
+//        	determining that it is zero (within an appropriate floating point
+//        	precision related tolerance)
+
+        	Double x0=s1.getCoords().get(0).getX();
+        	Double y0=s1.getCoords().get(0).getY();
+        	Double x1=s1.getCoords().get(1).getX();
+        	Double y1=s1.getCoords().get(1).getY();
+        	Double x2=s2.getCoords().get(0).getX();
+        	Double y2=s2.getCoords().get(0).getY();
+        	Double x3=s2.getCoords().get(1).getX();
+        	Double y3=s2.getCoords().get(1).getY();
+        	logger.info("cross product is "+roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)));
+        	if (roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)) == 0) {
+        		//it is orthogonal
+        		logger.info("lines are orthogonal. create a normal shape instead");
+        		Normal n=new Normal(s1,s2);
+        		//put the smallest shape id of the lines to the normal shape
+        		int si=(s1.getShapeIdentifier()<s2.getShapeIdentifier()?s1.getShapeIdentifier():s2.getShapeIdentifier());
+        		n.setShapeIdentifier(si);
+        		return n;
+        	}
+		}
+        	
+		return null;
+	}
+	
+	public List<Shape> organizeNormals(List<Shape> result){
+		List<Shape> result2 = new ArrayList<Shape>();
+        //see if there are 2 lines and if they are orthogonal put a normal shape instead
+        if (result.size()>=2) {
+        	for (int i=0;i<result.size();i++){
+        		for (int j=i+1;j<result.size();j++){
+        			Normal n=null;
+        			if ((n=getNormalIfPerpendicular(result.get(i),result.get(j)))!=null){
+        				result2.add(n);
+        	        	result.remove(j);
+        	        	result.remove(i);
+        	        	i--;
+        	        		
+        	        	break;
+        	        	
+        			}
+        		}
+        	}
+        }
+        if (!result.isEmpty())
+    		result2.addAll(result);
+
+        logger.info("result is "+ result.size());
+        return result2;
+	}
 
 	public List<Shape> getShapes() {
 		if (aimShapes!=null){
@@ -1678,51 +1739,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
             if (shape instanceof TwoDimensionGeometricShapeEntity)
             	result.add(new Shape((TwoDimensionGeometricShapeEntity)shape));
         }
-        List<Shape> result2 = new ArrayList<Shape>();
-        //see if there are 2 lines and if they are orthogonal put a normal shape instead
-        if (result.size()>=2) {
-        	for (int i=0;i<result.size();i++){
-        		for (int j=i+1;j<result.size();j++){
-        			if (result.get(i).getShapeType()==ShapeType.LINE && result.get(j).getShapeType()==ShapeType.LINE){
-        				//see if the lines are perpendicular
-//        	        	by computing the dot product of their vectors and
-//        	        	determining that it is zero (within an appropriate floating point
-//        	        	precision related tolerance)
-
-        	        	Double x0=result.get(0).getCoords().get(0).getX();
-        	        	Double y0=result.get(0).getCoords().get(0).getY();
-        	        	Double x1=result.get(0).getCoords().get(1).getX();
-        	        	Double y1=result.get(0).getCoords().get(1).getY();
-        	        	Double x2=result.get(1).getCoords().get(0).getX();
-        	        	Double y2=result.get(1).getCoords().get(0).getY();
-        	        	Double x3=result.get(1).getCoords().get(1).getX();
-        	        	Double y3=result.get(1).getCoords().get(1).getY();
-        	        	logger.info("cross product is "+roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)));
-        	        	if (roundDouble((x1-x0)*(x3-x2) + (y1-y0)*(y3-y2)) == 0) {
-        	        		//it is orthogonal
-        	        		logger.info("lines are orthogonal. create a normal shape instead");
-        	        		Normal n=new Normal(result.get(0),result.get(1));
-        	        		//put the smallest shape id of the lines to the normal shape
-        	        		int si=(result.get(0).getShapeIdentifier()<result.get(1).getShapeIdentifier()?result.get(0).getShapeIdentifier():result.get(1).getShapeIdentifier());
-        	        		n.setShapeIdentifier(si);
-        	        		result2.add(n);
-        	        		result.remove(j);
-        	        		result.remove(i);
-        	        		i--;
-        	        		
-        	        		break;
-//        	        		j--;
-        	        	}
-        				
-        			}
-        		}
-        	}
-        	
-        	
-        }
-        if (!result.isEmpty())
-    		result2.addAll(result);
-        logger.info("result is "+ result.size());
+        List<Shape> result2 =organizeNormals(result);
         aimShapes=result2;
         return result2;
 	}
