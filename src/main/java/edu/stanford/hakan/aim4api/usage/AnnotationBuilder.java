@@ -31,6 +31,8 @@ import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesMarkupEntityStatement;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesSegmentationEntityStatement;
 import edu.stanford.hakan.aim4api.base.CalculationResult;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
@@ -102,6 +104,15 @@ public class AnnotationBuilder {
         			
         		}
         	}
+            boolean addAnnotationStatements=false;
+            //no annotation statements in aim
+            if (ia.getImageAnnotationStatementCollection()==null || ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().isEmpty()){
+            	addAnnotationStatements=true;
+            }else if (!(ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().get(0) instanceof CalculationEntityReferencesSegmentationEntityStatement) && !(ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().get(0) instanceof CalculationEntityReferencesMarkupEntityStatement)){
+            	//clear image annotation statements and create them correctly
+            	ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().clear();
+            	addAnnotationStatements=true;
+            }
             String units="";
         	//fix calculations. issues: two types according to the modality, ucumstring in unitofmeasure,datatype 
             for (CalculationEntity ce:ia.getCalculationEntityCollection().getCalculationEntityList()){
@@ -146,6 +157,21 @@ public class AnnotationBuilder {
             	//template fix???
             	
             	//addrefs
+            	if (addAnnotationStatements){
+            		if (ia.getMarkupEntityCollection()!=null && ia.getSegmentationEntityCollection()!=null){
+            			Logger.write("Don't know which shape is the calculation from not adding ref");
+            		}
+            		//find the shape. what if more than one shape
+            		//geometric
+            		if (ia.getMarkupEntityCollection()!=null && ia.getMarkupEntityCollection().size()==1){
+            			ia.addImageAnnotationStatement(Aim4.createCalcRefMarkupStatement(ce, ia.getMarkupEntityCollection().getMarkupEntityList().get(0)));
+            		}
+            		//segmentation
+            		if (ia.getSegmentationEntityCollection()!=null && ia.getSegmentationEntityCollection().size()==1){
+            			ia.addImageAnnotationStatement(Aim4.createCalcRefSegStatement(ce, ia.getSegmentationEntityCollection().getSegmentationEntityList().get(0)));
+            		}
+            	}
+            	
             	
             	//datetime
             	
