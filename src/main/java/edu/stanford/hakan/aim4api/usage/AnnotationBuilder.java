@@ -113,24 +113,28 @@ public class AnnotationBuilder {
             	}
             	if (ce.getListTypeCode().size()==1){//this is old format see if the modality is ct or pet and add to the beginning
             		CD typeCode=null;
-            		try {
-            			//get the first and see if you can find modalty
-        				CD obj=((DicomImageReferenceEntity)ia.getImageReferenceEntityCollection().get(0)).getImageStudy().getImageSeries().getModality();
-        				if (obj!=null && obj.getCode().equals("PET")) {
-        					typeCode = new CD("126401","SUVbw","DCM");
-        				}
-        				if (obj!=null && obj.getCode().equals("CT")) {
-            				typeCode = new CD("112031","Attenuation Coefficient","DCM");
-        				}
-        					
-        			}catch(Exception e){
-        				if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
-        					typeCode = new CD("126401","SUVbw","DCM");
-        				}
-        				if (units.equals("HU") || units.equals("[hnsf'U]")) {
-        					typeCode = new CD("112031","Attenuation Coefficient","DCM");
-        				}
-        			}
+            		if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
+    					typeCode = new CD("126401","SUVbw","DCM");
+    				}
+    				if (units.equals("HU") || units.equals("[hnsf'U]")) {
+    					typeCode = new CD("112031","Attenuation Coefficient","DCM");
+    				}
+    				//try and fix old aims with pixels in units
+    				if (units.equals("pixels")){
+	            		try {
+	            			//get the first and see if you can find modalty
+	        				CD obj=((DicomImageReferenceEntity)ia.getImageReferenceEntityCollection().get(0)).getImageStudy().getImageSeries().getModality();
+	        				if (obj!=null && obj.getCode().equals("PET")) {
+	        					typeCode = new CD("126401","SUVbw","DCM");
+	        				}
+	        				if (obj!=null && obj.getCode().equals("CT")) {
+	            				typeCode = new CD("112031","Attenuation Coefficient","DCM");
+	        				}
+	        					
+	        			}catch(Exception e){
+	        				
+	        			}
+            		}
             		//we need to add to the beginning
             		if (typeCode!=null){
 	            		List<CD> listTypeCode=ce.getListTypeCode();

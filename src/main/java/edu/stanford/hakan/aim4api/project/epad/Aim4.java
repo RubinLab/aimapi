@@ -975,7 +975,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 //		calculationData.addCoordinate(0, 0);
 //
 		// Create a Dimension instance
-		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
+		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, name);
 //
 //		// Add calculationData to calculationResult
 //		calculationResult.addCalculationData(calculationData);
