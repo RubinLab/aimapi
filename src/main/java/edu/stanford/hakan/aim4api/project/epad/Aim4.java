@@ -2189,11 +2189,13 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
 	public static String getUCUMUnit(String units) {
 		if (units==null || units.equalsIgnoreCase("pixels")) 
-			return "no units";
+			return "1";
 		if (units.equalsIgnoreCase("HU")) {
 			return "[hnsf'U]";
 		}else if (units.equalsIgnoreCase("SUV")) {
 			return "{SUVbw}g/ml";
+		}else if (units.equalsIgnoreCase("ratio")) {
+			return "{ratio}";
 		}
 		return units;
     }
