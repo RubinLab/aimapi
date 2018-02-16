@@ -119,6 +119,8 @@ public class Lexicon extends HashMap<String, CD> {
 			this.put("S75", new CD("S75","Non-cancer Lesion",ePadDesignator,ePadLexVersion));
 			this.put("S86", new CD("S86","Evaluable",ePadDesignator,ePadLexVersion));
 			
+			this.put("rsz-2", new CD("rsz-2","energie",ePadDesignator,ePadLexVersion));
+			
 		} catch (Exception e) {
 			logger.info("Error getting lexicon "+ e.getMessage());
 			throw new RuntimeException(e.getMessage());
