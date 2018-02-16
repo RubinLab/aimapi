@@ -254,6 +254,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 			if (iac.getAccessionNumber()!=null) setAccessionNumber(iac.getAccessionNumber());
 		}
 		
+		setAimSeriesInstanceUid(iac.getSeriesInstanceUid());
 	}
 
 	
