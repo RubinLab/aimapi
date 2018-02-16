@@ -127,7 +127,8 @@ public class CalculationEntity extends Entity {
     }
 
     public void setAlgorithm(Algorithm algorithm) {
-        algorithm.setTagName("algorithm");
+    	if (algorithm!=null)
+    		algorithm.setTagName("algorithm");
         this.algorithm = algorithm;
     }
 

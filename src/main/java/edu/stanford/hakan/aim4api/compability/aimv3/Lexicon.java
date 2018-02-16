@@ -84,9 +84,40 @@ public class Lexicon extends HashMap<String, CD> {
 			this.put("C48870", new CD("C48870","Double","NCI"));
 			
 			//plugins,  start with 99EPADP
-			this.put(pluginPrefix+"1", new CD(pluginPrefix+"1","JJVector",ePadDesignator,ePadLexVersion));
 			this.put(pluginPrefix+"2", new CD(pluginPrefix+"2","Qifp3D",ePadDesignator,ePadLexVersion));
 			
+			this.put("jjv-5", new CD("jjv-5","jjvector",ePadDesignator,ePadLexVersion));
+			this.put("vanderbilt", new CD("vanderbilt","vanderbilt",ePadDesignator,ePadLexVersion));
+			this.put("smp-1", new CD("smp-1","sampleplugin",ePadDesignator,ePadLexVersion));
+			this.put("rsz-1", new CD("rsz-1","riesz",ePadDesignator,ePadLexVersion));
+			this.put("lseg-1", new CD("lseg-1","lesionseg",ePadDesignator,ePadLexVersion));
+			this.put("ts-1", new CD("ts-1","tedseg",ePadDesignator,ePadLexVersion));
+
+			//others
+			
+			this.put("SEG", new CD("SEG","SEG Only",ePadDesignator,ePadLexVersion));
+			this.put("ROI", new CD("ROI","ROI Only",ePadDesignator,ePadLexVersion));
+			
+			this.put("jjv-1", new CD("jjv-1","Lung CT",ePadDesignator,ePadLexVersion));
+			this.put("jjv-2", new CD("jjv-2","Liver CT",ePadDesignator,ePadLexVersion));
+			this.put("jjv-3", new CD("jjv-3","Breast MRI",ePadDesignator,ePadLexVersion));
+			this.put("jjv-4", new CD("jjv-4","Bone X-ray",ePadDesignator,ePadLexVersion));
+			
+			this.put("RECIST", new CD("RECIST","Tumor assessment",ePadDesignator,ePadLexVersion));
+			this.put("S71", new CD("S71","Target Lesion",ePadDesignator,ePadLexVersion));
+			this.put("S72", new CD("S72","Non-Target Lesion",ePadDesignator,ePadLexVersion));
+			this.put("S73", new CD("S73","New Lesion",ePadDesignator,ePadLexVersion));
+			this.put("S74", new CD("S74","Resolved Lesion",ePadDesignator,ePadLexVersion));
+			this.put("S81", new CD("S81","Lesion Baseline Evaluation",ePadDesignator,ePadLexVersion));
+			this.put("S82", new CD("S82","Lesion Followup Evaluation",ePadDesignator,ePadLexVersion));
+			this.put("S83", new CD("S83","tracked",ePadDesignator,ePadLexVersion));
+			this.put("S84", new CD("S84","not tracked",ePadDesignator,ePadLexVersion));
+			
+			this.put("RECIST_v2", new CD("RECIST_v2","Tumor assessment",ePadDesignator,ePadLexVersion));
+			this.put("S99", new CD("S99","undefined organ",ePadDesignator,ePadLexVersion));
+			this.put("S90", new CD("S90","FU Number (0=Baseline)",ePadDesignator,ePadLexVersion));
+			this.put("S75", new CD("S75","Non-cancer Lesion",ePadDesignator,ePadLexVersion));
+			this.put("S86", new CD("S86","Evaluable",ePadDesignator,ePadLexVersion));
 			
 		} catch (Exception e) {
 			logger.info("Error getting lexicon "+ e.getMessage());
