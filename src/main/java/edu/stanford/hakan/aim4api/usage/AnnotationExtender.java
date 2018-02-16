@@ -113,10 +113,18 @@ public class AnnotationExtender {
         
         if (calculation != null) {
         	if (calculation.getCalculationResultCollection().getCalculationResultList().get(0) instanceof CompactCalculationResult)
-        		((CompactCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).setValue(new ST(String.valueOf(featureValue)));
+        		if (label.equalsIgnoreCase(((CompactCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).getDimensionCollection().get(0).getLabel().getValue()))
+        			((CompactCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).setValue(new ST(String.valueOf(featureValue)));
+        		else{//add a new calculation result
+        			addFeatureToCalculation(calculation,  featureValue,  label,  unit);
+        		}
+        			
         	else if (calculation.getCalculationResultCollection().getCalculationResultList().get(0) instanceof ExtendedCalculationResult)
-        		((ExtendedCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).getCalculationDataCollection().getCalculationDataList().get(0).setValue(new ST(String.valueOf(featureValue)));
-
+        		if (label.equalsIgnoreCase(((ExtendedCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).getDimensionCollection().get(0).getLabel().getValue()))
+            		((ExtendedCalculationResult)calculation.getCalculationResultCollection().getCalculationResultList().get(0)).getCalculationDataCollection().getCalculationDataList().get(0).setValue(new ST(String.valueOf(featureValue)));
+        		else{//add a new calculation result
+        			addFeatureToCalculation(calculation,  featureValue,  label,  unit);
+        		}
         } else {
         	imageAnnotationCollection.getImageAnnotation().addCalculationEntity(createCalculationForFeature(imageAnnotationCollection, featureValue, feature, calcCD, label, unit));
         }
