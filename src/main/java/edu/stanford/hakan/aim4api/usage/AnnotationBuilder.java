@@ -29,20 +29,30 @@ package edu.stanford.hakan.aim4api.usage;
 
 import edu.stanford.hakan.aim4api.audittrail.AuditTrailManager;
 import edu.stanford.hakan.aim4api.base.AimException;
+import edu.stanford.hakan.aim4api.base.Algorithm;
 import edu.stanford.hakan.aim4api.base.CD;
 import edu.stanford.hakan.aim4api.base.CalculationEntity;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesMarkupEntityStatement;
+import edu.stanford.hakan.aim4api.base.CalculationEntityReferencesSegmentationEntityStatement;
 import edu.stanford.hakan.aim4api.base.CalculationResult;
 import edu.stanford.hakan.aim4api.base.DicomImageReferenceEntity;
 import edu.stanford.hakan.aim4api.base.ImageAnnotation;
 import edu.stanford.hakan.aim4api.base.ImageAnnotationCollection;
 import edu.stanford.hakan.aim4api.base.ImageReferenceEntity;
+import edu.stanford.hakan.aim4api.base.ImagingObservationCharacteristic;
+import edu.stanford.hakan.aim4api.base.ImagingObservationEntity;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntity;
+import edu.stanford.hakan.aim4api.base.ImagingPhysicalEntityCharacteristic;
 import edu.stanford.hakan.aim4api.base.ST;
 import edu.stanford.hakan.aim4api.base.TwoDimensionMultiPoint;
+import edu.stanford.hakan.aim4api.compability.aimv3.Lexicon;
 import edu.stanford.hakan.aim4api.database.exist.ExistManager;
 import edu.stanford.hakan.aim4api.plugin.v4.PluginV4;
 import edu.stanford.hakan.aim4api.project.epad.Aim4;
 import edu.stanford.hakan.aim4api.resources.Resource;
 import static edu.stanford.hakan.aim4api.usage.AnnotationGetter.getImageAnnotationCollectionByUniqueIdentifier;
+
+import edu.stanford.hakan.aim4api.utility.EPADConfig;
 import edu.stanford.hakan.aim4api.utility.Globals;
 import edu.stanford.hakan.aim4api.utility.Logger;
 import edu.stanford.hakan.aim4api.utility.Utility;
@@ -51,7 +61,9 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -63,6 +75,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -73,7 +86,9 @@ public class AnnotationBuilder {
     private static final String apiVersion = "1.4";
     // private static String validationResult;
     private static String aimXMLsaveResult = "";
-
+    
+    private static List<String> oldNoLexicon=Arrays.asList("RECIST","SEG","VB","SMP","RSZ","LSEG","TS","JJV");
+	
     public static String getAimXMLsaveResult() {
         return aimXMLsaveResult.trim();
     }
@@ -86,7 +101,26 @@ public class AnnotationBuilder {
         aimXMLsaveResult = "";
     }
     
+    private static void fixCD(CD cd){
+    	if (oldNoLexicon.contains(cd.getCodeSystemName())){
+    		Lexicon lx=Lexicon.getInstance();
+    		CD lexCD=lx.get(cd.getCode());
+    		
+	    	cd.setCodeSystemName(lexCD.getCodeSystemName());
+			cd.setCodeSystemVersion(lexCD.getCodeSystemVersion());
+			//should also set the name, epad-plugin doesn't make sense
+			if (cd.getDisplayName().getValue().equals("epad-plugin")){
+				cd.setDisplayName(lexCD.getDisplayName());
+			}
+    	}
+    }
     private static ImageAnnotationCollection fixVersionChangeIssues(ImageAnnotationCollection Anno){
+    	
+    	boolean fixAims="true".equalsIgnoreCase(EPADConfig.getInstance().getParam("fixAims"));
+    	if (!fixAims){
+    		Logger.write("Configuration file doesn't have fixAims parameter set to true. Not fixing the old aims");
+    		return Anno;
+    	}
     	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
     		//fix the old incorrect CT value 
             for (ImageReferenceEntity ir:ia.getImageReferenceEntityCollection().getImageReferenceEntityList()){
@@ -102,6 +136,57 @@ public class AnnotationBuilder {
         			
         		}
         	}
+            
+        	Logger.write("fixing template issues");
+        	//check if the aim has controlled terms that are from our old templates
+        	//check the template first
+        	if (ia.getListTypeCode()!=null && !ia.getListTypeCode().isEmpty()){
+            	fixCD(ia.getListTypeCode().get(0));
+        	}
+        	
+        	//check other items physical, vb
+        	for (ImagingPhysicalEntity pe:ia.getImagingPhysicalEntityCollection().getImagingPhysicalEntityList()){
+        		if (pe.getListTypeCode()!=null && !pe.getListTypeCode().isEmpty()){
+        			fixCD(pe.getListTypeCode().get(0));
+        		}
+        		//these two doesn't exist in our templates, put just in case
+        		if (pe.getImagingPhysicalEntityCharacteristicCollection()!=null){
+	        		for (ImagingPhysicalEntityCharacteristic pec:pe.getImagingPhysicalEntityCharacteristicCollection().getImagingPhysicalEntityCharacteristicList()){
+	        			if (pec.getListTypeCode()!=null && !pec.getListTypeCode().isEmpty()){
+		        			fixCD(pec.getListTypeCode().get(0));
+		        		}
+	        		}
+        		}
+        		if (pe.getImagingObservationCharacteristicCollection()!=null){
+	        		for (ImagingObservationCharacteristic ioc:pe.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList()){
+	        			if (ioc.getListTypeCode()!=null && !ioc.getListTypeCode().isEmpty()){
+		        			fixCD(ioc.getListTypeCode().get(0));
+		        		}
+	        		}
+        		}
+        	}
+        	for (ImagingObservationEntity oe:ia.getImagingObservationEntityCollection().getImagingObservationEntityList()){
+        		if (oe.getListTypeCode()!=null && !oe.getListTypeCode().isEmpty()){
+        			fixCD(oe.getListTypeCode().get(0));
+        		}
+        		if (oe.getImagingObservationCharacteristicCollection()!=null){
+	        		for (ImagingObservationCharacteristic ioc:oe.getImagingObservationCharacteristicCollection().getImagingObservationCharacteristicList()){
+	        			if (ioc.getListTypeCode()!=null && !ioc.getListTypeCode().isEmpty()){
+		        			fixCD(ioc.getListTypeCode().get(0));
+		        		}
+	        		}
+        		}
+        	}
+            
+            boolean addAnnotationStatements=false;
+            //no annotation statements in aim
+            if (ia.getImageAnnotationStatementCollection()==null || ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().isEmpty()){
+            	addAnnotationStatements=true;
+            }else if (!(ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().get(0) instanceof CalculationEntityReferencesSegmentationEntityStatement) && !(ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().get(0) instanceof CalculationEntityReferencesMarkupEntityStatement)){
+            	//clear image annotation statements and create them correctly
+            	ia.getImageAnnotationStatementCollection().getImageAnnotationStatementList().clear();
+            	addAnnotationStatements=true;
+            }
             String units="";
         	//fix calculations. issues: two types according to the modality, ucumstring in unitofmeasure,datatype 
             for (CalculationEntity ce:ia.getCalculationEntityCollection().getCalculationEntityList()){
@@ -113,24 +198,28 @@ public class AnnotationBuilder {
             	}
             	if (ce.getListTypeCode().size()==1){//this is old format see if the modality is ct or pet and add to the beginning
             		CD typeCode=null;
-            		try {
-            			//get the first and see if you can find modalty
-        				CD obj=((DicomImageReferenceEntity)ia.getImageReferenceEntityCollection().get(0)).getImageStudy().getImageSeries().getModality();
-        				if (obj!=null && obj.getCode().equals("PET")) {
-        					typeCode = new CD("126401","SUVbw","DCM");
-        				}
-        				if (obj!=null && obj.getCode().equals("CT")) {
-            				typeCode = new CD("112031","Attenuation Coefficient","DCM");
-        				}
-        					
-        			}catch(Exception e){
-        				if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
-        					typeCode = new CD("126401","SUVbw","DCM");
-        				}
-        				if (units.equals("HU") || units.equals("[hnsf'U]")) {
-        					typeCode = new CD("112031","Attenuation Coefficient","DCM");
-        				}
-        			}
+            		if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
+    					typeCode = new CD("126401","SUVbw","DCM");
+    				}
+    				if (units.equals("HU") || units.equals("[hnsf'U]")) {
+    					typeCode = new CD("112031","Attenuation Coefficient","DCM");
+    				}
+    				//try and fix old aims with pixels in units
+    				if (units.equals("pixels")){
+	            		try {
+	            			//get the first and see if you can find modalty
+	        				CD obj=((DicomImageReferenceEntity)ia.getImageReferenceEntityCollection().get(0)).getImageStudy().getImageSeries().getModality();
+	        				if (obj!=null && obj.getCode().equals("PET")) {
+	        					typeCode = new CD("126401","SUVbw","DCM");
+	        				}
+	        				if (obj!=null && obj.getCode().equals("CT")) {
+	            				typeCode = new CD("112031","Attenuation Coefficient","DCM");
+	        				}
+	        					
+	        			}catch(Exception e){
+	        				Logger.write("Cannot retrieve modality from aim "+e.getMessage());
+	        			}
+            		}
             		//we need to add to the beginning
             		if (typeCode!=null){
 	            		List<CD> listTypeCode=ce.getListTypeCode();
@@ -138,41 +227,84 @@ public class AnnotationBuilder {
 	            		ce.setTypeCode(listTypeCode);
             		}
             	}
-            	
-            	//template fix???
+            	//set/correct/clear the algorithm
+            	if (ce.getAlgorithm()!=null){ //it can be something weird from the old aims. delete and add plugin
+            		if (ce.getDescription().getValue().equalsIgnoreCase("Mean") || ce.getDescription().getValue().equalsIgnoreCase("Standard Deviation") ||ce.getDescription().getValue().equalsIgnoreCase("Minimum")||ce.getDescription().getValue().equalsIgnoreCase("Maximum")){
+            			//delete for old aims with algorithm for standard calculations
+            			ce.setAlgorithm(null);
+            		}else{
+	            		Algorithm alg=new Algorithm();
+	            		Lexicon lx=Lexicon.getInstance();
+	            		CD parentCD=lx.get(ia.getListTypeCode().get(0).getCode());
+	            		alg.setName(new ST(parentCD.getDisplayName().getValue()));
+	            		alg.setVersion(new ST(parentCD.getCodeSystemVersion()));
+	            		ArrayList<CD> types=new ArrayList<>();
+	            		types.add(parentCD);
+	            		alg.setType(types);
+	            		ce.setAlgorithm(alg);
+            		}
+            	}
             	
             	//addrefs
+            	if (addAnnotationStatements){
+            		if (ia.getMarkupEntityCollection()!=null && ia.getSegmentationEntityCollection()!=null){
+            			Logger.write("Don't know which shape is the calculation from not adding ref");
+            		}
+            		//find the shape. what if more than one shape
+            		//geometric
+            		if (ia.getMarkupEntityCollection()!=null && ia.getMarkupEntityCollection().size()==1){
+            			ia.addImageAnnotationStatement(Aim4.createCalcRefMarkupStatement(ce, ia.getMarkupEntityCollection().getMarkupEntityList().get(0)));
+            		}
+            		//segmentation
+            		if (ia.getSegmentationEntityCollection()!=null && ia.getSegmentationEntityCollection().size()==1){
+            			ia.addImageAnnotationStatement(Aim4.createCalcRefSegStatement(ce, ia.getSegmentationEntityCollection().getSegmentationEntityList().get(0)));
+            		}
+            	}
             	
-            	//datetime
+            	
+            	
             	
             }
-	    	
+         	
         }
         return Anno;
     	
     }
     /**
      * added this code to change the datetime to dicomformat. 
-     * Changes it but getXMLNode puts back a new GMT as it figures the aim is edited
-     * @param Anno
-     * @return
+     * had to do it in the produced xml
+     * @param root
      */
-    private static ImageAnnotationCollection formatDateTimeForFile(ImageAnnotationCollection Anno){
-    	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
-    		Logger.write("old datetime is "+ia.getDateTime());
-    		if (ia.getDateTime().contains("GMT")){
-    			ia.setDateTime(Utility.parseGMTToLocalDicomTime(ia.getDateTime()));
-        		Logger.write("new datetime is "+ia.getDateTime());
-    		}
-    		
-    	}
-    	return Anno;
+     public static void fixDateTime(Element root){
+    	NodeList listChilds = root.getChildNodes();
+        for (int i = 0; i < listChilds.getLength(); i++) {
+            Node currentNode = listChilds.item(i);
+            if ("imageAnnotations".equals(currentNode.getNodeName())) {
+                NodeList tempList = currentNode.getChildNodes();
+                for (int j = 0; j < tempList.getLength(); j++) {
+                    Node childNode = tempList.item(j);
+                    if ("ImageAnnotation".equals(childNode.getNodeName())) {
+                    	NodeList listChilds2 = childNode.getChildNodes();
+                        for (int i2 = 0; i2 < listChilds2.getLength(); i2++) {
+                            Node currentNode2 = listChilds2.item(i2);
+                            if ("dateTime".equals(currentNode2.getNodeName())) {
+                            	Logger.write("setting datetime "+ Utility.parseGMTToLocalDicomTime(currentNode2.getAttributes().getNamedItem("value").getNodeValue()));
+                            	currentNode2.getAttributes().getNamedItem("value").setNodeValue(Utility.parseGMTToLocalDicomTime(currentNode2.getAttributes().getNamedItem("value").getNodeValue()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    	
     }
     public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD) throws AimException {
+    	saveToFile(Anno, PathXML, PathXSD,false);
+    }    
+    public static void saveToFile(ImageAnnotationCollection Anno, String PathXML, String PathXSD, boolean dicomDate) throws AimException {
         try {
         	Anno=fixVersionChangeIssues(Anno);
         	//only for save change the datetime format
-        	Anno=formatDateTimeForFile(Anno);
         	Logger.write("save ");
             if (PathXSD != null && !"".equals(Globals.getXSDPath())) {
                 PathXSD = Globals.getXSDPath();
@@ -181,6 +313,7 @@ public class AnnotationBuilder {
             clearAimXMLsaveResult();
             Document doc = XML.createDocument();
             Element root = (Element) Anno.getXMLNode(doc);
+            if (dicomDate) fixDateTime(root);
             XML.setBaseAttributes(root);
             doc.appendChild(root);
             boolean valRes = true;

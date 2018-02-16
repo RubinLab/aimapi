@@ -254,6 +254,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 			if (iac.getAccessionNumber()!=null) setAccessionNumber(iac.getAccessionNumber());
 		}
 		
+		setAimSeriesInstanceUid(iac.getSeriesInstanceUid());
 	}
 
 	
@@ -975,7 +976,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 //		calculationData.addCoordinate(0, 0);
 //
 		// Create a Dimension instance
-		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, desc);
+		edu.stanford.hakan.aim4api.base.Dimension dimension = new edu.stanford.hakan.aim4api.base.Dimension(0, 1, name);
 //
 //		// Add calculationData to calculationResult
 //		calculationResult.addCalculationData(calculationData);
@@ -2189,11 +2190,13 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
 	public static String getUCUMUnit(String units) {
 		if (units==null || units.equalsIgnoreCase("pixels")) 
-			return "no units";
+			return "1";
 		if (units.equalsIgnoreCase("HU")) {
 			return "[hnsf'U]";
 		}else if (units.equalsIgnoreCase("SUV")) {
 			return "{SUVbw}g/ml";
+		}else if (units.equalsIgnoreCase("ratio")) {
+			return "{ratio}";
 		}
 		return units;
     }
