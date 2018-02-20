@@ -1926,7 +1926,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
                     for (ImagingObservationCharacteristic imagingObservationCharacteristic : listImagingObservationCharacteristic) {
                         if (imagingObservationCharacteristic.getLabel().getValue().equalsIgnoreCase(IOClabel)) {
                             if (imagingObservationCharacteristic.getListTypeCode()!= null) {
-                                return imagingObservationCharacteristic.getListTypeCode().get(0).getCode();
+                            	if (imagingObservationCharacteristic.getListTypeCode().size()>1)
+                            		return imagingObservationCharacteristic.getListTypeCode().get(1).getCode();
+        						else 
+        							return imagingObservationCharacteristic.getListTypeCode().get(0).getCode();
                                 //TODO what is this!!!!
 //	                            } else if (imagingObservationCharacteristic.getCodeValue() != null && !"".equals(imagingObservationCharacteristic.getCodeValue())) {
 //	                                return imagingObservationCharacteristic.getCodeValue();
@@ -1975,7 +1978,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
             for (ImagingObservationEntity imagingObservation : listImagingObservation) {
                 if (imagingObservation.getLabel().getValue().equalsIgnoreCase(label)) {
                     if (imagingObservation.getListTypeCode() != null) {
-                        return imagingObservation.getListTypeCode().get(0).getCode();
+                    	if (imagingObservation.getListTypeCode().size()>1)
+                    		return imagingObservation.getListTypeCode().get(1).getCode();
+						else 
+							return imagingObservation.getListTypeCode().get(0).getCode();
                         //TODO what is this 
 //                    } else if (imagingObservation.getCodeValue() != null && !"".equals(imagingObservation.getCodeValue())) {
 //                        return imagingObservation.getCodeValue();
