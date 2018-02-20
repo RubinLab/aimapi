@@ -467,12 +467,9 @@ public class Component implements Serializable {
 		String result="";
 		if (typeCodes==null)
 			return "";
-		if (typeCodes.size()==1){
-			result =typeCodes.get(0).getCode();
-		}
-		if (typeCodes.size()>1){
+		if (typeCodes.size()>=1){
 			result="";
-			for (int i = 1; i < typeCodes.size(); i++) {
+			for (int i = 0; i < typeCodes.size(); i++) {
 				result += " " + typeCodes.get(i).getCode();
 	
 			}
@@ -484,12 +481,9 @@ public class Component implements Serializable {
 		String result="";
 		if (typeCodes==null)
 			return "";
-		if (typeCodes.size()==1){
-			result =typeCodes.get(0).getDisplayName().getValue();
-		}
-		if (typeCodes.size()>1){
+		if (typeCodes.size()>=1){
 			result="";
-			for (int i = 1; i < typeCodes.size(); i++) {
+			for (int i = 0; i < typeCodes.size(); i++) {
 				result += typeCodes.get(i).getDisplayName().getValue() + " ";
 	
 			}
