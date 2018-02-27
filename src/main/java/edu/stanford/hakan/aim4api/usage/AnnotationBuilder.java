@@ -87,7 +87,7 @@ public class AnnotationBuilder {
     // private static String validationResult;
     private static String aimXMLsaveResult = "";
     
-    private static List<String> oldNoLexicon=Arrays.asList("RECIST","SEG","VB","SMP","RSZ","LSEG","TS","JJV");
+    public static List<String> oldNoLexicon=Arrays.asList("RECIST","SEG","VB","SMP","RSZ","LSEG","TS","JJV", "RECIST-AMS", "RECIST_v2","Tumor assessment");
 	
     public static String getAimXMLsaveResult() {
         return aimXMLsaveResult.trim();
@@ -105,22 +105,24 @@ public class AnnotationBuilder {
     	if (oldNoLexicon.contains(cd.getCodeSystemName())){
     		Lexicon lx=Lexicon.getInstance();
     		CD lexCD=lx.get(cd.getCode());
-    		
-	    	cd.setCodeSystemName(lexCD.getCodeSystemName());
-			cd.setCodeSystemVersion(lexCD.getCodeSystemVersion());
-			//should also set the name, epad-plugin doesn't make sense
-			if (cd.getDisplayName().getValue().equals("epad-plugin")){
-				cd.setDisplayName(lexCD.getDisplayName());
-			}
+    		if (lexCD!=null){
+		    	cd.setCodeSystemName(lexCD.getCodeSystemName());
+				cd.setCodeSystemVersion(lexCD.getCodeSystemVersion());
+				//should also set the name, epad-plugin doesn't make sense
+				if (cd.getDisplayName().getValue().equals("epad-plugin")){
+					cd.setDisplayName(lexCD.getDisplayName());
+				}
+				//codesystem is supposed to be the uid of the ontology, we have no info about uid
+				cd.setCodeSystem(null);
+    		}else if (cd.getCode().equals("RID7488") || cd.getCode().equals("RID396")){
+    			cd.setCodeSystemName("Radlex");
+    			cd.setCodeSystemVersion(null);
+    		}
     	}
     }
     private static ImageAnnotationCollection fixVersionChangeIssues(ImageAnnotationCollection Anno){
     	
-    	boolean fixAims="true".equalsIgnoreCase(EPADConfig.getInstance().getParam("fixAims"));
-    	if (!fixAims){
-    		Logger.write("Configuration file doesn't have fixAims parameter set to true. Not fixing the old aims");
-    		return Anno;
-    	}
+    	//always fix our template's aims (everything listed in oldNoLexicon)
     	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
     		//fix the old incorrect CT value 
             for (ImageReferenceEntity ir:ia.getImageReferenceEntityCollection().getImageReferenceEntityList()){
