@@ -121,7 +121,7 @@ public class AnnotationBuilder {
     	}
     }
     private static ImageAnnotationCollection fixVersionChangeIssues(ImageAnnotationCollection Anno){
-    	
+    	try{
     	//always fix our template's aims (everything listed in oldNoLexicon)
     	for (ImageAnnotation ia:Anno.getImageAnnotations()) {
     		//fix the old incorrect CT value 
@@ -145,7 +145,6 @@ public class AnnotationBuilder {
         	if (ia.getListTypeCode()!=null && !ia.getListTypeCode().isEmpty()){
             	fixCD(ia.getListTypeCode().get(0));
         	}
-        	
         	//check other items physical, vb
         	for (ImagingPhysicalEntity pe:ia.getImagingPhysicalEntityCollection().getImagingPhysicalEntityList()){
         		if (pe.getListTypeCode()!=null && !pe.getListTypeCode().isEmpty()){
@@ -198,6 +197,7 @@ public class AnnotationBuilder {
             		//everything is double!
             		cr.setDataType(new CD("C48870","Double","NCI"));
             	}
+                
             	if (ce.getListTypeCode().size()==1){//this is old format see if the modality is ct or pet and add to the beginning
             		CD typeCode=null;
             		if (units.equals("SUV") || units.equals("{SUVbw}g/ml")) {
@@ -229,23 +229,27 @@ public class AnnotationBuilder {
 	            		ce.setTypeCode(listTypeCode);
             		}
             	}
+                
             	//set/correct/clear the algorithm
             	if (ce.getAlgorithm()!=null){ //it can be something weird from the old aims. delete and add plugin
-            		if (ce.getDescription().getValue().equalsIgnoreCase("Mean") || ce.getDescription().getValue().equalsIgnoreCase("Standard Deviation") ||ce.getDescription().getValue().equalsIgnoreCase("Minimum")||ce.getDescription().getValue().equalsIgnoreCase("Maximum")){
+            		if (ce.getDescription().getValue().equalsIgnoreCase("Mean") || ce.getDescription().getValue().equalsIgnoreCase("Standard Deviation") ||ce.getDescription().getValue().equalsIgnoreCase("Minimum")||ce.getDescription().getValue().equalsIgnoreCase("Maximum")||ce.getDescription().getValue().equalsIgnoreCase("Length")||ce.getDescription().getValue().equalsIgnoreCase("LineLength")){
             			//delete for old aims with algorithm for standard calculations
             			ce.setAlgorithm(null);
             		}else{
 	            		Algorithm alg=new Algorithm();
 	            		Lexicon lx=Lexicon.getInstance();
 	            		CD parentCD=lx.get(ia.getListTypeCode().get(0).getCode());
-	            		alg.setName(new ST(parentCD.getDisplayName().getValue()));
-	            		alg.setVersion(new ST(parentCD.getCodeSystemVersion()));
-	            		ArrayList<CD> types=new ArrayList<>();
-	            		types.add(parentCD);
-	            		alg.setType(types);
-	            		ce.setAlgorithm(alg);
+	            		if (parentCD!=null){
+		            		alg.setName(new ST(parentCD.getDisplayName().getValue()));
+		            		alg.setVersion(new ST(parentCD.getCodeSystemVersion()));
+		            		ArrayList<CD> types=new ArrayList<>();
+		            		types.add(parentCD);
+		            		alg.setType(types);
+		            		ce.setAlgorithm(alg);
+	            		}
             		}
             	}
+                
             	
             	//addrefs
             	if (addAnnotationStatements){
@@ -269,6 +273,9 @@ public class AnnotationBuilder {
             }
          	
         }
+    	}catch(Exception e){
+    		Logger.write("Exception "+e.getMessage());
+    	}
         return Anno;
     	
     }
