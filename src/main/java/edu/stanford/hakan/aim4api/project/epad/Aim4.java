@@ -1322,9 +1322,13 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 
 	public String fillComment(String modality, String seriesDescription, int i) {
+		return fillComment(modality, seriesDescription, i, null);
+	}
+	public String fillComment(String modality, String seriesDescription, int i, String userId) {
 		String SEPARATOR = "/";
 		String comment = modality + SEPARATOR + seriesDescription +SEPARATOR + i;
-		
+		if (userId!=null)
+			comment+=SEPARATOR+"USER:"+userId;
 		return comment;
 	}
 
