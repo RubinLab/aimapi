@@ -78,8 +78,8 @@ public class AnnotationValidator {
     }
 
     public static boolean ValidateXML(Document doc, String PathXSD) {
-        String tempXmlPath = "temp" + GenerateId.getUUID() + ".xml";
-        Source source = documentToSource(doc, tempXmlPath);
+    	String tempXmlPath = System.getProperty("java.io.tmpdir") + "/temp" + GenerateId.getUUID() + ".xml";
+    	Source source = documentToSource(doc, tempXmlPath);
         if (source == null) {
             return false;
         }
