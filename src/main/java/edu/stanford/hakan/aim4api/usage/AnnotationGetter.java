@@ -93,7 +93,7 @@ public class AnnotationGetter {
         try {
             String serverResponse = ExistManager.getXMLStringFromExistWithStartIndexCount(Url, XQuery, dbUserName, dbUserPassword, 1, maxRecords);
             Document serverDoc = XML.getDocumentFromString(serverResponse);
-            List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, PathXSD);
+            List<ImageAnnotationCollection> res = ExistManager.getImageAnnotationCollectionListFromDocument(serverDoc, null);
 
             for (ImageAnnotationCollection iac : res) {
                 Logger.write("Checking plugin parameters");
