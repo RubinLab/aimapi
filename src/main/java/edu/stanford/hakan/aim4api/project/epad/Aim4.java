@@ -2145,6 +2145,10 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		return getShapeType(shapeID).equals(ShapeType.POLY);
 	}
 
+	public boolean isLine(int shapeID) {
+		return getShapeType(shapeID).equals(ShapeType.LINE);
+	}
+
 	
 	public Person createPerson(String name, String id, String sex,
             String birthdate) {
