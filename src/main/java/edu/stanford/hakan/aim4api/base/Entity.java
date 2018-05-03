@@ -114,6 +114,8 @@ public class Entity implements IAimXMLOperations {
 
     @Override
     public boolean isEqualTo(Object other) {
+    	if (other==null)
+    		return false;
         Entity oth = (Entity) other;
         if (this.uniqueIdentifier == null ? oth.uniqueIdentifier != null : !this.uniqueIdentifier.isEqualTo(oth.uniqueIdentifier)) {
             return false;
