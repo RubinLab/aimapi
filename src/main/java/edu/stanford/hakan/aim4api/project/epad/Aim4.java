@@ -855,6 +855,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	private static final String MAX = "Maximum";
 	private static final String VOLUME = "Volume";
     public static final String LINE_MEASURE = "cm";
+    public static final String VOLUME_MEASURE = "mm3";
 		
     
     //TODO all should be added with addCalculationEntityWithRef
@@ -877,7 +878,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		return createCalculation(String.valueOf(value),shapeId,units,Aim4.LINE_LENGTH, "G-D7FE");
 	}
 	public static CalculationEntity createVolumeCalculation(double value, Integer shapeId, String units) {
-		return createCalculation(String.valueOf(value),shapeId,units,VOLUME, "RID28668");
+		return createCalculation(String.valueOf(value),shapeId,VOLUME_MEASURE,VOLUME, "RID28668");
 	}
 	
 	public static CalculationEntity createLongAxisCalculation(double value, Integer shapeId, String units) {
