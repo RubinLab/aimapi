@@ -262,7 +262,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
     public Aim4(String name, String modality, String description,
             String patientName, String patientId, String patientSex,
             String patientBirthdate, String manufacturerName, String model,
-            String version, int activeImage, LoggedInUser user,
+            String version, int activeImage, String seriesNumber, LoggedInUser user,
             String imageUid, String seriesUid, String studyUid,
             String studyDate, String studyTime, String imageClassUid) { //ml imageclassuid added
 
@@ -270,7 +270,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
         setName(name);
         setDateTime(todaysDate());
-        setComment(fillComment(modality, description, activeImage));
+        setComment(fillComment(modality, description, activeImage, seriesNumber));
 
         setUser(user);
 
@@ -289,7 +289,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
     public Aim4(String name, String modality, String description,
             String patientName, String patientId, String patientSex,
             String patientBirthdate, String manufacturerName, String model,
-            String version, int activeImage, LoggedInUser user,
+            String version, int activeImage, String seriesNumber, LoggedInUser user,
             String imageUid, String seriesUid, String studyUid,
             String studyDate, String studyTime, String imageClassUid, String originalPatientId, String accessionNumber) { //ml imageclassuid added
 
@@ -297,7 +297,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 
         setName(name);
         setDateTime(todaysDate());
-        setComment(fillComment(modality, description, activeImage));
+        setComment(fillComment(modality, description, activeImage, seriesNumber));
 
         setUser(user);
 
@@ -1322,12 +1322,12 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		
 	}
 
-	public String fillComment(String modality, String seriesDescription, int i) {
-		return fillComment(modality, seriesDescription, i, null);
+	public String fillComment(String modality, String seriesDescription, int i, String seriesNumber) {
+		return fillComment(modality, seriesDescription, i, seriesNumber, null);
 	}
-	public String fillComment(String modality, String seriesDescription, int i, String userId) {
-		String SEPARATOR = "/";
-		String comment = modality + SEPARATOR + seriesDescription +SEPARATOR + i;
+	public String fillComment(String modality, String seriesDescription, int i, String seriesNumber, String userId) {
+		String SEPARATOR = " / ";
+		String comment = modality + SEPARATOR + seriesDescription +SEPARATOR + i + SEPARATOR + seriesNumber;
 		if (userId!=null)
 			comment+=SEPARATOR+"USER:"+userId;
 		return comment;
