@@ -282,6 +282,27 @@ public class Component implements Serializable {
 		}
 	}
 
+	public void setComment(String comment) {
+		switch (componentType) {
+		case anatomicEntity:
+			anatomicEntity.setComment(new ST(comment));
+			break;
+
+		case imagingObservation:
+			imagingObservation.setComment(new ST(comment));
+			break;
+
+		case anatomicEntityCharacteristic:
+			anatomicEntityCharacteristic.setComment(new ST(comment));
+			break;
+
+		case imagingObservationCharacteristic:
+			imagingObservationCharacteristic.setComment(new ST(comment));
+			break;
+		default:
+			break;
+		}
+	}
 	public void setAnnotatorConfidence(Double confidence) {
 		switch (componentType) {
 		case anatomicEntity:
