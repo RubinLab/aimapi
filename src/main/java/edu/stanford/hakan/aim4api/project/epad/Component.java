@@ -78,6 +78,7 @@ public class Component implements Serializable {
 		}
 		anatomicEntity.setIsPresent(ae.getIsPresent());
 		anatomicEntity.setLabel(ae.getLabel());
+		if (ae.getComment()!=null) anatomicEntity.setComment(ae.getComment());
 	}
 
 	public ImagingPhysicalEntityCharacteristic getAnatomicEntityCharacteristicItem(
@@ -110,6 +111,7 @@ public class Component implements Serializable {
 		}
 		imagingObservation.setIsPresent(io.getIsPresent());
 		imagingObservation.setLabel(io.getLabel());
+		if (io.getComment()!=null)  imagingObservation.setComment(io.getComment());
 		//TODO needs ImagingObservationEntityIsIdentifiedByGeometricShapeEntityStatement addition??
 //		imagingObservation.setListReferencedGeometricShape(io
 //				.getListReferencedGeometricShape());
@@ -158,6 +160,8 @@ public class Component implements Serializable {
 			inference.setTypeCode(inf.getListTypeCode());
 		}
 		inference.setImageEvidence(inf.getImageEvidence());
+
+		if (inf.getComment()!=null) inference.setComment(inf.getComment());
 	}
 
 	//
@@ -282,6 +286,27 @@ public class Component implements Serializable {
 		}
 	}
 
+	public void setComment(String comment) {
+		switch (componentType) {
+		case anatomicEntity:
+			anatomicEntity.setComment(new ST(comment));
+			break;
+
+		case imagingObservation:
+			imagingObservation.setComment(new ST(comment));
+			break;
+
+		case anatomicEntityCharacteristic:
+			anatomicEntityCharacteristic.setComment(new ST(comment));
+			break;
+
+		case imagingObservationCharacteristic:
+			imagingObservationCharacteristic.setComment(new ST(comment));
+			break;
+		default:
+			break;
+		}
+	}
 	public void setAnnotatorConfidence(Double confidence) {
 		switch (componentType) {
 		case anatomicEntity:
@@ -618,6 +643,37 @@ public class Component implements Serializable {
 
 		case imagingObservationCharacteristic:
 			result = imagingObservationCharacteristic.getListTypeCode().get(0).getCode();
+			break;
+		}
+		return result;
+	}
+	
+	public String getComment() {
+		String result = "";
+		switch (componentType) {
+		case anatomicEntity:
+			if (anatomicEntity.getComment()!=null)
+				result = anatomicEntity.getComment().getValue();
+			break;
+
+		case imagingObservation:
+			if (imagingObservation.getComment()!=null)
+				result = imagingObservation.getComment().getValue();
+			break;
+
+		case inference:
+			if (inference.getComment()!=null)
+				result = inference.getComment().getValue();
+			break;
+
+		case anatomicEntityCharacteristic:
+			if (anatomicEntityCharacteristic.getComment()!=null)
+				result = anatomicEntityCharacteristic.getComment().getValue();
+			break;
+
+		case imagingObservationCharacteristic:
+			if (imagingObservationCharacteristic.getComment()!=null)
+				result = imagingObservationCharacteristic.getComment().getValue();
 			break;
 		}
 		return result;
