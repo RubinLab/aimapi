@@ -335,7 +335,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		if (getDateTimeAsDate()!=null){
 			Date d=getDateTimeAsDate();
 //			return (d.getYear()+1900)+""+addLeadingZeros(d.getMonth()+1)+"-"+addLeadingZeros(d.getDate())+ "T"+addLeadingZeros(d.getHours())+":"+addLeadingZeros(d.getMinutes())+":"+addLeadingZeros(d.getSeconds());
-			return (d.getYear()+1900)+""+addLeadingZeros(d.getMonth()+1)+"-"+addLeadingZeros(d.getDate())+ " "+addLeadingZeros(d.getHours())+":"+addLeadingZeros(d.getMinutes())+":"+addLeadingZeros(d.getSeconds());
+			return (d.getYear()+1900)+""+addLeadingZeros(d.getMonth()+1)+""+addLeadingZeros(d.getDate())+ " "+addLeadingZeros(d.getHours())+":"+addLeadingZeros(d.getMinutes())+":"+addLeadingZeros(d.getSeconds());
 
 		}
 		return "";
@@ -788,6 +788,8 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		return id;
 	}
 	public String getComment(){
+		if (getImageAnnotation().getComment()==null)
+			return "";
 		return getImageAnnotation().getComment().getValue();
 	}
 
@@ -1121,7 +1123,7 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 	
 	public static String getFormattedDateTimeString(Date date){
-		return ""+((date.getYear()+1900))+addLeadingZeros(date.getMonth())+addLeadingZeros(date.getDate())+addLeadingZeros(date.getHours())+addLeadingZeros(date.getMinutes())+addLeadingZeros(date.getSeconds());
+		return ""+((date.getYear()+1900))+addLeadingZeros(date.getMonth()+1)+addLeadingZeros(date.getDate())+addLeadingZeros(date.getHours())+addLeadingZeros(date.getMinutes())+addLeadingZeros(date.getSeconds());
 
 	}
 	
