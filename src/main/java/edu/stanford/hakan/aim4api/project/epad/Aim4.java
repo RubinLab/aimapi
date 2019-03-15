@@ -2245,7 +2245,8 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 	
 	public void clearSegmentationEntityCollection(){
-		this.getImageAnnotation().getSegmentationEntityCollection().getSegmentationEntityList().clear();
+		if (this.getImageAnnotation().getSegmentationEntityCollection()!=null)
+			this.getImageAnnotation().getSegmentationEntityCollection().getSegmentationEntityList().clear();
 		
 	}
 
