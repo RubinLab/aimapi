@@ -755,6 +755,15 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 		}
 		return true;
 	}
+	
+	public boolean hasMarkupShape() {
+		try {
+			getImageAnnotation().getMarkupEntityCollection().getMarkupEntityList().get(0);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 
 	
 	public boolean hasSegmentationImage(String imageID) {
@@ -2245,7 +2254,8 @@ public class Aim4 extends ImageAnnotationCollection implements  Serializable {
 	}
 	
 	public void clearSegmentationEntityCollection(){
-		this.getImageAnnotation().getSegmentationEntityCollection().getSegmentationEntityList().clear();
+		if (this.getImageAnnotation().getSegmentationEntityCollection()!=null)
+			this.getImageAnnotation().getSegmentationEntityCollection().getSegmentationEntityList().clear();
 		
 	}
 
